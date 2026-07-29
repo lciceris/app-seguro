@@ -1,7 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { getSession } from "../../api/get-session";
 import { login } from "../../api/login";
+import { authKeys } from "../../constants/query-keys";
 import { useAuthStore } from "../../store/auth-store";
 
 interface LoginInput {
@@ -11,6 +12,7 @@ interface LoginInput {
 
 export function useLogin() {
   const setUsuario = useAuthStore((state) => state.setUsuario);
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ email, password }: LoginInput) => {
@@ -19,6 +21,7 @@ export function useLogin() {
     },
     onSuccess: (usuario) => {
       setUsuario(usuario);
+      queryClient.setQueryData(authKeys.session, usuario);
     },
   });
 }

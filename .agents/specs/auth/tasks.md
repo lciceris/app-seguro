@@ -60,13 +60,14 @@
   - [x] 6.4 Implementar redirecionamento de `/login` para a rota inicial quando já autenticado — redireciona pra `/` por enquanto; a tabela real de rota-por-perfil é da Task 7
     - _Requirements: 1.4_
 
-- [ ] 7. Proteção de rota e redirecionamento por perfil
-  - [ ] 7.1 Criar `features/auth/components/protected-route/`
+- [x] 7. Proteção de rota e redirecionamento por perfil
+  - [x] 7.1 Criar `features/auth/components/protected-route/`
     - _Requirements: 4.1, 4.2_
-  - [ ] 7.2 Implementar a tabela de rota inicial por perfil e o redirect pós-login
+  - [x] 7.2 Implementar a tabela de rota inicial por perfil e o redirect pós-login
     - _Requirements: 1.3, 4.3_
-  - [ ] 7.3 Integrar `protected-route` no `app/router/` envolvendo as rotas protegidas
+  - [x] 7.3 Integrar `protected-route` no `app/router/` envolvendo as rotas protegidas — criada `pages/home/home-page.tsx` como placeholder de `/` (rota real do seller/analyst) só pra provar o mecanismo ponta a ponta
     - _Requirements: 4.1, 4.2_
+  - [x] 7.4 (fix) `useLogin`/`useLogout` não sincronizavam o cache do React Query (`authKeys.session`), só a store Zustand — `useSession()` ficava com dado desatualizado até um refetch manual. Corrigido com `queryClient.setQueryData`. Verificado ponta a ponta com usuário real (login → redirect por perfil → sessão persiste no reload → `/login` redireciona de volta quando já autenticado).
 
 - [ ] 8. Sessão — restauração e refresh
   - [ ] 8.1 Implementar restauração de sessão ao carregar a aplicação (`useSession` lido no boot do `app/`)

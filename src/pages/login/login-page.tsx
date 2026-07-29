@@ -1,13 +1,12 @@
 import { Navigate } from "react-router-dom";
 
-import { LoginScreen, useSession } from "@/features/auth";
+import { INITIAL_ROUTE_BY_ROLE, LoginScreen, useSession } from "@/features/auth";
 
 export function LoginPage() {
   const { data: usuario, isLoading } = useSession();
 
   if (!isLoading && usuario) {
-    // Redireciona pra rota inicial por perfil — tabela real entra na Task 7 (proteção de rota).
-    return <Navigate to="/" replace />;
+    return <Navigate to={INITIAL_ROUTE_BY_ROLE[usuario.role]} replace />;
   }
 
   return <LoginScreen />;
