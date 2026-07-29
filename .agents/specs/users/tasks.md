@@ -8,11 +8,16 @@
   - [x] 1.2 Migration: função `can_add_user(brokerage_id)` (SECURITY DEFINER) comparando usuários ativos vs. `plans.max_users` — verificado via RPC direto (sem plano vinculado → `true`)
     - _Requirements: 1.2_
 
-- [ ] 2. Edge Functions
-  - [ ] 2.1 Criar Edge Function `invite-user` (cria no Auth, checa `can_add_user`, insere em `users`, envia email de convite)
+- [x] 2. Edge Functions
+  - [x] 2.1 Criar Edge Function `invite-user` (cria no Auth via `inviteUserByEmail`, checa `can_add_user`, insere em `users`, com rollback do usuário do Auth se o insert falhar)
     - _Requirements: 1.1, 1.2_
-  - [ ] 2.2 Criar Edge Function `update-user-password`
+  - [x] 2.2 Criar Edge Function `update-user-password`
     - _Requirements: 2.1_
+  - [x] 2.3 (fix de segurança, não estava no design original) `_shared/verify-admin.ts` — as Edge Functions usam o cliente service role, que ignora RLS por completo; sem essa verificação, qualquer usuário autenticado poderia chamar a função direto (fora da UI) e convidar/resetar senha de qualquer um, de qualquer corretora. Valida o JWT de quem chamou com o cliente ANON (respeitando RLS) via `get_my_role()`/`get_my_brokerage_id()`, e cada função confirma que o `brokerage_id`/`user_id` do payload pertence à corretora de quem está chamando.
+
+  Verificado com usuários reais (admin, seller, admin de outra corretora): seller convidando → 403; admin de outra corretora convidando pra esta → 403; seller resetando senha → 403; admin resetando senha do próprio seller → sucesso, e a senha nova funciona de verdade pra logar; admin resetando senha de usuário de outra corretora → 403; convite bloqueado quando `can_add_user()` nega (plano com limite atingido) → 422.
+
+  **Não verificado**: o envio real do e-mail de convite (`inviteUserByEmail` bem-sucedido) — o SMTP sandbox do Supabase rejeitou o domínio de teste e depois bateu rate limit. Não configuramos SMTP/Resend pro projeto novo ainda (ver `docs/architecture/backend/conventions/external-integrations.md`) — isso é um passo de infra pendente, não um bug de código. A lógica de permissão/negócio em volta do envio está toda verificada.
 
 - [ ] 3. Camada de dados do frontend
   - [ ] 3.1 Criar `features/users/constants/query-keys.ts`
