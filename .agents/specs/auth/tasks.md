@@ -97,10 +97,14 @@
 
   Verificado ponta a ponta com usuário `status = inactive` real: login → redireciona pra `/account-deactivated` (sem crash) → sessão é encerrada automaticamente → tentar acessar `/` depois manda pro `/login`.
 
-- [ ] 11. Testes
-  - [ ] 11.1 Testes de componente: `login-screen`, `set-password-screen`
+- [x] 11. Testes
+  - [x] 11.0 (infra) Configurar Vitest + React Testing Library + Playwright pela primeira vez no projeto — nada disso existia ainda. `vite.config.ts` ganhou o bloco `test` (jsdom, sem `globals: true` — imports explícitos, por consistência com o resto do projeto), `src/test-setup.ts` (jest-dom + cleanup manual do RTL, necessário justamente por não usar `globals`), `playwright.config.ts` (`webServer` sobe o `npm run dev` sozinho, `--no-sandbox` necessário neste ambiente), `shared/lib/test-utils` (helper `renderWithProviders` reaproveitado pelos testes de componente). Scripts novos: `test`, `test:watch`, `test:e2e`.
+    - _Requirements: infra_
+  - [x] 11.1 Testes de componente: `login-screen`, `set-password-screen` — mockando os hooks (`useLogin`/`useSetPassword`), não a API, testando validação de campo e chamada da mutation
     - _Requirements: 1.1, 1.2, 6.1_
-  - [ ] 11.2 Testes de hook: `useLogin`, `useSession` (com `QueryClient` de teste e sessão mockada)
+  - [x] 11.2 Testes de hook: `useLogin`, `useSession` (com `QueryClient` de teste e `api/` mockada, verificando que a auth store é populada corretamente)
     - _Requirements: 1.1, 2.1_
-  - [ ] 11.3 Teste E2E: login → redirect por perfil → reload preserva sessão → logout
+  - [x] 11.3 Teste E2E (`e2e/auth.spec.ts`, Playwright): cria/remove um usuário real via API admin (`SUPABASE_SERVICE_ROLE_KEY`, só em `.env` local) — login → redirect por perfil → reload preserva sessão → logout
     - _Requirements: 1.1, 1.3, 2.1, 3.1, 3.2_
+
+  7 testes unitários/componente (`npm run test`) + 1 E2E (`npm run test:e2e`) passando.
