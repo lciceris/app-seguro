@@ -1,1 +1,154 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-sans: 'Plus Jakarta Sans Variable', system-ui, -apple-system, sans-serif;
+    --font-data: 'Inter Variable', system-ui, sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 12px);
+    --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+    --radius: 0.5rem;
+
+    /* Page background: #F1F5F9 slate-100 */
+    --background: #F1F5F9;
+    --foreground: #0F172A;
+
+    /* Surface (cards, popovers): white */
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    --popover: #FFFFFF;
+    --popover-foreground: #0F172A;
+
+    /* Primary: indigo-600 #4F46E5 — sobrescrito em runtime pela cor da corretora */
+    --primary: #4F46E5;
+    --primary-foreground: #FFFFFF;
+
+    --secondary: #F1F5F9;
+    --secondary-foreground: #0F172A;
+
+    --muted: #F8FAFC;
+    --muted-foreground: #64748B;
+
+    --accent: #F8FAFC;
+    --accent-foreground: #0F172A;
+
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+
+    --border: #E2E8F0;
+    --input: #E2E8F0;
+
+    /* Ring: acompanha o primary */
+    --ring: #4F46E5;
+
+    --chart-1: #F97316;
+    --chart-2: #22C55E;
+    --chart-3: #3B82F6;
+    --chart-4: #F59E0B;
+    --chart-5: #EC4899;
+
+    /* Sidebar: #0F172A slate-900 */
+    --sidebar: #0F172A;
+    --sidebar-foreground: #94A3B8;
+    --sidebar-primary: #1E293B;
+    --sidebar-primary-foreground: #F8FAFC;
+    --sidebar-accent: #1E293B;
+    --sidebar-accent-foreground: #F8FAFC;
+    --sidebar-border: #1E293B;
+    --sidebar-ring: #4F46E5;
+
+    /* ── Tokens semânticos (spec de negócio) ── */
+    --primary-hover: #4338CA;
+    --primary-light: #EEF2FF;
+    --primary-text: #3730A3;
+
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+
+    /* Badges de status de cotação */
+    --status-waiting-bg: #F1F5F9;
+    --status-waiting-text: #475569;
+    --status-progress-bg: #EFF6FF;
+    --status-progress-text: #1D4ED8;
+    --status-negotiation-bg: #F5F3FF;
+    --status-negotiation-text: #6D28D9;
+    --status-presented-bg: #EFF6FF;
+    --status-presented-text: #1E40AF;
+    --status-effect-bg: #FFFBEB;
+    --status-effect-text: #92400E;
+    --status-effected-bg: #F0FDF4;
+    --status-effected-text: #166534;
+    --status-notclosed-bg: #FEF2F2;
+    --status-notclosed-text: #991B1B;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Tabelas e dados numéricos usam Inter */
+  table {
+    font-family: var(--font-data);
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}

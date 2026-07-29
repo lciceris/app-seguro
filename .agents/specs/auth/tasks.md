@@ -42,6 +42,14 @@
   - [x] 5.3 Criar `features/auth/hooks/` — `useLogin`, `useLogout`, `useSession` (envolvendo `api/` em `useMutation`/`useQuery`)
     - _Requirements: 1.1, 2.1, 2.2, 3.1_
 
+- [x] 5.5 Setup de design system e providers base (pré-requisito da Task 6, não existia ainda)
+  - [x] 5.5.1 shadcn init (`components.json` — aliases apontando pra `shared/` —, `Button`, `Input`, `Label`). Sem componente `Form`: o registry atual do shadcn não tem mais esse wrapper específico de RHF (virou `Field`, genérico/Base UI) — login-screen usa `react-hook-form` direto (`register`), sem necessidade do `Field` para um formulário de 2 campos.
+    - _Requirements: infra_
+  - [x] 5.5.2 Tokens de design em `globals.css` (paleta do CLAUDE.md original: sidebar, page bg, primary dinâmico, etc.)
+    - _Requirements: infra_
+  - [x] 5.5.3 Providers base em `app/` — `QueryClientProvider`, `BrowserRouter`, `Toaster` (sonner) — integrados em `main.tsx`
+    - _Requirements: infra_
+
 - [ ] 6. Tela de login
   - [ ] 6.1 Criar `features/auth/validations/login-schema.ts` (Zod)
     - _Requirements: 1.1_
