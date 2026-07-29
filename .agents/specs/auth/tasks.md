@@ -77,13 +77,15 @@
   - [x] 8.3 Tratar refresh token expirado/inválido — encerrar sessão e redirecionar para `/login` — `use-auth-state-listener` reage a `SIGNED_OUT` do próprio SDK (cobre logout explícito e refresh falho em background), limpa store + cache do React Query. Verificado disparando `signOut()` em background: app redireciona sozinho pro `/login` sem reload manual.
     - _Requirements: 2.3_
 
-- [ ] 9. Definir senha após convite
-  - [ ] 9.1 Criar `features/auth/validations/set-password-schema.ts`
+- [x] 9. Definir senha após convite
+  - [x] 9.1 Criar `features/auth/validations/set-password-schema.ts`
     - _Requirements: 6.1_
-  - [ ] 9.2 Criar `features/auth/screens/set-password-screen/`
+  - [x] 9.2 Criar `features/auth/screens/set-password-screen/` — usa `supabase.auth.updateUser({ password })`, a sessão de convite já é estabelecida automaticamente pelo `detectSessionInUrl` (padrão do SDK) ao clicar o link do e-mail
     - _Requirements: 6.1, 6.2_
-  - [ ] 9.3 Criar `pages/set-password/set-password-page.tsx` e registrar a rota
+  - [x] 9.3 Criar `pages/set-password/set-password-page.tsx` e registrar a rota `/set-password`
     - _Requirements: 6.1_
+
+  Verificado ponta a ponta com usuário real: login → `/set-password` → validação de senhas diferentes → senha definida com sucesso → redirect pro home → logout → login com a senha NOVA funciona.
 
 - [ ] 10. Conta desativada
   - [ ] 10.1 Criar `features/auth/screens/account-deactivated-screen/`

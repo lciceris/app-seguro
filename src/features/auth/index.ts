@@ -3,6 +3,8 @@ export * from "./hooks/use-auth-state-listener";
 export * from "./hooks/use-login";
 export * from "./hooks/use-logout";
 export * from "./hooks/use-session";
+export * from "./hooks/use-set-password";
 export * from "./screens/login-screen";
+export * from "./screens/set-password-screen";
 export * from "./components/protected-route";
 export * from "./constants/initial-route-by-role";
