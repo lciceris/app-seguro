@@ -7,6 +7,8 @@
     - _Requirements: 1.1, 3.1, 4.1, 5.1_
   - [x] 1.2 Migration: função `can_add_user(brokerage_id)` (SECURITY DEFINER) comparando usuários ativos vs. `plans.max_users` — verificado via RPC direto (sem plano vinculado → `true`)
     - _Requirements: 1.2_
+  - [x] 1.3 (fix de lacuna, encontrado ao iniciar a Task 3) Migration: policy `users_select_supervisor` — a 1.1 só cobria `brokerage_admin`/`platform_admin`, mas `supervisor` também tem leitura sobre usuários (ver `conventions/permissions.md` e Requirement 5 — ver detalhe)
+    - _Requirements: 5.1_
 
 - [x] 2. Edge Functions
   - [x] 2.1 Criar Edge Function `invite-user` (cria no Auth via `inviteUserByEmail`, checa `can_add_user`, insere em `users`, com rollback do usuário do Auth se o insert falhar)
