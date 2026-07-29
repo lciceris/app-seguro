@@ -1,9 +1,11 @@
 # Implementation Plan
 
-- [ ] 1. RLS e função adicionais (estendem a base de `auth`)
-  - [ ] 1.1 Migration: policy adicional em `users` para `brokerage_admin`/`platform_admin` gerenciarem (SELECT/INSERT/UPDATE) outros usuários da própria corretora
+- [x] 1. RLS e função adicionais (estendem a base de `auth`)
+  - [x] 1.0 (fix de lacuna) Migration: `brokerages.plan_id` (fk `plans`, nullable) — a spec `auth` nunca vinculou `brokerages` a `plans`, sem isso `can_add_user()` não tinha como saber o limite. Sem plano vinculado = sem limite, até existir uma feature de billing/planos.
+    - _Requirements: 1.2_
+  - [x] 1.1 Migration: policy adicional em `users` para `brokerage_admin`/`platform_admin` gerenciarem (SELECT/INSERT/UPDATE) outros usuários da própria corretora
     - _Requirements: 1.1, 3.1, 4.1, 5.1_
-  - [ ] 1.2 Migration: função `can_add_user(brokerage_id)` (SECURITY DEFINER) comparando usuários ativos vs. `plans.max_users`
+  - [x] 1.2 Migration: função `can_add_user(brokerage_id)` (SECURITY DEFINER) comparando usuários ativos vs. `plans.max_users` — verificado via RPC direto (sem plano vinculado → `true`)
     - _Requirements: 1.2_
 
 - [ ] 2. Edge Functions
