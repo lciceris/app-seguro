@@ -1,9 +1,9 @@
 # Implementation Plan
 
-- [ ] 1. Configuração inicial do Supabase
-  - [ ] 1.1 Criar o projeto Supabase novo e vincular via CLI (`supabase link`)
-    - Ação manual (dashboard/conta) — pré-requisito de tudo abaixo
-  - [ ] 1.2 Configurar `.env` do frontend (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`)
+- [x] 1. Configuração inicial do Supabase
+  - [x] 1.1 Criar o projeto Supabase novo e vincular via CLI (`supabase link`)
+    - Projeto "App Seguro" (`avceledthuyuvuhcdjeb`, sa-east-1) criado e linkado
+  - [x] 1.2 Configurar `.env` do frontend (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`)
     - _Requirements: infra_
 
 - [ ] 2. Schema — tabelas núcleo
