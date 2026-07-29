@@ -69,12 +69,12 @@
     - _Requirements: 4.1, 4.2_
   - [x] 7.4 (fix) `useLogin`/`useLogout` não sincronizavam o cache do React Query (`authKeys.session`), só a store Zustand — `useSession()` ficava com dado desatualizado até um refetch manual. Corrigido com `queryClient.setQueryData`. Verificado ponta a ponta com usuário real (login → redirect por perfil → sessão persiste no reload → `/login` redireciona de volta quando já autenticado).
 
-- [ ] 8. Sessão — restauração e refresh
-  - [ ] 8.1 Implementar restauração de sessão ao carregar a aplicação (`useSession` lido no boot do `app/`)
+- [x] 8. Sessão — restauração e refresh
+  - [x] 8.1 Implementar restauração de sessão ao carregar a aplicação (`useSession` lido no boot do `app/`) — já coberto por `ProtectedRoute`/`LoginPage` (verificado no reload da Task 7)
     - _Requirements: 2.1_
-  - [ ] 8.2 Confirmar/configurar o refresh automático de token do cliente Supabase (comportamento padrão do SDK, validar que está ativo)
+  - [x] 8.2 Confirmar/configurar o refresh automático de token do cliente Supabase — `autoRefreshToken`/`persistSession` explicitados em `client.ts` (já eram o padrão do SDK, deixados explícitos)
     - _Requirements: 2.2_
-  - [ ] 8.3 Tratar refresh token expirado/inválido — encerrar sessão e redirecionar para `/login`
+  - [x] 8.3 Tratar refresh token expirado/inválido — encerrar sessão e redirecionar para `/login` — `use-auth-state-listener` reage a `SIGNED_OUT` do próprio SDK (cobre logout explícito e refresh falho em background), limpa store + cache do React Query. Verificado disparando `signOut()` em background: app redireciona sozinho pro `/login` sem reload manual.
     - _Requirements: 2.3_
 
 - [ ] 9. Definir senha após convite
