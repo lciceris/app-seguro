@@ -16,16 +16,16 @@
   - [x] 2.4 Migration: tabela `users` (id → `auth.users`, `brokerage_id`, `role`, `status`, dados de perfil, timestamps) + trigger `set_updated_at`
     - _Requirements: 5.1_
 
-- [ ] 3. Funções SECURITY DEFINER e RLS base
-  - [ ] 3.1 Migration: função `get_my_role()` (SECURITY DEFINER, `search_path` fixado, considera `status = active`)
+- [x] 3. Funções SECURITY DEFINER e RLS base
+  - [x] 3.1 Migration: função `get_my_role()` (SECURITY DEFINER, `search_path` fixado, considera `status = active`)
     - _Requirements: 5.2, 4.4_
-  - [ ] 3.2 Migration: função `get_my_brokerage_id()` (mesmo padrão)
+  - [x] 3.2 Migration: função `get_my_brokerage_id()` (mesmo padrão)
     - _Requirements: 5.2, 4.4_
-  - [ ] 3.3 Migration: habilitar RLS em `brokerages` + policy de SELECT da própria corretora
+  - [x] 3.3 Migration: habilitar RLS em `brokerages` + policy de SELECT da própria corretora
     - _Requirements: 5.3_
-  - [ ] 3.4 Migration: habilitar RLS em `plans` + policy de SELECT para todo usuário autenticado
+  - [x] 3.4 Migration: habilitar RLS em `plans` + policy de SELECT para todo usuário autenticado
     - _Requirements: 5.3_
-  - [ ] 3.5 Migration: habilitar RLS em `users` + policy de SELECT/UPDATE de auto-acesso (`id = auth.uid()`)
+  - [x] 3.5 Migration: habilitar RLS em `users` + policy de SELECT/UPDATE de auto-acesso (`id = auth.uid()`), com GRANT restrito por coluna (nunca `role`/`status`/`brokerage_id`) pra impedir auto-promoção
     - _Requirements: 5.2, 5.3_
 
 - [ ] 4. Cliente Supabase tipado (frontend)
