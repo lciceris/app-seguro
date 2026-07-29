@@ -28,10 +28,10 @@
   - [x] 3.5 Migration: habilitar RLS em `users` + policy de SELECT/UPDATE de auto-acesso (`id = auth.uid()`), com GRANT restrito por coluna (nunca `role`/`status`/`brokerage_id`) pra impedir auto-promoção
     - _Requirements: 5.2, 5.3_
 
-- [ ] 4. Cliente Supabase tipado (frontend)
-  - [ ] 4.1 Gerar tipos TypeScript (`supabase gen types typescript`)
+- [x] 4. Cliente Supabase tipado (frontend)
+  - [x] 4.1 Gerar tipos TypeScript (`supabase gen types typescript`)
     - _Requirements: infra_
-  - [ ] 4.2 Criar `shared/lib/supabase/` com o cliente configurado usando os tipos gerados
+  - [x] 4.2 Criar `shared/lib/supabase/` com o cliente configurado usando os tipos gerados
     - _Requirements: infra_
 
 - [ ] 5. Auth store e camada de dados
