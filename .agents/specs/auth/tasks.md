@@ -34,12 +34,12 @@
   - [x] 4.2 Criar `shared/lib/supabase/` com o cliente configurado usando os tipos gerados
     - _Requirements: infra_
 
-- [ ] 5. Auth store e camada de dados
-  - [ ] 5.1 Criar `features/auth/store/auth-store.ts` (Zustand) com o shape `usuario`
+- [x] 5. Auth store e camada de dados
+  - [x] 5.1 Criar `features/auth/store/auth-store.ts` (Zustand) com o shape `usuario`
     - _Requirements: 1.1, 2.1_
-  - [ ] 5.2 Criar `features/auth/api/` — `login`, `logout`, `get-session`
+  - [x] 5.2 Criar `features/auth/api/` — `login`, `logout`, `get-session`
     - _Requirements: 1.1, 2.1, 3.1_
-  - [ ] 5.3 Criar `features/auth/hooks/` — `useLogin`, `useLogout`, `useSession` (envolvendo `api/` em `useMutation`/`useQuery`)
+  - [x] 5.3 Criar `features/auth/hooks/` — `useLogin`, `useLogout`, `useSession` (envolvendo `api/` em `useMutation`/`useQuery`)
     - _Requirements: 1.1, 2.1, 2.2, 3.1_
 
 - [ ] 6. Tela de login
