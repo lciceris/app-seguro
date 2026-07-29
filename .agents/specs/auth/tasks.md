@@ -50,14 +50,14 @@
   - [x] 5.5.3 Providers base em `app/` — `QueryClientProvider`, `BrowserRouter`, `Toaster` (sonner) — integrados em `main.tsx`
     - _Requirements: infra_
 
-- [ ] 6. Tela de login
-  - [ ] 6.1 Criar `features/auth/validations/login-schema.ts` (Zod)
+- [x] 6. Tela de login
+  - [x] 6.1 Criar `features/auth/validations/login-schema.ts` (Zod)
     - _Requirements: 1.1_
-  - [ ] 6.2 Criar `features/auth/screens/login-screen/` (formulário + integração com `useLogin`, erro genérico em toast)
+  - [x] 6.2 Criar `features/auth/screens/login-screen/` (formulário + integração com `useLogin`, erro genérico em toast)
     - _Requirements: 1.1, 1.2_
-  - [ ] 6.3 Criar `pages/login/login-page.tsx` e registrar a rota `/login`
+  - [x] 6.3 Criar `pages/login/login-page.tsx` e registrar a rota `/login`
     - _Requirements: 1.1_
-  - [ ] 6.4 Implementar redirecionamento de `/login` para a rota inicial quando já autenticado
+  - [x] 6.4 Implementar redirecionamento de `/login` para a rota inicial quando já autenticado — redireciona pra `/` por enquanto; a tabela real de rota-por-perfil é da Task 7
     - _Requirements: 1.4_
 
 - [ ] 7. Proteção de rota e redirecionamento por perfil
