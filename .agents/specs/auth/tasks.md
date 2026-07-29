@@ -6,14 +6,14 @@
   - [x] 1.2 Configurar `.env` do frontend (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`)
     - _Requirements: infra_
 
-- [ ] 2. Schema — tabelas núcleo
-  - [ ] 2.1 Migration: enums `user_role` e `user_status`
+- [x] 2. Schema — tabelas núcleo
+  - [x] 2.1 Migration: enums `user_role` e `user_status`
     - _Requirements: 5.1_
-  - [ ] 2.2 Migration: tabela `brokerages` (id, name, primary_color, logo_url, timestamps) + trigger `set_updated_at`
+  - [x] 2.2 Migration: tabela `brokerages` (id, name, primary_color, logo_url, timestamps) + trigger `set_updated_at`
     - _Requirements: 5.1_
-  - [ ] 2.3 Migration: tabela `plans` (id, name, max_users, timestamps) + trigger `set_updated_at`
+  - [x] 2.3 Migration: tabela `plans` (id, name, max_users, timestamps) + trigger `set_updated_at`
     - _Requirements: 5.1_
-  - [ ] 2.4 Migration: tabela `users` (id → `auth.users`, `brokerage_id`, `role`, `status`, dados de perfil, timestamps) + trigger `set_updated_at`
+  - [x] 2.4 Migration: tabela `users` (id → `auth.users`, `brokerage_id`, `role`, `status`, dados de perfil, timestamps) + trigger `set_updated_at`
     - _Requirements: 5.1_
 
 - [ ] 3. Funções SECURITY DEFINER e RLS base
