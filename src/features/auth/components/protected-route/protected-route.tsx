@@ -20,6 +20,10 @@ export function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
+  if (usuario.status !== "active") {
+    return <Navigate to="/account-deactivated" replace />;
+  }
+
   if (allowedRoles && !allowedRoles.includes(usuario.role)) {
     return <Navigate to={INITIAL_ROUTE_BY_ROLE[usuario.role]} replace />;
   }

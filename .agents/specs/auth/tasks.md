@@ -87,11 +87,15 @@
 
   Verificado ponta a ponta com usuário real: login → `/set-password` → validação de senhas diferentes → senha definida com sucesso → redirect pro home → logout → login com a senha NOVA funciona.
 
-- [ ] 10. Conta desativada
-  - [ ] 10.1 Criar `features/auth/screens/account-deactivated-screen/`
+- [x] 10. Conta desativada
+  - [x] 10.1 Criar `features/auth/screens/account-deactivated-screen/`
     - _Requirements: 4.4_
-  - [ ] 10.2 Detectar `status = inactive` logo após login (em `useSession`/`protected-route`), encerrar sessão e redirecionar para a tela de conta desativada
+  - [x] 10.2 Detectar `status = inactive` logo após login (em `useSession`/`protected-route`), encerrar sessão e redirecionar para a tela de conta desativada — `protected-route` e `login-page` checam `usuario.status`; a página de destino (`account-deactivated-page`) chama `useLogout` no mount, centralizando o encerramento de sessão num único lugar
     - _Requirements: 4.4_
+
+  Fix relacionado: `get-session.ts` acessava `data.brokerages.name` direto, o que quebrava em runtime pra usuário inativo (o embed de `brokerages` vem `null`, já que `get_my_brokerage_id()` retorna `NULL` pra quem não está `active` — RLS negando, não erro). Corrigido com optional chaining; `brokerage_name`/`primary_color`/`logo_url` agora são nullable no tipo `Usuario`.
+
+  Verificado ponta a ponta com usuário `status = inactive` real: login → redireciona pra `/account-deactivated` (sem crash) → sessão é encerrada automaticamente → tentar acessar `/` depois manda pro `/login`.
 
 - [ ] 11. Testes
   - [ ] 11.1 Testes de componente: `login-screen`, `set-password-screen`

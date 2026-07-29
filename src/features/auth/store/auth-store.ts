@@ -9,7 +9,8 @@ export interface Usuario {
   status: Database["public"]["Enums"]["user_status"];
   full_name: string;
   avatar_url: string | null;
-  brokerage_name: string;
+  // Nulos quando status = inactive — a RLS bloqueia o embed de brokerages nesse caso.
+  brokerage_name: string | null;
   primary_color: string | null;
   logo_url: string | null;
 }

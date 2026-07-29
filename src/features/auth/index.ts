@@ -6,5 +6,6 @@ export * from "./hooks/use-session";
 export * from "./hooks/use-set-password";
 export * from "./screens/login-screen";
 export * from "./screens/set-password-screen";
+export * from "./screens/account-deactivated-screen";
 export * from "./components/protected-route";
 export * from "./constants/initial-route-by-role";

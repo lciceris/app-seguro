@@ -6,6 +6,9 @@ export function LoginPage() {
   const { data: usuario, isLoading } = useSession();
 
   if (!isLoading && usuario) {
+    if (usuario.status !== "active") {
+      return <Navigate to="/account-deactivated" replace />;
+    }
     return <Navigate to={INITIAL_ROUTE_BY_ROLE[usuario.role]} replace />;
   }
 
