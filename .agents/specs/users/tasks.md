@@ -43,13 +43,18 @@
 
   Verificado com usuários reais: lista renderiza (admin/seller ativos + 1 inativo) sem erro de console; `seller` tentando acessar `/users` diretamente é bloqueado e redirecionado pra própria rota inicial.
 
-- [ ] 5. Convidar usuário
-  - [ ] 5.1 Criar `features/users/validations/invite-user-schema.ts`
+- [x] 5. Convidar usuário
+  - [x] 5.1 Criar `features/users/validations/invite-user-schema.ts`
     - _Requirements: 1.1_
-  - [ ] 5.2 Criar `features/users/components/invite-user-drawer/` (inclui feedback de limite de plano atingido)
+  - [x] 5.2 Criar `features/users/components/invite-user-drawer/` (inclui feedback de limite de plano atingido)
     - _Requirements: 1.1, 1.2_
-  - [ ] 5.3 Criar `pages/users/add/add-user-page.tsx` como rota filha `/users/add`
+  - [x] 5.3 Criar `pages/users/add/add-user-page.tsx` como rota filha `/users/add`
     - _Requirements: 1.1_
+  - [x] 5.4 (fix de bug, encontrado ao testar pelo navegador) CORS nas Edge Functions `invite-user`/`update-user-password` — o `verify_jwt` da plataforma interceptava o preflight `OPTIONS` (que não carrega `Authorization`) e respondia 401 sem cabeçalho CORS, quebrando toda chamada feita a partir do navegador (via curl/Task 2 isso nunca apareceu). Fix: `_shared/cors.ts` + tratamento de `OPTIONS` nas duas funções, deployadas com `verify_jwt = false` (já é redundante — `_shared/verify-admin.ts` faz essa checagem sozinho) via `supabase/config.toml`.
+
+  Verificado com usuários reais pelo navegador (Playwright): drawer abre sobre a listagem via `/users/add` sem perder a lista de fundo; validação client-side (campos vazios) aparece inline sem chamar a API; submit válido chega de fato na Edge Function (confirmado o fix de CORS) e retorna o erro de domínio de e-mail inválido do SMTP sandbox — mesma limitação já documentada na Task 2, agora também exposta corretamente como toast na UI; admin de corretora com `plans.max_users` atingido recebe o erro "Limite de usuários do plano atingido." inline no campo Perfil, sem sequer chegar a tentar o envio do e-mail. Nenhum erro de console.
+
+  **Não verificado** (mesma limitação já registrada na Task 2): envio real do e-mail de convite — depende da configuração de SMTP/Resend, ainda pendente.
 
 - [ ] 6. Ver detalhe de usuário
   - [ ] 6.1 Criar `features/users/components/user-detail-drawer/`

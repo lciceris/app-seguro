@@ -382,6 +382,17 @@ inspector_port = 8083
 # The Deno major version to use.
 deno_version = 2
 
+# verify_jwt = false: essas funções fazem sua própria verificação de identidade
+# via `_shared/verify-admin.ts`. O gate de verify_jwt da plataforma intercepta
+# o preflight OPTIONS (que não carrega Authorization) antes dele chegar no
+# código da função e responde 401 sem cabeçalho CORS, quebrando toda chamada
+# feita a partir do navegador — por isso ele fica desligado aqui.
+[functions.invite-user]
+verify_jwt = false
+
+[functions.update-user-password]
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

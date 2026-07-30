@@ -1,15 +1,20 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
+import { corsHeaders } from "../_shared/cors.ts";
 import { verifyAdmin } from "../_shared/verify-admin.ts";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...corsHeaders },
   });
 }
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   const auth = await verifyAdmin(req);
   if ("error" in auth) {
     return jsonResponse({ error: auth.error }, auth.status);
