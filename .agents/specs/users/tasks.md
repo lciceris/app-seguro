@@ -33,11 +33,15 @@
 
   Verificação ponta a ponta desses hooks fica pra quando a UI (Task 4+) existir e puder exercitá-los pelo navegador, em vez de testar isoladamente agora.
 
-- [ ] 4. Listagem de usuários
-  - [ ] 4.1 Criar `features/users/screens/users-list-screen/`
+- [x] 4. Listagem de usuários
+  - [x] 4.0 (infra) shadcn `skeleton`, `tooltip`, `badge` + `TooltipProvider` em `app/providers` (não existiam ainda)
+    - _Requirements: infra_
+  - [x] 4.1 Criar `features/users/screens/users-list-screen/` — tabela com skeleton no loading, erro com retry, empty state, badge de status, ícones Ver/Editar com tooltip, `<Outlet/>` pros drawers aninhados (Tasks 5-7)
     - _Requirements: 5.1_
-  - [ ] 4.2 Criar `pages/users/users-page.tsx` e registrar a rota `/users`
+  - [x] 4.2 Criar `pages/users/users-page.tsx` e registrar a rota `/users` (restrita a `platform_admin`/`brokerage_admin`/`supervisor` via `allowedRoles`)
     - _Requirements: 5.1_
+
+  Verificado com usuários reais: lista renderiza (admin/seller ativos + 1 inativo) sem erro de console; `seller` tentando acessar `/users` diretamente é bloqueado e redirecionado pra própria rota inicial.
 
 - [ ] 5. Convidar usuário
   - [ ] 5.1 Criar `features/users/validations/invite-user-schema.ts`
