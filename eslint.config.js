@@ -6,7 +6,8 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  // database-types.ts é gerado por `supabase gen types` — não é código nosso pra lintar/formatar.
+  { ignores: ["dist", "src/shared/lib/supabase/database-types.ts"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

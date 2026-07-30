@@ -21,13 +21,17 @@
 
   **Não verificado**: o envio real do e-mail de convite (`inviteUserByEmail` bem-sucedido) — o SMTP sandbox do Supabase rejeitou o domínio de teste e depois bateu rate limit. Não configuramos SMTP/Resend pro projeto novo ainda (ver `docs/architecture/backend/conventions/external-integrations.md`) — isso é um passo de infra pendente, não um bug de código. A lógica de permissão/negócio em volta do envio está toda verificada.
 
-- [ ] 3. Camada de dados do frontend
-  - [ ] 3.1 Criar `features/users/constants/query-keys.ts`
+- [x] 3. Camada de dados do frontend
+  - [x] 3.0 (infra) `features/users/types/user.ts` (tipo `User` derivado de `Database`) + excluído `database-types.ts` do ESLint/Prettier (arquivo gerado, não é código nosso)
     - _Requirements: infra_
-  - [ ] 3.2 Criar `features/users/api/` — `list-users`, `get-user`, `invite-user`, `update-user`, `update-user-password`, `deactivate-user`, `reactivate-user`
+  - [x] 3.1 Criar `features/users/constants/query-keys.ts`
+    - _Requirements: infra_
+  - [x] 3.2 Criar `features/users/api/` — `list-users`, `get-user`, `invite-user`, `update-user`, `update-user-password`, `deactivate-user`, `reactivate-user`
     - _Requirements: 1.1, 2.1, 3.1, 3.5, 4.1, 5.1_
-  - [ ] 3.3 Criar `features/users/hooks/` — `useUsers`, `useUser`, `useInviteUser`, `useUpdateUser`, `useUpdateUserPassword`, `useDeactivateUser`, `useReactivateUser`
+  - [x] 3.3 Criar `features/users/hooks/` — `useUsers`, `useUser`, `useInviteUser`, `useUpdateUser`, `useUpdateUserPassword`, `useDeactivateUser`, `useReactivateUser` — cada mutation invalida `userKeys.lists()`/`detail()` correspondente
     - _Requirements: 1.1, 2.1, 3.1, 3.5, 4.1, 5.1_
+
+  Verificação ponta a ponta desses hooks fica pra quando a UI (Task 4+) existir e puder exercitá-los pelo navegador, em vez de testar isoladamente agora.
 
 - [ ] 4. Listagem de usuários
   - [ ] 4.1 Criar `features/users/screens/users-list-screen/`
