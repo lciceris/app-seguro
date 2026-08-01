@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/home/home-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { SetPasswordPage } from "@/pages/set-password/set-password-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
+import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
 import { UsersPage } from "@/pages/users/users-page";
 
 export function AppRouter() {
@@ -26,6 +27,7 @@ export function AppRouter() {
       >
         <Route path="/users" element={<UsersPage />}>
           <Route path="add" element={<AddUserPage />} />
+          <Route path=":userId" element={<UserDetailPage />} />
         </Route>
       </Route>
     </Routes>

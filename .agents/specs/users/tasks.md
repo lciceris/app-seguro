@@ -56,11 +56,13 @@
 
   **Não verificado** (mesma limitação já registrada na Task 2): envio real do e-mail de convite — depende da configuração de SMTP/Resend, ainda pendente.
 
-- [ ] 6. Ver detalhe de usuário
-  - [ ] 6.1 Criar `features/users/components/user-detail-drawer/`
+- [x] 6. Ver detalhe de usuário
+  - [x] 6.1 Criar `features/users/components/user-detail-drawer/`
     - _Requirements: 5.1_
-  - [ ] 6.2 Criar `pages/users/[userId]/user-detail-page.tsx` como rota filha `/users/:userId`
+  - [x] 6.2 Criar `pages/users/[userId]/user-detail-page.tsx` como rota filha `/users/:userId`
     - _Requirements: 5.1_
+
+  Verificado com usuários reais pelo navegador: `brokerage_admin` abre `/users/:userId` e vê nome/e-mail/telefone/perfil/status corretos, com a listagem ainda montada por trás do drawer; `supervisor` também consegue abrir o mesmo detalhe (Requirement 5.1); `seller` tentando acessar `/users/:userId` diretamente é bloqueado pelo `ProtectedRoute` antes de chegar no drawer (Requirement 5.2 — já coberto estruturalmente pela mesma restrição de `allowedRoles` usada em `/users`). Botão "Fechar" volta pra `/users`. Nenhum erro de console.
 
 - [ ] 7. Editar usuário
   - [ ] 7.1 Criar `features/users/validations/edit-user-schema.ts` (nome, telefone, perfil — sem e-mail)

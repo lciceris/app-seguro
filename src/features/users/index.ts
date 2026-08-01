@@ -9,3 +9,4 @@ export * from "./types/user";
 export * from "./constants/role-labels";
 export * from "./screens/users-list-screen";
 export * from "./components/invite-user-drawer";
+export * from "./components/user-detail-drawer";
