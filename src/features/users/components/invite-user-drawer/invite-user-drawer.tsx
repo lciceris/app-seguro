@@ -117,7 +117,7 @@ export function InviteUserDrawer() {
                 name="role"
                 control={control}
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value ?? ""} onValueChange={field.onChange}>
                     <SelectTrigger id="role" className="w-full">
                       <SelectValue placeholder="Selecione um perfil" />
                     </SelectTrigger>

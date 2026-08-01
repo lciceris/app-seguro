@@ -64,13 +64,19 @@
 
   Verificado com usuários reais pelo navegador: `brokerage_admin` abre `/users/:userId` e vê nome/e-mail/telefone/perfil/status corretos, com a listagem ainda montada por trás do drawer; `supervisor` também consegue abrir o mesmo detalhe (Requirement 5.1); `seller` tentando acessar `/users/:userId` diretamente é bloqueado pelo `ProtectedRoute` antes de chegar no drawer (Requirement 5.2 — já coberto estruturalmente pela mesma restrição de `allowedRoles` usada em `/users`). Botão "Fechar" volta pra `/users`. Nenhum erro de console.
 
-- [ ] 7. Editar usuário
-  - [ ] 7.1 Criar `features/users/validations/edit-user-schema.ts` (nome, telefone, perfil — sem e-mail)
+- [x] 7. Editar usuário
+  - [x] 7.1 Criar `features/users/validations/edit-user-schema.ts` (nome, telefone, perfil — sem e-mail)
     - _Requirements: 4.1, 4.3_
-  - [ ] 7.2 Criar `features/users/components/edit-user-drawer/`
+  - [x] 7.2 Criar `features/users/components/edit-user-drawer/`
     - _Requirements: 4.1_
-  - [ ] 7.3 Criar `pages/users/[userId]/edit/edit-user-page.tsx` como rota filha `/users/:userId/edit`
+  - [x] 7.3 Criar `pages/users/[userId]/edit/edit-user-page.tsx` como rota filha `/users/:userId/edit`
     - _Requirements: 4.1_
+  - [x] 7.4 (fix de lacuna, encontrado ao testar o submit real) Migration: GRANT de `role`/`status` em `users` + trigger `prevent_self_privilege_escalation` — o GRANT column-level da spec `auth` só liberava `full_name, phone, avatar_url` pra `authenticated` (o resto era bloqueado em nível de privilégio, antes mesmo da RLS ser avaliada). A policy `users_update_managed` (Task 1.1) e o fluxo de desativar/reativar (Task 9, ainda não implementado) precisam escrever `role`/`status` de **outros** usuários, mas GRANT é por role do Postgres, não por policy — não dava pra liberar a coluna só pra uma policy. Substitui a proteção contra auto-promoção (que antes vivia inteiramente no GRANT restrito) por um trigger `BEFORE UPDATE` que bloqueia especificamente quando `auth.uid() = id` e `role`/`status`/`brokerage_id` mudam.
+    - _Requirements: 4.1_
+  - [x] 7.5 (fix de UX, não é bug funcional) `Select` do perfil em `invite-user-drawer` e `edit-user-drawer` — warning do React de "uncontrolled to controlled" porque `field.value` do RHF começa `undefined` até o primeiro `reset()`/preenchimento. Fix: `value={field.value ?? ""}`.
+    - _Requirements: infra_
+
+  Verificado com usuários reais pelo navegador: `brokerage_admin` vê os botões "Convidar usuário" e o ícone Editar; abre o drawer de edição, que vem pré-preenchido com os dados atuais do usuário-alvo; altera nome, telefone e perfil e salva — `PATCH` retorna 200, toast de sucesso, volta pra `/users`, lista já reflete os novos dados via invalidação de query. `supervisor` não vê nem "Convidar usuário" nem o ícone Editar na lista (Requirement 4.2), e é redirecionado pro próprio home se tentar acessar `/users/:userId/edit` direto pela URL (nova policy de rota restrita a `platform_admin`/`brokerage_admin`, separada da rota de detalhe que ainda permite `supervisor`). Confirmado via chamada direta (fora da UI): o próprio usuário tentando promover o próprio `role` é bloqueado pelo trigger, mas editar o próprio `full_name` continua funcionando normalmente. Nenhum erro de console.
 
 - [ ] 8. Reset de senha
   - [ ] 8.1 Criar `features/users/validations/reset-password-schema.ts`

@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/home/home-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { SetPasswordPage } from "@/pages/set-password/set-password-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
+import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
 import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
 import { UsersPage } from "@/pages/users/users-page";
 
@@ -26,8 +27,12 @@ export function AppRouter() {
         }
       >
         <Route path="/users" element={<UsersPage />}>
-          <Route path="add" element={<AddUserPage />} />
           <Route path=":userId" element={<UserDetailPage />} />
+
+          <Route element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}>
+            <Route path="add" element={<AddUserPage />} />
+            <Route path=":userId/edit" element={<EditUserPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

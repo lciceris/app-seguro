@@ -1,6 +1,7 @@
 import { Eye, Pencil } from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 
+import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -11,14 +12,18 @@ import { useUsers } from "../../hooks/use-users";
 
 export function UsersListScreen() {
   const { data: users, isLoading, isError, refetch } = useUsers();
+  const usuario = useAuthStore((state) => state.usuario);
+  const canManageUsers = usuario?.role === "platform_admin" || usuario?.role === "brokerage_admin";
 
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-lg font-semibold text-foreground">Usuários</h1>
-        <Button asChild>
-          <Link to="/users/add">Convidar usuário</Link>
-        </Button>
+        {canManageUsers && (
+          <Button asChild>
+            <Link to="/users/add">Convidar usuário</Link>
+          </Button>
+        )}
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -117,16 +122,18 @@ export function UsersListScreen() {
                         </TooltipTrigger>
                         <TooltipContent>Ver</TooltipContent>
                       </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/users/${user.id}/edit`}>
-                              <Pencil className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Editar</TooltipContent>
-                      </Tooltip>
+                      {canManageUsers && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button asChild variant="ghost" size="icon-sm">
+                              <Link to={`/users/${user.id}/edit`}>
+                                <Pencil className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Editar</TooltipContent>
+                        </Tooltip>
+                      )}
                     </div>
                   </td>
                 </tr>

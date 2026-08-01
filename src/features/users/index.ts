@@ -10,3 +10,4 @@ export * from "./constants/role-labels";
 export * from "./screens/users-list-screen";
 export * from "./components/invite-user-drawer";
 export * from "./components/user-detail-drawer";
+export * from "./components/edit-user-drawer";
