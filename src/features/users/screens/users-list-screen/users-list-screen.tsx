@@ -1,4 +1,5 @@
-import { Eye, Pencil } from "lucide-react";
+import { Eye, KeyRound, Pencil } from "lucide-react";
+import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 import { useAuthStore } from "@/features/auth";
@@ -9,11 +10,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/
 
 import { ROLE_LABELS } from "../../constants/role-labels";
 import { useUsers } from "../../hooks/use-users";
+import { ResetPasswordDialog } from "../../components/reset-password-dialog";
 
 export function UsersListScreen() {
   const { data: users, isLoading, isError, refetch } = useUsers();
   const usuario = useAuthStore((state) => state.usuario);
   const canManageUsers = usuario?.role === "platform_admin" || usuario?.role === "brokerage_admin";
+  const [resetPasswordUserId, setResetPasswordUserId] = useState<string | null>(null);
 
   return (
     <div className="p-6">
@@ -134,6 +137,20 @@ export function UsersListScreen() {
                           <TooltipContent>Editar</TooltipContent>
                         </Tooltip>
                       )}
+                      {canManageUsers && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() => setResetPasswordUserId(user.id)}
+                            >
+                              <KeyRound className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Resetar senha</TooltipContent>
+                        </Tooltip>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -143,6 +160,11 @@ export function UsersListScreen() {
       </div>
 
       <Outlet />
+
+      <ResetPasswordDialog
+        userId={resetPasswordUserId}
+        onOpenChange={(open) => !open && setResetPasswordUserId(null)}
+      />
     </div>
   );
 }

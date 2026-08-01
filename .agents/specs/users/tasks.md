@@ -78,11 +78,13 @@
 
   Verificado com usuários reais pelo navegador: `brokerage_admin` vê os botões "Convidar usuário" e o ícone Editar; abre o drawer de edição, que vem pré-preenchido com os dados atuais do usuário-alvo; altera nome, telefone e perfil e salva — `PATCH` retorna 200, toast de sucesso, volta pra `/users`, lista já reflete os novos dados via invalidação de query. `supervisor` não vê nem "Convidar usuário" nem o ícone Editar na lista (Requirement 4.2), e é redirecionado pro próprio home se tentar acessar `/users/:userId/edit` direto pela URL (nova policy de rota restrita a `platform_admin`/`brokerage_admin`, separada da rota de detalhe que ainda permite `supervisor`). Confirmado via chamada direta (fora da UI): o próprio usuário tentando promover o próprio `role` é bloqueado pelo trigger, mas editar o próprio `full_name` continua funcionando normalmente. Nenhum erro de console.
 
-- [ ] 8. Reset de senha
-  - [ ] 8.1 Criar `features/users/validations/reset-password-schema.ts`
+- [x] 8. Reset de senha
+  - [x] 8.1 Criar `features/users/validations/reset-password-schema.ts`
     - _Requirements: 2.1_
-  - [ ] 8.2 Criar `features/users/components/reset-password-dialog/` (formulário local, sem rota)
+  - [x] 8.2 Criar `features/users/components/reset-password-dialog/` (formulário local, sem rota)
     - _Requirements: 2.1_
+
+  Verificado com usuários reais pelo navegador: `brokerage_admin` abre o dialog pelo ícone de chave na linha do usuário-alvo; senhas diferentes mostram erro inline ("As senhas não coincidem") sem chamar a API; "Cancelar" fecha sem submeter; envio válido chama a Edge Function `update-user-password` (já validada na Task 2), retorna sucesso, mostra toast e fecha o dialog. Confirmado ponta a ponta: o usuário-alvo consegue logar de verdade com a senha nova. Botão só aparece pra `brokerage_admin`/`platform_admin` (mesmo `canManageUsers` da Task 7). Nenhum erro de console.
 
 - [ ] 9. Desativar e reativar usuário
   - [ ] 9.1 Criar `features/users/components/deactivate-confirm-dialog/` (`AlertDialog`, sem rota)
