@@ -86,11 +86,15 @@
 
   Verificado com usuários reais pelo navegador: `brokerage_admin` abre o dialog pelo ícone de chave na linha do usuário-alvo; senhas diferentes mostram erro inline ("As senhas não coincidem") sem chamar a API; "Cancelar" fecha sem submeter; envio válido chama a Edge Function `update-user-password` (já validada na Task 2), retorna sucesso, mostra toast e fecha o dialog. Confirmado ponta a ponta: o usuário-alvo consegue logar de verdade com a senha nova. Botão só aparece pra `brokerage_admin`/`platform_admin` (mesmo `canManageUsers` da Task 7). Nenhum erro de console.
 
-- [ ] 9. Desativar e reativar usuário
-  - [ ] 9.1 Criar `features/users/components/deactivate-confirm-dialog/` (`AlertDialog`, sem rota)
+- [x] 9. Desativar e reativar usuário
+  - [x] 9.1 Criar `features/users/components/deactivate-confirm-dialog/` (`AlertDialog`, sem rota)
     - _Requirements: 3.1, 3.4_
-  - [ ] 9.2 Implementar ação de reativar na listagem (sem dialog de confirmação — reativar não é destrutivo)
+  - [x] 9.2 Implementar ação de reativar na listagem (sem dialog de confirmação — reativar não é destrutivo)
     - _Requirements: 3.5_
+  - [x] 9.3 (decisão de UX, não pedida explicitamente) Esconder as ações de desativar/reativar na própria linha do usuário logado — o trigger `prevent_self_privilege_escalation` (Task 7.4) já bloqueia `status` mudar via auto-UPDATE em nível de banco, mas mostrar o botão pro próprio admin só pra ele receber um erro genérico não ajuda ninguém.
+    - _Requirements: infra_
+
+  Verificado com usuários reais pelo navegador: `brokerage_admin` não vê ação de desativar/reativar na própria linha; na linha de outro usuário, "Desativar" abre `AlertDialog` mencionando o nome do usuário-alvo, "Cancelar" fecha sem alterar nada, confirmar desativa de verdade (`PATCH` retorna `status: inactive`, toast de sucesso, badge muda pra "Inativo" na lista). Confirmado o efeito real: o usuário desativado tentando logar é redirecionado pra `/account-deactivated` (Requirement 3.3, já validado na spec `auth`). "Reativar" funciona como ação direta sem dialog de confirmação (Requirement 3.5 — reativar não é destrutivo), toast de sucesso, badge volta pra "Ativo", e o login volta a funcionar normalmente. Nenhum erro de console.
 
 - [ ] 10. Testes
   - [ ] 10.1 Testes de componente: `invite-user-drawer`, `edit-user-drawer`, `deactivate-confirm-dialog`

@@ -1,6 +1,7 @@
-import { Eye, KeyRound, Pencil } from "lucide-react";
+import { Eye, KeyRound, Pencil, UserCheck, UserX } from "lucide-react";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
@@ -10,13 +11,24 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/
 
 import { ROLE_LABELS } from "../../constants/role-labels";
 import { useUsers } from "../../hooks/use-users";
+import { useReactivateUser } from "../../hooks/use-reactivate-user";
 import { ResetPasswordDialog } from "../../components/reset-password-dialog";
+import { DeactivateConfirmDialog } from "../../components/deactivate-confirm-dialog";
 
 export function UsersListScreen() {
   const { data: users, isLoading, isError, refetch } = useUsers();
   const usuario = useAuthStore((state) => state.usuario);
   const canManageUsers = usuario?.role === "platform_admin" || usuario?.role === "brokerage_admin";
   const [resetPasswordUserId, setResetPasswordUserId] = useState<string | null>(null);
+  const [deactivateUser, setDeactivateUser] = useState<{ id: string; name: string } | null>(null);
+  const reactivateUser = useReactivateUser();
+
+  function handleReactivate(id: string) {
+    reactivateUser.mutate(id, {
+      onSuccess: () => toast.success("Usuário reativado com sucesso"),
+      onError: (error) => toast.error(error.message || "Não foi possível reativar o usuário"),
+    });
+  }
 
   return (
     <div className="p-6">
@@ -151,6 +163,37 @@ export function UsersListScreen() {
                           <TooltipContent>Resetar senha</TooltipContent>
                         </Tooltip>
                       )}
+                      {canManageUsers &&
+                        user.id !== usuario?.id &&
+                        (user.status === "active" ? (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={() =>
+                                  setDeactivateUser({ id: user.id, name: user.full_name })
+                                }
+                              >
+                                <UserX className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Desativar</TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={() => handleReactivate(user.id)}
+                              >
+                                <UserCheck className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Reativar</TooltipContent>
+                          </Tooltip>
+                        ))}
                     </div>
                   </td>
                 </tr>
@@ -164,6 +207,12 @@ export function UsersListScreen() {
       <ResetPasswordDialog
         userId={resetPasswordUserId}
         onOpenChange={(open) => !open && setResetPasswordUserId(null)}
+      />
+
+      <DeactivateConfirmDialog
+        userId={deactivateUser?.id ?? null}
+        userName={deactivateUser?.name}
+        onOpenChange={(open) => !open && setDeactivateUser(null)}
       />
     </div>
   );
