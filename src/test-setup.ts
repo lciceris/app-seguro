@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterEach, vi } from "vitest";
 
 import "@testing-library/jest-dom/vitest";
 
@@ -8,3 +8,11 @@ import "@testing-library/jest-dom/vitest";
 afterEach(() => {
   cleanup();
 });
+
+// jsdom não implementa scrollIntoView nem a Pointer Events API completa — o Radix
+// Select (usado em invite-user-drawer, edit-user-drawer) depende de ambos ao abrir,
+// quebrando o teste sem esses stubs.
+Element.prototype.scrollIntoView = vi.fn();
+Element.prototype.hasPointerCapture = vi.fn().mockReturnValue(false);
+Element.prototype.setPointerCapture = vi.fn();
+Element.prototype.releasePointerCapture = vi.fn();

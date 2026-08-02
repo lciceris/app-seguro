@@ -96,12 +96,18 @@
 
   Verificado com usuários reais pelo navegador: `brokerage_admin` não vê ação de desativar/reativar na própria linha; na linha de outro usuário, "Desativar" abre `AlertDialog` mencionando o nome do usuário-alvo, "Cancelar" fecha sem alterar nada, confirmar desativa de verdade (`PATCH` retorna `status: inactive`, toast de sucesso, badge muda pra "Inativo" na lista). Confirmado o efeito real: o usuário desativado tentando logar é redirecionado pra `/account-deactivated` (Requirement 3.3, já validado na spec `auth`). "Reativar" funciona como ação direta sem dialog de confirmação (Requirement 3.5 — reativar não é destrutivo), toast de sucesso, badge volta pra "Ativo", e o login volta a funcionar normalmente. Nenhum erro de console.
 
-- [ ] 10. Testes
-  - [ ] 10.1 Testes de componente: `invite-user-drawer`, `edit-user-drawer`, `deactivate-confirm-dialog`
+- [x] 10. Testes
+  - [x] 10.1 Testes de componente: `invite-user-drawer`, `edit-user-drawer`, `deactivate-confirm-dialog`
     - _Requirements: 1.1, 4.1, 3.1_
-  - [ ] 10.2 Testes de hook: `useInviteUser`, `useUpdateUser`, `useDeactivateUser`, `useUpdateUserPassword`
+  - [x] 10.2 Testes de hook: `useInviteUser`, `useUpdateUser`, `useDeactivateUser`, `useUpdateUserPassword`
     - _Requirements: 1.1, 4.1, 3.1, 2.1_
-  - [ ] 10.3 Teste E2E: convite → definir senha → primeiro login (ponta a ponta com a spec `auth`)
+  - [x] 10.3 Teste E2E: convite → definir senha → primeiro login (ponta a ponta com a spec `auth`)
     - _Requirements: 1.1_
-  - [ ] 10.4 Teste E2E: desativação → tentativa de login bloqueada → reativação → login funciona de novo
+  - [x] 10.4 Teste E2E: desativação → tentativa de login bloqueada → reativação → login funciona de novo
     - _Requirements: 3.1, 3.2, 3.3, 3.5_
+  - [x] 10.5 (fix de infra, encontrado ao escrever os testes) `src/test-setup.ts` ganhou stubs de `scrollIntoView`/`hasPointerCapture`/`setPointerCapture`/`releasePointerCapture` — jsdom não implementa essas APIs e o Radix `Select` (usado em `invite-user-drawer`/`edit-user-drawer`) depende delas pra abrir, quebrando qualquer teste que interaja com ele sem esse stub.
+    - _Requirements: infra_
+
+  **Testes de componente/hook** (`npx vitest run`): 20/20 passando. Os hooks mockam a camada `api/` e conferem a chamada com os argumentos corretos (via `renderHook` + `waitFor`); os componentes mockam os hooks da própria feature e usam `renderWithProviders` — `invite-user-drawer`/`edit-user-drawer` precisaram de `@testing-library/user-event` (em vez de `fireEvent`) pra interagir de forma realista com o `Select` do Radix, e de `within(listbox)`/`{ selector: "p" }` pra desambiguar textos que aparecem duplicados (o `<select>` nativo oculto que o Radix mantém por baixo repete o mesmo texto das opções visíveis).
+
+  **Testes E2E** (`npx playwright test`, contra o Supabase real): `e2e/users-invite.spec.ts` usa `admin.auth.admin.generateLink({ type: "invite" })` pra obter um link de convite válido sem depender do SMTP realmente enviar o e-mail (mesma limitação das Tasks 2 e 5) — abre o link, define a senha, desloga e loga de novo com a senha nova, confirmando o mecanismo de "primeiro acesso" ponta a ponta. `e2e/users-deactivate.spec.ts` desativa um usuário pela UI, confirma que o login dele passa a cair em `/account-deactivated`, reativa (sem dialog), e confirma que o login volta a funcionar. Ambos passando, junto com o `e2e/auth.spec.ts` já existente (3/3).
