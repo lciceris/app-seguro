@@ -9,3 +9,4 @@ export * from "./hooks/use-update-own-brokerage";
 export * from "./types/brokerage";
 export * from "./screens/brokerages-list-screen";
 export * from "./components/create-brokerage-drawer";
+export * from "./components/brokerage-detail-drawer";

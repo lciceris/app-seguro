@@ -64,11 +64,15 @@
 
   **Não verificado** (mesma limitação já registrada): envio real do e-mail de convite do primeiro admin.
 
-- [ ] 6. Ver detalhe de uma corretora
-  - [ ] 6.1 Criar `features/brokerages/components/brokerage-detail-drawer/`
+- [x] 6. Ver detalhe de uma corretora
+  - [x] 6.1 Criar `features/brokerages/components/brokerage-detail-drawer/`
     - _Requirements: 4.1_
-  - [ ] 6.2 Criar `pages/brokerages/[brokerageId]/brokerage-detail-page.tsx` como rota filha `/brokerages/:brokerageId`
+  - [x] 6.2 Criar `pages/brokerages/[brokerageId]/brokerage-detail-page.tsx` como rota filha `/brokerages/:brokerageId`
     - _Requirements: 4.1_
+  - [x] 6.3 (ajuste, não é lacuna) `get-brokerage` passou a fazer o mesmo embed com `plans(name)` já usado em `list-brokerages` (Task 4.3), pra mostrar o nome do plano no detalhe.
+    - _Requirements: infra_
+
+  Verificado com o usuário `platform_admin` real pelo navegador: abre `/brokerages/:brokerageId` e vê nome/plano/status corretos, com a listagem ainda montada por trás do drawer. Botão "Fechar" volta pra `/brokerages`. Nenhum erro de console.
 
 - [ ] 7. Editar uma corretora (platform_admin)
   - [ ] 7.1 Criar `features/brokerages/validations/edit-brokerage-schema.ts` (nome, plano vinculado — sem logo/cor)
