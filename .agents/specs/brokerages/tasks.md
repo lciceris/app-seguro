@@ -30,13 +30,17 @@
 
   **Não verificado** (mesma limitação já registrada nas Tasks 2/5/10 da spec `users`): envio real do e-mail de convite do primeiro admin — depende da configuração de SMTP/Resend, ainda pendente.
 
-- [ ] 3. Camada de dados do frontend
-  - [ ] 3.1 Criar `features/brokerages/types/brokerage.ts` + `constants/query-keys.ts`
+- [x] 3. Camada de dados do frontend
+  - [x] 3.1 Criar `features/brokerages/types/brokerage.ts` + `constants/query-keys.ts` (+ `constants/platform-brokerage.ts` com o id fixo da corretora especial)
     - _Requirements: infra_
-  - [ ] 3.2 Criar `features/brokerages/api/` — `list-brokerages`, `get-brokerage`, `create-brokerage`, `update-brokerage`, `deactivate-brokerage`, `reactivate-brokerage`, `get-own-brokerage`, `update-own-brokerage`
+  - [x] 3.2 Criar `features/brokerages/api/` — `list-brokerages`, `get-brokerage`, `create-brokerage`, `update-brokerage`, `deactivate-brokerage`, `reactivate-brokerage`, `get-own-brokerage`, `update-own-brokerage`
     - _Requirements: 2.1, 3.1, 4.1, 4.2, 5.1, 5.4, 6.1_
-  - [ ] 3.3 Criar `features/brokerages/hooks/` correspondentes — cada mutation invalida `brokerageKeys.lists()`/`detail()`/`own()`
+  - [x] 3.3 Criar `features/brokerages/hooks/` correspondentes — cada mutation invalida `brokerageKeys.lists()`/`detail()`/`own()`
     - _Requirements: 2.1, 3.1, 4.1, 4.2, 5.1, 5.4, 6.1_
+  - [x] 3.4 (refatoração, não é lacuna) Extraído `shared/utils/extract-function-error-message/` — a mesma lógica de parsing de erro de Edge Function já existia em `users/api/invite-user.ts`; com `create-brokerage.ts` precisando dela de novo, duas ocorrências idênticas já justificava o compartilhamento. `invite-user.ts` foi atualizado pra importar dali.
+    - _Requirements: infra_
+
+  Verificação ponta a ponta desses hooks fica pra quando a UI (Task 4+) existir e puder exercitá-los pelo navegador — a RLS/trigger por trás já foi validada com usuários reais na Task 1.
 
 - [ ] 4. Listagem de corretoras (platform_admin)
   - [ ] 4.1 Criar `features/brokerages/screens/brokerages-list-screen/` — tabela com nome, plano, status, ações (mesmo padrão visual da `users-list-screen`), `<Outlet/>` pros drawers aninhados
