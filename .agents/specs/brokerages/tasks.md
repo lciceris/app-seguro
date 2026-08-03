@@ -52,13 +52,17 @@
 
   Verificado com usuários/corretoras reais pelo navegador: `platform_admin` (usuário real `lciceris@gmail.com`) vê as corretoras de teste com o nome do plano vinculado ou "Sem plano", badge de status correto, e **não** vê a corretora especial "Plataforma" na lista (filtro funcionando); `brokerage_admin` tentando acessar `/brokerages` diretamente é bloqueado e redirecionado pra própria rota inicial. Nenhum erro de console.
 
-- [ ] 5. Criar corretora
-  - [ ] 5.1 Criar `features/brokerages/validations/create-brokerage-schema.ts` (nome da corretora, nome/email do primeiro admin)
+- [x] 5. Criar corretora
+  - [x] 5.1 Criar `features/brokerages/validations/create-brokerage-schema.ts` (nome da corretora, nome/email do primeiro admin)
     - _Requirements: 2.1_
-  - [ ] 5.2 Criar `features/brokerages/components/create-brokerage-drawer/` (inclui feedback de erro no convite do primeiro admin)
+  - [x] 5.2 Criar `features/brokerages/components/create-brokerage-drawer/` (inclui feedback de erro no convite do primeiro admin)
     - _Requirements: 2.1, 2.2_
-  - [ ] 5.3 Criar `pages/brokerages/add/add-brokerage-page.tsx` como rota filha `/brokerages/add`
+  - [x] 5.3 Criar `pages/brokerages/add/add-brokerage-page.tsx` como rota filha `/brokerages/add`
     - _Requirements: 2.1_
+
+  Verificado com o usuário `platform_admin` real pelo navegador: drawer abre sobre a listagem via `/brokerages/add` sem perder a lista de fundo; validação client-side (campos vazios) aparece inline sem chamar a API; submit válido chega de fato na Edge Function e retorna o erro de domínio de e-mail inválido do SMTP sandbox (mesma limitação já documentada nas Tasks 2/5/10 da spec `users` e na Task 2 desta spec) — o toast de erro aparece corretamente, e o rollback foi reconfirmado a partir da UI: a corretora não ficou órfã no banco. Nenhum erro de console.
+
+  **Não verificado** (mesma limitação já registrada): envio real do e-mail de convite do primeiro admin.
 
 - [ ] 6. Ver detalhe de uma corretora
   - [ ] 6.1 Criar `features/brokerages/components/brokerage-detail-drawer/`

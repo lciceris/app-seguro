@@ -5,6 +5,7 @@ import { AccountDeactivatedPage } from "@/pages/account-deactivated/account-deac
 import { HomePage } from "@/pages/home/home-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { SetPasswordPage } from "@/pages/set-password/set-password-page";
+import { AddBrokeragePage } from "@/pages/brokerages/add/add-brokerage-page";
 import { BrokeragesPage } from "@/pages/brokerages/brokerages-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
@@ -38,7 +39,9 @@ export function AppRouter() {
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={["platform_admin"]} />}>
-        <Route path="/brokerages" element={<BrokeragesPage />} />
+        <Route path="/brokerages" element={<BrokeragesPage />}>
+          <Route path="add" element={<AddBrokeragePage />} />
+        </Route>
       </Route>
     </Routes>
   );
