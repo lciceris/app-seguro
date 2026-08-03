@@ -7,3 +7,4 @@ export * from "./hooks/use-reactivate-brokerage";
 export * from "./hooks/use-own-brokerage";
 export * from "./hooks/use-update-own-brokerage";
 export * from "./types/brokerage";
+export * from "./screens/brokerages-list-screen";

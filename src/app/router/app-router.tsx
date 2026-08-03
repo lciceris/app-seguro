@@ -5,6 +5,7 @@ import { AccountDeactivatedPage } from "@/pages/account-deactivated/account-deac
 import { HomePage } from "@/pages/home/home-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { SetPasswordPage } from "@/pages/set-password/set-password-page";
+import { BrokeragesPage } from "@/pages/brokerages/brokerages-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
 import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
@@ -34,6 +35,10 @@ export function AppRouter() {
             <Route path=":userId/edit" element={<EditUserPage />} />
           </Route>
         </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute allowedRoles={["platform_admin"]} />}>
+        <Route path="/brokerages" element={<BrokeragesPage />} />
       </Route>
     </Routes>
   );

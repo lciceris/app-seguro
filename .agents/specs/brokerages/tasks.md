@@ -42,11 +42,15 @@
 
   Verificação ponta a ponta desses hooks fica pra quando a UI (Task 4+) existir e puder exercitá-los pelo navegador — a RLS/trigger por trás já foi validada com usuários reais na Task 1.
 
-- [ ] 4. Listagem de corretoras (platform_admin)
-  - [ ] 4.1 Criar `features/brokerages/screens/brokerages-list-screen/` — tabela com nome, plano, status, ações (mesmo padrão visual da `users-list-screen`), `<Outlet/>` pros drawers aninhados
+- [x] 4. Listagem de corretoras (platform_admin)
+  - [x] 4.1 Criar `features/brokerages/screens/brokerages-list-screen/` — tabela com nome, plano, status, ações (mesmo padrão visual da `users-list-screen`), `<Outlet/>` pros drawers aninhados
     - _Requirements: 3.1_
-  - [ ] 4.2 Criar `pages/brokerages/brokerages-page.tsx` e registrar a rota `/brokerages` (restrita a `platform_admin`)
+  - [x] 4.2 Criar `pages/brokerages/brokerages-page.tsx` e registrar a rota `/brokerages` (restrita a `platform_admin`)
     - _Requirements: 3.2_
+  - [x] 4.3 (ajuste, não é lacuna) `list-brokerages` passou a fazer embed com `plans(name)` — só 1 relacionamento entre `brokerages` e `plans`, embed direto é seguro (diferente do caso `quotations`/`quotation_insurers`, que tem 2 relacionamentos e por isso exige queries separadas). Tipo novo `BrokerageWithPlan` em `types/brokerage.ts`.
+    - _Requirements: infra_
+
+  Verificado com usuários/corretoras reais pelo navegador: `platform_admin` (usuário real `lciceris@gmail.com`) vê as corretoras de teste com o nome do plano vinculado ou "Sem plano", badge de status correto, e **não** vê a corretora especial "Plataforma" na lista (filtro funcionando); `brokerage_admin` tentando acessar `/brokerages` diretamente é bloqueado e redirecionado pra própria rota inicial. Nenhum erro de console.
 
 - [ ] 5. Criar corretora
   - [ ] 5.1 Criar `features/brokerages/validations/create-brokerage-schema.ts` (nome da corretora, nome/email do primeiro admin)
