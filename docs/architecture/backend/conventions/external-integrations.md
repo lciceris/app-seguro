@@ -15,6 +15,16 @@ Configurado no nível do projeto Supabase (Auth → SMTP customizado), não em c
 
 Isso é configuração de infraestrutura do projeto Supabase, não faz parte do código do frontend.
 
+### TODO — ainda não configurado no projeto novo
+
+O SMTP sandbox padrão do Supabase rejeita domínios de teste e tem rate limit agressivo — insuficiente mesmo pra validar manualmente. Precisa configurar SMTP customizado (Resend) no dashboard do projeto (Auth → SMTP Settings) antes de qualquer envio real funcionar.
+
+**Specs que dependem disso e já documentam a limitação nas notas de verificação do próprio `tasks.md`** (a lógica de negócio em si está implementada e verificada — só o envio de fato não foi confirmado):
+- `.agents/specs/users/tasks.md` — Tasks 2, 5 e 10 (convite de usuário).
+- `.agents/specs/auth/tasks.md` — fluxo de "definir senha no primeiro acesso" depende do link de convite chegar por e-mail.
+
+Quando configurar: refazer a verificação manual de convite ponta a ponta (convite → e-mail chega → definir senha → login) e atualizar as notas "Não verificado" desses `tasks.md` para refletir a confirmação.
+
 ## Variáveis de ambiente
 
 | Variável | Onde vive | Público? |
