@@ -393,6 +393,9 @@ verify_jwt = false
 [functions.update-user-password]
 verify_jwt = false
 
+[functions.create-brokerage]
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

@@ -20,11 +20,15 @@
 
   Verificado com usuários/corretoras reais (script efêmero, limpo depois): `platform_admin` vê todas as corretoras e edita nome/plano/status de qualquer uma, mas é bloqueado pelo trigger ao tentar editar logo/cor de uma corretora que não é a sua; `brokerage_admin` só vê/edita a própria (nome/logo/cor), e é bloqueado ao tentar mudar o próprio plano/status; desativar uma corretora via `service role` faz `get_my_role()` retornar `null` pra todos os usuários dela (cascata funcionando); mesmo com a corretora inativa, `brokerages_select_own_unconditional` ainda permite ler os próprios dados da corretora (necessário pra Task 9.4 diferenciar a causa do bloqueio). Aproveitado pra migrar o usuário `platform_admin` de teste (`lciceris@gmail.com`, criado antes desta spec existir) da corretora normal em que estava pra a corretora especial "Plataforma", e remover a corretora órfã que sobrou.
 
-- [ ] 2. Edge Function `create-brokerage`
-  - [ ] 2.1 Criar `_shared/verify-platform-admin.ts` — confirma só `get_my_role() === 'platform_admin'`, sem checagem de corretora (operação inerentemente cross-tenant, diferente de `verify-admin.ts`)
+- [x] 2. Edge Function `create-brokerage`
+  - [x] 2.1 Criar `_shared/verify-platform-admin.ts` — confirma só `get_my_role() === 'platform_admin'`, sem checagem de corretora (operação inerentemente cross-tenant, diferente de `verify-admin.ts`)
     - _Requirements: 2.3_
-  - [ ] 2.2 Criar Edge Function `create-brokerage` — cria a linha em `brokerages`, convida o primeiro usuário como `brokerage_admin` dela (reaproveita a lógica de `invite-user` da spec `users`), com rollback da corretora se o convite falhar
+  - [x] 2.2 Criar Edge Function `create-brokerage` — cria a linha em `brokerages`, convida o primeiro usuário como `brokerage_admin` dela (reaproveita a lógica de `invite-user` da spec `users`), com rollback da corretora se o convite falhar
     - _Requirements: 2.1, 2.2, 2.4_
+
+  Verificado com usuários reais via chamada HTTP direta (fora da UI, já que ainda não existe frontend): `seller` chamando a função → 403; `brokerage_admin` chamando → 403 (só `platform_admin` passa); `platform_admin` criando uma corretora nova → o convite falha por causa do domínio de teste (mesma limitação de SMTP já documentada nas Tasks 2/5/10 da spec `users`), e o rollback foi confirmado de verdade — a corretora não ficou órfã no banco depois da falha. Deployada com `verify_jwt = false` (mesmo padrão de `invite-user`/`update-user-password`, ver `supabase/config.toml`).
+
+  **Não verificado** (mesma limitação já registrada nas Tasks 2/5/10 da spec `users`): envio real do e-mail de convite do primeiro admin — depende da configuração de SMTP/Resend, ainda pendente.
 
 - [ ] 3. Camada de dados do frontend
   - [ ] 3.1 Criar `features/brokerages/types/brokerage.ts` + `constants/query-keys.ts`
