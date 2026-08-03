@@ -22,6 +22,7 @@ export type Database = {
           name: string
           plan_id: string | null
           primary_color: string | null
+          status: Database["public"]["Enums"]["brokerage_status"]
           updated_at: string
         }
         Insert: {
@@ -31,6 +32,7 @@ export type Database = {
           name: string
           plan_id?: string | null
           primary_color?: string | null
+          status?: Database["public"]["Enums"]["brokerage_status"]
           updated_at?: string
         }
         Update: {
@@ -40,6 +42,7 @@ export type Database = {
           name?: string
           plan_id?: string | null
           primary_color?: string | null
+          status?: Database["public"]["Enums"]["brokerage_status"]
           updated_at?: string
         }
         Relationships: [
@@ -136,6 +139,7 @@ export type Database = {
       }
     }
     Enums: {
+      brokerage_status: "active" | "inactive"
       user_role:
         | "platform_admin"
         | "brokerage_admin"
@@ -271,6 +275,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      brokerage_status: ["active", "inactive"],
       user_role: [
         "platform_admin",
         "brokerage_admin",

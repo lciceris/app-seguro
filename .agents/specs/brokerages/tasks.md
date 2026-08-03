@@ -1,20 +1,24 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: enum `brokerage_status` (`active`, `inactive`) + coluna `status` em `brokerages` (not null, default `active`)
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: enum `brokerage_status` (`active`, `inactive`) + coluna `status` em `brokerages` (not null, default `active`)
     - _Requirements: 5.1_
-  - [ ] 1.2 Migration: seed da corretora especial da plataforma (`id` fixo `00000000-0000-0000-0000-000000000001`)
+  - [x] 1.2 Migration: seed da corretora especial da plataforma (`id` fixo `00000000-0000-0000-0000-000000000001`)
     - _Requirements: 1.1_
-  - [ ] 1.3 Migration: estender `get_my_role()`/`get_my_brokerage_id()` (definidas na spec `auth`) pra também exigir `brokerages.status = 'active'`, além de `users.status = 'active'` já existente
+  - [x] 1.3 Migration: estender `get_my_role()`/`get_my_brokerage_id()` (definidas na spec `auth`) pra também exigir `brokerages.status = 'active'`, além de `users.status = 'active'` já existente
     - _Requirements: 5.2_
-  - [ ] 1.4 Migration: policy `brokerages_select_own_unconditional` — lê a própria corretora via o `brokerage_id` salvo em `users`, sem depender de `get_my_brokerage_id()` (continua funcionando com a corretora inativa)
+  - [x] 1.4 Migration: policy `brokerages_select_own_unconditional` — lê a própria corretora via o `brokerage_id` salvo em `users`, sem depender de `get_my_brokerage_id()` (continua funcionando com a corretora inativa)
     - _Requirements: 5.3_
-  - [ ] 1.5 Migration: policy `brokerages_select_all_platform_admin` (sem filtro de `brokerage_id`)
+  - [x] 1.5 Migration: policy `brokerages_select_all_platform_admin` (sem filtro de `brokerage_id`)
     - _Requirements: 3.1_
-  - [ ] 1.6 Migration: policies `brokerages_update_own` e `brokerages_update_platform_admin` + GRANT column-level (`name`/`logo_url`/`primary_color` vs. `name`/`plan_id`/`status`)
+  - [x] 1.6 Migration: policies `brokerages_update_own` e `brokerages_update_platform_admin` + GRANT column-level (`name`/`logo_url`/`primary_color` vs. `name`/`plan_id`/`status`)
     - _Requirements: 4.2, 6.1_
-  - [ ] 1.7 Migration: trigger `enforce_brokerage_update_columns` (`BEFORE UPDATE`) — bloqueia `brokerage_admin` de mudar `plan_id`/`status` e `platform_admin` de mudar `logo_url`/`primary_color`, já que GRANT column-level não diferencia por policy/linha
+  - [x] 1.7 Migration: trigger `enforce_brokerage_update_columns` (`BEFORE UPDATE`) — bloqueia `brokerage_admin` de mudar `plan_id`/`status` e `platform_admin` de mudar `logo_url`/`primary_color`, já que GRANT column-level não diferencia por policy/linha
     - _Requirements: 4.3, 6.2_
+  - [x] 1.8 (fix de bug, encontrado ao verificar a Task 1 manualmente) A função do trigger 1.7 chamava `get_my_role()`/`get_my_brokerage_id()` sem qualificar o schema — com `search_path = ''` (`SECURITY DEFINER`), isso falha com "function get_my_role() does not exist" e quebra **qualquer** UPDATE em `brokerages`, inclusive via service role. Migration de fix qualifica as chamadas com `public.`.
+    - _Requirements: infra_
+
+  Verificado com usuários/corretoras reais (script efêmero, limpo depois): `platform_admin` vê todas as corretoras e edita nome/plano/status de qualquer uma, mas é bloqueado pelo trigger ao tentar editar logo/cor de uma corretora que não é a sua; `brokerage_admin` só vê/edita a própria (nome/logo/cor), e é bloqueado ao tentar mudar o próprio plano/status; desativar uma corretora via `service role` faz `get_my_role()` retornar `null` pra todos os usuários dela (cascata funcionando); mesmo com a corretora inativa, `brokerages_select_own_unconditional` ainda permite ler os próprios dados da corretora (necessário pra Task 9.4 diferenciar a causa do bloqueio). Aproveitado pra migrar o usuário `platform_admin` de teste (`lciceris@gmail.com`, criado antes desta spec existir) da corretora normal em que estava pra a corretora especial "Plataforma", e remover a corretora órfã que sobrou.
 
 - [ ] 2. Edge Function `create-brokerage`
   - [ ] 2.1 Criar `_shared/verify-platform-admin.ts` — confirma só `get_my_role() === 'platform_admin'`, sem checagem de corretora (operação inerentemente cross-tenant, diferente de `verify-admin.ts`)
