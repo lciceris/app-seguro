@@ -88,11 +88,15 @@
 
   Verificado com o usuário `platform_admin` real pelo navegador: editar nome funciona; vincular um plano funciona (`plan_id` atualizado corretamente no banco) e o `Select` mostra o nome do plano certo ao reabrir o drawer; voltar pra "Sem plano" também funciona (`plan_id` volta a `null`). Reconfirmado depois do fix que `edit-user-drawer` (spec `users`) continua funcionando de ponta a ponta (nome, telefone e perfil mudam corretamente) e que os 20 testes automatizados existentes continuam passando. Nenhum erro de console.
 
-- [ ] 8. Desativar e reativar uma corretora
-  - [ ] 8.1 Criar `features/brokerages/components/deactivate-brokerage-confirm-dialog/` (`AlertDialog`, sem rota)
+- [x] 8. Desativar e reativar uma corretora
+  - [x] 8.1 Criar `features/brokerages/components/deactivate-brokerage-confirm-dialog/` (`AlertDialog`, sem rota)
     - _Requirements: 5.1_
-  - [ ] 8.2 Implementar ação de reativar na listagem (sem dialog de confirmação — reativar não é destrutivo)
+  - [x] 8.2 Implementar ação de reativar na listagem (sem dialog de confirmação — reativar não é destrutivo)
     - _Requirements: 5.4_
+
+  Verificado com usuários reais pelo navegador: `platform_admin` desativa uma corretora pela listagem — `AlertDialog` menciona o nome da corretora, confirmar desativa de verdade (badge muda pra "Inativo", toast de sucesso); reativar funciona como ação direta sem dialog (Requirement 5.4). Confirmado o mecanismo de dados por trás (Requirement 5.2): com a corretora inativa, `get_my_role()` retorna `null` pro usuário dela via chamada direta — o login (autenticação em si) continua funcionando normalmente (é independente de RLS), mas toda leitura de dados operacionais fica bloqueada, e a linha própria em `users` continua legível (self-access, não depende de `get_my_role()`), que é o mecanismo que a Task 9 vai usar pra detectar a causa do bloqueio.
+
+  **Gap conhecido, escopo da Task 9**: hoje o `ProtectedRoute` só verifica `usuario.status`, nunca o status da corretora — por isso um usuário de uma corretora desativada ainda consegue "entrar" no app (a home carrega, mesmo que as queries de dados por trás estejam todas bloqueadas pela RLS). Isso é exatamente o que a Task 9 resolve, não uma regressão desta task.
 
 - [ ] 9. Editar a própria corretora (brokerage_admin)
   - [ ] 9.1 Criar `features/brokerages/validations/edit-own-brokerage-schema.ts` (nome, logo, cor primária — sem plano/status)

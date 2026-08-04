@@ -1,15 +1,31 @@
-import { Eye, Pencil } from "lucide-react";
+import { Eye, Pencil, UserCheck, UserX } from "lucide-react";
+import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { toast } from "sonner";
 
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
+import { DeactivateBrokerageConfirmDialog } from "../../components/deactivate-brokerage-confirm-dialog";
 import { useBrokerages } from "../../hooks/use-brokerages";
+import { useReactivateBrokerage } from "../../hooks/use-reactivate-brokerage";
 
 export function BrokeragesListScreen() {
   const { data: brokerages, isLoading, isError, refetch } = useBrokerages();
+  const [deactivateBrokerage, setDeactivateBrokerage] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const reactivateBrokerage = useReactivateBrokerage();
+
+  function handleReactivate(id: string) {
+    reactivateBrokerage.mutate(id, {
+      onSuccess: () => toast.success("Corretora reativada com sucesso"),
+      onError: (error) => toast.error(error.message || "Não foi possível reativar a corretora"),
+    });
+  }
 
   return (
     <div className="p-6">
@@ -121,6 +137,35 @@ export function BrokeragesListScreen() {
                         </TooltipTrigger>
                         <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
+                      {brokerage.status === "active" ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() =>
+                                setDeactivateBrokerage({ id: brokerage.id, name: brokerage.name })
+                              }
+                            >
+                              <UserX className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Desativar</TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() => handleReactivate(brokerage.id)}
+                            >
+                              <UserCheck className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reativar</TooltipContent>
+                        </Tooltip>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -130,6 +175,12 @@ export function BrokeragesListScreen() {
       </div>
 
       <Outlet />
+
+      <DeactivateBrokerageConfirmDialog
+        brokerageId={deactivateBrokerage?.id ?? null}
+        brokerageName={deactivateBrokerage?.name}
+        onOpenChange={(open) => !open && setDeactivateBrokerage(null)}
+      />
     </div>
   );
 }
