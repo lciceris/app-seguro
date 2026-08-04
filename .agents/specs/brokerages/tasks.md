@@ -74,13 +74,19 @@
 
   Verificado com o usuário `platform_admin` real pelo navegador: abre `/brokerages/:brokerageId` e vê nome/plano/status corretos, com a listagem ainda montada por trás do drawer. Botão "Fechar" volta pra `/brokerages`. Nenhum erro de console.
 
-- [ ] 7. Editar uma corretora (platform_admin)
-  - [ ] 7.1 Criar `features/brokerages/validations/edit-brokerage-schema.ts` (nome, plano vinculado — sem logo/cor)
+- [x] 7. Editar uma corretora (platform_admin)
+  - [x] 7.1 Criar `features/brokerages/validations/edit-brokerage-schema.ts` (nome, plano vinculado — sem logo/cor)
     - _Requirements: 4.2, 4.3_
-  - [ ] 7.2 Criar `features/brokerages/components/edit-brokerage-drawer/`
+  - [x] 7.2 Criar `features/brokerages/components/edit-brokerage-drawer/`
     - _Requirements: 4.2_
-  - [ ] 7.3 Criar `pages/brokerages/[brokerageId]/edit/edit-brokerage-page.tsx` como rota filha `/brokerages/:brokerageId/edit`
+  - [x] 7.3 Criar `pages/brokerages/[brokerageId]/edit/edit-brokerage-page.tsx` como rota filha `/brokerages/:brokerageId/edit`
     - _Requirements: 4.2_
+  - [x] 7.4 (infra) `features/brokerages/api/list-plans` + `hooks/use-plans` — `plans` ainda não tem spec própria; único consumidor até agora é o `Select` de plano deste drawer.
+    - _Requirements: infra_
+  - [x] 7.5 (fix de bug, encontrado ao verificar manualmente) O `Select` controlado (via `Controller` + `reset()` num `useEffect`) nunca refletia o valor pré-selecionado ao abrir o drawer — sempre mostrava o placeholder, mesmo esperando vários segundos (não era race condition, era estrutural). O submit funcionava certo (o valor ia pro banco correto), só a exibição inicial que ficava errada. Fix: extraído um subcomponente (`EditBrokerageForm`) que só monta quando os dados já chegaram, usando-os como `defaultValues` do `useForm` diretamente, em vez de popular via `reset()` depois de montado. **O mesmo bug existia em `edit-user-drawer` da spec `users` (Task 7.2 de lá) — corrigido junto, com a mesma técnica**, já que é a mesma causa raiz.
+    - _Requirements: infra_
+
+  Verificado com o usuário `platform_admin` real pelo navegador: editar nome funciona; vincular um plano funciona (`plan_id` atualizado corretamente no banco) e o `Select` mostra o nome do plano certo ao reabrir o drawer; voltar pra "Sem plano" também funciona (`plan_id` volta a `null`). Reconfirmado depois do fix que `edit-user-drawer` (spec `users`) continua funcionando de ponta a ponta (nome, telefone e perfil mudam corretamente) e que os 20 testes automatizados existentes continuam passando. Nenhum erro de console.
 
 - [ ] 8. Desativar e reativar uma corretora
   - [ ] 8.1 Criar `features/brokerages/components/deactivate-brokerage-confirm-dialog/` (`AlertDialog`, sem rota)

@@ -10,3 +10,4 @@ export * from "./types/brokerage";
 export * from "./screens/brokerages-list-screen";
 export * from "./components/create-brokerage-drawer";
 export * from "./components/brokerage-detail-drawer";
+export * from "./components/edit-brokerage-drawer";
