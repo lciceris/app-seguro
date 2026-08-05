@@ -118,12 +118,16 @@
 
   Verificado extensivamente com usuários/corretoras reais pelo navegador (múltiplas rodadas seguidas, inclusive com contextos de browser isolados por login, pra descartar qualquer resquício entre sessões): `brokerage_admin` edita nome/logo/cor da própria corretora com sucesso (dado refletido no banco); usuário individualmente desativado (corretora ativa) vê "Sua conta foi desativada..."; `brokerage_admin` ativo com a corretora desativada vê "O acesso da sua corretora à plataforma foi desativado..." — as duas mensagens nunca mais se confundiram depois do fix 9.7; após reativar a corretora, o login volta a funcionar normalmente. Nenhum erro de console.
 
-- [ ] 10. Testes
-  - [ ] 10.1 Testes de componente: `create-brokerage-drawer`, `edit-brokerage-drawer`, `deactivate-brokerage-confirm-dialog`, `own-brokerage-screen`
+- [x] 10. Testes
+  - [x] 10.1 Testes de componente: `create-brokerage-drawer`, `edit-brokerage-drawer`, `deactivate-brokerage-confirm-dialog`, `own-brokerage-screen`
     - _Requirements: 2.1, 4.2, 5.1, 6.1_
-  - [ ] 10.2 Testes de hook: `useCreateBrokerage`, `useUpdateBrokerage`, `useDeactivateBrokerage`
+  - [x] 10.2 Testes de hook: `useCreateBrokerage`, `useUpdateBrokerage`, `useDeactivateBrokerage`
     - _Requirements: 2.1, 4.2, 5.1_
-  - [ ] 10.3 Teste E2E: `platform_admin` cria corretora → primeiro admin define senha → login
+  - [x] 10.3 Teste E2E: `platform_admin` cria corretora → primeiro admin define senha → login
     - _Requirements: 2.1_
-  - [ ] 10.4 Teste E2E: desativação de corretora → login de um usuário dela cai na tela de bloqueio com a mensagem certa → reativação → login funciona de novo
+  - [x] 10.4 Teste E2E: desativação de corretora → login de um usuário dela cai na tela de bloqueio com a mensagem certa → reativação → login funciona de novo
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
+
+  **Testes de componente/hook** (`npx vitest run`): 33/33 passando (13 novos desta spec + os 20 já existentes de `auth`/`users`, sem nenhuma regressão). `edit-brokerage-drawer` precisou de `@testing-library/user-event` + `within(listbox)` pra interagir com o `Select` do Radix, mesmo padrão já usado em `invite-user-drawer`/`edit-user-drawer` da spec `users`.
+
+  **Testes E2E** (`npx playwright test`, contra o Supabase real): `e2e/brokerages-create.spec.ts` cobre tanto a criação pela UI real (confirmando o rollback quando o convite falha por SMTP) quanto "definir senha → login" via `generateLink` (mesma técnica da spec `users`, contorna só a limitação de envio de e-mail). `e2e/brokerages-deactivate.spec.ts` desativa uma corretora pela UI, confirma que um usuário dela cai em `/account-deactivated` com a mensagem de **corretora** (não de conta — o núcleo do que a Task 9 corrigiu), reativa, e confirma que o login volta a funcionar. Encontrado e corrigido no caminho: a home do `brokerage_admin` (`/quotations`) ainda não é uma rota implementada, então nada reage a um `signOut()` feito ali navegando pra `/login` sozinho — o teste precisou navegar explicitamente. Todos os 6 testes E2E do projeto passando (3 novos + `auth`/`users-invite`/`users-deactivate` já existentes).
