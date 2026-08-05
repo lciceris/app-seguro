@@ -98,15 +98,25 @@
 
   **Gap conhecido, escopo da Task 9**: hoje o `ProtectedRoute` só verifica `usuario.status`, nunca o status da corretora — por isso um usuário de uma corretora desativada ainda consegue "entrar" no app (a home carrega, mesmo que as queries de dados por trás estejam todas bloqueadas pela RLS). Isso é exatamente o que a Task 9 resolve, não uma regressão desta task.
 
-- [ ] 9. Editar a própria corretora (brokerage_admin)
-  - [ ] 9.1 Criar `features/brokerages/validations/edit-own-brokerage-schema.ts` (nome, logo, cor primária — sem plano/status)
+- [x] 9. Editar a própria corretora (brokerage_admin)
+  - [x] 9.1 Criar `features/brokerages/validations/edit-own-brokerage-schema.ts` (nome, logo, cor primária — sem plano/status)
     - _Requirements: 6.1, 6.2_
-  - [ ] 9.2 Criar `features/brokerages/screens/own-brokerage-screen/` (screen própria, não drawer — sem lista por trás)
+  - [x] 9.2 Criar `features/brokerages/screens/own-brokerage-screen/` (screen própria, não drawer — sem lista por trás)
     - _Requirements: 6.1_
-  - [ ] 9.3 Criar `pages/my-brokerage/my-brokerage-page.tsx` e registrar a rota `/my-brokerage` (restrita a `brokerage_admin`/`platform_admin`)
+  - [x] 9.3 Criar `pages/my-brokerage/my-brokerage-page.tsx` e registrar a rota `/my-brokerage` (restrita a `brokerage_admin`/`platform_admin`)
     - _Requirements: 6.1, 6.4_
-  - [ ] 9.4 Adaptar `account-deactivated-screen` (spec `auth`) pra diferenciar "conta desativada" de "corretora desativada", consultando `brokerages_select_own_unconditional`
+  - [x] 9.4 Adaptar `account-deactivated-screen` (spec `auth`) pra diferenciar "conta desativada" de "corretora desativada"
     - _Requirements: 5.3_
+  - [x] 9.5 (fix de bug real, encontrado ao verificar manualmente) `ProtectedRoute`/`LoginPage` (spec `auth`) checavam só `usuario.status !== "active"` pra bloquear — nunca consideravam a corretora, então um usuário de uma corretora desativada conseguia "entrar" no app normalmente (a home carregava, mesmo com toda leitura de dados bloqueada por RLS por trás). Fix em duas partes:
+    - `get-session.ts` passou a trazer `brokerages(..., status)` no embed e expor `brokerage_status` no objeto `Usuario` (`auth-store.ts`) — sinal explícito, não a ausência do embed (que agora **sempre** funciona pra própria corretora, ver 9.6).
+    - `ProtectedRoute` e `LoginPage` passaram a checar `usuario.status !== "active" || usuario.brokerage_status === "inactive"`.
+    - _Requirements: 5.2_
+  - [x] 9.6 (fix de bug real, encontrado ao verificar manualmente) `brokerages_select_own_unconditional` (Task 1.4) usava uma subquery inline na policy — funcionava de forma isolada, mas se mostrou inconsistente no fluxo real do app. Substituída por uma função `SECURITY DEFINER` (`get_my_brokerage_id_unconditional()`), mesmo padrão já comprovado de `get_my_role()`/`get_my_brokerage_id()`.
+    - _Requirements: infra_
+  - [x] 9.7 (fix de bug real, o mais sutil de todos) A implementação original de "diferenciar a causa" fazia uma segunda chamada de rede (`getDeactivationReason`) dentro da própria tela — sofria de uma corrida real de autenticação e foi descartada. A abordagem final reaproveita `usuario.status`/`brokerage_status` que **já vêm** de `get-session.ts` (populados durante o login), sem nenhuma chamada extra. Ainda assim, a causa raiz do bug observado era outra: `AccountDeactivatedPage` (spec `auth`, já existente) desloga automaticamente ao montar essa tela (logout de segurança) — isso faz `usuario` virar `null` pouco depois do primeiro render, e a tela (que recalculava a mensagem a cada render) trocava para a mensagem errada assim que o logout completava. Fix: captura a causa uma única vez (`setState` condicional no corpo do componente — não num `useEffect`, que o React Compiler deste projeto rejeita para esse padrão) e nunca mais atualiza depois.
+    - _Requirements: 5.3_
+
+  Verificado extensivamente com usuários/corretoras reais pelo navegador (múltiplas rodadas seguidas, inclusive com contextos de browser isolados por login, pra descartar qualquer resquício entre sessões): `brokerage_admin` edita nome/logo/cor da própria corretora com sucesso (dado refletido no banco); usuário individualmente desativado (corretora ativa) vê "Sua conta foi desativada..."; `brokerage_admin` ativo com a corretora desativada vê "O acesso da sua corretora à plataforma foi desativado..." — as duas mensagens nunca mais se confundiram depois do fix 9.7; após reativar a corretora, o login volta a funcionar normalmente. Nenhum erro de console.
 
 - [ ] 10. Testes
   - [ ] 10.1 Testes de componente: `create-brokerage-drawer`, `edit-brokerage-drawer`, `deactivate-brokerage-confirm-dialog`, `own-brokerage-screen`

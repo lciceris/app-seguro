@@ -133,6 +133,7 @@ export type Database = {
     Functions: {
       can_add_user: { Args: { p_brokerage_id: string }; Returns: boolean }
       get_my_brokerage_id: { Args: never; Returns: string }
+      get_my_brokerage_id_unconditional: { Args: never; Returns: string }
       get_my_role: {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]

@@ -9,6 +9,7 @@ import { AddBrokeragePage } from "@/pages/brokerages/add/add-brokerage-page";
 import { BrokeragesPage } from "@/pages/brokerages/brokerages-page";
 import { BrokerageDetailPage } from "@/pages/brokerages/[brokerageId]/brokerage-detail-page";
 import { EditBrokeragePage } from "@/pages/brokerages/[brokerageId]/edit/edit-brokerage-page";
+import { MyBrokeragePage } from "@/pages/my-brokerage/my-brokerage-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
 import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
@@ -46,6 +47,10 @@ export function AppRouter() {
           <Route path=":brokerageId" element={<BrokerageDetailPage />} />
           <Route path=":brokerageId/edit" element={<EditBrokeragePage />} />
         </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}>
+        <Route path="/my-brokerage" element={<MyBrokeragePage />} />
       </Route>
     </Routes>
   );

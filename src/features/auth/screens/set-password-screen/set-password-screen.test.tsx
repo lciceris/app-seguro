@@ -25,6 +25,7 @@ describe("SetPasswordScreen", () => {
         brokerage_name: "Corretora",
         primary_color: null,
         logo_url: null,
+        brokerage_status: "active",
       },
     });
     mutateMock.mockClear();

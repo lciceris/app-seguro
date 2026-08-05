@@ -9,10 +9,14 @@ export interface Usuario {
   status: Database["public"]["Enums"]["user_status"];
   full_name: string;
   avatar_url: string | null;
-  // Nulos quando status = inactive — a RLS bloqueia o embed de brokerages nesse caso.
+  // brokerage_name/primary_color/logo_url só ficam null num embed que falhou de
+  // fato (não pelo status — a policy brokerages_select_own_unconditional garante
+  // leitura da própria corretora mesmo desativada). brokerage_status é o sinal
+  // explícito de que a corretora está bloqueada (ver protected-route.tsx).
   brokerage_name: string | null;
   primary_color: string | null;
   logo_url: string | null;
+  brokerage_status: Database["public"]["Enums"]["brokerage_status"] | null;
 }
 
 interface AuthState {
