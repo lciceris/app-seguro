@@ -22,11 +22,15 @@
 
   Verificação ponta a ponta desses hooks fica pra quando a UI (Task 3+) existir e puder exercitá-los pelo navegador — a RLS por trás já foi validada com usuários reais na Task 1.
 
-- [ ] 3. Listagem de seguradoras (platform_admin)
-  - [ ] 3.1 Criar `features/insurers/screens/insurers-list-screen/` — tabela com nome, CNPJ, ações (mesmo padrão visual de `users-list-screen`/`brokerages-list-screen`), `<Outlet/>` pros drawers aninhados
+- [x] 3. Listagem de seguradoras (platform_admin)
+  - [x] 3.1 Criar `features/insurers/screens/insurers-list-screen/` — tabela com nome, CNPJ, ações (mesmo padrão visual de `users-list-screen`/`brokerages-list-screen`), `<Outlet/>` pros drawers aninhados
     - _Requirements: 2.1_
-  - [ ] 3.2 Criar `pages/insurers/insurers-page.tsx` e registrar a rota `/insurers` (restrita a `platform_admin`)
+  - [x] 3.2 Criar `pages/admin/insurers/insurers-page.tsx` e registrar a rota `/admin/insurers` (restrita a `platform_admin`)
     - _Requirements: 2.2_
+  - [x] 3.3 (ajuste, não é lacuna) A rota é `/admin/insurers`, não `/insurers` — bate com `INITIAL_ROUTE_BY_ROLE.platform_admin` já definido na spec `auth`. `pages/` segue movido pra `pages/admin/insurers/` pra espelhar a URL (convenção já estabelecida).
+    - _Requirements: infra_
+
+  Verificado com o usuário `platform_admin` real pelo navegador: lista seguradoras de teste com nome e CNPJ (ou "—" quando não informado); `brokerage_admin` tentando acessar `/admin/insurers` diretamente é bloqueado e redirecionado pra própria rota inicial. Nenhum erro de console.
 
 - [ ] 4. Cadastrar seguradora
   - [ ] 4.1 Criar `features/insurers/validations/create-insurer-schema.ts` (nome obrigatório; CNPJ, e-mail, telefone, website, contato, prazo de resposta, ordem de exibição e observações opcionais)

@@ -6,3 +6,4 @@ export * from "./hooks/use-insurer-catalog";
 export * from "./hooks/use-disable-insurer";
 export * from "./hooks/use-enable-insurer";
 export * from "./types/insurer";
+export * from "./screens/insurers-list-screen";
