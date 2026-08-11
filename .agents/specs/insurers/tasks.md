@@ -12,13 +12,15 @@
 
   Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois): `platform_admin` cria e edita seguradoras; `brokerage_admin` lê o catálogo mas é bloqueado ao tentar criar/editar (RLS silenciosa — 0 linhas afetadas, dado no banco intacto); `seller` não enxerga nenhuma seguradora. `brokerage_admin` A desabilita uma seguradora só pra própria corretora — bloqueado ao tentar fazer isso pra outra corretora, e um `seller` da mesma corretora também é bloqueado (só `brokerage_admin` gerencia). Confirmado o isolamento por corretora via o embed do catálogo: a corretora A vê a seguradora como desabilitada, a corretora B continua vendo como habilitada. Reabilitar (`DELETE`) funciona e volta ao estado padrão.
 
-- [ ] 2. Camada de dados do frontend
-  - [ ] 2.1 Criar `features/insurers/types/insurer.ts` + `constants/query-keys.ts`
+- [x] 2. Camada de dados do frontend
+  - [x] 2.1 Criar `features/insurers/types/insurer.ts` + `constants/query-keys.ts`
     - _Requirements: infra_
-  - [ ] 2.2 Criar `features/insurers/api/` — `list-insurers`, `get-insurer`, `create-insurer`, `update-insurer`, `list-insurer-catalog`, `disable-insurer`, `enable-insurer`
+  - [x] 2.2 Criar `features/insurers/api/` — `list-insurers`, `get-insurer`, `create-insurer`, `update-insurer`, `list-insurer-catalog`, `disable-insurer`, `enable-insurer`
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 5.2, 5.3_
-  - [ ] 2.3 Criar `features/insurers/hooks/` correspondentes — cada mutation invalida a query certa
+  - [x] 2.3 Criar `features/insurers/hooks/` correspondentes — cada mutation invalida a query certa. `useDisableInsurer`/`useEnableInsurer` pegam o `brokerage_id` do auth store internamente, então o componente só passa o `insurerId`.
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 5.2, 5.3_
+
+  Verificação ponta a ponta desses hooks fica pra quando a UI (Task 3+) existir e puder exercitá-los pelo navegador — a RLS por trás já foi validada com usuários reais na Task 1.
 
 - [ ] 3. Listagem de seguradoras (platform_admin)
   - [ ] 3.1 Criar `features/insurers/screens/insurers-list-screen/` — tabela com nome, CNPJ, ações (mesmo padrão visual de `users-list-screen`/`brokerages-list-screen`), `<Outlet/>` pros drawers aninhados
