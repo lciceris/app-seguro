@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      brokerage_disabled_insurers: {
+        Row: {
+          brokerage_id: string
+          created_at: string
+          insurer_id: string
+        }
+        Insert: {
+          brokerage_id: string
+          created_at?: string
+          insurer_id: string
+        }
+        Update: {
+          brokerage_id?: string
+          created_at?: string
+          insurer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brokerage_disabled_insurers_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "brokerage_disabled_insurers_insurer_id_fkey"
+            columns: ["insurer_id"]
+            isOneToOne: false
+            referencedRelation: "insurers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brokerages: {
         Row: {
           created_at: string
@@ -54,6 +87,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      insurers: {
+        Row: {
+          cnpj: string | null
+          contact_name: string | null
+          created_at: string
+          display_order: number | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          response_time_days: number | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          cnpj?: string | null
+          contact_name?: string | null
+          created_at?: string
+          display_order?: number | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          response_time_days?: number | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          cnpj?: string | null
+          contact_name?: string | null
+          created_at?: string
+          display_order?: number | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          response_time_days?: number | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
       }
       plans: {
         Row: {

@@ -1,14 +1,16 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: tabela `insurers` (catálogo global — `name`, `cnpj`, `email`, `phone`, `website`, `contact_name`, `response_time_days`, `display_order`, `notes`, sem coluna de status)
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: tabela `insurers` (catálogo global — `name`, `cnpj`, `email`, `phone`, `website`, `contact_name`, `response_time_days`, `display_order`, `notes`, sem coluna de status)
     - _Requirements: 1.1_
-  - [ ] 1.2 Migration: RLS de `insurers` — `insurers_select_managed` (`platform_admin`/`brokerage_admin`), `insurers_insert_platform_admin`, `insurers_update_platform_admin`
+  - [x] 1.2 Migration: RLS de `insurers` — `insurers_select_managed` (`platform_admin`/`brokerage_admin`), `insurers_insert_platform_admin`, `insurers_update_platform_admin`
     - _Requirements: 1.3, 2.2, 3.2, 4.2_
-  - [ ] 1.3 Migration: tabela `brokerage_disabled_insurers` (pk composta `brokerage_id`/`insurer_id`, modelada como lista de exceções — ver design.md)
+  - [x] 1.3 Migration: tabela `brokerage_disabled_insurers` (pk composta `brokerage_id`/`insurer_id`, modelada como lista de exceções — ver design.md)
     - _Requirements: 5.2, 5.3_
-  - [ ] 1.4 Migration: RLS de `brokerage_disabled_insurers` — `brokerage_disabled_insurers_select_own`, `brokerage_disabled_insurers_manage_own`
+  - [x] 1.4 Migration: RLS de `brokerage_disabled_insurers` — `brokerage_disabled_insurers_select_own`, `brokerage_disabled_insurers_insert_own`, `brokerage_disabled_insurers_delete_own`
     - _Requirements: 5.2, 5.3, 5.6_
+
+  Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois): `platform_admin` cria e edita seguradoras; `brokerage_admin` lê o catálogo mas é bloqueado ao tentar criar/editar (RLS silenciosa — 0 linhas afetadas, dado no banco intacto); `seller` não enxerga nenhuma seguradora. `brokerage_admin` A desabilita uma seguradora só pra própria corretora — bloqueado ao tentar fazer isso pra outra corretora, e um `seller` da mesma corretora também é bloqueado (só `brokerage_admin` gerencia). Confirmado o isolamento por corretora via o embed do catálogo: a corretora A vê a seguradora como desabilitada, a corretora B continua vendo como habilitada. Reabilitar (`DELETE`) funciona e volta ao estado padrão.
 
 - [ ] 2. Camada de dados do frontend
   - [ ] 2.1 Criar `features/insurers/types/insurer.ts` + `constants/query-keys.ts`
