@@ -32,13 +32,17 @@
 
   Verificado com o usuário `platform_admin` real pelo navegador: lista seguradoras de teste com nome e CNPJ (ou "—" quando não informado); `brokerage_admin` tentando acessar `/admin/insurers` diretamente é bloqueado e redirecionado pra própria rota inicial. Nenhum erro de console.
 
-- [ ] 4. Cadastrar seguradora
-  - [ ] 4.1 Criar `features/insurers/validations/create-insurer-schema.ts` (nome obrigatório; CNPJ, e-mail, telefone, website, contato, prazo de resposta, ordem de exibição e observações opcionais)
+- [x] 4. Cadastrar seguradora
+  - [x] 4.1 Criar `features/insurers/validations/create-insurer-schema.ts` (nome obrigatório; CNPJ, e-mail, telefone, website, contato, prazo de resposta, ordem de exibição e observações opcionais)
     - _Requirements: 1.1_
-  - [ ] 4.2 Criar `features/insurers/components/create-insurer-drawer/`
+  - [x] 4.2 Criar `features/insurers/components/create-insurer-drawer/`
     - _Requirements: 1.1_
-  - [ ] 4.3 Criar `pages/insurers/add/add-insurer-page.tsx` como rota filha `/insurers/add`
+  - [x] 4.3 Criar `pages/admin/insurers/add/add-insurer-page.tsx` como rota filha `/admin/insurers/add`
     - _Requirements: 1.1_
+  - [x] 4.4 (infra) shadcn `textarea` (não existia ainda) — usado no campo Observações
+    - _Requirements: infra_
+
+  Verificado com o usuário `platform_admin` real pelo navegador: drawer abre sobre a listagem via `/admin/insurers/add` sem perder a lista de fundo; validação de nome obrigatório e de formato de e-mail aparecem inline sem chamar a API; submit com todos os campos preenchidos (CNPJ, e-mail, telefone, website, contato, prazo de resposta, ordem de exibição, observações) salva corretamente — números confirmados como `number` no banco (não string), toast de sucesso, volta pra lista. Nenhum erro de console.
 
 - [ ] 5. Ver detalhe de uma seguradora
   - [ ] 5.1 Criar `features/insurers/components/insurer-detail-drawer/`
