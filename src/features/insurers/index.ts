@@ -7,6 +7,7 @@ export * from "./hooks/use-disable-insurer";
 export * from "./hooks/use-enable-insurer";
 export * from "./types/insurer";
 export * from "./screens/insurers-list-screen";
+export * from "./screens/insurer-catalog-screen";
 export * from "./components/create-insurer-drawer";
 export * from "./components/insurer-detail-drawer";
 export * from "./components/edit-insurer-drawer";

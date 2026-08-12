@@ -62,11 +62,15 @@
 
   Verificado com usuário `platform_admin` real pelo navegador (script efêmero, limpo depois): drawer de edição abre sobre a listagem via `/admin/insurers/:insurerId/edit`; os valores atuais (nome, CNPJ, prazo de resposta) já vêm pré-preenchidos corretamente no primeiro render, sem depender de `reset()` pós-mount (mesmo padrão de `edit-brokerage-drawer`/`edit-user-drawer`, aqui sem Select controlado); editar nome e e-mail e salvar atualiza corretamente no banco (confirmado via query direta) e a listagem reflete o novo nome. Nenhum erro de console.
 
-- [ ] 7. Habilitar/desabilitar seguradora por corretora (brokerage_admin)
-  - [ ] 7.1 Criar `features/insurers/screens/insurer-catalog-screen/` — lista com toggle inline habilitado/desabilitado, sem dialog de confirmação (ação reversível a qualquer momento)
+- [x] 7. Habilitar/desabilitar seguradora por corretora (brokerage_admin)
+  - [x] 7.1 Criar `features/insurers/screens/insurer-catalog-screen/` — lista com toggle inline habilitado/desabilitado, sem dialog de confirmação (ação reversível a qualquer momento)
     - _Requirements: 5.1, 5.2, 5.3_
-  - [ ] 7.2 Criar `pages/my-insurers/my-insurers-page.tsx` e registrar a rota `/my-insurers` (restrita a `platform_admin`/`brokerage_admin`)
-    - _Requirements: 5.6_
+  - [x] 7.2 Criar `pages/my-insurers/my-insurers-page.tsx` e registrar a rota `/my-insurers` (restrita a `platform_admin`/`brokerage_admin`)
+    - _Requirements: 5.5_
+  - [x] 7.3 (ajuste, não é lacuna) Requirement 5.5 dá acesso à tela pra `platform_admin` também, mas só `brokerage_admin` habilita/desabilita (Requirement 5.4 + a própria RLS de `brokerage_disabled_insurers` só permite insert/delete pra esse role). Pra não deixar um switch clicável que falharia silenciosamente pro `platform_admin`, a tela renderiza `Switch` interativo só quando `usuario.role === 'brokerage_admin'`; caso contrário mostra um `Badge` somente leitura com o mesmo estado.
+    - _Requirements: 5.4, 5.5_
+
+  Verificado com 3 usuários de teste reais (1 `platform_admin` + 2 `brokerage_admin` de corretoras diferentes, script efêmero, limpo depois): `platform_admin` acessa `/my-insurers` e vê a seguradora com badge "Habilitada" em modo leitura, sem switch clicável; `brokerage_admin` A desabilita a seguradora (switch vai pra `false`, `INSERT` confirmado em `brokerage_disabled_insurers`) e `brokerage_admin` B, de outra corretora, continua vendo "habilitada" (isolamento por corretora confirmado); A reabilita e a linha de exceção é removida (`DELETE` confirmado, tabela volta a ficar vazia pro par corretora/seguradora). Nenhum erro de console.
 
 - [ ] 8. Testes
   - [ ] 8.1 Testes de componente: `create-insurer-drawer`, `edit-insurer-drawer`, `insurer-catalog-screen`
