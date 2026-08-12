@@ -12,6 +12,7 @@ import { EditBrokeragePage } from "@/pages/brokerages/[brokerageId]/edit/edit-br
 import { MyBrokeragePage } from "@/pages/my-brokerage/my-brokerage-page";
 import { AddInsurerPage } from "@/pages/admin/insurers/add/add-insurer-page";
 import { InsurerDetailPage } from "@/pages/admin/insurers/[insurerId]/insurer-detail-page";
+import { EditInsurerPage } from "@/pages/admin/insurers/[insurerId]/edit/edit-insurer-page";
 import { InsurersPage } from "@/pages/admin/insurers/insurers-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
@@ -60,6 +61,7 @@ export function AppRouter() {
         <Route path="/admin/insurers" element={<InsurersPage />}>
           <Route path="add" element={<AddInsurerPage />} />
           <Route path=":insurerId" element={<InsurerDetailPage />} />
+          <Route path=":insurerId/edit" element={<EditInsurerPage />} />
         </Route>
       </Route>
     </Routes>

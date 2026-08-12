@@ -52,13 +52,15 @@
 
   Verificado com usuário `platform_admin` real pelo navegador (script efêmero, limpo depois): drawer abre sobre a listagem via `/admin/insurers/:insurerId` sem perder a lista de fundo; todos os campos cadastrais aparecem corretamente (nome, CNPJ, e-mail, telefone comercial, website, contato comercial, prazo de resposta, ordem de exibição, observações — sem campo de status, já que não existe na tabela); "Fechar" navega de volta pra `/admin/insurers`. Nenhum erro de console.
 
-- [ ] 6. Editar seguradora
-  - [ ] 6.1 Criar `features/insurers/validations/edit-insurer-schema.ts`
+- [x] 6. Editar seguradora
+  - [x] 6.1 Criar `features/insurers/validations/edit-insurer-schema.ts`
     - _Requirements: 4.1_
-  - [ ] 6.2 Criar `features/insurers/components/edit-insurer-drawer/`
+  - [x] 6.2 Criar `features/insurers/components/edit-insurer-drawer/`
     - _Requirements: 4.1_
-  - [ ] 6.3 Criar `pages/insurers/[insurerId]/edit/edit-insurer-page.tsx` como rota filha `/insurers/:insurerId/edit`
+  - [x] 6.3 Criar `pages/admin/insurers/[insurerId]/edit/edit-insurer-page.tsx` como rota filha `/admin/insurers/:insurerId/edit`
     - _Requirements: 4.1_
+
+  Verificado com usuário `platform_admin` real pelo navegador (script efêmero, limpo depois): drawer de edição abre sobre a listagem via `/admin/insurers/:insurerId/edit`; os valores atuais (nome, CNPJ, prazo de resposta) já vêm pré-preenchidos corretamente no primeiro render, sem depender de `reset()` pós-mount (mesmo padrão de `edit-brokerage-drawer`/`edit-user-drawer`, aqui sem Select controlado); editar nome e e-mail e salvar atualiza corretamente no banco (confirmado via query direta) e a listagem reflete o novo nome. Nenhum erro de console.
 
 - [ ] 7. Habilitar/desabilitar seguradora por corretora (brokerage_admin)
   - [ ] 7.1 Criar `features/insurers/screens/insurer-catalog-screen/` — lista com toggle inline habilitado/desabilitado, sem dialog de confirmação (ação reversível a qualquer momento)

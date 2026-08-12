@@ -9,3 +9,4 @@ export * from "./types/insurer";
 export * from "./screens/insurers-list-screen";
 export * from "./components/create-insurer-drawer";
 export * from "./components/insurer-detail-drawer";
+export * from "./components/edit-insurer-drawer";
