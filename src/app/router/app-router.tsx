@@ -11,6 +11,7 @@ import { BrokerageDetailPage } from "@/pages/brokerages/[brokerageId]/brokerage-
 import { EditBrokeragePage } from "@/pages/brokerages/[brokerageId]/edit/edit-brokerage-page";
 import { MyBrokeragePage } from "@/pages/my-brokerage/my-brokerage-page";
 import { AddInsurerPage } from "@/pages/admin/insurers/add/add-insurer-page";
+import { InsurerDetailPage } from "@/pages/admin/insurers/[insurerId]/insurer-detail-page";
 import { InsurersPage } from "@/pages/admin/insurers/insurers-page";
 import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
@@ -58,6 +59,7 @@ export function AppRouter() {
       <Route element={<ProtectedRoute allowedRoles={["platform_admin"]} />}>
         <Route path="/admin/insurers" element={<InsurersPage />}>
           <Route path="add" element={<AddInsurerPage />} />
+          <Route path=":insurerId" element={<InsurerDetailPage />} />
         </Route>
       </Route>
     </Routes>

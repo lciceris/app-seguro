@@ -44,11 +44,13 @@
 
   Verificado com o usuário `platform_admin` real pelo navegador: drawer abre sobre a listagem via `/admin/insurers/add` sem perder a lista de fundo; validação de nome obrigatório e de formato de e-mail aparecem inline sem chamar a API; submit com todos os campos preenchidos (CNPJ, e-mail, telefone, website, contato, prazo de resposta, ordem de exibição, observações) salva corretamente — números confirmados como `number` no banco (não string), toast de sucesso, volta pra lista. Nenhum erro de console.
 
-- [ ] 5. Ver detalhe de uma seguradora
-  - [ ] 5.1 Criar `features/insurers/components/insurer-detail-drawer/`
+- [x] 5. Ver detalhe de uma seguradora
+  - [x] 5.1 Criar `features/insurers/components/insurer-detail-drawer/`
     - _Requirements: 3.1_
-  - [ ] 5.2 Criar `pages/insurers/[insurerId]/insurer-detail-page.tsx` como rota filha `/insurers/:insurerId`
+  - [x] 5.2 Criar `pages/admin/insurers/[insurerId]/insurer-detail-page.tsx` como rota filha `/admin/insurers/:insurerId`
     - _Requirements: 3.1_
+
+  Verificado com usuário `platform_admin` real pelo navegador (script efêmero, limpo depois): drawer abre sobre a listagem via `/admin/insurers/:insurerId` sem perder a lista de fundo; todos os campos cadastrais aparecem corretamente (nome, CNPJ, e-mail, telefone comercial, website, contato comercial, prazo de resposta, ordem de exibição, observações — sem campo de status, já que não existe na tabela); "Fechar" navega de volta pra `/admin/insurers`. Nenhum erro de console.
 
 - [ ] 6. Editar seguradora
   - [ ] 6.1 Criar `features/insurers/validations/edit-insurer-schema.ts`

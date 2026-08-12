@@ -1,0 +1,109 @@
+import { useNavigate, useParams } from "react-router-dom";
+
+import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/shared/components/ui/sheet";
+
+import { useInsurer } from "../../hooks/use-insurer";
+
+function DetailField({ label, value }: { label: string; value: string | number | null }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+        {label}
+      </span>
+      <span className="text-sm text-foreground">{value ?? "Não informado"}</span>
+    </div>
+  );
+}
+
+export function InsurerDetailDrawer() {
+  const navigate = useNavigate();
+  const { insurerId } = useParams<{ insurerId: string }>();
+  const { data: insurer, isLoading, isError, refetch } = useInsurer(insurerId!);
+
+  function handleClose() {
+    navigate("/admin/insurers");
+  }
+
+  return (
+    <Sheet open onOpenChange={(open) => !open && handleClose()}>
+      <SheetContent className="flex w-full flex-col sm:max-w-[1000px]">
+        <SheetHeader>
+          <SheetTitle>Detalhe da seguradora</SheetTitle>
+        </SheetHeader>
+
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto bg-muted p-5">
+          {isLoading && (
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+          )}
+
+          {isError && !isLoading && (
+            <div className="rounded-xl border border-border bg-card p-5 text-center">
+              <p className="mb-2 text-sm text-muted-foreground">
+                Não foi possível carregar os dados da seguradora.
+              </p>
+              <Button variant="outline" size="sm" onClick={() => refetch()}>
+                Tentar novamente
+              </Button>
+            </div>
+          )}
+
+          {!isLoading && !isError && insurer && (
+            <>
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Identificação
+                </p>
+                <DetailField label="Nome" value={insurer.name} />
+                <DetailField label="CNPJ" value={insurer.cnpj} />
+                <DetailField label="E-mail" value={insurer.email} />
+                <DetailField label="Telefone comercial" value={insurer.phone} />
+                <DetailField label="Website" value={insurer.website} />
+              </div>
+
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Contato comercial
+                </p>
+                <DetailField label="Nome do contato" value={insurer.contact_name} />
+              </div>
+
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Configurações
+                </p>
+                <DetailField label="Prazo de resposta (dias)" value={insurer.response_time_days} />
+                <DetailField label="Ordem de exibição" value={insurer.display_order} />
+              </div>
+
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Observações
+                </p>
+                <DetailField label="Observações" value={insurer.notes} />
+              </div>
+            </>
+          )}
+        </div>
+
+        <SheetFooter className="flex-row justify-end border-t border-border bg-card">
+          <Button variant="outline" onClick={handleClose}>
+            Fechar
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+}
