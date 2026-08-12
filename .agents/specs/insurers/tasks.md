@@ -72,12 +72,14 @@
 
   Verificado com 3 usuários de teste reais (1 `platform_admin` + 2 `brokerage_admin` de corretoras diferentes, script efêmero, limpo depois): `platform_admin` acessa `/my-insurers` e vê a seguradora com badge "Habilitada" em modo leitura, sem switch clicável; `brokerage_admin` A desabilita a seguradora (switch vai pra `false`, `INSERT` confirmado em `brokerage_disabled_insurers`) e `brokerage_admin` B, de outra corretora, continua vendo "habilitada" (isolamento por corretora confirmado); A reabilita e a linha de exceção é removida (`DELETE` confirmado, tabela volta a ficar vazia pro par corretora/seguradora). Nenhum erro de console.
 
-- [ ] 8. Testes
-  - [ ] 8.1 Testes de componente: `create-insurer-drawer`, `edit-insurer-drawer`, `insurer-catalog-screen`
+- [x] 8. Testes
+  - [x] 8.1 Testes de componente: `create-insurer-drawer`, `edit-insurer-drawer`, `insurer-catalog-screen`
     - _Requirements: 1.1, 4.1, 5.2, 5.3_
-  - [ ] 8.2 Testes de hook: `useCreateInsurer`, `useUpdateInsurer`, `useDisableInsurer`
+  - [x] 8.2 Testes de hook: `useCreateInsurer`, `useUpdateInsurer`, `useDisableInsurer`
     - _Requirements: 1.1, 4.1, 5.2_
-  - [ ] 8.3 Teste E2E: `platform_admin` cadastra seguradora → aparece no catálogo de `/my-insurers`
+  - [x] 8.3 Teste E2E: `platform_admin` cadastra seguradora → aparece no catálogo de `/my-insurers`
     - _Requirements: 1.1, 5.1_
-  - [ ] 8.4 Teste E2E: `brokerage_admin` desabilita uma seguradora → some das opções dele, mas uma segunda corretora continua vendo normalmente (isolamento) → reabilita
+  - [x] 8.4 Teste E2E: `brokerage_admin` desabilita uma seguradora → some das opções dele, mas uma segunda corretora continua vendo normalmente (isolamento) → reabilita
     - _Requirements: 5.2, 5.3_
+
+  `npm run test` (Vitest): 24 arquivos, 45 testes, todos passando (12 são da spec `insurers`: 3 componentes × ~3 casos cada + 3 hooks). `npx playwright test` (E2E completo, incluindo as specs de `auth`/`brokerages`/`users` já existentes): 8 specs, todas passando, sem regressão. `insurer-catalog-screen.test.tsx` cobre também o caso de `platform_admin` em modo leitura (Task 7.3). Nenhum erro de console em nenhum dos testes.
