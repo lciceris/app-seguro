@@ -40,13 +40,17 @@
 
   Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` A (vinculado a 1 cliente) vê só o próprio na listagem, com botão "Novo cliente" visível; `seller` B (sem vínculo nenhum) vê a listagem vazia; `viewer` vê todos os 2 clientes da corretora, sem botão "Novo cliente" nem ícone Editar (RLS + `canEdit` condicional na UI); busca por nome parcial e por CNPJ filtra corretamente; badge de segmento (`VIP`) renderiza com a cor certa. Botões "Ver"/"Editar" já apontam pra `/clients/:id`/`/clients/:id/edit` (ainda sem rota registrada — Tasks 5/6) e "Novo cliente" pra `/clients/add` (Task 4), seguindo o mesmo padrão já usado em `insurers` Task 3 (UI antecipada, rota vem depois).
 
-- [ ] 4. Cadastrar cliente
-  - [ ] 4.1 Criar `features/clients/validations/create-client-schema.ts` (razão social/nome obrigatório; demais campos opcionais)
+- [x] 4. Cadastrar cliente
+  - [x] 4.1 Criar `features/clients/validations/create-client-schema.ts` (razão social/nome obrigatório; demais campos opcionais)
     - _Requirements: 1.1_
-  - [ ] 4.2 Criar `features/clients/components/create-client-drawer/` — seletor de vendedores (multi-select + principal) só quando `usuario.role !== 'seller'`
+  - [x] 4.2 Criar `features/clients/components/create-client-drawer/` — seletor de vendedores (multi-select + principal) só quando `usuario.role !== 'seller'`
     - _Requirements: 1.1, 1.2, 1.3_
-  - [ ] 4.3 Criar `pages/clients/add/add-client-page.tsx` como rota filha `/clients/add`
+  - [x] 4.3 Criar `pages/clients/add/add-client-page.tsx` como rota filha `/clients/add`
     - _Requirements: 1.1_
+  - [x] 4.4 (infra) shadcn `checkbox`, `calendar`, `popover` (não existiam ainda) + componente reutilizável `shared/components/ui/date-picker.tsx` (Popover + Calendar + Button, locale `ptBR` via `date-fns`) — primeiro campo de data do projeto (`birth_date`), segue a regra do CLAUDE.md de nunca usar `input type="date"`
+    - _Requirements: infra_
+
+  Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` não vê a seção "Vendedores responsáveis" no formulário; ao criar, o cliente aparece na lista dele e o vínculo automático como principal é confirmado no banco (trigger da Task 1); `supervisor` vê a seção de vendedores, seleciona dois (checkbox), clica em "Tornar principal" no segundo — confirmado no banco que o principal é realmente o vendedor clicado (não só o primeiro selecionado por padrão). Nenhum erro de console.
 
 - [ ] 5. Ver detalhe de um cliente (com gestão de vendedores vinculados)
   - [ ] 5.1 Criar `features/clients/components/client-detail-drawer/` — todos os campos cadastrais + seção de vendedores vinculados (badge de principal; para `platform_admin`/`brokerage_admin`/`supervisor`: adicionar, remover — com seletor inline de substituto quando remover o principal e restarem outros — e marcar principal; `seller` só visualiza)

@@ -10,3 +10,4 @@ export * from "./hooks/use-remove-client-seller";
 export * from "./hooks/use-set-primary-client-seller";
 export * from "./types/client";
 export * from "./screens/clients-list-screen";
+export * from "./components/create-client-drawer";

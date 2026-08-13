@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/home/home-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { SetPasswordPage } from "@/pages/set-password/set-password-page";
 import { AddBrokeragePage } from "@/pages/brokerages/add/add-brokerage-page";
+import { AddClientPage } from "@/pages/clients/add/add-client-page";
 import { ClientsPage } from "@/pages/clients/clients-page";
 import { BrokeragesPage } from "@/pages/brokerages/brokerages-page";
 import { BrokerageDetailPage } from "@/pages/brokerages/[brokerageId]/brokerage-detail-page";
@@ -78,7 +79,17 @@ export function AppRouter() {
           />
         }
       >
-        <Route path="/clients" element={<ClientsPage />} />
+        <Route path="/clients" element={<ClientsPage />}>
+          <Route
+            element={
+              <ProtectedRoute
+                allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+              />
+            }
+          >
+            <Route path="add" element={<AddClientPage />} />
+          </Route>
+        </Route>
       </Route>
     </Routes>
   );
