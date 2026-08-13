@@ -1,24 +1,26 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: enums `client_type` (`individual`, `company`) e `client_segment` (`lead`, `active`, `vip`, `inactive`)
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: enums `client_type` (`individual`, `company`) e `client_segment` (`lead`, `active`, `vip`, `inactive`)
     - _Requirements: 1.1_
-  - [ ] 1.2 Migration: tabela `clients` (tenant-scoped — todos os campos PF/PJ, endereço, contato comercial e financeiro, segmento, origem do lead, observações; trigger `set_updated_at`)
+  - [x] 1.2 Migration: tabela `clients` (tenant-scoped — todos os campos PF/PJ, endereço, contato comercial e financeiro, segmento, origem do lead, observações; trigger `set_updated_at`)
     - _Requirements: 1.1_
-  - [ ] 1.3 Migration: tabela `client_sellers` (vínculo N:N, `UNIQUE(client_id, seller_id)`, `is_primary`)
+  - [x] 1.3 Migration: tabela `client_sellers` (vínculo N:N, `UNIQUE(client_id, seller_id)`, `is_primary`)
     - _Requirements: 1.2, 5.1_
-  - [ ] 1.4 Migration: funções `SECURITY DEFINER` — `get_client_brokerage_id(uuid)` e `is_my_client(uuid)`
+  - [x] 1.4 Migration: funções `SECURITY DEFINER` — `get_client_brokerage_id(uuid)` e `is_my_client(uuid)`
     - _Requirements: infra_
-  - [ ] 1.5 Migration: RLS de `clients` — `clients_select`, `clients_insert`, `clients_update` (sem policy de DELETE)
+  - [x] 1.5 Migration: RLS de `clients` — `clients_select`, `clients_insert`, `clients_update` (sem policy de DELETE)
     - _Requirements: 1.4, 2.1, 2.2, 2.3, 4.1, 4.2, 4.3_
-  - [ ] 1.6 Migration: RLS de `client_sellers` — `client_sellers_select`, `client_sellers_manage` (INSERT/UPDATE/DELETE restrito a `platform_admin`/`brokerage_admin`/`supervisor`)
+  - [x] 1.6 Migration: RLS de `client_sellers` — `client_sellers_select`, `client_sellers_manage` (INSERT/UPDATE/DELETE restrito a `platform_admin`/`brokerage_admin`/`supervisor`)
     - _Requirements: 3.1, 3.2, 5.1, 5.2, 5.3, 5.4_
-  - [ ] 1.7 Migration: trigger `enforce_single_primary_seller` em `client_sellers` (desmarca o principal anterior)
+  - [x] 1.7 Migration: trigger `enforce_single_primary_seller` em `client_sellers` (desmarca o principal anterior)
     - _Requirements: 5.3_
-  - [ ] 1.8 Migration: trigger `auto_link_seller_as_primary` em `clients` (vincula `seller` criador como principal, via `SECURITY DEFINER`, sem abrir INSERT direto pra `seller` em `client_sellers`)
+  - [x] 1.8 Migration: trigger `auto_link_seller_as_primary` em `clients` (vincula `seller` criador como principal, via `SECURITY DEFINER`, sem abrir INSERT direto pra `seller` em `client_sellers`)
     - _Requirements: 1.2_
+  - [x] 1.9 (achado durante a verificação, não é lacuna) `INSERT ... RETURNING` reavalia a policy de SELECT antes do trigger `AFTER INSERT` terminar — documentado em design.md ("Pegadinha confirmada"). Impacta diretamente como `create-client` (Task 2) precisa ser implementado: `insert()` e `select()` em duas requisições separadas, nunca encadeadas.
+    - _Requirements: infra_
 
-  Verificar com usuários/corretoras de teste reais (script efêmero, limpo depois): `seller` cria cliente → vínculo automático como principal confirmado em `client_sellers`; `seller` não consegue inserir/remover vínculo de outro vendedor diretamente (RLS bloqueia); `supervisor`/`brokerage_admin`/`platform_admin` conseguem gerenciar vínculos de qualquer cliente da própria corretora; um segundo `seller` (sem vínculo) não enxerga o cliente nem seus vínculos; marcar um segundo vendedor como principal desmarca o primeiro automaticamente (trigger).
+  8 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados (`supabase gen types typescript`). Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois): `seller` cria cliente → vínculo automático como principal confirmado em `client_sellers` (usando insert/select separados, ver 1.9); `seller` bloqueado ao tentar inserir vínculo de outro vendedor diretamente (RLS); um segundo `seller` sem vínculo não enxerga o cliente; `supervisor` enxerga qualquer cliente da corretora e consegue adicionar um segundo vendedor (secundário); o vendedor recém-adicionado passa a enxergar o cliente; `supervisor` marca o segundo vendedor como principal → trigger desmarca o primeiro automaticamente (só 1 principal confirmado no banco); cliente criado por `supervisor` não tem vínculo automático (trigger só age pra `seller`); `supervisor` inativa cliente via `UPDATE segment = 'inactive'` com sucesso.
 
 - [ ] 2. Camada de dados do frontend
   - [ ] 2.1 Criar `features/clients/types/client.ts` + `constants/query-keys.ts`

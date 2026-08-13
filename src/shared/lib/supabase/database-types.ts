@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       brokerage_disabled_insurers: {
@@ -84,6 +109,146 @@ export type Database = {
             columns: ["plan_id"]
             isOneToOne: false
             referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_sellers: {
+        Row: {
+          client_id: string
+          created_at: string
+          id: string
+          is_primary: boolean
+          seller_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          seller_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          seller_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_sellers_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_sellers_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          birth_date: string | null
+          brokerage_id: string
+          business_code: string | null
+          city: string | null
+          client_type: Database["public"]["Enums"]["client_type"]
+          complement: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          contact_role: string | null
+          created_at: string
+          financial_email: string | null
+          financial_name: string | null
+          id: string
+          industry: string | null
+          lead_source: string | null
+          legal_name: string
+          neighborhood: string | null
+          notes: string | null
+          segment: Database["public"]["Enums"]["client_segment"]
+          state: string | null
+          state_registration: string | null
+          street: string | null
+          street_number: string | null
+          tax_id: string | null
+          trade_name: string | null
+          updated_at: string
+          zip_code: string | null
+        }
+        Insert: {
+          birth_date?: string | null
+          brokerage_id: string
+          business_code?: string | null
+          city?: string | null
+          client_type?: Database["public"]["Enums"]["client_type"]
+          complement?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          contact_role?: string | null
+          created_at?: string
+          financial_email?: string | null
+          financial_name?: string | null
+          id?: string
+          industry?: string | null
+          lead_source?: string | null
+          legal_name: string
+          neighborhood?: string | null
+          notes?: string | null
+          segment?: Database["public"]["Enums"]["client_segment"]
+          state?: string | null
+          state_registration?: string | null
+          street?: string | null
+          street_number?: string | null
+          tax_id?: string | null
+          trade_name?: string | null
+          updated_at?: string
+          zip_code?: string | null
+        }
+        Update: {
+          birth_date?: string | null
+          brokerage_id?: string
+          business_code?: string | null
+          city?: string | null
+          client_type?: Database["public"]["Enums"]["client_type"]
+          complement?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          contact_role?: string | null
+          created_at?: string
+          financial_email?: string | null
+          financial_name?: string | null
+          id?: string
+          industry?: string | null
+          lead_source?: string | null
+          legal_name?: string
+          neighborhood?: string | null
+          notes?: string | null
+          segment?: Database["public"]["Enums"]["client_segment"]
+          state?: string | null
+          state_registration?: string | null
+          street?: string | null
+          street_number?: string | null
+          tax_id?: string | null
+          trade_name?: string | null
+          updated_at?: string
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
             referencedColumns: ["id"]
           },
         ]
@@ -210,15 +375,22 @@ export type Database = {
     }
     Functions: {
       can_add_user: { Args: { p_brokerage_id: string }; Returns: boolean }
+      get_client_brokerage_id: {
+        Args: { p_client_id: string }
+        Returns: string
+      }
       get_my_brokerage_id: { Args: never; Returns: string }
       get_my_brokerage_id_unconditional: { Args: never; Returns: string }
       get_my_role: {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      is_my_client: { Args: { p_client_id: string }; Returns: boolean }
     }
     Enums: {
       brokerage_status: "active" | "inactive"
+      client_segment: "lead" | "active" | "vip" | "inactive"
+      client_type: "individual" | "company"
       user_role:
         | "platform_admin"
         | "brokerage_admin"
@@ -352,9 +524,14 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       brokerage_status: ["active", "inactive"],
+      client_segment: ["lead", "active", "vip", "inactive"],
+      client_type: ["individual", "company"],
       user_role: [
         "platform_admin",
         "brokerage_admin",

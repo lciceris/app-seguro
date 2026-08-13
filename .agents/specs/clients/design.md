@@ -121,6 +121,12 @@ $$;
 
 Frontend só precisa dar `UPDATE client_sellers SET is_primary = true WHERE id = ...` — o trigger cuida do resto (Requirement 5.3).
 
+### Pegadinha confirmada: `INSERT ... RETURNING` reavalia a policy de SELECT antes do trigger `AFTER INSERT` terminar
+
+Verificado com um `seller` de teste real: `supabase.from('clients').insert({...}).select().single()` (um único request, `INSERT ... RETURNING`) falha com `"new row violates row-level security policy for table clients"` **mesmo a `WITH CHECK` de `clients_insert` sendo satisfeita** — porque o `RETURNING` reavalia a policy de **SELECT** sobre a linha recém-criada, e essa reavaliação acontece antes do trigger `auto_link_seller_as_primary` (`AFTER INSERT`, definido a seguir) terminar de inserir o vínculo em `client_sellers`. Nesse instante, `is_my_client(id)` ainda é `false` pro próprio criador.
+
+Fix confirmado: a API `create-client` **não pode** encadear `.insert().select()` numa única chamada — precisa separar em duas requisições (duas transações distintas): `insert()` sem `.select()`, depois um `select().eq('id', id).single()` à parte (com `id` gerado no cliente via `crypto.randomUUID()`, já que sem `.select()` o Supabase não devolve a linha criada). Na segunda requisição, a primeira transação (insert + trigger) já foi commitada por inteiro, então `is_my_client(id)` já é `true`. Essa mesma técnica é usada uniformemente pra todos os perfis (não só `seller`) — mais simples que ramificar por role.
+
 ### Trigger: `auto_link_seller_as_primary`
 
 Quando `seller` cria um cliente (Requirement 1.2), ele precisa ser vinculado automaticamente como principal — mas a RLS de `client_sellers` (ver abaixo) só libera INSERT pra `platform_admin`/`brokerage_admin`/`supervisor`, de propósito (Requirement 5.4: `seller` nunca gerencia vínculos diretamente, nem o próprio). Resolvido com um trigger `AFTER INSERT ON clients`, `SECURITY DEFINER`, que insere a linha em nome do sistema — sem abrir uma brecha de INSERT direto pra `seller` em `client_sellers`:
