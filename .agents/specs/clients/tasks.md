@@ -22,13 +22,15 @@
 
   8 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados (`supabase gen types typescript`). Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois): `seller` cria cliente → vínculo automático como principal confirmado em `client_sellers` (usando insert/select separados, ver 1.9); `seller` bloqueado ao tentar inserir vínculo de outro vendedor diretamente (RLS); um segundo `seller` sem vínculo não enxerga o cliente; `supervisor` enxerga qualquer cliente da corretora e consegue adicionar um segundo vendedor (secundário); o vendedor recém-adicionado passa a enxergar o cliente; `supervisor` marca o segundo vendedor como principal → trigger desmarca o primeiro automaticamente (só 1 principal confirmado no banco); cliente criado por `supervisor` não tem vínculo automático (trigger só age pra `seller`); `supervisor` inativa cliente via `UPDATE segment = 'inactive'` com sucesso.
 
-- [ ] 2. Camada de dados do frontend
-  - [ ] 2.1 Criar `features/clients/types/client.ts` + `constants/query-keys.ts`
+- [x] 2. Camada de dados do frontend
+  - [x] 2.1 Criar `features/clients/types/client.ts` + `constants/query-keys.ts`
     - _Requirements: infra_
-  - [ ] 2.2 Criar `features/clients/api/` — `list-clients`, `get-client`, `create-client`, `update-client`, `deactivate-client`, `reactivate-client`, `list-client-sellers`, `add-client-seller`, `remove-client-seller` (com a checagem de principal-sem-substituto — ver design.md), `set-primary-client-seller`
+  - [x] 2.2 Criar `features/clients/api/` — `list-clients`, `get-client`, `create-client`, `update-client`, `deactivate-client`, `reactivate-client`, `list-client-sellers`, `add-client-seller`, `remove-client-seller` (com a checagem de principal-sem-substituto — ver design.md), `set-primary-client-seller`
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 5.2, 5.3, 6.1, 6.2_
-  - [ ] 2.3 Criar `features/clients/hooks/` correspondentes — cada mutation invalida a query certa
+  - [x] 2.3 Criar `features/clients/hooks/` correspondentes — cada mutation invalida a query certa. `useCreateClient` pega o `brokerage_id` do auth store internamente (`create-client` API recebe `brokerage_id` explícito, mas quem chama é o hook, nunca o componente/formulário — mesmo padrão de `useDisableInsurer`).
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 5.2, 5.3, 6.1, 6.2_
+
+  `create-client` implementa o fix da pegadinha encontrada na Task 1 (`insert()` e `select()` em duas requisições separadas, `id` gerado no cliente). Verificação ponta a ponta desses hooks fica pra quando a UI (Task 3+) existir e puder exercitá-los pelo navegador — a RLS/triggers por trás já foram validados com usuários reais na Task 1. `npx tsc --noEmit` e `npx eslint src/features/clients` sem erros.
 
 - [ ] 3. Listagem de clientes
   - [ ] 3.1 Criar `features/clients/screens/clients-list-screen/` — tabela com nome/razão social, tipo, CPF/CNPJ, segmento (com indicação visual de inativo), cidade/UF; busca por nome/razão social ou CPF/CNPJ; `<Outlet/>` pros drawers aninhados
