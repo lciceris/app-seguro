@@ -32,11 +32,13 @@
 
   `create-client` implementa o fix da pegadinha encontrada na Task 1 (`insert()` e `select()` em duas requisições separadas, `id` gerado no cliente). Verificação ponta a ponta desses hooks fica pra quando a UI (Task 3+) existir e puder exercitá-los pelo navegador — a RLS/triggers por trás já foram validados com usuários reais na Task 1. `npx tsc --noEmit` e `npx eslint src/features/clients` sem erros.
 
-- [ ] 3. Listagem de clientes
-  - [ ] 3.1 Criar `features/clients/screens/clients-list-screen/` — tabela com nome/razão social, tipo, CPF/CNPJ, segmento (com indicação visual de inativo), cidade/UF; busca por nome/razão social ou CPF/CNPJ; `<Outlet/>` pros drawers aninhados
+- [x] 3. Listagem de clientes
+  - [x] 3.1 Criar `features/clients/screens/clients-list-screen/` — tabela com nome/razão social, tipo, CPF/CNPJ, segmento (com indicação visual de inativo), cidade/UF; busca por nome/razão social ou CPF/CNPJ; `<Outlet/>` pros drawers aninhados
     - _Requirements: 2.1, 2.2, 6.4_
-  - [ ] 3.2 Criar `pages/clients/clients-page.tsx` e registrar a rota `/clients` (restrita a `platform_admin`, `brokerage_admin`, `supervisor`, `seller`, `viewer`)
+  - [x] 3.2 Criar `pages/clients/clients-page.tsx` e registrar a rota `/clients` (restrita a `platform_admin`, `brokerage_admin`, `supervisor`, `seller`, `viewer`)
     - _Requirements: 2.3_
+
+  Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` A (vinculado a 1 cliente) vê só o próprio na listagem, com botão "Novo cliente" visível; `seller` B (sem vínculo nenhum) vê a listagem vazia; `viewer` vê todos os 2 clientes da corretora, sem botão "Novo cliente" nem ícone Editar (RLS + `canEdit` condicional na UI); busca por nome parcial e por CNPJ filtra corretamente; badge de segmento (`VIP`) renderiza com a cor certa. Botões "Ver"/"Editar" já apontam pra `/clients/:id`/`/clients/:id/edit` (ainda sem rota registrada — Tasks 5/6) e "Novo cliente" pra `/clients/add` (Task 4), seguindo o mesmo padrão já usado em `insurers` Task 3 (UI antecipada, rota vem depois).
 
 - [ ] 4. Cadastrar cliente
   - [ ] 4.1 Criar `features/clients/validations/create-client-schema.ts` (razão social/nome obrigatório; demais campos opcionais)
