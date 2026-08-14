@@ -52,11 +52,13 @@
 
   Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` não vê a seção "Vendedores responsáveis" no formulário; ao criar, o cliente aparece na lista dele e o vínculo automático como principal é confirmado no banco (trigger da Task 1); `supervisor` vê a seção de vendedores, seleciona dois (checkbox), clica em "Tornar principal" no segundo — confirmado no banco que o principal é realmente o vendedor clicado (não só o primeiro selecionado por padrão). Nenhum erro de console.
 
-- [ ] 5. Ver detalhe de um cliente (com gestão de vendedores vinculados)
-  - [ ] 5.1 Criar `features/clients/components/client-detail-drawer/` — todos os campos cadastrais + seção de vendedores vinculados (badge de principal; para `platform_admin`/`brokerage_admin`/`supervisor`: adicionar, remover — com seletor inline de substituto quando remover o principal e restarem outros — e marcar principal; `seller` só visualiza)
+- [x] 5. Ver detalhe de um cliente (com gestão de vendedores vinculados)
+  - [x] 5.1 Criar `features/clients/components/client-detail-drawer/` — todos os campos cadastrais + seção de vendedores vinculados (badge de principal; para `platform_admin`/`brokerage_admin`/`supervisor`: adicionar, remover — com seletor inline de substituto quando remover o principal e restarem outros — e marcar principal; `seller` só visualiza)
     - _Requirements: 3.1, 3.2, 5.1, 5.2, 5.3, 5.4_
-  - [ ] 5.2 Criar `pages/clients/[clientId]/client-detail-page.tsx` como rota filha `/clients/:clientId`
+  - [x] 5.2 Criar `pages/clients/[clientId]/client-detail-page.tsx` como rota filha `/clients/:clientId`
     - _Requirements: 3.1_
+
+  Verificado com 4 usuários de teste reais pelo navegador (script efêmero, limpo depois): `supervisor` vê todos os campos cadastrais (incluindo data de nascimento formatada em pt-BR) e o vendedor principal com badge; adiciona um segundo vendedor pelo seletor; tenta remover o principal com outro vendedor restante → sistema exige escolher um substituto antes (botão "Confirmar remoção" desabilitado até escolher), confirma e o banco reflete corretamente (removido + substituto promovido a principal via `set-primary`); `seller` sem vínculo é bloqueado pela RLS ao tentar abrir o detalhe (erro tratado com retry, sem crash); `seller` vinculado vê o detalhe mas sem nenhum controle de gestão (nem seletor de adicionar, nem botão remover). `console errors` esperados (406 da RLS bloqueando o `seller` sem vínculo) — sem erros inesperados.
 
 - [ ] 6. Editar cliente
   - [ ] 6.1 Criar `features/clients/validations/edit-client-schema.ts`
