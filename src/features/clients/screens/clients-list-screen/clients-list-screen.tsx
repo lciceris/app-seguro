@@ -1,6 +1,7 @@
-import { Eye, Pencil, Search } from "lucide-react";
+import { Eye, Pencil, Search, UserCheck, UserX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
@@ -10,7 +11,9 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
 import { CLIENT_TYPE_LABELS, SEGMENT_BADGE_CLASSES, SEGMENT_LABELS } from "../../constants/labels";
+import { DeactivateClientConfirmDialog } from "../../components/deactivate-client-confirm-dialog";
 import { useClients } from "../../hooks/use-clients";
+import { useReactivateClient } from "../../hooks/use-reactivate-client";
 
 function normalize(value: string) {
   return value
@@ -23,7 +26,22 @@ export function ClientsListScreen() {
   const { data: clients, isLoading, isError, refetch } = useClients();
   const usuario = useAuthStore((state) => state.usuario);
   const canEdit = usuario?.role !== "viewer";
+  const canDeactivate =
+    usuario?.role === "platform_admin" ||
+    usuario?.role === "brokerage_admin" ||
+    usuario?.role === "supervisor";
   const [search, setSearch] = useState("");
+  const [deactivateClient, setDeactivateClient] = useState<{ id: string; name: string } | null>(
+    null,
+  );
+  const reactivateClient = useReactivateClient();
+
+  function handleReactivate(id: string) {
+    reactivateClient.mutate(id, {
+      onSuccess: () => toast.success("Cliente reativado com sucesso"),
+      onError: (error) => toast.error(error.message || "Não foi possível reativar o cliente"),
+    });
+  }
 
   const filteredClients = useMemo(() => {
     if (!clients) return clients;
@@ -180,6 +198,36 @@ export function ClientsListScreen() {
                           <TooltipContent>Editar</TooltipContent>
                         </Tooltip>
                       )}
+                      {canDeactivate &&
+                        (client.segment === "inactive" ? (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={() => handleReactivate(client.id)}
+                              >
+                                <UserCheck className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Reativar</TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={() =>
+                                  setDeactivateClient({ id: client.id, name: client.legal_name })
+                                }
+                              >
+                                <UserX className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Inativar</TooltipContent>
+                          </Tooltip>
+                        ))}
                     </div>
                   </td>
                 </tr>
@@ -189,6 +237,12 @@ export function ClientsListScreen() {
       </div>
 
       <Outlet />
+
+      <DeactivateClientConfirmDialog
+        clientId={deactivateClient?.id ?? null}
+        clientName={deactivateClient?.name}
+        onOpenChange={(open) => !open && setDeactivateClient(null)}
+      />
     </div>
   );
 }

@@ -70,11 +70,15 @@
 
   Verificado com usuário `supervisor` real pelo navegador (script efêmero, limpo depois): drawer de edição abre sobre a listagem via `/clients/:clientId/edit`; valores atuais (nome, CPF/CNPJ, tipo no Select, data de nascimento no DatePicker) vêm pré-preenchidos corretamente no primeiro render, sem depender de `reset()` pós-mount; editar nome e e-mail de contato e salvar atualiza corretamente no banco e a listagem reflete o novo nome. Nenhum erro de console.
 
-- [ ] 7. Inativar e reativar cliente
-  - [ ] 7.1 Criar `features/clients/components/deactivate-client-confirm-dialog/` (`AlertDialog`, mesmo padrão de `deactivate-brokerage`/`deactivate-user`)
+- [x] 7. Inativar e reativar cliente
+  - [x] 7.1 Criar `features/clients/components/deactivate-client-confirm-dialog/` (`AlertDialog`, mesmo padrão de `deactivate-brokerage`/`deactivate-user`)
     - _Requirements: 6.1, 6.3_
-  - [ ] 7.2 Ações na listagem/detalhe — inativar (com confirmação) e reativar (um clique, sem confirmação)
+  - [x] 7.2 Ações na listagem — inativar (com confirmação) e reativar (um clique, sem confirmação)
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
+  - [x] 7.3 (ajuste, não é lacuna) Ação só na listagem, não duplicada no `client-detail-drawer` — mesmo padrão já usado em `brokerages`/`users` (deactivate/reactivate vivem só na tela de gestão).
+    - _Requirements: infra_
+
+  Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` não vê nenhum ícone de inativar na listagem (só `brokerage_admin`/`supervisor`/`platform_admin` têm esse controle); `brokerage_admin` inativa um cliente ativo → `AlertDialog` de confirmação aparece, confirma, toast de sucesso, `segment` vira `inactive` no banco e o cliente **continua listado** com badge "Inativo" (não desaparece da lista); reativa com um clique só (sem `AlertDialog`), `segment` volta pra `active` no banco. Nenhum erro de console.
 
 - [ ] 8. Testes
   - [ ] 8.1 Testes de componente: `create-client-drawer` (validação, submit, seletor de vendedores condicional), `edit-client-drawer`, `client-detail-drawer` (adicionar/remover/trocar principal), `deactivate-client-confirm-dialog`

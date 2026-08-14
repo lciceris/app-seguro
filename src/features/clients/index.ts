@@ -13,3 +13,4 @@ export * from "./screens/clients-list-screen";
 export * from "./components/create-client-drawer";
 export * from "./components/client-detail-drawer";
 export * from "./components/edit-client-drawer";
+export * from "./components/deactivate-client-confirm-dialog";
