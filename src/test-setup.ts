@@ -16,3 +16,12 @@ Element.prototype.scrollIntoView = vi.fn();
 Element.prototype.hasPointerCapture = vi.fn().mockReturnValue(false);
 Element.prototype.setPointerCapture = vi.fn();
 Element.prototype.releasePointerCapture = vi.fn();
+
+// jsdom também não implementa ResizeObserver — usado internamente pelo Popover
+// (date-picker, e qualquer Select dentro de um Popover) pra medir o conteúdo.
+class ResizeObserverStub {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+globalThis.ResizeObserver = ResizeObserverStub;

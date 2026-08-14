@@ -80,14 +80,20 @@
 
   Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` não vê nenhum ícone de inativar na listagem (só `brokerage_admin`/`supervisor`/`platform_admin` têm esse controle); `brokerage_admin` inativa um cliente ativo → `AlertDialog` de confirmação aparece, confirma, toast de sucesso, `segment` vira `inactive` no banco e o cliente **continua listado** com badge "Inativo" (não desaparece da lista); reativa com um clique só (sem `AlertDialog`), `segment` volta pra `active` no banco. Nenhum erro de console.
 
-- [ ] 8. Testes
-  - [ ] 8.1 Testes de componente: `create-client-drawer` (validação, submit, seletor de vendedores condicional), `edit-client-drawer`, `client-detail-drawer` (adicionar/remover/trocar principal), `deactivate-client-confirm-dialog`
+- [x] 8. Testes
+  - [x] 8.1 Testes de componente: `create-client-drawer` (validação, submit, seletor de vendedores condicional), `edit-client-drawer`, `client-detail-drawer` (adicionar/remover/trocar principal), `deactivate-client-confirm-dialog`
     - _Requirements: 1.1, 4.1, 5.1, 5.2, 5.3, 6.1_
-  - [ ] 8.2 Testes de hook: `useCreateClient`, `useUpdateClient`, `useAddClientSeller`, `useRemoveClientSeller`
+  - [x] 8.2 Testes de hook: `useCreateClient`, `useUpdateClient`, `useAddClientSeller`, `useRemoveClientSeller`
     - _Requirements: 1.1, 4.1, 5.1, 5.2_
-  - [ ] 8.3 Teste E2E: `seller` cadastra cliente → vínculo automático como principal → um segundo `seller` de teste não o vê (isolamento por vínculo)
+  - [x] 8.3 Teste E2E: `seller` cadastra cliente → vínculo automático como principal → um segundo `seller` de teste não o vê (isolamento por vínculo)
     - _Requirements: 1.2, 2.2_
-  - [ ] 8.4 Teste E2E: `supervisor` cadastra cliente escolhendo dois vendedores → detalhe mostra ambos, um marcado como principal
+  - [x] 8.4 Teste E2E: `supervisor` cadastra cliente escolhendo dois vendedores → detalhe mostra ambos, um marcado como principal
     - _Requirements: 1.3, 3.1_
-  - [ ] 8.5 Teste E2E: `brokerage_admin` inativa um cliente → continua listado com indicação de inativo → reativa
+  - [x] 8.5 Teste E2E: `brokerage_admin` inativa um cliente → continua listado com indicação de inativo → reativa
     - _Requirements: 6.1, 6.2, 6.4_
+  - [x] 8.6 (infra) `src/test-setup.ts` ganhou um stub de `ResizeObserver` — não existia ainda; necessário porque `create-client-drawer`/`client-detail-drawer` foram os primeiros componentes a renderizar um `Popover` (via `date-picker`) sob teste, e o `@radix-ui/react-use-size` interno quebrava sem ele.
+    - _Requirements: infra_
+
+  `npm run test` (Vitest): 32 arquivos, 67 testes, todos passando (22 são da spec `clients`: 4 componentes × ~2-5 casos + 4 hooks). `npx playwright test` (E2E completo, incluindo `auth`/`brokerages`/`insurers`/`users` já existentes): 11 specs, todas passando, sem regressão. Nenhum erro de console em nenhum teste.
+
+## Spec `clients` completa (Tasks 1-8)
