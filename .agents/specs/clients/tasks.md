@@ -60,13 +60,15 @@
 
   Verificado com 4 usuários de teste reais pelo navegador (script efêmero, limpo depois): `supervisor` vê todos os campos cadastrais (incluindo data de nascimento formatada em pt-BR) e o vendedor principal com badge; adiciona um segundo vendedor pelo seletor; tenta remover o principal com outro vendedor restante → sistema exige escolher um substituto antes (botão "Confirmar remoção" desabilitado até escolher), confirma e o banco reflete corretamente (removido + substituto promovido a principal via `set-primary`); `seller` sem vínculo é bloqueado pela RLS ao tentar abrir o detalhe (erro tratado com retry, sem crash); `seller` vinculado vê o detalhe mas sem nenhum controle de gestão (nem seletor de adicionar, nem botão remover). `console errors` esperados (406 da RLS bloqueando o `seller` sem vínculo) — sem erros inesperados.
 
-- [ ] 6. Editar cliente
-  - [ ] 6.1 Criar `features/clients/validations/edit-client-schema.ts`
+- [x] 6. Editar cliente
+  - [x] 6.1 Criar `features/clients/validations/edit-client-schema.ts`
     - _Requirements: 4.1_
-  - [ ] 6.2 Criar `features/clients/components/edit-client-drawer/`
+  - [x] 6.2 Criar `features/clients/components/edit-client-drawer/`
     - _Requirements: 4.1, 4.2, 4.3_
-  - [ ] 6.3 Criar `pages/clients/[clientId]/edit/edit-client-page.tsx` como rota filha `/clients/:clientId/edit`
+  - [x] 6.3 Criar `pages/clients/[clientId]/edit/edit-client-page.tsx` como rota filha `/clients/:clientId/edit`
     - _Requirements: 4.1_
+
+  Verificado com usuário `supervisor` real pelo navegador (script efêmero, limpo depois): drawer de edição abre sobre a listagem via `/clients/:clientId/edit`; valores atuais (nome, CPF/CNPJ, tipo no Select, data de nascimento no DatePicker) vêm pré-preenchidos corretamente no primeiro render, sem depender de `reset()` pós-mount; editar nome e e-mail de contato e salvar atualiza corretamente no banco e a listagem reflete o novo nome. Nenhum erro de console.
 
 - [ ] 7. Inativar e reativar cliente
   - [ ] 7.1 Criar `features/clients/components/deactivate-client-confirm-dialog/` (`AlertDialog`, mesmo padrão de `deactivate-brokerage`/`deactivate-user`)

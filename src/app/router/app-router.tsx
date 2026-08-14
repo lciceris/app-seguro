@@ -8,6 +8,7 @@ import { SetPasswordPage } from "@/pages/set-password/set-password-page";
 import { AddBrokeragePage } from "@/pages/brokerages/add/add-brokerage-page";
 import { AddClientPage } from "@/pages/clients/add/add-client-page";
 import { ClientDetailPage } from "@/pages/clients/[clientId]/client-detail-page";
+import { EditClientPage } from "@/pages/clients/[clientId]/edit/edit-client-page";
 import { ClientsPage } from "@/pages/clients/clients-page";
 import { BrokeragesPage } from "@/pages/brokerages/brokerages-page";
 import { BrokerageDetailPage } from "@/pages/brokerages/[brokerageId]/brokerage-detail-page";
@@ -91,6 +92,7 @@ export function AppRouter() {
             }
           >
             <Route path="add" element={<AddClientPage />} />
+            <Route path=":clientId/edit" element={<EditClientPage />} />
           </Route>
         </Route>
       </Route>
