@@ -28,13 +28,15 @@
 
   Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` A (vinculado a 1 cliente com 2 veículos) vê os 2 na listagem; badge "Inativo" e label de tipo em pt-BR (`VEHICLE_TYPE_LABELS`) renderizam corretamente; busca por placa filtra certo; `seller` B (sem cliente vinculado) vê a listagem vazia; `viewer` é bloqueado pela rota e redirecionado pra própria rota inicial (`/clients`) — nem chega a montar a tela. Botões "Ver"/"Editar" já apontam pra `/vehicles/:id`/`/vehicles/:id/edit` (rota vem nas Tasks 5/6) e "Novo veículo" pra `/vehicles/add` (Task 4), mesmo padrão de UI-antecipada já usado em `insurers`/`clients`.
 
-- [ ] 4. Cadastrar veículo
-  - [ ] 4.1 Criar `features/vehicles/validations/create-vehicle-schema.ts` (placa obrigatória; demais campos opcionais)
+- [x] 4. Cadastrar veículo
+  - [x] 4.1 Criar `features/vehicles/validations/create-vehicle-schema.ts` (placa obrigatória; demais campos opcionais)
     - _Requirements: 1.1_
-  - [ ] 4.2 Criar `features/vehicles/components/create-vehicle-drawer/` — seletor de cliente via `useClients()` (RLS já escopa por role)
+  - [x] 4.2 Criar `features/vehicles/components/create-vehicle-drawer/` — seletor de cliente via `useClients()` (RLS já escopa por role)
     - _Requirements: 1.1, 1.2_
-  - [ ] 4.3 Criar `pages/vehicles/add/add-vehicle-page.tsx` como rota filha `/vehicles/add`
+  - [x] 4.3 Criar `pages/vehicles/add/add-vehicle-page.tsx` como rota filha `/vehicles/add`
     - _Requirements: 1.1_
+
+  Verificado com dois `seller`s de teste reais pelo navegador (script efêmero, limpo depois): o seletor de cliente do `seller` A mostra só o próprio cliente vinculado — o cliente do `seller` B nem aparece na lista, sem precisar de nenhuma lógica extra no frontend (a RLS de `clients` já resolve isso via `useClients()`); submit com tipo/uso escolhidos, checkbox de rastreador marcado e campo de modelo do rastreador preenchido salva tudo corretamente no banco (número como `number`, não string); veículo aparece na listagem. Nenhum erro de console.
 
 - [ ] 5. Ver detalhe de um veículo
   - [ ] 5.1 Criar `features/vehicles/components/vehicle-detail-drawer/`

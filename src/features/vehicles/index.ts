@@ -7,3 +7,4 @@ export * from "./hooks/use-reactivate-vehicle";
 export * from "./types/vehicle";
 export * from "./constants/labels";
 export * from "./screens/vehicles-list-screen";
+export * from "./components/create-vehicle-drawer";

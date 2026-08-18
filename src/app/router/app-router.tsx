@@ -23,6 +23,7 @@ import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
 import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
 import { UsersPage } from "@/pages/users/users-page";
+import { AddVehiclePage } from "@/pages/vehicles/add/add-vehicle-page";
 import { VehiclesPage } from "@/pages/vehicles/vehicles-page";
 
 export function AppRouter() {
@@ -105,7 +106,9 @@ export function AppRouter() {
           />
         }
       >
-        <Route path="/vehicles" element={<VehiclesPage />} />
+        <Route path="/vehicles" element={<VehiclesPage />}>
+          <Route path="add" element={<AddVehiclePage />} />
+        </Route>
       </Route>
     </Routes>
   );
