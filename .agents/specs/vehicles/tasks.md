@@ -46,13 +46,17 @@
 
   Verificado com `supervisor` e `seller` de teste reais pelo navegador (script efêmero, limpo depois): `supervisor` vê todos os campos cadastrados, incluindo nome do cliente, status, tipo/uso em pt-BR, valores formatados em `R$` e booleanos como "Sim"/"Não"; "Fechar" navega de volta pra `/vehicles`; `seller` sem vínculo com o cliente do veículo é bloqueado pela RLS (erro tratado com retry). Nenhum erro de console.
 
-- [ ] 6. Editar veículo
-  - [ ] 6.1 Criar `features/vehicles/validations/edit-vehicle-schema.ts`
+- [x] 6. Editar veículo
+  - [x] 6.1 Criar `features/vehicles/validations/edit-vehicle-schema.ts`
     - _Requirements: 4.1_
-  - [ ] 6.2 Criar `features/vehicles/components/edit-vehicle-drawer/`
+  - [x] 6.2 Criar `features/vehicles/components/edit-vehicle-drawer/`
     - _Requirements: 4.1, 4.2, 4.3_
-  - [ ] 6.3 Criar `pages/vehicles/[vehicleId]/edit/edit-vehicle-page.tsx` como rota filha `/vehicles/:vehicleId/edit`
+  - [x] 6.3 Criar `pages/vehicles/[vehicleId]/edit/edit-vehicle-page.tsx` como rota filha `/vehicles/:vehicleId/edit`
     - _Requirements: 4.1_
+  - [x] 6.4 (achado durante a verificação, não é lacuna) Race condition nova, diferente da já conhecida (`defaultValues`-no-`useForm`): o Select de cliente depende de uma SEGUNDA query assíncrona (`useClients()`), não só de `useVehicle()`. Gatear o mount do formulário só em `vehicle` deixava o Select nascer em branco por um instante sempre que `clients` resolvia depois de `vehicle`. Corrigido gateando `EditVehicleDrawer` em `isVehicleLoading || isClientsLoading`.
+    - _Requirements: infra_
+
+  Verificado com usuário `supervisor` real pelo navegador (script efêmero, limpo depois, rodado 3x pra confirmar que não é flakiness): drawer de edição abre sobre a listagem via `/vehicles/:vehicleId/edit`; todos os valores atuais (placa, cliente, tipo, checkbox de rastreador) vêm pré-preenchidos corretamente e de forma consistente nas 3 execuções, sem o Select de cliente aparecer em branco; trocar o cliente vinculado e a placa e salvar atualiza corretamente no banco (`client_id` trocado confirmado) e a listagem reflete a nova placa. Nenhum erro de console.
 
 - [ ] 7. Inativar e reativar veículo
   - [ ] 7.1 Criar `features/vehicles/components/deactivate-vehicle-confirm-dialog/` (`AlertDialog`, mesmo padrão de `deactivate-client`)

@@ -48,6 +48,8 @@ Mesmo critério de `/clients`: uma única screen de gestão com `<Outlet/>` pros
 
 `create-vehicle-drawer`/`edit-vehicle-drawer` usam `useClients()` (já exportado por `@/features/clients`) pra popular o `Select` de cliente — a RLS de `clients` já resolve o escopo certo por role automaticamente (um `seller` só vê os próprios clientes nesse seletor, sem lógica extra no frontend).
 
+**Pegadinha confirmada na Task 6** (`edit-vehicle-drawer`): quando um `Select` controlado depende de uma segunda query assíncrona pra popular suas opções (aqui, `useClients()`, além de `useVehicle()`), gatear o mount do formulário só na query "principal" (`vehicle`) não é suficiente — se `clients` ainda não tiver resolvido no momento do mount, o `Select` nasce sem a `SelectItem` correspondente ao valor já setado e fica em branco até `clients` chegar. O fix é gatear o mount do formulário em **todas** as queries das quais alguma opção de `Select` depende (`isVehicleLoading || isClientsLoading`), não só na query dona dos `defaultValues`. Generaliza a lição já registrada em `clients`/`brokerages`/`insurers` (Select controlado + dado populado depois do mount é frágil) — aqui a fonte do "depois do mount" é uma SEGUNDA query, não um `reset()`.
+
 ## Data Models
 
 ### Enums novos
