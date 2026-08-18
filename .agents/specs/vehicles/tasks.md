@@ -58,11 +58,13 @@
 
   Verificado com usuário `supervisor` real pelo navegador (script efêmero, limpo depois, rodado 3x pra confirmar que não é flakiness): drawer de edição abre sobre a listagem via `/vehicles/:vehicleId/edit`; todos os valores atuais (placa, cliente, tipo, checkbox de rastreador) vêm pré-preenchidos corretamente e de forma consistente nas 3 execuções, sem o Select de cliente aparecer em branco; trocar o cliente vinculado e a placa e salvar atualiza corretamente no banco (`client_id` trocado confirmado) e a listagem reflete a nova placa. Nenhum erro de console.
 
-- [ ] 7. Inativar e reativar veículo
-  - [ ] 7.1 Criar `features/vehicles/components/deactivate-vehicle-confirm-dialog/` (`AlertDialog`, mesmo padrão de `deactivate-client`)
+- [x] 7. Inativar e reativar veículo
+  - [x] 7.1 Criar `features/vehicles/components/deactivate-vehicle-confirm-dialog/` (`AlertDialog`, mesmo padrão de `deactivate-client`)
     - _Requirements: 5.1_
-  - [ ] 7.2 Ações na listagem — inativar (com confirmação) e reativar (um clique, sem confirmação)
+  - [x] 7.2 Ações na listagem — inativar (com confirmação) e reativar (um clique, sem confirmação)
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
+
+  Verificado com `brokerage_admin` real pelo navegador (script efêmero, limpo depois): inativa um veículo ativo → `AlertDialog` de confirmação aparece, confirma, toast de sucesso, `is_active` vira `false` no banco e o veículo **continua listado** com badge "Inativo" (não desaparece); reativa com um clique só (sem `AlertDialog`), `is_active` volta pra `true` no banco. Ação disponível pros 4 perfis com acesso à listagem (sem restrição extra além da já garantida pela RLS — `seller` só inativa veículos dos próprios clientes, automaticamente).
 
 - [ ] 8. Testes
   - [ ] 8.1 Testes de componente: `create-vehicle-drawer` (validação, submit, seletor de cliente), `edit-vehicle-drawer`, `deactivate-vehicle-confirm-dialog`

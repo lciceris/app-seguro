@@ -1,6 +1,7 @@
-import { Eye, Pencil, Search } from "lucide-react";
+import { Eye, Pencil, Search, UserCheck, UserX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { toast } from "sonner";
 
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -9,6 +10,8 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
 import { VEHICLE_TYPE_LABELS } from "../../constants/labels";
+import { DeactivateVehicleConfirmDialog } from "../../components/deactivate-vehicle-confirm-dialog";
+import { useReactivateVehicle } from "../../hooks/use-reactivate-vehicle";
 import { useVehicles } from "../../hooks/use-vehicles";
 
 function normalize(value: string) {
@@ -21,6 +24,17 @@ function normalize(value: string) {
 export function VehiclesListScreen() {
   const { data: vehicles, isLoading, isError, refetch } = useVehicles();
   const [search, setSearch] = useState("");
+  const [deactivateVehicle, setDeactivateVehicle] = useState<{ id: string; plate: string } | null>(
+    null,
+  );
+  const reactivateVehicle = useReactivateVehicle();
+
+  function handleReactivate(id: string) {
+    reactivateVehicle.mutate(id, {
+      onSuccess: () => toast.success("Veículo reativado com sucesso"),
+      onError: (error) => toast.error(error.message || "Não foi possível reativar o veículo"),
+    });
+  }
 
   const filteredVehicles = useMemo(() => {
     if (!vehicles) return vehicles;
@@ -175,6 +189,35 @@ export function VehiclesListScreen() {
                         </TooltipTrigger>
                         <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
+                      {vehicle.is_active ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() =>
+                                setDeactivateVehicle({ id: vehicle.id, plate: vehicle.plate })
+                              }
+                            >
+                              <UserX className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Inativar</TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() => handleReactivate(vehicle.id)}
+                            >
+                              <UserCheck className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reativar</TooltipContent>
+                        </Tooltip>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -184,6 +227,12 @@ export function VehiclesListScreen() {
       </div>
 
       <Outlet />
+
+      <DeactivateVehicleConfirmDialog
+        vehicleId={deactivateVehicle?.id ?? null}
+        vehiclePlate={deactivateVehicle?.plate}
+        onOpenChange={(open) => !open && setDeactivateVehicle(null)}
+      />
     </div>
   );
 }
