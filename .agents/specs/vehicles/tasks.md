@@ -10,13 +10,15 @@
 
   3 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados. Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois): `seller` A cadastra veículo pro próprio cliente; `seller` A bloqueado ao tentar cadastrar veículo pra um cliente de outro vendedor; `seller` B (sem o cliente vinculado) não enxerga o veículo; `supervisor` enxerga o veículo e cadastra veículo pra qualquer cliente da corretora; `viewer` não enxerga nenhum veículo (sem policy nenhuma pra esse role — nem leitura, diferente de `clients`); `supervisor` inativa via `UPDATE is_active = false` com sucesso. Nenhuma função nova precisou ser criada — `is_my_client()` da spec `clients` reaproveitada como planejado.
 
-- [ ] 2. Camada de dados do frontend
-  - [ ] 2.1 Criar `features/vehicles/types/vehicle.ts` + `constants/query-keys.ts` + `constants/labels.ts` (`VEHICLE_TYPE_LABELS`, `VEHICLE_USAGE_LABELS`)
+- [x] 2. Camada de dados do frontend
+  - [x] 2.1 Criar `features/vehicles/types/vehicle.ts` + `constants/query-keys.ts` + `constants/labels.ts` (`VEHICLE_TYPE_LABELS`, `VEHICLE_USAGE_LABELS`)
     - _Requirements: infra_
-  - [ ] 2.2 Criar `features/vehicles/api/` — `list-vehicles`, `get-vehicle`, `create-vehicle`, `update-vehicle`, `deactivate-vehicle`, `reactivate-vehicle`
+  - [x] 2.2 Criar `features/vehicles/api/` — `list-vehicles`, `get-vehicle`, `create-vehicle`, `update-vehicle`, `deactivate-vehicle`, `reactivate-vehicle`
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 5.2_
-  - [ ] 2.3 Criar `features/vehicles/hooks/` correspondentes — cada mutation invalida a query certa
+  - [x] 2.3 Criar `features/vehicles/hooks/` correspondentes — cada mutation invalida a query certa. `useCreateVehicle` pega o `brokerage_id` do auth store internamente, mesmo padrão de `useCreateClient`.
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 5.2_
+
+  `list-vehicles`/`get-vehicle` fazem embed com `clients(id, legal_name)` (`VehicleWithClient`) pra exibir o nome do cliente na listagem/detalhe sem uma segunda query. Diferente de `create-client`, `create-vehicle`/`update-vehicle` usam `.insert()/.update().select().single()` normal — não há trigger nenhum em `vehicles` que crie a pegadinha de `RETURNING` encontrada na spec `clients`. `npx tsc --noEmit` e `npx eslint src/features/vehicles` sem erros. Verificação ponta a ponta desses hooks fica pra quando a UI (Task 3+) existir.
 
 - [ ] 3. Listagem de veículos
   - [ ] 3.1 Criar `features/vehicles/screens/vehicles-list-screen/` — tabela com placa, cliente, marca/modelo, tipo, status; busca por placa, chassi ou nome do cliente; `<Outlet/>` pros drawers aninhados
