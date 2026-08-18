@@ -6,3 +6,4 @@ export * from "./hooks/use-deactivate-vehicle";
 export * from "./hooks/use-reactivate-vehicle";
 export * from "./types/vehicle";
 export * from "./constants/labels";
+export * from "./screens/vehicles-list-screen";

@@ -20,11 +20,13 @@
 
   `list-vehicles`/`get-vehicle` fazem embed com `clients(id, legal_name)` (`VehicleWithClient`) pra exibir o nome do cliente na listagem/detalhe sem uma segunda query. Diferente de `create-client`, `create-vehicle`/`update-vehicle` usam `.insert()/.update().select().single()` normal — não há trigger nenhum em `vehicles` que crie a pegadinha de `RETURNING` encontrada na spec `clients`. `npx tsc --noEmit` e `npx eslint src/features/vehicles` sem erros. Verificação ponta a ponta desses hooks fica pra quando a UI (Task 3+) existir.
 
-- [ ] 3. Listagem de veículos
-  - [ ] 3.1 Criar `features/vehicles/screens/vehicles-list-screen/` — tabela com placa, cliente, marca/modelo, tipo, status; busca por placa, chassi ou nome do cliente; `<Outlet/>` pros drawers aninhados
+- [x] 3. Listagem de veículos
+  - [x] 3.1 Criar `features/vehicles/screens/vehicles-list-screen/` — tabela com placa, cliente, marca/modelo, tipo, status; busca por placa, chassi ou nome do cliente; `<Outlet/>` pros drawers aninhados
     - _Requirements: 2.1, 2.2, 5.3_
-  - [ ] 3.2 Criar `pages/vehicles/vehicles-page.tsx` e registrar a rota `/vehicles` (restrita a `platform_admin`, `brokerage_admin`, `supervisor`, `seller`)
+  - [x] 3.2 Criar `pages/vehicles/vehicles-page.tsx` e registrar a rota `/vehicles` (restrita a `platform_admin`, `brokerage_admin`, `supervisor`, `seller`)
     - _Requirements: 2.3_
+
+  Verificado com usuários de teste reais pelo navegador (script efêmero, limpo depois): `seller` A (vinculado a 1 cliente com 2 veículos) vê os 2 na listagem; badge "Inativo" e label de tipo em pt-BR (`VEHICLE_TYPE_LABELS`) renderizam corretamente; busca por placa filtra certo; `seller` B (sem cliente vinculado) vê a listagem vazia; `viewer` é bloqueado pela rota e redirecionado pra própria rota inicial (`/clients`) — nem chega a montar a tela. Botões "Ver"/"Editar" já apontam pra `/vehicles/:id`/`/vehicles/:id/edit` (rota vem nas Tasks 5/6) e "Novo veículo" pra `/vehicles/add` (Task 4), mesmo padrão de UI-antecipada já usado em `insurers`/`clients`.
 
 - [ ] 4. Cadastrar veículo
   - [ ] 4.1 Criar `features/vehicles/validations/create-vehicle-schema.ts` (placa obrigatória; demais campos opcionais)

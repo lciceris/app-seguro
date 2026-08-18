@@ -23,6 +23,7 @@ import { AddUserPage } from "@/pages/users/add/add-user-page";
 import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
 import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
 import { UsersPage } from "@/pages/users/users-page";
+import { VehiclesPage } from "@/pages/vehicles/vehicles-page";
 
 export function AppRouter() {
   return (
@@ -95,6 +96,16 @@ export function AppRouter() {
             <Route path=":clientId/edit" element={<EditClientPage />} />
           </Route>
         </Route>
+      </Route>
+
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+          />
+        }
+      >
+        <Route path="/vehicles" element={<VehiclesPage />} />
       </Route>
     </Routes>
   );
