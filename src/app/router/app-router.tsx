@@ -24,6 +24,7 @@ import { EditUserPage } from "@/pages/users/[userId]/edit/edit-user-page";
 import { UserDetailPage } from "@/pages/users/[userId]/user-detail-page";
 import { UsersPage } from "@/pages/users/users-page";
 import { AddVehiclePage } from "@/pages/vehicles/add/add-vehicle-page";
+import { VehicleDetailPage } from "@/pages/vehicles/[vehicleId]/vehicle-detail-page";
 import { VehiclesPage } from "@/pages/vehicles/vehicles-page";
 
 export function AppRouter() {
@@ -108,6 +109,7 @@ export function AppRouter() {
       >
         <Route path="/vehicles" element={<VehiclesPage />}>
           <Route path="add" element={<AddVehiclePage />} />
+          <Route path=":vehicleId" element={<VehicleDetailPage />} />
         </Route>
       </Route>
     </Routes>

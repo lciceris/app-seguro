@@ -38,11 +38,13 @@
 
   Verificado com dois `seller`s de teste reais pelo navegador (script efêmero, limpo depois): o seletor de cliente do `seller` A mostra só o próprio cliente vinculado — o cliente do `seller` B nem aparece na lista, sem precisar de nenhuma lógica extra no frontend (a RLS de `clients` já resolve isso via `useClients()`); submit com tipo/uso escolhidos, checkbox de rastreador marcado e campo de modelo do rastreador preenchido salva tudo corretamente no banco (número como `number`, não string); veículo aparece na listagem. Nenhum erro de console.
 
-- [ ] 5. Ver detalhe de um veículo
-  - [ ] 5.1 Criar `features/vehicles/components/vehicle-detail-drawer/`
+- [x] 5. Ver detalhe de um veículo
+  - [x] 5.1 Criar `features/vehicles/components/vehicle-detail-drawer/`
     - _Requirements: 3.1_
-  - [ ] 5.2 Criar `pages/vehicles/[vehicleId]/vehicle-detail-page.tsx` como rota filha `/vehicles/:vehicleId`
+  - [x] 5.2 Criar `pages/vehicles/[vehicleId]/vehicle-detail-page.tsx` como rota filha `/vehicles/:vehicleId`
     - _Requirements: 3.1_
+
+  Verificado com `supervisor` e `seller` de teste reais pelo navegador (script efêmero, limpo depois): `supervisor` vê todos os campos cadastrados, incluindo nome do cliente, status, tipo/uso em pt-BR, valores formatados em `R$` e booleanos como "Sim"/"Não"; "Fechar" navega de volta pra `/vehicles`; `seller` sem vínculo com o cliente do veículo é bloqueado pela RLS (erro tratado com retry). Nenhum erro de console.
 
 - [ ] 6. Editar veículo
   - [ ] 6.1 Criar `features/vehicles/validations/edit-vehicle-schema.ts`
