@@ -1,14 +1,14 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: enums `vehicle_type` e `vehicle_usage` (catálogo fixo de frota)
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: enums `vehicle_type` e `vehicle_usage` (catálogo fixo de frota)
     - _Requirements: 1.1_
-  - [ ] 1.2 Migration: tabela `vehicles` (tenant-scoped, `client_id` fk `clients(id)`; `plate` obrigatória, demais campos opcionais; `is_active` default `true`; trigger `set_updated_at`)
+  - [x] 1.2 Migration: tabela `vehicles` (tenant-scoped, `client_id` fk `clients(id)`; `plate` obrigatória, demais campos opcionais; `is_active` default `true`; trigger `set_updated_at`)
     - _Requirements: 1.1_
-  - [ ] 1.3 Migration: RLS de `vehicles` — `vehicles_select`, `vehicles_insert`, `vehicles_update` reaproveitando `is_my_client(client_id)` (já existe, spec `clients`); sem policy de DELETE
+  - [x] 1.3 Migration: RLS de `vehicles` — `vehicles_select`, `vehicles_insert`, `vehicles_update` reaproveitando `is_my_client(client_id)` (já existe, spec `clients`); sem policy de DELETE
     - _Requirements: 1.2, 1.3, 2.1, 2.2, 2.3, 3.2, 4.1, 4.2_
 
-  Verificar com usuários/corretoras de teste reais (script efêmero, limpo depois): `seller` cadastra veículo só pra um cliente vinculado a ele; `seller` bloqueado ao tentar cadastrar veículo pra um cliente que não é dele; `supervisor`/`brokerage_admin`/`platform_admin` cadastram veículo pra qualquer cliente da corretora; um segundo `seller` (sem o cliente vinculado) não enxerga o veículo; `analyst` e `viewer` não enxergam nenhum veículo (RLS silenciosa — nem SELECT).
+  3 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados. Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois): `seller` A cadastra veículo pro próprio cliente; `seller` A bloqueado ao tentar cadastrar veículo pra um cliente de outro vendedor; `seller` B (sem o cliente vinculado) não enxerga o veículo; `supervisor` enxerga o veículo e cadastra veículo pra qualquer cliente da corretora; `viewer` não enxerga nenhum veículo (sem policy nenhuma pra esse role — nem leitura, diferente de `clients`); `supervisor` inativa via `UPDATE is_active = false` com sucesso. Nenhuma função nova precisou ser criada — `is_my_client()` da spec `clients` reaproveitada como planejado.
 
 - [ ] 2. Camada de dados do frontend
   - [ ] 2.1 Criar `features/vehicles/types/vehicle.ts` + `constants/query-keys.ts` + `constants/labels.ts` (`VEHICLE_TYPE_LABELS`, `VEHICLE_USAGE_LABELS`)

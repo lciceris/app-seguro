@@ -369,6 +369,114 @@ export type Database = {
           },
         ]
       }
+      vehicles: {
+        Row: {
+          accessories: string | null
+          brand: string | null
+          brokerage_id: string
+          chassis: string | null
+          client_id: string
+          created_at: string
+          declared_value: number | null
+          fipe_code: string | null
+          fipe_value: number | null
+          fuel_type: string | null
+          has_claim_history: boolean
+          has_tracker: boolean
+          id: string
+          identification_code: string | null
+          is_active: boolean
+          main_driver: string | null
+          main_state: string | null
+          manufacture_year: number | null
+          model: string | null
+          model_year: number | null
+          notes: string | null
+          overnight_zip_code: string | null
+          plate: string
+          renavam: string | null
+          tracker_model: string | null
+          updated_at: string
+          vehicle_type: Database["public"]["Enums"]["vehicle_type"] | null
+          vehicle_usage: Database["public"]["Enums"]["vehicle_usage"] | null
+        }
+        Insert: {
+          accessories?: string | null
+          brand?: string | null
+          brokerage_id: string
+          chassis?: string | null
+          client_id: string
+          created_at?: string
+          declared_value?: number | null
+          fipe_code?: string | null
+          fipe_value?: number | null
+          fuel_type?: string | null
+          has_claim_history?: boolean
+          has_tracker?: boolean
+          id?: string
+          identification_code?: string | null
+          is_active?: boolean
+          main_driver?: string | null
+          main_state?: string | null
+          manufacture_year?: number | null
+          model?: string | null
+          model_year?: number | null
+          notes?: string | null
+          overnight_zip_code?: string | null
+          plate: string
+          renavam?: string | null
+          tracker_model?: string | null
+          updated_at?: string
+          vehicle_type?: Database["public"]["Enums"]["vehicle_type"] | null
+          vehicle_usage?: Database["public"]["Enums"]["vehicle_usage"] | null
+        }
+        Update: {
+          accessories?: string | null
+          brand?: string | null
+          brokerage_id?: string
+          chassis?: string | null
+          client_id?: string
+          created_at?: string
+          declared_value?: number | null
+          fipe_code?: string | null
+          fipe_value?: number | null
+          fuel_type?: string | null
+          has_claim_history?: boolean
+          has_tracker?: boolean
+          id?: string
+          identification_code?: string | null
+          is_active?: boolean
+          main_driver?: string | null
+          main_state?: string | null
+          manufacture_year?: number | null
+          model?: string | null
+          model_year?: number | null
+          notes?: string | null
+          overnight_zip_code?: string | null
+          plate?: string
+          renavam?: string | null
+          tracker_model?: string | null
+          updated_at?: string
+          vehicle_type?: Database["public"]["Enums"]["vehicle_type"] | null
+          vehicle_usage?: Database["public"]["Enums"]["vehicle_usage"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicles_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vehicles_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -399,6 +507,30 @@ export type Database = {
         | "analyst"
         | "viewer"
       user_status: "active" | "inactive"
+      vehicle_type:
+        | "tow_truck"
+        | "semi_trailer"
+        | "heavy_truck"
+        | "light_truck"
+        | "bus"
+        | "heavy_pickup"
+        | "light_pickup"
+        | "passenger_car"
+        | "motorcycle"
+      vehicle_usage:
+        | "cargo_transport"
+        | "commercial"
+        | "private"
+        | "tow_service"
+        | "test_drive"
+        | "driving_school"
+        | "garbage_collector"
+        | "funeral_service"
+        | "walk_in_rental"
+        | "contract_rental"
+        | "taxi"
+        | "passenger_transport"
+        | "school_transport"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -541,6 +673,32 @@ export const Constants = {
         "viewer",
       ],
       user_status: ["active", "inactive"],
+      vehicle_type: [
+        "tow_truck",
+        "semi_trailer",
+        "heavy_truck",
+        "light_truck",
+        "bus",
+        "heavy_pickup",
+        "light_pickup",
+        "passenger_car",
+        "motorcycle",
+      ],
+      vehicle_usage: [
+        "cargo_transport",
+        "commercial",
+        "private",
+        "tow_service",
+        "test_drive",
+        "driving_school",
+        "garbage_collector",
+        "funeral_service",
+        "walk_in_rental",
+        "contract_rental",
+        "taxi",
+        "passenger_transport",
+        "school_transport",
+      ],
     },
   },
 } as const
