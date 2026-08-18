@@ -89,6 +89,7 @@ export function CreateVehicleDrawer() {
   } = useForm<CreateVehicleFormValues>({
     resolver: zodResolver(createVehicleSchema),
     defaultValues: {
+      client_id: "",
       vehicle_type: NO_VEHICLE_TYPE_VALUE,
       vehicle_usage: NO_VEHICLE_USAGE_VALUE,
       has_tracker: false,

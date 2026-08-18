@@ -66,12 +66,16 @@
 
   Verificado com `brokerage_admin` real pelo navegador (script efêmero, limpo depois): inativa um veículo ativo → `AlertDialog` de confirmação aparece, confirma, toast de sucesso, `is_active` vira `false` no banco e o veículo **continua listado** com badge "Inativo" (não desaparece); reativa com um clique só (sem `AlertDialog`), `is_active` volta pra `true` no banco. Ação disponível pros 4 perfis com acesso à listagem (sem restrição extra além da já garantida pela RLS — `seller` só inativa veículos dos próprios clientes, automaticamente).
 
-- [ ] 8. Testes
-  - [ ] 8.1 Testes de componente: `create-vehicle-drawer` (validação, submit, seletor de cliente), `edit-vehicle-drawer`, `deactivate-vehicle-confirm-dialog`
+- [x] 8. Testes
+  - [x] 8.1 Testes de componente: `create-vehicle-drawer` (validação, submit, seletor de cliente), `edit-vehicle-drawer`, `deactivate-vehicle-confirm-dialog`
     - _Requirements: 1.1, 4.1, 5.1_
-  - [ ] 8.2 Testes de hook: `useCreateVehicle`, `useUpdateVehicle`
+  - [x] 8.2 Testes de hook: `useCreateVehicle`, `useUpdateVehicle`
     - _Requirements: 1.1, 4.1_
-  - [ ] 8.3 Teste E2E: `seller` cadastra veículo só pra um cliente próprio → aparece na listagem dele → um segundo `seller` sem esse cliente não vê (isolamento em cascata)
+  - [x] 8.3 Teste E2E: `seller` cadastra veículo só pra um cliente próprio → aparece na listagem dele → um segundo `seller` sem esse cliente não vê (isolamento em cascata)
     - _Requirements: 1.2, 2.2_
-  - [ ] 8.4 Teste E2E: `brokerage_admin` inativa um veículo → continua listado com indicação de inativo → reativa
+  - [x] 8.4 Teste E2E: `brokerage_admin` inativa um veículo → continua listado com indicação de inativo → reativa
     - _Requirements: 5.1, 5.2, 5.3_
+  - [x] 8.5 (achado durante o E2E, não é lacuna) `create-vehicle-drawer` não tinha `client_id: ""` em `defaultValues` — o `Select` de cliente nascia com `field.value` `undefined` (não-controlado) e virava controlado assim que o RHF inicializava, disparando o warning real do React "Select is changing from uncontrolled to controlled" (capturado pelo E2E, não pelos testes unitários). Corrigido adicionando o default vazio, mesmo padrão já usado em todo campo de `Select` controlado do projeto.
+    - _Requirements: infra_
+
+  `npm run test` (Vitest): 37 arquivos, 77 testes, todos passando (10 são da spec `vehicles`). `npx playwright test` (E2E completo, incluindo `auth`/`brokerages`/`insurers`/`clients`/`users` já existentes): 13 specs, todas passando, sem regressão, sem warnings de console. Spec `vehicles` completa (Tasks 1-8).
