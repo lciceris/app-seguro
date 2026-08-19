@@ -29,3 +29,5 @@ export * from "./components/quotation-vehicles-tab";
 export * from "./validations/quotation-vehicle-coverage-schema";
 export * from "./components/quotation-qar-tab";
 export * from "./validations/quotation-qar-schema";
+export * from "./components/quotation-insurers-tab";
+export * from "./validations/quotation-insurer-response-schema";

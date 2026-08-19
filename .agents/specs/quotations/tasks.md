@@ -117,15 +117,23 @@
 
   Verificado com `seller` e `viewer` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `seller` preenche o QAR inteiro (texto, número, switches, regiões separadas por vírgula), salva, dá reload na página e os valores voltam pré-preenchidos exatamente como salvos; anexa um arquivo real, baixa (URL assinada abre numa aba nova apontando pro bucket `qar-attachments`) e remove com sucesso; `viewer` abre a mesma cotação, vê o anexo e os valores do QAR mas os campos aparecem desabilitados e os botões "Salvar QAR"/"Anexar arquivo" nem aparecem. Nenhum erro de console. `npx tsc --noEmit` e `npx eslint` limpos.
 
-- [ ] 9. Aba Seguradoras
-  - [ ] 9.1 Convidar seguradora — seletor a partir do catálogo habilitado pra corretora (exclui as desabilitadas via `brokerage_disabled_insurers`)
+- [x] 9. Aba Seguradoras
+  - [x] 9.1 Convidar seguradora — seletor a partir do catálogo habilitado pra corretora (exclui as desabilitadas via `brokerage_disabled_insurers`)
     - _Requirements: 5.1, 5.2_
-  - [ ] 9.2 Editar retorno de uma seguradora (status, prêmio, franquia, comissão, parcelas, número da proposta, coberturas aprovadas, notas) — `seller` só visualiza
+  - [x] 9.2 Editar retorno de uma seguradora (status, prêmio, franquia, comissão, parcelas, número da proposta, coberturas aprovadas, notas) — `seller` só visualiza
     - _Requirements: 5.3, 5.4_
-  - [ ] 9.3 Marcar seguradora vencedora — só entre as `accepted`; desmarca a anterior automaticamente
+  - [x] 9.3 Marcar seguradora vencedora — só entre as `accepted`; desmarca a anterior automaticamente
     - _Requirements: 7.1, 7.2, 7.3_
-  - [ ] 9.4 Comentários e linha do tempo de eventos por seguradora — `seller`/`viewer` em modo leitura
+  - [x] 9.4 Comentários e linha do tempo de eventos por seguradora — `seller`/`viewer` em modo leitura
     - _Requirements: 8.1, 8.2, 8.3_
+
+  Requirement 8.2 (evento `system` automático quando um campo relevante do retorno muda) não tinha nenhum trigger de banco prevendo isso — implementado no frontend, em `update-quotation-insurer.ts`: a função lê a linha atual antes do update, faz o update, e insere um evento `system` por campo que mudou (`response_status`, `premium_amount`, `deductible_amount`, `commission_rate`, `installments_count`, `insurer_quotation_number`, `approved_coverages`, `analyst_notes`), com `field_changed`/`old_value`/`new_value`. Não é atômico (duas idas ao banco), mas segue o mesmo padrão sequencial já usado no resto do projeto (sem RPC/transação). `responded_at` passou a ser calculado automaticamente (não é mais campo do formulário) — só atualiza quando `response_status` muda de fato.
+
+  Dois problemas reais achados na verificação (não bugs de teste):
+  1. **RLS de `insurers`** (spec `insurers`, migration `20260811133002`) restringia leitura a `platform_admin`/`brokerage_admin` — fazia sentido antes de existir a aba Seguradoras da cotação, mas agora qualquer perfil com acesso à cotação (`seller`, `analyst`, `supervisor`, `viewer`) precisa ler o nome da seguradora no embed de `quotation_insurers`, e quem convida precisa do catálogo inteiro. Corrigido com a migration `20260819100018_extend_insurers_select_to_all_authenticated.sql`, abrindo o SELECT pra qualquer usuário autenticado (`insurers` não tem `brokerage_id` — catálogo global sem dado sensível de outra corretora; só a escrita continua exclusiva de `platform_admin`). Mesma categoria do gap de RLS de `vehicles` achado na Task 7.
+  2. **Estado obsoleto no drawer**: `QuotationInsurersTab` guardava o objeto `QuotationInsurerWithInsurer` inteiro num `useState` no momento do clique na linha. Depois de salvar um retorno que muda `response_status` pra `accepted`, o botão "Marcar como vencedora" não aparecia porque o drawer continuava lendo o snapshot antigo (`pending`) em vez do dado já atualizado pela invalidação da query. Corrigido guardando só o `id` selecionado e derivando o objeto atual via `.find()` na lista já reativa (`quotationInsurers`), então qualquer refetch reflete no drawer aberto sem precisar fechar/reabrir.
+
+  Verificado com `seller`, `analyst` e `viewer` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `seller` não vê o seletor de convidar nem o botão "Salvar retorno"/caixa de comentário; `analyst` convida uma seguradora, edita o retorno (status → `Aceita`, prêmio), salva e vê os dois eventos `system` gerados automaticamente na linha do tempo sem reabrir o drawer; comenta e vê o comentário atribuído ao próprio nome; marca como vencedora sem precisar fechar/reabrir o drawer (fix do bug acima) e o badge "Vencedora" aparece tanto no cabeçalho do drawer quanto na linha da tabela; `viewer` abre a mesma cotação, vê a seguradora, o retorno e a linha do tempo completa (incluindo os eventos `system` e o comentário), mas com os campos desabilitados e sem nenhum botão de escrita. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros — nada quebrou nas specs anteriores.
 
 - [ ] 10. Fluxo de status da cotação
   - [ ] 10.1 Componente de ações de transição — mostra só os botões válidos pro status atual e pro role do usuário logado (espelha o trigger `enforce_quotation_status_transition`)
