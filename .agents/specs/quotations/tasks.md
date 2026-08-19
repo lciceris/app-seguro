@@ -83,13 +83,17 @@
 
   Verificado com `supervisor`, `viewer` e `seller` reais pelo navegador (script efêmero, limpo depois): todos os campos da aba Visão geral aparecem corretamente (número, cliente, status, tipo, franquia, observações); trocar de aba (Veículos/Seguradoras) funciona; `supervisor` vê botão Editar, `viewer` não vê; botão voltar navega pra listagem; `seller` sem vínculo com o cliente é bloqueado pela RLS ao abrir a página. Nenhum erro de console.
 
-- [ ] 6. Editar cotação
-  - [ ] 6.1 Criar `features/quotations/validations/edit-quotation-schema.ts`
+- [x] 6. Editar cotação
+  - [x] 6.1 Criar `features/quotations/validations/edit-quotation-schema.ts`
     - _Requirements: infra_
-  - [ ] 6.2 Criar `features/quotations/components/edit-quotation-drawer/` — campos gerais (datas, coberturas desejadas, franquia preferida, prazo, observações)
+  - [x] 6.2 Criar `features/quotations/components/edit-quotation-drawer/` — campos gerais (vendedor responsável condicional por role, tipo, datas, coberturas desejadas, franquia preferida, prazo, observações). `client_id` fica de fora de propósito — trocar o cliente de uma cotação com veículos já vinculados quebraria a checagem de integridade do trigger `validate_quotation_vehicle`.
     - _Requirements: infra_
-  - [ ] 6.3 Criar `pages/quotations/[quotationId]/edit/edit-quotation-page.tsx` como rota filha `/quotations/:quotationId/edit`
+  - [x] 6.3 Criar `pages/quotations/[quotationId]/edit/edit-quotation-page.tsx` como rota filha `/quotations/:quotationId/edit` — drawer sobre a página de detalhe (`quotation-detail-screen` ganhou `<Outlet/>`), mesmo padrão de sobreposição já usado nas specs anteriores
     - _Requirements: infra_
+
+  Nota de processo: o comando `npx shadcn add tabs` (Task 5) foi originalmente executado sem querer no diretório `fleet-auth-gate` por causa do reset de cwd do Bash — criou um `src/components/ui/tabs.tsx` órfão lá, identificado e removido antes de qualquer commit (nada vazou pro repo errado). Refeito corretamente em `app-seguro` logo em seguida.
+
+  Verificado com `supervisor` e `seller` reais pelo navegador (script efêmero, limpo depois): valores atuais vêm pré-preenchidos corretamente desde o primeiro render, incluindo o Select de vendedor (mesmo padrão de `defaultValues`-no-`useForm` + gate em ambas as queries assíncronas já estabelecido); salvar atualiza o banco e volta pro detalhe; `seller` não vê o campo "Vendedor responsável" (só perfis de gestão reatribuem). Nenhum erro de console.
 
 - [ ] 7. Aba Veículos
   - [ ] 7.1 Seletor de veículos do cliente da cotação (reaproveita `useVehicles()` filtrado pelo `client_id`) + formulário de cobertura por veículo

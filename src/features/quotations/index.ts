@@ -24,3 +24,4 @@ export * from "./constants/labels";
 export * from "./screens/quotations-list-screen";
 export * from "./components/create-quotation-drawer";
 export * from "./screens/quotation-detail-screen";
+export * from "./components/edit-quotation-drawer";

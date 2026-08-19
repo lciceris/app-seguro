@@ -30,6 +30,7 @@ import { VehiclesPage } from "@/pages/vehicles/vehicles-page";
 import { QuotationsPage } from "@/pages/quotations/quotations-page";
 import { AddQuotationPage } from "@/pages/quotations/add/add-quotation-page";
 import { QuotationDetailPage } from "@/pages/quotations/[quotationId]/quotation-detail-page";
+import { EditQuotationPage } from "@/pages/quotations/[quotationId]/edit/edit-quotation-page";
 
 export function AppRouter() {
   return (
@@ -146,7 +147,23 @@ export function AppRouter() {
 
         {/* Página cheia, não drawer — não fica dentro do <Outlet/> de /quotations
             (ver .agents/specs/quotations/design.md, "Divergência de padrão"). */}
-        <Route path="/quotations/:quotationId" element={<QuotationDetailPage />} />
+        <Route path="/quotations/:quotationId" element={<QuotationDetailPage />}>
+          <Route
+            element={
+              <ProtectedRoute
+                allowedRoles={[
+                  "platform_admin",
+                  "brokerage_admin",
+                  "supervisor",
+                  "analyst",
+                  "seller",
+                ]}
+              />
+            }
+          >
+            <Route path="edit" element={<EditQuotationPage />} />
+          </Route>
+        </Route>
       </Route>
     </Routes>
   );

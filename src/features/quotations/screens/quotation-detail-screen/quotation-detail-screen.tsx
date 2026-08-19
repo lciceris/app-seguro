@@ -1,5 +1,5 @@
 import { ArrowLeft, Pencil } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
@@ -167,6 +167,8 @@ export function QuotationDetailScreen() {
           </TabsContent>
         </Tabs>
       )}
+
+      <Outlet />
     </div>
   );
 }
