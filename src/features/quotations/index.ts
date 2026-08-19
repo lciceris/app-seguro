@@ -22,3 +22,4 @@ export * from "./hooks/use-add-quotation-insurer-comment";
 export * from "./types/quotation";
 export * from "./constants/labels";
 export * from "./screens/quotations-list-screen";
+export * from "./components/create-quotation-drawer";

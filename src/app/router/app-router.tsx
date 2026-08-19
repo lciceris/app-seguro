@@ -28,6 +28,7 @@ import { VehicleDetailPage } from "@/pages/vehicles/[vehicleId]/vehicle-detail-p
 import { EditVehiclePage } from "@/pages/vehicles/[vehicleId]/edit/edit-vehicle-page";
 import { VehiclesPage } from "@/pages/vehicles/vehicles-page";
 import { QuotationsPage } from "@/pages/quotations/quotations-page";
+import { AddQuotationPage } from "@/pages/quotations/add/add-quotation-page";
 
 export function AppRouter() {
   return (
@@ -130,7 +131,17 @@ export function AppRouter() {
           />
         }
       >
-        <Route path="/quotations" element={<QuotationsPage />} />
+        <Route path="/quotations" element={<QuotationsPage />}>
+          <Route
+            element={
+              <ProtectedRoute
+                allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+              />
+            }
+          >
+            <Route path="add" element={<AddQuotationPage />} />
+          </Route>
+        </Route>
       </Route>
     </Routes>
   );

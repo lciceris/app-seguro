@@ -62,13 +62,15 @@
 
   Verificado com 5 usuários de teste reais pelo navegador (script efêmero, limpo depois): `brokerage_admin` loga e cai direto em `/quotations`, vendo as 2 cotações da corretora; `seller` A vê só a própria cotação (RLS) e o botão "Nova cotação"; busca por número e filtro por status funcionam; `viewer` não vê "Nova cotação" nem o ícone Editar. Nenhum erro de console.
 
-- [ ] 4. Criar cotação
-  - [ ] 4.1 Criar `features/quotations/validations/create-quotation-schema.ts`
+- [x] 4. Criar cotação
+  - [x] 4.1 Criar `features/quotations/validations/create-quotation-schema.ts`
     - _Requirements: 1.1_
-  - [ ] 4.2 Criar `features/quotations/components/create-quotation-drawer/` — seletor de cliente escopado por role (mesmo padrão de `vehicles`)
+  - [x] 4.2 Criar `features/quotations/components/create-quotation-drawer/` — seletor de cliente escopado por role (mesmo padrão de `vehicles`); seletor de vendedor responsável condicional (só perfis de gestão — `seller` fica implícito)
     - _Requirements: 1.1, 1.2_
-  - [ ] 4.3 Criar `pages/quotations/add/add-quotation-page.tsx` como rota filha `/quotations/add`
+  - [x] 4.3 Criar `pages/quotations/add/add-quotation-page.tsx` como rota filha `/quotations/add`
     - _Requirements: 1.1_
+
+  Verificado com `seller` e `supervisor` reais pelo navegador (script efêmero, limpo depois): `seller` não vê o seletor de vendedor responsável e a cotação criada já sai com `seller_id` do próprio; `supervisor` vê o seletor e escolhe outro vendedor manualmente; número sequencial gerado corretamente (`QT-2026-0001`); status inicial `waiting`. Nenhum erro de console.
 
 - [ ] 5. Página de detalhe da cotação (estrutura de abas + Visão geral)
   - [ ] 5.1 Criar `features/quotations/screens/quotation-detail-screen/` — página cheia (não drawer) com abas: Visão geral, Veículos, QAR, Seguradoras
