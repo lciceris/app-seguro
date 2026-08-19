@@ -322,6 +322,474 @@ export type Database = {
         }
         Relationships: []
       }
+      quotation_insurer_events: {
+        Row: {
+          author_id: string | null
+          brokerage_id: string
+          content: string
+          created_at: string
+          event_type: Database["public"]["Enums"]["quotation_event_type"]
+          field_changed: string | null
+          id: string
+          new_value: string | null
+          old_value: string | null
+          quotation_insurer_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          brokerage_id: string
+          content: string
+          created_at?: string
+          event_type: Database["public"]["Enums"]["quotation_event_type"]
+          field_changed?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          quotation_insurer_id: string
+        }
+        Update: {
+          author_id?: string | null
+          brokerage_id?: string
+          content?: string
+          created_at?: string
+          event_type?: Database["public"]["Enums"]["quotation_event_type"]
+          field_changed?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          quotation_insurer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_insurer_events_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_insurer_events_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_insurer_events_quotation_insurer_id_fkey"
+            columns: ["quotation_insurer_id"]
+            isOneToOne: false
+            referencedRelation: "quotation_insurers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotation_insurers: {
+        Row: {
+          analyst_notes: string | null
+          approved_coverages: string | null
+          brokerage_id: string
+          commission_rate: number | null
+          created_at: string
+          deductible_amount: number | null
+          id: string
+          installments_count: number | null
+          insurer_id: string
+          insurer_quotation_number: string | null
+          is_winner: boolean
+          premium_amount: number | null
+          quotation_id: string
+          responded_at: string | null
+          response_status: Database["public"]["Enums"]["insurer_response_status"]
+        }
+        Insert: {
+          analyst_notes?: string | null
+          approved_coverages?: string | null
+          brokerage_id: string
+          commission_rate?: number | null
+          created_at?: string
+          deductible_amount?: number | null
+          id?: string
+          installments_count?: number | null
+          insurer_id: string
+          insurer_quotation_number?: string | null
+          is_winner?: boolean
+          premium_amount?: number | null
+          quotation_id: string
+          responded_at?: string | null
+          response_status?: Database["public"]["Enums"]["insurer_response_status"]
+        }
+        Update: {
+          analyst_notes?: string | null
+          approved_coverages?: string | null
+          brokerage_id?: string
+          commission_rate?: number | null
+          created_at?: string
+          deductible_amount?: number | null
+          id?: string
+          installments_count?: number | null
+          insurer_id?: string
+          insurer_quotation_number?: string | null
+          is_winner?: boolean
+          premium_amount?: number | null
+          quotation_id?: string
+          responded_at?: string | null
+          response_status?: Database["public"]["Enums"]["insurer_response_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_insurers_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_insurers_insurer_id_fkey"
+            columns: ["insurer_id"]
+            isOneToOne: false
+            referencedRelation: "insurers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_insurers_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotation_number_counters: {
+        Row: {
+          brokerage_id: string
+          last_number: number
+          year: number
+        }
+        Insert: {
+          brokerage_id: string
+          last_number?: number
+          year: number
+        }
+        Update: {
+          brokerage_id?: string
+          last_number?: number
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_number_counters_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotation_qar: {
+        Row: {
+          brokerage_id: string
+          cargo_category: string | null
+          cargo_type: string | null
+          circulation_regions: string[] | null
+          current_policy_expiry: string | null
+          desired_premium: number | null
+          has_cargo: boolean | null
+          has_defensive_driving: boolean | null
+          has_logo_or_special_paint: boolean | null
+          has_preventive_maintenance: boolean | null
+          has_risk_management: boolean | null
+          has_tracker: boolean | null
+          id: string
+          insurance_type: Database["public"]["Enums"]["quotation_type"] | null
+          previous_premium: number | null
+          quotation_id: string
+          renewal_insurer_id: string | null
+          renewal_insurer_name: string | null
+          sinistralidade: string | null
+        }
+        Insert: {
+          brokerage_id: string
+          cargo_category?: string | null
+          cargo_type?: string | null
+          circulation_regions?: string[] | null
+          current_policy_expiry?: string | null
+          desired_premium?: number | null
+          has_cargo?: boolean | null
+          has_defensive_driving?: boolean | null
+          has_logo_or_special_paint?: boolean | null
+          has_preventive_maintenance?: boolean | null
+          has_risk_management?: boolean | null
+          has_tracker?: boolean | null
+          id?: string
+          insurance_type?: Database["public"]["Enums"]["quotation_type"] | null
+          previous_premium?: number | null
+          quotation_id: string
+          renewal_insurer_id?: string | null
+          renewal_insurer_name?: string | null
+          sinistralidade?: string | null
+        }
+        Update: {
+          brokerage_id?: string
+          cargo_category?: string | null
+          cargo_type?: string | null
+          circulation_regions?: string[] | null
+          current_policy_expiry?: string | null
+          desired_premium?: number | null
+          has_cargo?: boolean | null
+          has_defensive_driving?: boolean | null
+          has_logo_or_special_paint?: boolean | null
+          has_preventive_maintenance?: boolean | null
+          has_risk_management?: boolean | null
+          has_tracker?: boolean | null
+          id?: string
+          insurance_type?: Database["public"]["Enums"]["quotation_type"] | null
+          previous_premium?: number | null
+          quotation_id?: string
+          renewal_insurer_id?: string | null
+          renewal_insurer_name?: string | null
+          sinistralidade?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_qar_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_qar_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: true
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_qar_renewal_insurer_id_fkey"
+            columns: ["renewal_insurer_id"]
+            isOneToOne: false
+            referencedRelation: "insurers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotation_qar_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id: string
+          quotation_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id?: string
+          quotation_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          id?: string
+          quotation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_qar_attachments_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotation_vehicles: {
+        Row: {
+          app_death: number | null
+          app_disability: number | null
+          armoring_value: number | null
+          assistance: string | null
+          bodywork_type: string | null
+          bodywork_value: number | null
+          bonus: number | null
+          casco_percentage: number | null
+          casco_value: number | null
+          claims_count: number | null
+          coverage_type: Database["public"]["Enums"]["coverage_type"] | null
+          equipment_type: string | null
+          equipment_value: number | null
+          franchise_type: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          quotation_id: string
+          rcf_dc: number | null
+          rcf_dm: number | null
+          rcf_dmo: number | null
+          reserve_car: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          app_death?: number | null
+          app_disability?: number | null
+          armoring_value?: number | null
+          assistance?: string | null
+          bodywork_type?: string | null
+          bodywork_value?: number | null
+          bonus?: number | null
+          casco_percentage?: number | null
+          casco_value?: number | null
+          claims_count?: number | null
+          coverage_type?: Database["public"]["Enums"]["coverage_type"] | null
+          equipment_type?: string | null
+          equipment_value?: number | null
+          franchise_type?: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage?:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          quotation_id: string
+          rcf_dc?: number | null
+          rcf_dm?: number | null
+          rcf_dmo?: number | null
+          reserve_car?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          app_death?: number | null
+          app_disability?: number | null
+          armoring_value?: number | null
+          assistance?: string | null
+          bodywork_type?: string | null
+          bodywork_value?: number | null
+          bonus?: number | null
+          casco_percentage?: number | null
+          casco_value?: number | null
+          claims_count?: number | null
+          coverage_type?: Database["public"]["Enums"]["coverage_type"] | null
+          equipment_type?: string | null
+          equipment_value?: number | null
+          franchise_type?: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage?:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          quotation_id?: string
+          rcf_dc?: number | null
+          rcf_dm?: number | null
+          rcf_dmo?: number | null
+          reserve_car?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_vehicles_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_vehicles_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotations: {
+        Row: {
+          analyst_id: string | null
+          brokerage_id: string
+          client_id: string
+          coverage_end: string | null
+          coverage_start: string | null
+          coverages: string[] | null
+          created_at: string
+          deductible_pref: string | null
+          due_date: string | null
+          id: string
+          lost_reason: string | null
+          number: string
+          quotation_type: Database["public"]["Enums"]["quotation_type"] | null
+          seller_id: string | null
+          seller_notes: string | null
+          status: Database["public"]["Enums"]["quotation_status"]
+          updated_at: string
+        }
+        Insert: {
+          analyst_id?: string | null
+          brokerage_id: string
+          client_id: string
+          coverage_end?: string | null
+          coverage_start?: string | null
+          coverages?: string[] | null
+          created_at?: string
+          deductible_pref?: string | null
+          due_date?: string | null
+          id?: string
+          lost_reason?: string | null
+          number: string
+          quotation_type?: Database["public"]["Enums"]["quotation_type"] | null
+          seller_id?: string | null
+          seller_notes?: string | null
+          status?: Database["public"]["Enums"]["quotation_status"]
+          updated_at?: string
+        }
+        Update: {
+          analyst_id?: string | null
+          brokerage_id?: string
+          client_id?: string
+          coverage_end?: string | null
+          coverage_start?: string | null
+          coverages?: string[] | null
+          created_at?: string
+          deductible_pref?: string | null
+          due_date?: string | null
+          id?: string
+          lost_reason?: string | null
+          number?: string
+          quotation_type?: Database["public"]["Enums"]["quotation_type"] | null
+          seller_id?: string | null
+          seller_notes?: string | null
+          status?: Database["public"]["Enums"]["quotation_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotations_analyst_id_fkey"
+            columns: ["analyst_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotations_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotations_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar_url: string | null
@@ -493,12 +961,40 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      get_quotation_brokerage_id: {
+        Args: { p_quotation_id: string }
+        Returns: string
+      }
       is_my_client: { Args: { p_client_id: string }; Returns: boolean }
+      is_my_quotation: { Args: { p_quotation_id: string }; Returns: boolean }
+      is_my_quotation_insurer: {
+        Args: { p_quotation_insurer_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       brokerage_status: "active" | "inactive"
       client_segment: "lead" | "active" | "vip" | "inactive"
       client_type: "individual" | "company"
+      coverage_type: "rcf" | "total" | "vd"
+      franchise_type: "normal" | "reduced"
+      glass_coverage_level: "basic" | "complete" | "armored"
+      insurer_response_status:
+        | "pending"
+        | "accepted"
+        | "declined"
+        | "waiting_info"
+      quotation_event_type: "comment" | "system"
+      quotation_status:
+        | "waiting"
+        | "in_progress"
+        | "in_negotiation"
+        | "presented"
+        | "waiting_effect"
+        | "client_accepted"
+        | "effected"
+        | "not_closed"
+      quotation_type: "new" | "renewal"
       user_role:
         | "platform_admin"
         | "brokerage_admin"
@@ -664,6 +1160,27 @@ export const Constants = {
       brokerage_status: ["active", "inactive"],
       client_segment: ["lead", "active", "vip", "inactive"],
       client_type: ["individual", "company"],
+      coverage_type: ["rcf", "total", "vd"],
+      franchise_type: ["normal", "reduced"],
+      glass_coverage_level: ["basic", "complete", "armored"],
+      insurer_response_status: [
+        "pending",
+        "accepted",
+        "declined",
+        "waiting_info",
+      ],
+      quotation_event_type: ["comment", "system"],
+      quotation_status: [
+        "waiting",
+        "in_progress",
+        "in_negotiation",
+        "presented",
+        "waiting_effect",
+        "client_accepted",
+        "effected",
+        "not_closed",
+      ],
+      quotation_type: ["new", "renewal"],
       user_role: [
         "platform_admin",
         "brokerage_admin",

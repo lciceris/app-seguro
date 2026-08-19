@@ -1,40 +1,40 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: enums `quotation_status`, `quotation_type`, `insurer_response_status`, `quotation_event_type`, `coverage_type`, `franchise_type`, `glass_coverage_level`
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: enums `quotation_status`, `quotation_type`, `insurer_response_status`, `quotation_event_type`, `coverage_type`, `franchise_type`, `glass_coverage_level`
     - _Requirements: infra_
-  - [ ] 1.2 Migration: `quotation_number_counters` + trigger `generate_quotation_number` (numeração sequencial atômica por corretora/ano)
+  - [x] 1.2 Migration: `quotation_number_counters` + trigger `generate_quotation_number` (numeração sequencial atômica por corretora/ano)
     - _Requirements: 1.1_
-  - [ ] 1.3 Migration: tabela `quotations` (`brokerage_id`, `client_id`, `seller_id`, `analyst_id`, `number`, `status` default `waiting`, `quotation_type`, datas/coberturas/prazo, `seller_notes`, `lost_reason`; trigger `set_updated_at`)
+  - [x] 1.3 Migration: tabela `quotations` (`brokerage_id`, `client_id`, `seller_id`, `analyst_id`, `number`, `status` default `waiting`, `quotation_type`, datas/coberturas/prazo, `seller_notes`, `lost_reason`; trigger `set_updated_at`)
     - _Requirements: 1.1_
-  - [ ] 1.4 Migration: tabela `quotation_vehicles` (PK composta `vehicle_id`/`quotation_id`, ~19 campos de cobertura por veículo)
+  - [x] 1.4 Migration: tabela `quotation_vehicles` (PK composta `vehicle_id`/`quotation_id`, ~19 campos de cobertura por veículo)
     - _Requirements: 3.1_
-  - [ ] 1.5 Migration: tabela `quotation_insurers` (`is_winner` em vez de `winning_insurer_id`; `installments_count` novo; `UNIQUE(quotation_id, insurer_id)`; `CHECK (NOT is_winner OR response_status = 'accepted')`)
+  - [x] 1.5 Migration: tabela `quotation_insurers` (`is_winner` em vez de `winning_insurer_id`; `installments_count` novo; `UNIQUE(quotation_id, insurer_id)`; `CHECK (NOT is_winner OR response_status = 'accepted')`)
     - _Requirements: 5.1, 5.2, 7.2_
-  - [ ] 1.6 Migration: tabela `quotation_qar` (1:1 com `quotations`, sem `renewed_policy_id` ainda — ver design.md)
+  - [x] 1.6 Migration: tabela `quotation_qar` (1:1 com `quotations`, sem `renewed_policy_id` ainda — ver design.md)
     - _Requirements: 4.1_
-  - [ ] 1.7 Migration: tabela `quotation_qar_attachments`
+  - [x] 1.7 Migration: tabela `quotation_qar_attachments`
     - _Requirements: 4.3_
-  - [ ] 1.8 Migration: tabela `quotation_insurer_events` (`event_type` como enum)
+  - [x] 1.8 Migration: tabela `quotation_insurer_events` (`event_type` como enum)
     - _Requirements: 8.1, 8.2_
-  - [ ] 1.9 Migration: funções `SECURITY DEFINER` — `get_quotation_brokerage_id(uuid)`, `is_my_quotation(uuid)`, `is_my_quotation_insurer(uuid)`
+  - [x] 1.9 Migration: funções `SECURITY DEFINER` — `get_quotation_brokerage_id(uuid)`, `is_my_quotation(uuid)`, `is_my_quotation_insurer(uuid)`
     - _Requirements: infra_
-  - [ ] 1.10 Migration: RLS de `quotations` (select/insert/update, sem delete)
+  - [x] 1.10 Migration: RLS de `quotations` (select/insert/update, sem delete)
     - _Requirements: 1.3, 2.1, 2.2_
-  - [ ] 1.11 Migration: RLS de `quotation_vehicles`, `quotation_qar`, `quotation_qar_attachments` (mesma condição de visibilidade da cotação pai)
+  - [x] 1.11 Migration: RLS de `quotation_vehicles`, `quotation_qar`, `quotation_qar_attachments` (mesma condição de visibilidade da cotação pai)
     - _Requirements: 3.1, 4.1, 4.3_
-  - [ ] 1.12 Migration: RLS de `quotation_insurers` (insert/update só `analyst`/`supervisor`/`brokerage_admin`/`platform_admin`) e `quotation_insurer_events` (idem pro insert)
+  - [x] 1.12 Migration: RLS de `quotation_insurers` (insert/update só `analyst`/`supervisor`/`brokerage_admin`/`platform_admin`) e `quotation_insurer_events` (idem pro insert)
     - _Requirements: 5.4, 8.1_
-  - [ ] 1.13 Migration: trigger `enforce_single_quotation_winner` em `quotation_insurers` (mesmo padrão de `enforce_single_primary_seller`)
+  - [x] 1.13 Migration: trigger `enforce_single_quotation_winner` em `quotation_insurers` (mesmo padrão de `enforce_single_primary_seller`)
     - _Requirements: 7.1_
-  - [ ] 1.14 Migration: trigger `enforce_quotation_status_transition` em `quotations` (valida toda a máquina de estados do Requirement 6 — sequência, role por transição, `analyst_id` automático, exigência de vencedora antes de `presented`, exigência de `lost_reason` antes de `not_closed`)
+  - [x] 1.14 Migration: trigger `enforce_quotation_status_transition` em `quotations` (valida toda a máquina de estados do Requirement 6 — sequência, role por transição, `analyst_id` automático, exigência de vencedora antes de `presented`, exigência de `lost_reason` antes de `not_closed`)
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 6.10, 6.11_
-  - [ ] 1.15 Migration: trigger de validação em `quotation_vehicles` — veículo precisa ser do mesmo `client_id` da cotação; bloqueia INSERT/DELETE fora de `waiting`/`in_progress` (UPDATE de cobertura continua livre)
+  - [x] 1.15 Migration: trigger de validação em `quotation_vehicles` — veículo precisa ser do mesmo `client_id` da cotação; bloqueia INSERT/DELETE fora de `waiting`/`in_progress` (UPDATE de cobertura continua livre)
     - _Requirements: 3.2, 3.3, 3.4_
-  - [ ] 1.16 Migration: bucket `qar-attachments` (privado) + policies de `storage.objects` (path `{brokerage_id}/{quotation_id}/{filename}`, mesma regra de visibilidade da cotação)
+  - [x] 1.16 Migration: bucket `qar-attachments` (privado) + policies de `storage.objects` (path `{brokerage_id}/{quotation_id}/{filename}`, mesma regra de visibilidade da cotação)
     - _Requirements: 4.3_
 
-  Verificar com usuários/corretoras de teste reais (script efêmero, limpo depois): numeração sequencial sem colisão em inserções concorrentes; `seller` só enxerga as próprias cotações; toda a máquina de transições (cada perfil só avança o que pode, na ordem certa); vencedora exige `response_status = 'accepted'` e só uma por cotação; veículo de cliente errado é rejeitado; lista de veículos trava a partir de `in_negotiation`; upload/leitura de anexo do QAR respeita a mesma visibilidade da cotação.
+  16 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados. Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois, 24 checks): numeração sequencial no formato `QT-2026-NNNN` e sem colisão em inserções concorrentes (`Promise.all`); `seller` B não enxerga cotação de `seller` A; adicionar veículo do cliente certo funciona, de cliente errado é rejeitado pelo trigger; lista de veículos trava a partir de `in_negotiation` (confirmado tentando inserir depois da transição); `analyst` convida seguradora e assume `analyst_id` automaticamente ao iniciar (`waiting → in_progress`); `seller` bloqueado (RLS silenciosa, 0 linhas, valor intacto no banco — confirmado via segunda leitura) ao tentar editar retorno de seguradora; marcar vencedora com `response_status = 'pending'` é rejeitado pelo `CHECK`; avançar pra `presented` sem vencedora marcada é bloqueado pelo trigger; `seller` avança `presented → waiting_effect → client_accepted`; `seller` e `analyst` são bloqueados na transição final `client_accepted → effected`; `supervisor` efetiva com sucesso; status terminal não aceita mais mudança; upload/leitura de anexo do QAR (bucket `qar-attachments`) respeita a mesma visibilidade da cotação — `seller` de outra cotação não consegue baixar.
 
 - [ ] 2. Camada de dados do frontend
   - [ ] 2.1 Criar `features/quotations/types/` + `constants/query-keys.ts` + `constants/labels.ts` (status, tipo, resposta de seguradora, tipo de cobertura/franquia/vidros)
