@@ -1,6 +1,7 @@
 export * from "./hooks/use-policies";
 export * from "./hooks/use-policy";
 export * from "./hooks/use-renewed-by-policy";
+export * from "./hooks/use-renewed-from-policy";
 export * from "./hooks/use-update-policy";
 export * from "./hooks/use-policy-attachments";
 export * from "./hooks/use-upload-policy-attachment";
@@ -10,3 +11,4 @@ export * from "./types/policy";
 export * from "./constants/labels";
 export * from "./lib/get-derived-policy-status";
 export * from "./screens/policies-list-screen";
+export * from "./components/policy-detail-drawer";

@@ -44,11 +44,15 @@
 
   Verificado com `supervisor` e `seller` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `supervisor` vê as 3 apólices de teste (uma vigente, uma vencendo em breve, uma pendente de emissão), badges de status derivado corretos; busca por nome de cliente filtra certo; filtro por "Vencendo em breve" isola só a apólice certa; `seller` só vê as apólices do próprio cliente vinculado (RLS), não vê a de outro cliente. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e `npx vitest run` (45 arquivos/103 testes) sem erros.
 
-- [ ] 4. Detalhe da apólice
-  - [ ] 4.1 Criar `features/policies/components/policy-detail-drawer/` — dados da apólice, link para a cotação de origem, vínculo de renovação (pra qual renova / se já foi renovada), lista de anexos com upload/remoção inline
+- [x] 4. Detalhe da apólice
+  - [x] 4.1 Criar `features/policies/components/policy-detail-drawer/` — dados da apólice, link para a cotação de origem, vínculo de renovação (pra qual renova / se já foi renovada), lista de anexos com upload/remoção inline
     - _Requirements: 3.2, 3.3, 4.2, 5.6_
-  - [ ] 4.2 Criar `pages/policies/[policyId]/` e registrar a rota `/policies/:policyId`
+  - [x] 4.2 Criar `pages/policies/[policyId]/` e registrar a rota `/policies/:policyId`
     - _Requirements: 5.6_
+
+  **Achado real, não bug de teste**: o embed self-referencing `renewed_from:policies!policies_renewed_from_policy_id_fkey(id, policy_number)` (buscar, na mesma tabela `policies`, a apólice que essa renova) não funcionava de jeito nenhum nesse projeto Supabase hospedado. Primeiro tentei o nome de constraint (`policies!policies_renewed_from_policy_id_fkey`) — erro 400 `PGRST200`, "Could not find a relationship... in the schema cache". Suspeitei de cache de schema desatualizado, tentei `NOTIFY pgrst, 'reload schema'` via migration e via RPC direta — sem efeito, mesmo esperando. Troquei pro hint por nome de coluna (`policies!renewed_from_policy_id`) — parou de dar 400, mas passou a retornar sempre `[]` (array vazio), mesmo com `renewed_from_policy_id` preenchido: ambiguidade de direção do self-join (o PostgREST não sabe se "seguir a FK pra frente" ou "achar quem me referencia" só pelo nome da coluna). Confirmei via uma function `SECURITY DEFINER` temporária consultando `pg_constraint` que o nome da constraint estava certo o tempo todo — o problema era mesmo o cache do PostgREST não reconhecendo essa FK específica, e nenhuma tentativa de reload resolveu. Abandonei o embed: `renewed_from` virou uma query separada (`get-renewed-from-policy` + `useRenewedFromPolicy`, com `enabled` condicional), no mesmo espírito da busca reversa `get-renewed-by-policy` que já existia — mais uma chamada de rede, mas confiável. Todas as migrations/functions de debug foram removidas do banco e o histórico de migrations reparado (`supabase migration repair --status reverted`) antes do commit, sem deixar rastro.
+
+  Verificado com `supervisor`, `viewer` e `seller` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): dados gerais, prêmio, valor da frota e vigência aparecem certos; link "Renova a apólice" na apólice nova aponta pra apólice antiga; link "Renovada pela apólice" na apólice antiga aponta pra nova (as duas direções do vínculo, cada uma resolvida por uma query diferente); `supervisor` anexa um documento com sucesso; `viewer` e `seller` veem o mesmo documento mas sem botão de anexar nem remover. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (45 arquivos/103 testes) e `npx playwright test` completo (16 testes de todas as specs) sem erros.
 
 - [ ] 5. Editar apólice
   - [ ] 5.1 Criar `features/policies/validations/edit-policy-schema.ts`

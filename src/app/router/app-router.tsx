@@ -32,6 +32,7 @@ import { AddQuotationPage } from "@/pages/quotations/add/add-quotation-page";
 import { QuotationDetailPage } from "@/pages/quotations/[quotationId]/quotation-detail-page";
 import { EditQuotationPage } from "@/pages/quotations/[quotationId]/edit/edit-quotation-page";
 import { PoliciesPage } from "@/pages/policies/policies-page";
+import { PolicyDetailPage } from "@/pages/policies/[policyId]/policy-detail-page";
 
 export function AppRouter() {
   return (
@@ -181,7 +182,9 @@ export function AppRouter() {
           />
         }
       >
-        <Route path="/policies" element={<PoliciesPage />} />
+        <Route path="/policies" element={<PoliciesPage />}>
+          <Route path=":policyId" element={<PolicyDetailPage />} />
+        </Route>
       </Route>
     </Routes>
   );
