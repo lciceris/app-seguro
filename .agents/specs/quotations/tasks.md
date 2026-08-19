@@ -52,11 +52,15 @@
 
   20 módulos de `api/` + 21 hooks. Pontos de atenção resolvidos: `list-quotations`/`get-quotation` usam embed explícito com o nome da FK (`seller:users!quotations_seller_id_fkey(...)`) porque `quotations` tem duas colunas apontando pra `users` (`seller_id`/`analyst_id`) — embed genérico seria ambíguo. `create-quotation` passa `number: ""` no payload (sobrescrito pelo trigger `generate_quotation_number`, mas a coluna não tem `DEFAULT`, só trigger, então o tipo gerado exige o campo). `upload-qar-attachment` é a primeira função do projeto usando `supabase.storage` (upload + insert da linha, path com UUID pra evitar colisão de nome de arquivo); anexo privado usa URL assinada de 60s pra download (`get-qar-attachment-url`). `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros — nada quebrou nas specs anteriores.
 
-- [ ] 3. Listagem de cotações
-  - [ ] 3.1 Criar `features/quotations/screens/quotations-list-screen/` — número, cliente, vendedor, status (badge), prazo; busca por número/cliente; filtro por status
+- [x] 3. Listagem de cotações
+  - [x] 3.1 Criar `features/quotations/screens/quotations-list-screen/` — número, cliente, vendedor, status (badge), prazo; busca por número/cliente; filtro por status
     - _Requirements: 2.1, 2.2_
-  - [ ] 3.2 Criar `pages/quotations/quotations-page.tsx` e registrar a rota `/quotations` (restrita a `platform_admin`, `brokerage_admin`, `supervisor`, `analyst`, `seller`, `viewer`)
+  - [x] 3.2 Criar `pages/quotations/quotations-page.tsx` e registrar a rota `/quotations` (restrita a `platform_admin`, `brokerage_admin`, `supervisor`, `analyst`, `seller`, `viewer`)
     - _Requirements: 2.1, 2.2_
+
+  Efeito colateral bom: `/quotations` já era a rota inicial de `brokerage_admin`/`supervisor` desde a spec `auth`, mas nunca tinha sido implementada — login desses perfis caía numa rota sem match. A partir de agora cai na tela de verdade.
+
+  Verificado com 5 usuários de teste reais pelo navegador (script efêmero, limpo depois): `brokerage_admin` loga e cai direto em `/quotations`, vendo as 2 cotações da corretora; `seller` A vê só a própria cotação (RLS) e o botão "Nova cotação"; busca por número e filtro por status funcionam; `viewer` não vê "Nova cotação" nem o ícone Editar. Nenhum erro de console.
 
 - [ ] 4. Criar cotação
   - [ ] 4.1 Criar `features/quotations/validations/create-quotation-schema.ts`

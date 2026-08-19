@@ -21,3 +21,4 @@ export * from "./hooks/use-quotation-insurer-events";
 export * from "./hooks/use-add-quotation-insurer-comment";
 export * from "./types/quotation";
 export * from "./constants/labels";
+export * from "./screens/quotations-list-screen";
