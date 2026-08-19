@@ -135,11 +135,19 @@
 
   Verificado com `seller`, `analyst` e `viewer` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `seller` não vê o seletor de convidar nem o botão "Salvar retorno"/caixa de comentário; `analyst` convida uma seguradora, edita o retorno (status → `Aceita`, prêmio), salva e vê os dois eventos `system` gerados automaticamente na linha do tempo sem reabrir o drawer; comenta e vê o comentário atribuído ao próprio nome; marca como vencedora sem precisar fechar/reabrir o drawer (fix do bug acima) e o badge "Vencedora" aparece tanto no cabeçalho do drawer quanto na linha da tabela; `viewer` abre a mesma cotação, vê a seguradora, o retorno e a linha do tempo completa (incluindo os eventos `system` e o comentário), mas com os campos desabilitados e sem nenhum botão de escrita. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros — nada quebrou nas specs anteriores.
 
-- [ ] 10. Fluxo de status da cotação
-  - [ ] 10.1 Componente de ações de transição — mostra só os botões válidos pro status atual e pro role do usuário logado (espelha o trigger `enforce_quotation_status_transition`)
+- [x] 10. Fluxo de status da cotação
+  - [x] 10.1 Componente de ações de transição — mostra só os botões válidos pro status atual e pro role do usuário logado (espelha o trigger `enforce_quotation_status_transition`)
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9_
-  - [ ] 10.2 Diálogo de "Não fechada" exigindo `lost_reason` antes de confirmar
+  - [x] 10.2 Diálogo de "Não fechada" exigindo `lost_reason` antes de confirmar
     - _Requirements: 6.8, 6.9_
+
+  `get-available-status-actions.ts` espelha em TypeScript puro (sem acesso a banco) exatamente o `CASE OLD.status WHEN ...` do trigger — só decide quais botões mostrar; quem garante de verdade continua sendo o trigger (se o frontend e o trigger algum dia divergirem, o banco rejeita e o erro aparece via toast, como no caso de "apresentar sem vencedora" abaixo). Os botões ficam no cabeçalho da tela de detalhe, ao lado do "Editar", visíveis em todas as abas.
+
+  Dois problemas reais achados na verificação (não bugs de teste):
+  1. **Toaster sobrepondo os botões de ação**: o `<Toaster position="top-right">` (global, `app-providers.tsx`) ocupa exatamente o mesmo canto onde ficam os botões de transição de status — depois de um toast de sucesso, o toast seguinte ficava por cima do próximo botão que o usuário precisava clicar (confirmado tentando clicar duas vezes em sequência: o clique caía no toast, não no botão, e nada acontecia). Corrigido trocando a posição global do Toaster pra `bottom-right` — resolve o problema pra qualquer tela com botões no canto superior direito, não só essa.
+  2. **Erro de validação do diálogo "Não fechada" invisível**: `NotClosedDialog` validava `lost_reason` com zod (`min(1)`) mas nunca exibia `formState.errors.lost_reason` na tela — clicar em "Confirmar" com o campo vazio simplesmente não fazia nada visível, sem nenhum feedback pro usuário. Corrigido adicionando a mensagem de erro abaixo do campo.
+
+  Verificado com `seller`, `analyst` e `supervisor` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): fluxo completo `waiting → in_progress → in_negotiation` (analyst); tentativa de `in_negotiation → presented` sem vencedora marcada rejeitada pelo trigger com a mensagem exata exibida em toast; convida seguradora, marca retorno aceito e vencedora, aí sim `presented` funciona; `analyst` perde a ação em `presented` (só `seller` dono ou gestão); `seller` avança `presented → waiting_effect → client_accepted`; `seller` perde a ação em `client_accepted` (só `supervisor`/`brokerage_admin`/`platform_admin`); `supervisor` vê "Efetivar" e "Não fechada"; tenta confirmar "Não fechada" sem motivo (erro de validação aparece, confirmado o fix acima), preenche o motivo, confirma — cotação vai pra `not_closed` com `lost_reason` salvo; nenhum botão de ação aparece mais pra ninguém (estado terminal). Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros.
 
 - [ ] 11. PDF de proposta
   - [ ] 11.1 Instalar `@react-pdf/renderer`; criar o template do documento (dados do cliente, veículos com cobertura resumida, proposta vencedora)

@@ -23,7 +23,12 @@ export function AppProviders({ children }: AppProvidersProps) {
         <TooltipProvider delayDuration={300}>
           <AuthStateSync />
           {children}
-          <Toaster richColors position="top-right" />
+          {/* bottom-right, não top-right: cabeçalhos de tela de detalhe (Editar,
+              ações de status da cotação) ficam encostados no canto superior
+              direito — um toast ali em cima intercepta o clique do botão
+              seguinte em fluxos de cliques em sequência (ex: avançar status
+              da cotação várias vezes seguidas). */}
+          <Toaster richColors position="bottom-right" />
         </TooltipProvider>
       </BrowserRouter>
     </QueryClientProvider>

@@ -31,3 +31,5 @@ export * from "./components/quotation-qar-tab";
 export * from "./validations/quotation-qar-schema";
 export * from "./components/quotation-insurers-tab";
 export * from "./validations/quotation-insurer-response-schema";
+export * from "./components/quotation-status-actions";
+export * from "./validations/not-closed-reason-schema";

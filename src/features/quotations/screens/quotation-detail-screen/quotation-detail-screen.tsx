@@ -16,6 +16,7 @@ import { useQuotation } from "../../hooks/use-quotation";
 import { QuotationVehiclesTab } from "../../components/quotation-vehicles-tab";
 import { QuotationQarTab } from "../../components/quotation-qar-tab";
 import { QuotationInsurersTab } from "../../components/quotation-insurers-tab";
+import { QuotationStatusActions } from "../../components/quotation-status-actions";
 
 function DetailField({ label, value }: { label: string; value: string | null }) {
   return (
@@ -109,13 +110,18 @@ export function QuotationDetailScreen() {
             </Badge>
           )}
         </div>
-        {canEdit && quotation && (
-          <Button asChild variant="outline">
-            <Link to={`/quotations/${quotation.id}/edit`}>
-              <Pencil className="h-4 w-4" />
-              Editar
-            </Link>
-          </Button>
+        {quotation && (
+          <div className="flex items-center gap-2">
+            <QuotationStatusActions quotation={quotation} />
+            {canEdit && (
+              <Button asChild variant="outline">
+                <Link to={`/quotations/${quotation.id}/edit`}>
+                  <Pencil className="h-4 w-4" />
+                  Editar
+                </Link>
+              </Button>
+            )}
+          </div>
         )}
       </div>
 
