@@ -20,15 +20,19 @@
 
   9 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados. Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois, 16 checks): cotação levada até `effected` por 3 perfis reais (`analyst`/`seller`/`supervisor`, mesmo fluxo da spec `quotations`) gera automaticamente a linha em `policies` com `insurer_id`/`premium_amount` da seguradora vencedora, `total_fleet_value` = soma exata de `casco_value` dos veículos da cotação, `coverage_start/end` herdados, `policy_number` e `renewed_from_policy_id` nulos; `seller` dono do cliente vê a apólice via RLS, outro `seller` não vê nem via leitura direta; `seller` bloqueado (RLS silenciosa, 0 linhas) ao tentar editar `policy_number`, `supervisor` edita com sucesso; tentativa de `insert` manual em `policies` rejeitada (sem policy de insert — só o trigger `security definer` cria); `policy_attachments` — `seller` bloqueado de inserir anexo, `supervisor` insere com sucesso, `seller` A (dono) vê o anexo, `seller` B não vê; fluxo de renovação completo — segunda cotação com `quotation_qar.renewed_policy_id` apontando pra apólice criada, efetivada até `effected`, gera nova apólice com `renewed_from_policy_id` correto e `total_fleet_value` recalculado só com os veículos dessa nova cotação, e a apólice antiga vira `status = 'renewed'` automaticamente. `npx tsc --noEmit`, `npx eslint` e `npx vitest run` (45 arquivos/103 testes) sem erros — nada quebrou nas specs anteriores.
 
-- [ ] 2. Camada de dados do frontend
-  - [ ] 2.1 Criar `features/policies/types/` + `constants/query-keys.ts` + `constants/labels.ts` (status persistido e status derivado) + `lib/get-derived-policy-status.ts`
+- [x] 2. Camada de dados do frontend
+  - [x] 2.1 Criar `features/policies/types/` + `constants/query-keys.ts` + `constants/labels.ts` (status persistido e status derivado) + `lib/get-derived-policy-status.ts`
     - _Requirements: infra, 5.4_
-  - [ ] 2.2 Criar `features/policies/api/` — list, get, update (`policy_number`, `coverage_start/end`, `premium_amount`, `total_fleet_value`)
+  - [x] 2.2 Criar `features/policies/api/` — list, get, update (`policy_number`, `coverage_start/end`, `premium_amount`, `total_fleet_value`)
     - _Requirements: 2.1, 5.1, 5.2, 5.3_
-  - [ ] 2.3 Criar `features/policies/api/` para `policy_attachments` — list/upload/delete/url assinada (reaproveita o padrão de `qar-attachments`)
+  - [x] 2.3 Criar `features/policies/api/` para `policy_attachments` — list/upload/delete/url assinada (reaproveita o padrão de `qar-attachments`)
     - _Requirements: 3.1, 3.2, 3.3_
-  - [ ] 2.4 Criar `features/policies/hooks/` correspondentes
+  - [x] 2.4 Criar `features/policies/hooks/` correspondentes
     - _Requirements: 2.1, 3.1, 5.1_
+
+  11 módulos de `api/` + 11 hooks (inclui `get-renewed-by-policy`/`useRenewedByPolicy` — busca reversa por `renewed_from_policy_id`, não é embed de FK, é query separada; vai alimentar o "se já foi renovada por outra" do detalhe na Task 4). `list-policies`/`get-policy` fazem embed único de `clients`/`insurers`/`quotations` numa query só — sem a pegadinha de FK dupla que `quotations`/`quotation_insurers` tiveram, porque `policies` tem uma FK simples pra cada uma dessas três tabelas.
+
+  Verificado com usuário real pelo navegador via script efêmero de banco (rodado e apagado depois): `list`/`get` com embed retornam `clients.legal_name`/`insurers.name` corretamente; `update` grava `policy_number`; upload real pro bucket `policy-documents`, listagem do anexo, geração de URL assinada de verdade, e remoção — tudo via sessão autenticada real, não service role. Lógica de `getDerivedPolicyStatus` validada à parte com um teste efêmero de datas (limites exatos de 0/30/31 dias, timezone, prioridade do status persistido sobre o calculado) antes de ser descartado — o teste permanente fica pra Task 7, mas a lógica de data é fácil de errar por off-by-one e valeu conferir antes de construir a UI em cima. `npx tsc --noEmit`, `npx eslint` e `npx vitest run` (45 arquivos/103 testes) sem erros.
 
 - [ ] 3. Listagem de apólices
   - [ ] 3.1 Criar `features/policies/screens/policies-list-screen/` — número, cliente, seguradora, prêmio, status derivado (badge), vigência; busca por número/cliente; filtro por status derivado
