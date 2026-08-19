@@ -31,6 +31,7 @@ import { QuotationsPage } from "@/pages/quotations/quotations-page";
 import { AddQuotationPage } from "@/pages/quotations/add/add-quotation-page";
 import { QuotationDetailPage } from "@/pages/quotations/[quotationId]/quotation-detail-page";
 import { EditQuotationPage } from "@/pages/quotations/[quotationId]/edit/edit-quotation-page";
+import { PoliciesPage } from "@/pages/policies/policies-page";
 
 export function AppRouter() {
   return (
@@ -164,6 +165,23 @@ export function AppRouter() {
             <Route path="edit" element={<EditQuotationPage />} />
           </Route>
         </Route>
+      </Route>
+
+      <Route
+        element={
+          <ProtectedRoute
+            allowedRoles={[
+              "platform_admin",
+              "brokerage_admin",
+              "supervisor",
+              "analyst",
+              "seller",
+              "viewer",
+            ]}
+          />
+        }
+      >
+        <Route path="/policies" element={<PoliciesPage />} />
       </Route>
     </Routes>
   );

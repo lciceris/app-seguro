@@ -34,11 +34,15 @@
 
   Verificado com usuário real pelo navegador via script efêmero de banco (rodado e apagado depois): `list`/`get` com embed retornam `clients.legal_name`/`insurers.name` corretamente; `update` grava `policy_number`; upload real pro bucket `policy-documents`, listagem do anexo, geração de URL assinada de verdade, e remoção — tudo via sessão autenticada real, não service role. Lógica de `getDerivedPolicyStatus` validada à parte com um teste efêmero de datas (limites exatos de 0/30/31 dias, timezone, prioridade do status persistido sobre o calculado) antes de ser descartado — o teste permanente fica pra Task 7, mas a lógica de data é fácil de errar por off-by-one e valeu conferir antes de construir a UI em cima. `npx tsc --noEmit`, `npx eslint` e `npx vitest run` (45 arquivos/103 testes) sem erros.
 
-- [ ] 3. Listagem de apólices
-  - [ ] 3.1 Criar `features/policies/screens/policies-list-screen/` — número, cliente, seguradora, prêmio, status derivado (badge), vigência; busca por número/cliente; filtro por status derivado
+- [x] 3. Listagem de apólices
+  - [x] 3.1 Criar `features/policies/screens/policies-list-screen/` — número, cliente, seguradora, prêmio, status derivado (badge), vigência; busca por número/cliente; filtro por status derivado
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
-  - [ ] 3.2 Criar `pages/policies/policies-page.tsx` e registrar a rota `/policies` (sem botão "Nova apólice")
+  - [x] 3.2 Criar `pages/policies/policies-page.tsx` e registrar a rota `/policies` (sem botão "Nova apólice")
     - _Requirements: 5.1, 5.2, 5.3_
+
+  Sem link de menu — o projeto ainda não tem um componente de navegação/sidebar compartilhado (nenhuma spec anterior adicionou um; a navegação até aqui é sempre por link direto entre telas ou URL). `policy_number` nulo aparece como "Pendente de emissão" na coluna, não um "—" vazio e sem explicação. `<Outlet/>` no final da tela, mesmo padrão de `vehicles`/`clients` — o drawer de detalhe (Task 4) vai renderizar ali como rota filha de `/policies`.
+
+  Verificado com `supervisor` e `seller` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `supervisor` vê as 3 apólices de teste (uma vigente, uma vencendo em breve, uma pendente de emissão), badges de status derivado corretos; busca por nome de cliente filtra certo; filtro por "Vencendo em breve" isola só a apólice certa; `seller` só vê as apólices do próprio cliente vinculado (RLS), não vê a de outro cliente. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e `npx vitest run` (45 arquivos/103 testes) sem erros.
 
 - [ ] 4. Detalhe da apólice
   - [ ] 4.1 Criar `features/policies/components/policy-detail-drawer/` — dados da apólice, link para a cotação de origem, vínculo de renovação (pra qual renova / se já foi renovada), lista de anexos com upload/remoção inline
