@@ -17,6 +17,7 @@ import { QuotationVehiclesTab } from "../../components/quotation-vehicles-tab";
 import { QuotationQarTab } from "../../components/quotation-qar-tab";
 import { QuotationInsurersTab } from "../../components/quotation-insurers-tab";
 import { QuotationStatusActions } from "../../components/quotation-status-actions";
+import { QuotationProposalActions } from "../../components/quotation-proposal-pdf";
 
 function DetailField({ label, value }: { label: string; value: string | null }) {
   return (
@@ -112,6 +113,7 @@ export function QuotationDetailScreen() {
         </div>
         {quotation && (
           <div className="flex items-center gap-2">
+            <QuotationProposalActions quotation={quotation} />
             <QuotationStatusActions quotation={quotation} />
             {canEdit && (
               <Button asChild variant="outline">

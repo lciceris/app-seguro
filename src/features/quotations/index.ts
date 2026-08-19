@@ -33,3 +33,4 @@ export * from "./components/quotation-insurers-tab";
 export * from "./validations/quotation-insurer-response-schema";
 export * from "./components/quotation-status-actions";
 export * from "./validations/not-closed-reason-schema";
+export * from "./components/quotation-proposal-pdf";

@@ -149,11 +149,15 @@
 
   Verificado com `seller`, `analyst` e `supervisor` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): fluxo completo `waiting → in_progress → in_negotiation` (analyst); tentativa de `in_negotiation → presented` sem vencedora marcada rejeitada pelo trigger com a mensagem exata exibida em toast; convida seguradora, marca retorno aceito e vencedora, aí sim `presented` funciona; `analyst` perde a ação em `presented` (só `seller` dono ou gestão); `seller` avança `presented → waiting_effect → client_accepted`; `seller` perde a ação em `client_accepted` (só `supervisor`/`brokerage_admin`/`platform_admin`); `supervisor` vê "Efetivar" e "Não fechada"; tenta confirmar "Não fechada" sem motivo (erro de validação aparece, confirmado o fix acima), preenche o motivo, confirma — cotação vai pra `not_closed` com `lost_reason` salvo; nenhum botão de ação aparece mais pra ninguém (estado terminal). Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros.
 
-- [ ] 11. PDF de proposta
-  - [ ] 11.1 Instalar `@react-pdf/renderer`; criar o template do documento (dados do cliente, veículos com cobertura resumida, proposta vencedora)
+- [x] 11. PDF de proposta
+  - [x] 11.1 Instalar `@react-pdf/renderer`; criar o template do documento (dados do cliente, veículos com cobertura resumida, proposta vencedora)
     - _Requirements: 9.1_
-  - [ ] 11.2 Botão "Baixar PDF" (sempre disponível com vencedora marcada) e "Compartilhar" condicional a `navigator.canShare({ files })`
+  - [x] 11.2 Botão "Baixar PDF" (sempre disponível com vencedora marcada) e "Compartilhar" condicional a `navigator.canShare({ files })`
     - _Requirements: 9.2, 9.3, 9.4, 9.5_
+
+  `QuotationProposalActions` só renderiza (retorna `null` antes disso) quando já carregou cliente, veículos e uma `quotation_insurers` com `is_winner = true` — cobre o Requirement 9.1 (disponível só com vencedora) sem precisar de mais um flag de estado. Gerado 100% client-side via `pdf(<Document/>).toBlob()` do `@react-pdf/renderer` (v4.6.1, compatível com React 19) — nenhuma chamada a Edge Function. "Compartilhar" só aparece quando `navigator.canShare({ files: [...] })` retorna `true` de verdade pra um arquivo de teste do mesmo mime-type (não só checar se a função existe — vários navegadores têm `navigator.share` mas só pra texto/URL, não arquivo).
+
+  Verificado com `seller` real pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): com uma seguradora vencedora marcada, "Baixar PDF" aparece e o download gerado é um PDF de verdade (`%PDF-` nos primeiros bytes, > 1KB, nome `proposta-{número}.pdf`); desmarcando a vencedora via banco e recarregando, o botão some; mockando `navigator.share`/`navigator.canShare` (Chromium headless não suporta Web Share API de verdade) o botão "Compartilhar" aparece e entrega um arquivo com o nome esperado pro `navigator.share`; sem o mock, "Compartilhar" não aparece (fallback do Requirement 9.4, mesmo navegador real do Chromium). Nenhum erro de console. `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros.
 
 - [ ] 12. Testes
   - [ ] 12.1 Testes de componente: `create-quotation-drawer`, `edit-quotation-drawer`, componente de ações de transição de status, aba Seguradoras (convidar, retorno, marcar vencedora)
