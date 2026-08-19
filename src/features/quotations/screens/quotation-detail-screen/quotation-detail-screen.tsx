@@ -14,6 +14,7 @@ import {
 } from "../../constants/labels";
 import { useQuotation } from "../../hooks/use-quotation";
 import { QuotationVehiclesTab } from "../../components/quotation-vehicles-tab";
+import { QuotationQarTab } from "../../components/quotation-qar-tab";
 
 function DetailField({ label, value }: { label: string; value: string | null }) {
   return (
@@ -154,9 +155,7 @@ export function QuotationDetailScreen() {
           </TabsContent>
 
           <TabsContent value="qar" className="mt-4">
-            <div className="rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
-              Questionário de Análise de Risco — em construção.
-            </div>
+            <QuotationQarTab quotationId={quotation.id} />
           </TabsContent>
 
           <TabsContent value="insurers" className="mt-4">

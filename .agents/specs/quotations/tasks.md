@@ -107,11 +107,15 @@
 
   Verificado com `seller` e `analyst` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois, sem virar teste permanente — isso fica pra Task 12): `seller` com cotação em `waiting` adiciona veículo do cliente certo, edita cobertura (valor de casco refletido na tabela), remove e re-adiciona; `analyst` avança a cotação até `in_negotiation` (chamada direta via sessão do navegador, já que a UI de transição de status é só a Task 10) e confirma que o seletor "Adicionar veículo" e o botão "Remover" somem, mas "Editar cobertura" continua funcionando e persiste o novo valor — inclusive enxergando a placa do veículo graças ao fix de RLS acima. Nenhum erro de console. `npx tsc --noEmit` e `npx eslint` limpos.
 
-- [ ] 8. Aba QAR
-  - [ ] 8.1 Formulário do QAR (upsert 1:1) — tipo, dados de renovação (texto livre por enquanto), sinistralidade, prêmios, flags de risco, transporte de carga, regiões de circulação
+- [x] 8. Aba QAR
+  - [x] 8.1 Formulário do QAR (upsert 1:1) — tipo, dados de renovação (texto livre por enquanto), sinistralidade, prêmios, flags de risco, transporte de carga, regiões de circulação
     - _Requirements: 4.1_
-  - [ ] 8.2 Upload e listagem de anexos (bucket `qar-attachments`)
+  - [x] 8.2 Upload e listagem de anexos (bucket `qar-attachments`)
     - _Requirements: 4.3_
+
+  Formulário inteiro dentro de um `<fieldset disabled={!canManage}>` em vez de espalhar `disabled`/gate em cada campo individualmente — mais simples e cobre os `<select>`/`<button>` nativos automaticamente por cascata do HTML; só o `DatePicker` (que não expõe prop `disabled`) fica visualmente clicável pro `viewer`, mas sem efeito real porque o próprio submit e o RLS de `quotation_qar` (update/insert só fora de `viewer`) bloqueiam a gravação de qualquer forma. `renewal_insurer_id` (Select do catálogo) e `renewal_insurer_name` (texto livre) coexistem como campos independentes — Requirement 4.2 (vincular `renewed_policy_id` quando a apólice anterior foi emitida na própria plataforma) fica pra spec `policies`, como já registrado no design.md.
+
+  Verificado com `seller` e `viewer` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `seller` preenche o QAR inteiro (texto, número, switches, regiões separadas por vírgula), salva, dá reload na página e os valores voltam pré-preenchidos exatamente como salvos; anexa um arquivo real, baixa (URL assinada abre numa aba nova apontando pro bucket `qar-attachments`) e remove com sucesso; `viewer` abre a mesma cotação, vê o anexo e os valores do QAR mas os campos aparecem desabilitados e os botões "Salvar QAR"/"Anexar arquivo" nem aparecem. Nenhum erro de console. `npx tsc --noEmit` e `npx eslint` limpos.
 
 - [ ] 9. Aba Seguradoras
   - [ ] 9.1 Convidar seguradora — seletor a partir do catálogo habilitado pra corretora (exclui as desabilitadas via `brokerage_disabled_insurers`)

@@ -27,3 +27,5 @@ export * from "./screens/quotation-detail-screen";
 export * from "./components/edit-quotation-drawer";
 export * from "./components/quotation-vehicles-tab";
 export * from "./validations/quotation-vehicle-coverage-schema";
+export * from "./components/quotation-qar-tab";
+export * from "./validations/quotation-qar-schema";
