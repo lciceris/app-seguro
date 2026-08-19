@@ -68,11 +68,15 @@
 
   Verificado com `seller` e `supervisor` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `seller` só vê o ícone "Ver" na linha; `supervisor` vê "Ver" e "Editar"; edita `policy_number`, prêmio e valor da frota, salva, volta pro drawer de detalhe já mostrando os valores novos (confirmado também direto no banco); `seller` tentando acessar `/policies/:id/edit` direto pela URL é bloqueado pelo `ProtectedRoute`. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (45 arquivos/103 testes) e `npx playwright test` completo (16 testes) sem erros.
 
-- [ ] 6. Vínculo de renovação no QAR (volta na spec `quotations`)
-  - [ ] 6.1 Adicionar campo "Apólice anterior" (Select) no formulário do QAR (`quotation-qar-form`, spec `quotations`) — lista apólices do `client_id` da cotação, visível sempre (não só quando `quotation_type = renewal`, pra não travar quem esqueceu de marcar o tipo)
+- [x] 6. Vínculo de renovação no QAR (volta na spec `quotations`)
+  - [x] 6.1 Adicionar campo "Apólice anterior" (Select) no formulário do QAR (`quotation-qar-form`, spec `quotations`) — lista apólices do `client_id` da cotação, visível sempre (não só quando `quotation_type = renewal`, pra não travar quem esqueceu de marcar o tipo)
     - _Requirements: 4.1_
-  - [ ] 6.2 `upsert-quotation-qar` (spec `quotations`) passa a aceitar `renewed_policy_id`
+  - [x] 6.2 `upsert-quotation-qar` (spec `quotations`) passa a aceitar `renewed_policy_id`
     - _Requirements: 4.1_
+
+  Nova API `list-policies-by-client`/`usePoliciesByClient` na feature `policies` (só `id, policy_number`, sem os embeds pesados de `list-policies`) — `features/quotations` passa a importar de `@/features/policies`, mão única (policies não importa nada de quotations), consistente com a dependência já documentada no schema (`policies` depende de `quotations`, nunca o inverso — aqui é só o frontend reaproveitando um hook de leitura, não recria a dependência de schema). `clientId` precisou subir a cadeia de props: `quotation-detail-screen` (já tinha a `quotation` inteira) → `QuotationQarTab` → `QuotationQarForm`, já que o form só recebia `quotationId` antes.
+
+  Verificado com `seller` real pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): criada uma apólice existente pro cliente da cotação, o Select "Apólice anterior" no QAR lista corretamente `AP-QARPOL-0001`; selecionar e salvar grava `renewed_policy_id` certo em `quotation_qar` (confirmado direto no banco); reload da página mantém a seleção pré-preenchida. `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (45/103) e `npx playwright test` completo (16 testes) sem erros.
 
 - [ ] 7. Testes
   - [ ] 7.1 Testes de componente: `policy-detail-drawer`, `edit-policy-drawer`

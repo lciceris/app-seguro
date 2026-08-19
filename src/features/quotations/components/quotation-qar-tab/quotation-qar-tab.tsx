@@ -8,9 +8,10 @@ import { QuotationQarForm } from "./quotation-qar-form";
 
 interface QuotationQarTabProps {
   quotationId: string;
+  clientId: string;
 }
 
-export function QuotationQarTab({ quotationId }: QuotationQarTabProps) {
+export function QuotationQarTab({ quotationId, clientId }: QuotationQarTabProps) {
   const usuario = useAuthStore((state) => state.usuario);
   const canManage = usuario?.role !== "viewer";
 
@@ -39,7 +40,12 @@ export function QuotationQarTab({ quotationId }: QuotationQarTabProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <QuotationQarForm quotationId={quotationId} qar={qar} canManage={canManage} />
+      <QuotationQarForm
+        quotationId={quotationId}
+        clientId={clientId}
+        qar={qar}
+        canManage={canManage}
+      />
       <QuotationQarAttachments quotationId={quotationId} canManage={canManage} />
     </div>
   );

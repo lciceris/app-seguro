@@ -8,6 +8,7 @@ export interface UpsertQuotationQarInput {
   current_policy_expiry: string | null;
   renewal_insurer_id: string | null;
   renewal_insurer_name: string | null;
+  renewed_policy_id: string | null;
   sinistralidade: string | null;
   previous_premium: number | null;
   desired_premium: number | null;

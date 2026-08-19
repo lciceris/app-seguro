@@ -164,7 +164,7 @@ export function QuotationDetailScreen() {
           </TabsContent>
 
           <TabsContent value="qar" className="mt-4">
-            <QuotationQarTab quotationId={quotation.id} />
+            <QuotationQarTab quotationId={quotation.id} clientId={quotation.client_id} />
           </TabsContent>
 
           <TabsContent value="insurers" className="mt-4">

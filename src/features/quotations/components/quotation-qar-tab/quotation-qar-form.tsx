@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { useInsurers } from "@/features/insurers";
+import { usePoliciesByClient } from "@/features/policies";
 import { Button } from "@/shared/components/ui/button";
 import { DatePicker } from "@/shared/components/ui/date-picker";
 import { Input } from "@/shared/components/ui/input";
@@ -22,6 +23,7 @@ import type { QuotationQar } from "../../types/quotation";
 import {
   NO_INSURANCE_TYPE_VALUE,
   NO_RENEWAL_INSURER_VALUE,
+  NO_RENEWED_POLICY_VALUE,
   quotationQarSchema,
   type QuotationQarFormValues,
 } from "../../validations/quotation-qar-schema";
@@ -44,12 +46,14 @@ function fromDateOnly(value: string | null | undefined) {
 
 interface QuotationQarFormProps {
   quotationId: string;
+  clientId: string;
   qar: QuotationQar | null | undefined;
   canManage: boolean;
 }
 
-export function QuotationQarForm({ quotationId, qar, canManage }: QuotationQarFormProps) {
+export function QuotationQarForm({ quotationId, clientId, qar, canManage }: QuotationQarFormProps) {
   const { data: insurers } = useInsurers();
+  const { data: clientPolicies } = usePoliciesByClient(clientId);
   const upsertQuotationQar = useUpsertQuotationQar();
 
   const { register, handleSubmit, control } = useForm<QuotationQarFormValues>({
@@ -59,6 +63,7 @@ export function QuotationQarForm({ quotationId, qar, canManage }: QuotationQarFo
       current_policy_expiry: fromDateOnly(qar?.current_policy_expiry),
       renewal_insurer_id: qar?.renewal_insurer_id ?? NO_RENEWAL_INSURER_VALUE,
       renewal_insurer_name: qar?.renewal_insurer_name ?? "",
+      renewed_policy_id: qar?.renewed_policy_id ?? NO_RENEWED_POLICY_VALUE,
       sinistralidade: qar?.sinistralidade ?? "",
       previous_premium: qar?.previous_premium?.toString() ?? "",
       desired_premium: qar?.desired_premium?.toString() ?? "",
@@ -86,6 +91,8 @@ export function QuotationQarForm({ quotationId, qar, canManage }: QuotationQarFo
         renewal_insurer_id:
           values.renewal_insurer_id === NO_RENEWAL_INSURER_VALUE ? null : values.renewal_insurer_id,
         renewal_insurer_name: sanitize(values.renewal_insurer_name),
+        renewed_policy_id:
+          values.renewed_policy_id === NO_RENEWED_POLICY_VALUE ? null : values.renewed_policy_id,
         sinistralidade: sanitize(values.sinistralidade),
         previous_premium: sanitizeNum(values.previous_premium),
         desired_premium: sanitizeNum(values.desired_premium),
@@ -190,6 +197,29 @@ export function QuotationQarForm({ quotationId, qar, canManage }: QuotationQarFo
               id="renewal_insurer_name"
               placeholder="Preencha se a seguradora não está cadastrada"
               {...register("renewal_insurer_name")}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="renewed_policy_id">Apólice anterior</Label>
+            <Controller
+              name="renewed_policy_id"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange} disabled={!canManage}>
+                  <SelectTrigger id="renewed_policy_id" className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NO_RENEWED_POLICY_VALUE}>Não é renovação</SelectItem>
+                    {clientPolicies?.map((policy) => (
+                      <SelectItem key={policy.id} value={policy.id}>
+                        {policy.policy_number ?? "Pendente de emissão"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             />
           </div>
         </div>

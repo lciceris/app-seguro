@@ -4,12 +4,14 @@ import { z } from "zod";
 // (Select não aceita value="" diretamente) — convertido pra null no payload.
 export const NO_INSURANCE_TYPE_VALUE = "none";
 export const NO_RENEWAL_INSURER_VALUE = "none";
+export const NO_RENEWED_POLICY_VALUE = "none";
 
 export const quotationQarSchema = z.object({
   insurance_type: z.string(),
   current_policy_expiry: z.date().nullable(),
   renewal_insurer_id: z.string(),
   renewal_insurer_name: z.string().optional(),
+  renewed_policy_id: z.string(),
   sinistralidade: z.string().optional(),
   previous_premium: z.string().optional(),
   desired_premium: z.string().optional(),
