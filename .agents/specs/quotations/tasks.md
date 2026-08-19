@@ -95,11 +95,17 @@
 
   Verificado com `supervisor` e `seller` reais pelo navegador (script efêmero, limpo depois): valores atuais vêm pré-preenchidos corretamente desde o primeiro render, incluindo o Select de vendedor (mesmo padrão de `defaultValues`-no-`useForm` + gate em ambas as queries assíncronas já estabelecido); salvar atualiza o banco e volta pro detalhe; `seller` não vê o campo "Vendedor responsável" (só perfis de gestão reatribuem). Nenhum erro de console.
 
-- [ ] 7. Aba Veículos
-  - [ ] 7.1 Seletor de veículos do cliente da cotação (reaproveita `useVehicles()` filtrado pelo `client_id`) + formulário de cobertura por veículo
+- [x] 7. Aba Veículos
+  - [x] 7.1 Seletor de veículos do cliente da cotação (reaproveita `useVehicles()` filtrado pelo `client_id`) + formulário de cobertura por veículo
     - _Requirements: 3.1_
-  - [ ] 7.2 UI reflete o travamento de adicionar/remover a partir de `in_negotiation` (Requirement 3.3) — campos de cobertura continuam editáveis
+  - [x] 7.2 UI reflete o travamento de adicionar/remover a partir de `in_negotiation` (Requirement 3.3) — campos de cobertura continuam editáveis
     - _Requirements: 3.2, 3.3_
+
+  Achado real durante a verificação (não era só bug de teste): a RLS de `vehicles` (spec `vehicles`, migration `20260814120003`) nunca deu nenhum acesso — nem leitura — pra `analyst`/`viewer`, decisão que fazia sentido antes de `quotations` existir. Com a aba Veículos fazendo embed de `vehicles(plate, brand, model)`, o `analyst` (justamente quem trabalha nessa aba como calculista) via a linha da cobertura mas com tudo "—" porque o embed voltava `null` pra ele. Corrigido com a migration `20260819100017_extend_vehicles_select_to_analyst_viewer.sql`, estendendo o `vehicles_select` (só select, nunca insert/update) pra incluir `analyst` e `viewer`, na mesma linha da leitura ampla que `viewer` já tinha em `clients`.
+
+  Drawer de cobertura (`quotation-vehicle-coverage-drawer.tsx`) reaproveita o Sheet local-`useState` mesmo estando dentro de uma página cheia (não uma outra Sheet já aberta) — não viola a regra "nunca modal dentro de drawer" do CLAUDE.md porque o container aqui é uma página, não um drawer.
+
+  Verificado com `seller` e `analyst` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois, sem virar teste permanente — isso fica pra Task 12): `seller` com cotação em `waiting` adiciona veículo do cliente certo, edita cobertura (valor de casco refletido na tabela), remove e re-adiciona; `analyst` avança a cotação até `in_negotiation` (chamada direta via sessão do navegador, já que a UI de transição de status é só a Task 10) e confirma que o seletor "Adicionar veículo" e o botão "Remover" somem, mas "Editar cobertura" continua funcionando e persiste o novo valor — inclusive enxergando a placa do veículo graças ao fix de RLS acima. Nenhum erro de console. `npx tsc --noEmit` e `npx eslint` limpos.
 
 - [ ] 8. Aba QAR
   - [ ] 8.1 Formulário do QAR (upsert 1:1) — tipo, dados de renovação (texto livre por enquanto), sinistralidade, prêmios, flags de risco, transporte de carga, regiões de circulação

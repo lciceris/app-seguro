@@ -13,6 +13,7 @@ import {
   QUOTATION_TYPE_LABELS,
 } from "../../constants/labels";
 import { useQuotation } from "../../hooks/use-quotation";
+import { QuotationVehiclesTab } from "../../components/quotation-vehicles-tab";
 
 function DetailField({ label, value }: { label: string; value: string | null }) {
   return (
@@ -149,9 +150,7 @@ export function QuotationDetailScreen() {
           </TabsContent>
 
           <TabsContent value="vehicles" className="mt-4">
-            <div className="rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
-              Gestão de veículos da cotação — em construção.
-            </div>
+            <QuotationVehiclesTab quotation={quotation} />
           </TabsContent>
 
           <TabsContent value="qar" className="mt-4">
