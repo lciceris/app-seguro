@@ -72,13 +72,16 @@
 
   Verificado com `seller` e `supervisor` reais pelo navegador (script efêmero, limpo depois): `seller` não vê o seletor de vendedor responsável e a cotação criada já sai com `seller_id` do próprio; `supervisor` vê o seletor e escolhe outro vendedor manualmente; número sequencial gerado corretamente (`QT-2026-0001`); status inicial `waiting`. Nenhum erro de console.
 
-- [ ] 5. Página de detalhe da cotação (estrutura de abas + Visão geral)
-  - [ ] 5.1 Criar `features/quotations/screens/quotation-detail-screen/` — página cheia (não drawer) com abas: Visão geral, Veículos, QAR, Seguradoras
+- [x] 5. Página de detalhe da cotação (estrutura de abas + Visão geral)
+  - [x] 5.1 Criar `features/quotations/screens/quotation-detail-screen/` — página cheia (não drawer) com abas: Visão geral, Veículos, QAR, Seguradoras
     - _Requirements: 2.3_
-  - [ ] 5.2 Criar `pages/quotations/[quotationId]/quotation-detail-page.tsx` e registrar a rota `/quotations/:quotationId`
+  - [x] 5.2 Criar `pages/quotations/[quotationId]/quotation-detail-page.tsx` e registrar a rota `/quotations/:quotationId` (rota irmã de `/quotations`, fora do `<Outlet/>` da listagem — é página cheia, não drawer)
     - _Requirements: 2.3_
-  - [ ] 5.3 Conteúdo da aba Visão geral — dados gerais da cotação, número, vendedor, calculista, prazo
+  - [x] 5.3 Conteúdo da aba Visão geral — dados gerais da cotação, número, vendedor, calculista, prazo
     - _Requirements: 2.3_
+  - [x] 5.4 (infra) shadcn `tabs` — não existia ainda
+
+  Verificado com `supervisor`, `viewer` e `seller` reais pelo navegador (script efêmero, limpo depois): todos os campos da aba Visão geral aparecem corretamente (número, cliente, status, tipo, franquia, observações); trocar de aba (Veículos/Seguradoras) funciona; `supervisor` vê botão Editar, `viewer` não vê; botão voltar navega pra listagem; `seller` sem vínculo com o cliente é bloqueado pela RLS ao abrir a página. Nenhum erro de console.
 
 - [ ] 6. Editar cotação
   - [ ] 6.1 Criar `features/quotations/validations/edit-quotation-schema.ts`
