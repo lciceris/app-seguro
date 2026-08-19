@@ -36,19 +36,21 @@
 
   16 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados. Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois, 24 checks): numeração sequencial no formato `QT-2026-NNNN` e sem colisão em inserções concorrentes (`Promise.all`); `seller` B não enxerga cotação de `seller` A; adicionar veículo do cliente certo funciona, de cliente errado é rejeitado pelo trigger; lista de veículos trava a partir de `in_negotiation` (confirmado tentando inserir depois da transição); `analyst` convida seguradora e assume `analyst_id` automaticamente ao iniciar (`waiting → in_progress`); `seller` bloqueado (RLS silenciosa, 0 linhas, valor intacto no banco — confirmado via segunda leitura) ao tentar editar retorno de seguradora; marcar vencedora com `response_status = 'pending'` é rejeitado pelo `CHECK`; avançar pra `presented` sem vencedora marcada é bloqueado pelo trigger; `seller` avança `presented → waiting_effect → client_accepted`; `seller` e `analyst` são bloqueados na transição final `client_accepted → effected`; `supervisor` efetiva com sucesso; status terminal não aceita mais mudança; upload/leitura de anexo do QAR (bucket `qar-attachments`) respeita a mesma visibilidade da cotação — `seller` de outra cotação não consegue baixar.
 
-- [ ] 2. Camada de dados do frontend
-  - [ ] 2.1 Criar `features/quotations/types/` + `constants/query-keys.ts` + `constants/labels.ts` (status, tipo, resposta de seguradora, tipo de cobertura/franquia/vidros)
+- [x] 2. Camada de dados do frontend
+  - [x] 2.1 Criar `features/quotations/types/` + `constants/query-keys.ts` + `constants/labels.ts` (status, tipo, resposta de seguradora, tipo de cobertura/franquia/vidros)
     - _Requirements: infra_
-  - [ ] 2.2 Criar `features/quotations/api/` pra `quotations` — list, get, create, update (campos gerais), advance-status
+  - [x] 2.2 Criar `features/quotations/api/` pra `quotations` — list, get, create, update (campos gerais), advance-status
     - _Requirements: 1.1, 2.1, 2.2, 2.3, 6.1_
-  - [ ] 2.3 Criar `features/quotations/api/` pra `quotation_vehicles` — list, add, update, remove
+  - [x] 2.3 Criar `features/quotations/api/` pra `quotation_vehicles` — list, add, update, remove
     - _Requirements: 3.1_
-  - [ ] 2.4 Criar `features/quotations/api/` pra `quotation_qar` (get/upsert) e `quotation_qar_attachments` (list/upload/delete)
+  - [x] 2.4 Criar `features/quotations/api/` pra `quotation_qar` (get/upsert) e `quotation_qar_attachments` (list/upload/delete/url assinada)
     - _Requirements: 4.1, 4.3_
-  - [ ] 2.5 Criar `features/quotations/api/` pra `quotation_insurers` (list/invite/update/set-winner) e `quotation_insurer_events` (list/comment)
+  - [x] 2.5 Criar `features/quotations/api/` pra `quotation_insurers` (list/invite/update/set-winner) e `quotation_insurer_events` (list/comment)
     - _Requirements: 5.1, 5.3, 7.1, 8.1_
-  - [ ] 2.6 Criar `features/quotations/hooks/` correspondentes — cada mutation invalida a query certa
+  - [x] 2.6 Criar `features/quotations/hooks/` correspondentes — cada mutation invalida a query certa
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 4.3, 5.1, 5.3, 6.1, 7.1, 8.1_
+
+  20 módulos de `api/` + 21 hooks. Pontos de atenção resolvidos: `list-quotations`/`get-quotation` usam embed explícito com o nome da FK (`seller:users!quotations_seller_id_fkey(...)`) porque `quotations` tem duas colunas apontando pra `users` (`seller_id`/`analyst_id`) — embed genérico seria ambíguo. `create-quotation` passa `number: ""` no payload (sobrescrito pelo trigger `generate_quotation_number`, mas a coluna não tem `DEFAULT`, só trigger, então o tipo gerado exige o campo). `upload-qar-attachment` é a primeira função do projeto usando `supabase.storage` (upload + insert da linha, path com UUID pra evitar colisão de nome de arquivo); anexo privado usa URL assinada de 60s pra download (`get-qar-attachment-url`). `npx tsc --noEmit`, `npx eslint` e a suíte de testes inteira (37 arquivos/77 testes) sem erros — nada quebrou nas specs anteriores.
 
 - [ ] 3. Listagem de cotações
   - [ ] 3.1 Criar `features/quotations/screens/quotations-list-screen/` — número, cliente, vendedor, status (badge), prazo; busca por número/cliente; filtro por status
