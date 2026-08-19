@@ -12,3 +12,5 @@ export * from "./constants/labels";
 export * from "./lib/get-derived-policy-status";
 export * from "./screens/policies-list-screen";
 export * from "./components/policy-detail-drawer";
+export * from "./components/edit-policy-drawer";
+export * from "./validations/edit-policy-schema";

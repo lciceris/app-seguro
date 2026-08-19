@@ -33,6 +33,7 @@ import { QuotationDetailPage } from "@/pages/quotations/[quotationId]/quotation-
 import { EditQuotationPage } from "@/pages/quotations/[quotationId]/edit/edit-quotation-page";
 import { PoliciesPage } from "@/pages/policies/policies-page";
 import { PolicyDetailPage } from "@/pages/policies/[policyId]/policy-detail-page";
+import { EditPolicyPage } from "@/pages/policies/[policyId]/edit/edit-policy-page";
 
 export function AppRouter() {
   return (
@@ -184,6 +185,14 @@ export function AppRouter() {
       >
         <Route path="/policies" element={<PoliciesPage />}>
           <Route path=":policyId" element={<PolicyDetailPage />} />
+
+          <Route
+            element={
+              <ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin", "supervisor"]} />
+            }
+          >
+            <Route path=":policyId/edit" element={<EditPolicyPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

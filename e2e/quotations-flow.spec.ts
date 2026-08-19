@@ -98,6 +98,12 @@ test.describe("quotations-flow", () => {
 
   test.afterAll(async () => {
     const admin = adminClient();
+    // o fluxo chega até `effected`, então o trigger da spec `policies` já
+    // criou uma linha — precisa sumir antes de `quotations`/`insurers`
+    // (FK `on delete restrict` nos dois), senão o delete falha silencioso
+    // e deixa órfãos (insurers não tem brokerage_id, então nem o cascade
+    // final de brokerages limpa isso).
+    if (quotationId) await admin.from("policies").delete().eq("quotation_id", quotationId);
     if (quotationId) await admin.from("quotations").delete().eq("id", quotationId);
     await admin.from("insurers").delete().eq("id", insurerId);
     await admin.from("client_sellers").delete().eq("client_id", clientId);

@@ -54,13 +54,19 @@
 
   Verificado com `supervisor`, `viewer` e `seller` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): dados gerais, prêmio, valor da frota e vigência aparecem certos; link "Renova a apólice" na apólice nova aponta pra apólice antiga; link "Renovada pela apólice" na apólice antiga aponta pra nova (as duas direções do vínculo, cada uma resolvida por uma query diferente); `supervisor` anexa um documento com sucesso; `viewer` e `seller` veem o mesmo documento mas sem botão de anexar nem remover. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (45 arquivos/103 testes) e `npx playwright test` completo (16 testes de todas as specs) sem erros.
 
-- [ ] 5. Editar apólice
-  - [ ] 5.1 Criar `features/policies/validations/edit-policy-schema.ts`
+- [x] 5. Editar apólice
+  - [x] 5.1 Criar `features/policies/validations/edit-policy-schema.ts`
     - _Requirements: 2.1_
-  - [ ] 5.2 Criar `features/policies/components/edit-policy-drawer/` — `policy_number`, `coverage_start/end`, `premium_amount`, `total_fleet_value`; só visível pra `supervisor`/`brokerage_admin`/`platform_admin`
+  - [x] 5.2 Criar `features/policies/components/edit-policy-drawer/` — `policy_number`, `coverage_start/end`, `premium_amount`, `total_fleet_value`; só visível pra `supervisor`/`brokerage_admin`/`platform_admin`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 5.3 Criar `pages/policies/[policyId]/edit/` como rota filha `/policies/:policyId/edit`
+  - [x] 5.3 Criar `pages/policies/[policyId]/edit/` como rota filha `/policies/:policyId/edit`
     - _Requirements: 2.1, 2.2_
+
+  Rota `:policyId/edit` **irmã** de `:policyId` (ambas filhas diretas de `/policies`), não aninhada dentro do drawer de detalhe — diferente do padrão de `quotations` (onde o detalhe é página cheia com `<Outlet/>` próprio). Aqui o detalhe é um drawer (como `vehicles`/`clients`), e nenhum drawer de detalhe do projeto tem botão "Editar" embutido — o ícone de lápis fica na linha da tabela da listagem, ao lado de "Ver", condicional a `canManage`. Estrutura de `ProtectedRoute` aninhada igual a `clients` (bloco externo com os 6 roles pra visualização, bloco interno só com `supervisor`/`brokerage_admin`/`platform_admin` pro `edit`).
+
+  **Achado real durante a verificação regressiva** (não bug desta task, mas descoberto rodando a suíte E2E completa depois dela): o teste permanente `quotations-flow.spec.ts` (spec `quotations`, Task 12) leva a cotação até `effected`, e agora isso *sempre* cria uma `policies` via trigger — mas o `afterAll` daquele teste foi escrito antes da spec `policies` existir e tentava deletar `quotations`/`insurers` sem saber que uma `policies` (FK `on delete restrict` nos dois) passaria a existir. O delete falhava silenciosamente (sem checar `.error`), deixando a seguradora de teste órfã pra sempre — cada nova execução criava outra com o mesmo nome fixo, e a segunda execução quebrava de verdade (`getByRole("option")` resolvendo pra 2 elementos). Corrigido adicionando `delete from policies where quotation_id = ...` antes dos deletes de `quotations`/`insurers` nesse `afterAll`; órfã antiga limpa manualmente do banco. `npx playwright test` completo rodado duas vezes seguidas depois do fix, sem deixar nenhum resíduo.
+
+  Verificado com `seller` e `supervisor` reais pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): `seller` só vê o ícone "Ver" na linha; `supervisor` vê "Ver" e "Editar"; edita `policy_number`, prêmio e valor da frota, salva, volta pro drawer de detalhe já mostrando os valores novos (confirmado também direto no banco); `seller` tentando acessar `/policies/:id/edit` direto pela URL é bloqueado pelo `ProtectedRoute`. Nenhum erro de console. `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (45 arquivos/103 testes) e `npx playwright test` completo (16 testes) sem erros.
 
 - [ ] 6. Vínculo de renovação no QAR (volta na spec `quotations`)
   - [ ] 6.1 Adicionar campo "Apólice anterior" (Select) no formulário do QAR (`quotation-qar-form`, spec `quotations`) — lista apólices do `client_id` da cotação, visível sempre (não só quando `quotation_type = renewal`, pra não travar quem esqueceu de marcar o tipo)

@@ -1,7 +1,8 @@
-import { Eye, Search } from "lucide-react";
+import { Eye, Pencil, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
+import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -44,8 +45,12 @@ function formatDate(value: string | null) {
   return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR");
 }
 
+const MANAGE_ROLES = new Set(["supervisor", "brokerage_admin", "platform_admin"]);
+
 export function PoliciesListScreen() {
   const { data: policies, isLoading, isError, refetch } = usePolicies();
+  const usuario = useAuthStore((state) => state.usuario);
+  const canManage = !!usuario && MANAGE_ROLES.has(usuario.role);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<DerivedPolicyStatus | typeof ALL_STATUS_VALUE>(
     ALL_STATUS_VALUE,
@@ -221,6 +226,18 @@ export function PoliciesListScreen() {
                           </TooltipTrigger>
                           <TooltipContent>Ver</TooltipContent>
                         </Tooltip>
+                        {canManage && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button asChild variant="ghost" size="icon-sm">
+                                <Link to={`/policies/${policy.id}/edit`}>
+                                  <Pencil className="h-4 w-4" />
+                                </Link>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Editar</TooltipContent>
+                          </Tooltip>
+                        )}
                       </div>
                     </td>
                   </tr>
