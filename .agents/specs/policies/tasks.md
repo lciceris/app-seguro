@@ -1,22 +1,24 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: enum `policy_status` (`active`, `cancelled`, `renewed`)
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: enum `policy_status` (`active`, `cancelled`, `renewed`)
     - _Requirements: infra_
-  - [ ] 1.2 Migration: tabela `policies` (`brokerage_id`, `client_id`, `insurer_id`, `quotation_id` not null unique, `renewed_from_policy_id`, `policy_number`, `premium_amount`, `total_fleet_value`, `coverage_start/end`, `status` default `active`; trigger `set_updated_at`)
+  - [x] 1.2 Migration: tabela `policies` (`brokerage_id`, `client_id`, `insurer_id`, `quotation_id` not null unique, `renewed_from_policy_id`, `policy_number`, `premium_amount`, `total_fleet_value`, `coverage_start/end`, `status` default `active`; trigger `set_updated_at`)
     - _Requirements: 1.1_
-  - [ ] 1.3 Migration: tabela `policy_attachments`
+  - [x] 1.3 Migration: tabela `policy_attachments`
     - _Requirements: 3.1_
-  - [ ] 1.4 Migration: `ALTER TABLE quotation_qar ADD COLUMN renewed_policy_id` (fk `policies(id)` on delete set null)
+  - [x] 1.4 Migration: `ALTER TABLE quotation_qar ADD COLUMN renewed_policy_id` (fk `policies(id)` on delete set null)
     - _Requirements: 4.1_
-  - [ ] 1.5 Migration: trigger `create_policy_from_effected_quotation` (`AFTER UPDATE OF status ON quotations`) — cria a apólice herdando dados da cotação/seguradora vencedora/soma de veículos, e marca a apólice anterior como `renewed` quando há vínculo no QAR
+  - [x] 1.5 Migration: trigger `create_policy_from_effected_quotation` (`AFTER UPDATE OF status ON quotations`) — cria a apólice herdando dados da cotação/seguradora vencedora/soma de veículos, e marca a apólice anterior como `renewed` quando há vínculo no QAR
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 4.2, 4.3_
-  - [ ] 1.6 Migration: RLS de `policies` (select por perfil/`is_my_client`; update só `supervisor`/`brokerage_admin`/`platform_admin`; sem insert nem delete)
+  - [x] 1.6 Migration: RLS de `policies` (select por perfil/`is_my_client`; update só `supervisor`/`brokerage_admin`/`platform_admin`; sem insert nem delete)
     - _Requirements: 2.1, 2.2, 5.1, 5.2, 5.3_
-  - [ ] 1.7 Migration: funções `get_policy_brokerage_id`/`is_my_policy_client` + RLS de `policy_attachments` (select amplo, insert/delete restrito)
+  - [x] 1.7 Migration: funções `get_policy_brokerage_id`/`is_my_policy_client` + RLS de `policy_attachments` (select amplo, insert/delete restrito)
     - _Requirements: 3.1, 3.2_
-  - [ ] 1.8 Migration: bucket `policy-documents` (privado) + policies de `storage.objects`
+  - [x] 1.8 Migration: bucket `policy-documents` (privado) + policies de `storage.objects`
     - _Requirements: 3.1_
+
+  9 migrations aplicadas no projeto hospedado (`supabase db push --linked`) e tipos TypeScript regenerados. Verificado com usuários/corretoras de teste reais (script efêmero, limpo depois, 16 checks): cotação levada até `effected` por 3 perfis reais (`analyst`/`seller`/`supervisor`, mesmo fluxo da spec `quotations`) gera automaticamente a linha em `policies` com `insurer_id`/`premium_amount` da seguradora vencedora, `total_fleet_value` = soma exata de `casco_value` dos veículos da cotação, `coverage_start/end` herdados, `policy_number` e `renewed_from_policy_id` nulos; `seller` dono do cliente vê a apólice via RLS, outro `seller` não vê nem via leitura direta; `seller` bloqueado (RLS silenciosa, 0 linhas) ao tentar editar `policy_number`, `supervisor` edita com sucesso; tentativa de `insert` manual em `policies` rejeitada (sem policy de insert — só o trigger `security definer` cria); `policy_attachments` — `seller` bloqueado de inserir anexo, `supervisor` insere com sucesso, `seller` A (dono) vê o anexo, `seller` B não vê; fluxo de renovação completo — segunda cotação com `quotation_qar.renewed_policy_id` apontando pra apólice criada, efetivada até `effected`, gera nova apólice com `renewed_from_policy_id` correto e `total_fleet_value` recalculado só com os veículos dessa nova cotação, e a apólice antiga vira `status = 'renewed'` automaticamente. `npx tsc --noEmit`, `npx eslint` e `npx vitest run` (45 arquivos/103 testes) sem erros — nada quebrou nas specs anteriores.
 
 - [ ] 2. Camada de dados do frontend
   - [ ] 2.1 Criar `features/policies/types/` + `constants/query-keys.ts` + `constants/labels.ts` (status persistido e status derivado) + `lib/get-derived-policy-status.ts`

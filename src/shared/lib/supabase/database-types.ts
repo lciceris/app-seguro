@@ -322,6 +322,128 @@ export type Database = {
         }
         Relationships: []
       }
+      policies: {
+        Row: {
+          brokerage_id: string
+          client_id: string
+          coverage_end: string | null
+          coverage_start: string | null
+          created_at: string
+          id: string
+          insurer_id: string
+          policy_number: string | null
+          premium_amount: number | null
+          quotation_id: string
+          renewed_from_policy_id: string | null
+          status: Database["public"]["Enums"]["policy_status"]
+          total_fleet_value: number | null
+          updated_at: string
+        }
+        Insert: {
+          brokerage_id: string
+          client_id: string
+          coverage_end?: string | null
+          coverage_start?: string | null
+          created_at?: string
+          id?: string
+          insurer_id: string
+          policy_number?: string | null
+          premium_amount?: number | null
+          quotation_id: string
+          renewed_from_policy_id?: string | null
+          status?: Database["public"]["Enums"]["policy_status"]
+          total_fleet_value?: number | null
+          updated_at?: string
+        }
+        Update: {
+          brokerage_id?: string
+          client_id?: string
+          coverage_end?: string | null
+          coverage_start?: string | null
+          created_at?: string
+          id?: string
+          insurer_id?: string
+          policy_number?: string | null
+          premium_amount?: number | null
+          quotation_id?: string
+          renewed_from_policy_id?: string | null
+          status?: Database["public"]["Enums"]["policy_status"]
+          total_fleet_value?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policies_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_insurer_id_fkey"
+            columns: ["insurer_id"]
+            isOneToOne: false
+            referencedRelation: "insurers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: true
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_renewed_from_policy_id_fkey"
+            columns: ["renewed_from_policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policy_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id: string
+          policy_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id?: string
+          policy_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          id?: string
+          policy_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policy_attachments_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quotation_insurer_events: {
         Row: {
           author_id: string | null
@@ -505,6 +627,7 @@ export type Database = {
           quotation_id: string
           renewal_insurer_id: string | null
           renewal_insurer_name: string | null
+          renewed_policy_id: string | null
           sinistralidade: string | null
         }
         Insert: {
@@ -526,6 +649,7 @@ export type Database = {
           quotation_id: string
           renewal_insurer_id?: string | null
           renewal_insurer_name?: string | null
+          renewed_policy_id?: string | null
           sinistralidade?: string | null
         }
         Update: {
@@ -547,6 +671,7 @@ export type Database = {
           quotation_id?: string
           renewal_insurer_id?: string | null
           renewal_insurer_name?: string | null
+          renewed_policy_id?: string | null
           sinistralidade?: string | null
         }
         Relationships: [
@@ -569,6 +694,13 @@ export type Database = {
             columns: ["renewal_insurer_id"]
             isOneToOne: false
             referencedRelation: "insurers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_qar_renewed_policy_id_fkey"
+            columns: ["renewed_policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
             referencedColumns: ["id"]
           },
         ]
@@ -961,11 +1093,16 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      get_policy_brokerage_id: {
+        Args: { p_policy_id: string }
+        Returns: string
+      }
       get_quotation_brokerage_id: {
         Args: { p_quotation_id: string }
         Returns: string
       }
       is_my_client: { Args: { p_client_id: string }; Returns: boolean }
+      is_my_policy_client: { Args: { p_policy_id: string }; Returns: boolean }
       is_my_quotation: { Args: { p_quotation_id: string }; Returns: boolean }
       is_my_quotation_insurer: {
         Args: { p_quotation_insurer_id: string }
@@ -984,6 +1121,7 @@ export type Database = {
         | "accepted"
         | "declined"
         | "waiting_info"
+      policy_status: "active" | "cancelled" | "renewed"
       quotation_event_type: "comment" | "system"
       quotation_status:
         | "waiting"
@@ -1169,6 +1307,7 @@ export const Constants = {
         "declined",
         "waiting_info",
       ],
+      policy_status: ["active", "cancelled", "renewed"],
       quotation_event_type: ["comment", "system"],
       quotation_status: [
         "waiting",
