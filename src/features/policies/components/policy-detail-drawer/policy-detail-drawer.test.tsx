@@ -52,6 +52,11 @@ vi.mock("./policy-attachments-section", () => ({
   PolicyAttachmentsSection: () => null,
 }));
 
+// Isola do componente de veículos (tem seus próprios hooks, testado à parte).
+vi.mock("./policy-vehicles-section", () => ({
+  PolicyVehiclesSection: () => null,
+}));
+
 function renderDrawer() {
   return renderWithProviders(
     <Routes>

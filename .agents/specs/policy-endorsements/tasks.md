@@ -34,8 +34,8 @@
   - [x] 2.4 Criar `features/policy-endorsements/hooks/` correspondentes
     - _Requirements: 1.1, 12.1, 12.2_
 
-- [ ] 3. Aba Veículos no detalhe da apólice
-  - [ ] 3.1 Adicionar seção/aba "Veículos" no `policy-detail-drawer` (spec `policies`) — lista `policy_vehicles` da versão sendo vista, view-only, resumo de cobertura por veículo
+- [x] 3. Aba Veículos no detalhe da apólice
+  - [x] 3.1 Adicionar seção/aba "Veículos" no `policy-detail-drawer` (spec `policies`) — lista `policy_vehicles` da versão sendo vista, view-only, resumo de cobertura por veículo
     - _Requirements: 12.1_
 
 - [ ] 4. Seção de endossos no detalhe da apólice
