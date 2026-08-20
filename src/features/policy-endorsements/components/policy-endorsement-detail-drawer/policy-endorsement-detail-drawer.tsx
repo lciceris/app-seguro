@@ -19,6 +19,7 @@ import {
   POLICY_ENDORSEMENT_TYPE_LABELS,
 } from "../../constants/labels";
 import { usePolicyEndorsement } from "../../hooks/use-policy-endorsement";
+import { PolicyEndorsementPdfActions } from "../policy-endorsement-document";
 import type { EndorsementAction } from "./get-available-endorsement-actions";
 import { InsurerResponseForm } from "./insurer-response-form";
 import { NotClosedReasonForm } from "./not-closed-reason-form";
@@ -240,13 +241,14 @@ export function PolicyEndorsementDetailDrawer() {
             </div>
 
             <SheetFooter className="flex-row items-center justify-between border-t border-border bg-card">
-              <div>
+              <div className="flex items-center gap-2">
                 {endorsement && (
                   <PolicyEndorsementStatusActions
                     endorsement={endorsement}
                     onRequireForm={setSubView}
                   />
                 )}
+                {endorsement && <PolicyEndorsementPdfActions endorsement={endorsement} />}
               </div>
               <Button variant="outline" onClick={handleClose}>
                 Fechar

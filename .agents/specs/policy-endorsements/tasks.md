@@ -60,10 +60,10 @@
   - [x] 6.2 Criar `pages/policies/[policyId]/endorsements/[endorsementId]/` como rota filha `/policies/:policyId/endorsements/:endorsementId`
     - _Requirements: 2.1, 3.1, 4.1_
 
-- [ ] 7. PDF do endosso
-  - [ ] 7.1 Criar `PolicyEndorsementDocument` (`@react-pdf/renderer`) — número da apólice, tipo, data de efetivação, motivo, ajuste de prêmio, resumo antes/depois
+- [x] 7. PDF do endosso
+  - [x] 7.1 Criar `PolicyEndorsementDocument` (`@react-pdf/renderer`) — número da apólice, tipo, data de efetivação, motivo, ajuste de prêmio, resumo antes/depois
     - _Requirements: 11.1_
-  - [ ] 7.2 Botão "Baixar PDF" no detalhe do endosso, visível só quando `status = 'effected'`
+  - [x] 7.2 Botão "Baixar PDF" no detalhe do endosso, visível só quando `status = 'effected'`
     - _Requirements: 11.2, 11.3_
 
 - [ ] 8. Testes

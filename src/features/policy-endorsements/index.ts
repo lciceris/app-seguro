@@ -9,3 +9,4 @@ export * from "./constants/labels";
 export * from "./components/create-policy-endorsement-drawer";
 export * from "./validations/create-policy-endorsement-schema";
 export * from "./components/policy-endorsement-detail-drawer";
+export * from "./components/policy-endorsement-document";
