@@ -46,12 +46,12 @@
   - [x] 4.3 Botão "Abrir endosso" na seção — visível só quando a versão vista é `active` e o usuário tem permissão
     - _Requirements: 1.2, 1.3_
 
-- [ ] 5. Criar endosso
-  - [ ] 5.1 Criar `features/policy-endorsements/validations/create-policy-endorsement-schema.ts` — schema condicional por tipo (zod discriminated union ou validação manual por tipo selecionado)
+- [x] 5. Criar endosso
+  - [x] 5.1 Criar `features/policy-endorsements/validations/create-policy-endorsement-schema.ts` — schema condicional por tipo (zod discriminated union ou validação manual por tipo selecionado)
     - _Requirements: 5.1, 6.1, 7.1, 8.1, 9.1, 10.1_
-  - [ ] 5.2 Criar `features/policy-endorsements/components/create-policy-endorsement-drawer/` — Select de tipo + campos condicionais (veículo do cliente pra inclusão, veículo já coberto pra exclusão/cobertura, data pra prorrogação, campos genéricos pra correção, motivo pra correção/cancelamento)
+  - [x] 5.2 Criar `features/policy-endorsements/components/create-policy-endorsement-drawer/` — Select de tipo + campos condicionais (veículo do cliente pra inclusão, veículo já coberto pra exclusão/cobertura, data pra prorrogação, campos genéricos pra correção, motivo pra correção/cancelamento)
     - _Requirements: 1.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1_
-  - [ ] 5.3 Criar `pages/policies/[policyId]/endorsements/add/` como rota filha `/policies/:policyId/endorsements/add`
+  - [x] 5.3 Criar `pages/policies/[policyId]/endorsements/add/` como rota filha `/policies/:policyId/endorsements/add`
     - _Requirements: 1.1_
 
 - [ ] 6. Detalhe e ações de status do endosso

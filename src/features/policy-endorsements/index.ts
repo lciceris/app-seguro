@@ -6,3 +6,5 @@ export * from "./hooks/use-advance-policy-endorsement-status";
 export * from "./hooks/use-current-policy-version";
 export * from "./types/policy-endorsement";
 export * from "./constants/labels";
+export * from "./components/create-policy-endorsement-drawer";
+export * from "./validations/create-policy-endorsement-schema";

@@ -34,6 +34,7 @@ import { EditQuotationPage } from "@/pages/quotations/[quotationId]/edit/edit-qu
 import { PoliciesPage } from "@/pages/policies/policies-page";
 import { PolicyDetailPage } from "@/pages/policies/[policyId]/policy-detail-page";
 import { EditPolicyPage } from "@/pages/policies/[policyId]/edit/edit-policy-page";
+import { AddPolicyEndorsementPage } from "@/pages/policies/[policyId]/endorsements/add/add-policy-endorsement-page";
 
 export function AppRouter() {
   return (
@@ -192,6 +193,16 @@ export function AppRouter() {
             }
           >
             <Route path=":policyId/edit" element={<EditPolicyPage />} />
+          </Route>
+
+          <Route
+            element={
+              <ProtectedRoute
+                allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+              />
+            }
+          >
+            <Route path=":policyId/endorsements/add" element={<AddPolicyEndorsementPage />} />
           </Route>
         </Route>
       </Route>
