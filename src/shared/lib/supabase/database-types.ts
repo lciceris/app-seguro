@@ -333,8 +333,10 @@ export type Database = {
           insurer_id: string
           policy_number: string | null
           premium_amount: number | null
+          previous_version_id: string | null
           quotation_id: string
           renewed_from_policy_id: string | null
+          root_policy_id: string | null
           status: Database["public"]["Enums"]["policy_status"]
           total_fleet_value: number | null
           updated_at: string
@@ -349,8 +351,10 @@ export type Database = {
           insurer_id: string
           policy_number?: string | null
           premium_amount?: number | null
+          previous_version_id?: string | null
           quotation_id: string
           renewed_from_policy_id?: string | null
+          root_policy_id?: string | null
           status?: Database["public"]["Enums"]["policy_status"]
           total_fleet_value?: number | null
           updated_at?: string
@@ -365,8 +369,10 @@ export type Database = {
           insurer_id?: string
           policy_number?: string | null
           premium_amount?: number | null
+          previous_version_id?: string | null
           quotation_id?: string
           renewed_from_policy_id?: string | null
+          root_policy_id?: string | null
           status?: Database["public"]["Enums"]["policy_status"]
           total_fleet_value?: number | null
           updated_at?: string
@@ -394,6 +400,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "policies_previous_version_id_fkey"
+            columns: ["previous_version_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "policies_quotation_id_fkey"
             columns: ["quotation_id"]
             isOneToOne: true
@@ -403,6 +416,13 @@ export type Database = {
           {
             foreignKeyName: "policies_renewed_from_policy_id_fkey"
             columns: ["renewed_from_policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policies_root_policy_id_fkey"
+            columns: ["root_policy_id"]
             isOneToOne: false
             referencedRelation: "policies"
             referencedColumns: ["id"]
@@ -440,6 +460,306 @@ export type Database = {
             columns: ["policy_id"]
             isOneToOne: false
             referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policy_endorsements: {
+        Row: {
+          app_death: number | null
+          app_disability: number | null
+          armoring_value: number | null
+          assistance: string | null
+          bodywork_type: string | null
+          bodywork_value: number | null
+          bonus: number | null
+          brokerage_id: string
+          casco_percentage: number | null
+          casco_value: number | null
+          claims_count: number | null
+          client_responded_at: string | null
+          client_responded_by: string | null
+          client_response_notes: string | null
+          coverage_type: Database["public"]["Enums"]["coverage_type"] | null
+          created_at: string
+          description: string | null
+          effected_at: string | null
+          effected_by: string | null
+          endorsement_type: Database["public"]["Enums"]["policy_endorsement_type"]
+          equipment_type: string | null
+          equipment_value: number | null
+          franchise_type: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          id: string
+          insurer_response_notes: string | null
+          new_coverage_end: string | null
+          new_coverage_start: string | null
+          new_policy_id: string | null
+          new_policy_number: string | null
+          new_premium_amount: number | null
+          new_total_fleet_value: number | null
+          not_closed_reason: string | null
+          policy_id: string
+          premium_adjustment: number | null
+          rcf_dc: number | null
+          rcf_dm: number | null
+          rcf_dmo: number | null
+          reserve_car: string | null
+          responded_at: string | null
+          responded_by: string | null
+          seller_id: string | null
+          status: Database["public"]["Enums"]["policy_endorsement_status"]
+          updated_at: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          app_death?: number | null
+          app_disability?: number | null
+          armoring_value?: number | null
+          assistance?: string | null
+          bodywork_type?: string | null
+          bodywork_value?: number | null
+          bonus?: number | null
+          brokerage_id: string
+          casco_percentage?: number | null
+          casco_value?: number | null
+          claims_count?: number | null
+          client_responded_at?: string | null
+          client_responded_by?: string | null
+          client_response_notes?: string | null
+          coverage_type?: Database["public"]["Enums"]["coverage_type"] | null
+          created_at?: string
+          description?: string | null
+          effected_at?: string | null
+          effected_by?: string | null
+          endorsement_type: Database["public"]["Enums"]["policy_endorsement_type"]
+          equipment_type?: string | null
+          equipment_value?: number | null
+          franchise_type?: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage?:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          id?: string
+          insurer_response_notes?: string | null
+          new_coverage_end?: string | null
+          new_coverage_start?: string | null
+          new_policy_id?: string | null
+          new_policy_number?: string | null
+          new_premium_amount?: number | null
+          new_total_fleet_value?: number | null
+          not_closed_reason?: string | null
+          policy_id: string
+          premium_adjustment?: number | null
+          rcf_dc?: number | null
+          rcf_dm?: number | null
+          rcf_dmo?: number | null
+          reserve_car?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          seller_id?: string | null
+          status?: Database["public"]["Enums"]["policy_endorsement_status"]
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          app_death?: number | null
+          app_disability?: number | null
+          armoring_value?: number | null
+          assistance?: string | null
+          bodywork_type?: string | null
+          bodywork_value?: number | null
+          bonus?: number | null
+          brokerage_id?: string
+          casco_percentage?: number | null
+          casco_value?: number | null
+          claims_count?: number | null
+          client_responded_at?: string | null
+          client_responded_by?: string | null
+          client_response_notes?: string | null
+          coverage_type?: Database["public"]["Enums"]["coverage_type"] | null
+          created_at?: string
+          description?: string | null
+          effected_at?: string | null
+          effected_by?: string | null
+          endorsement_type?: Database["public"]["Enums"]["policy_endorsement_type"]
+          equipment_type?: string | null
+          equipment_value?: number | null
+          franchise_type?: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage?:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          id?: string
+          insurer_response_notes?: string | null
+          new_coverage_end?: string | null
+          new_coverage_start?: string | null
+          new_policy_id?: string | null
+          new_policy_number?: string | null
+          new_premium_amount?: number | null
+          new_total_fleet_value?: number | null
+          not_closed_reason?: string | null
+          policy_id?: string
+          premium_adjustment?: number | null
+          rcf_dc?: number | null
+          rcf_dm?: number | null
+          rcf_dmo?: number | null
+          reserve_car?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          seller_id?: string | null
+          status?: Database["public"]["Enums"]["policy_endorsement_status"]
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policy_endorsements_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_client_responded_by_fkey"
+            columns: ["client_responded_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_effected_by_fkey"
+            columns: ["effected_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_new_policy_id_fkey"
+            columns: ["new_policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_responded_by_fkey"
+            columns: ["responded_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_endorsements_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      policy_vehicles: {
+        Row: {
+          app_death: number | null
+          app_disability: number | null
+          armoring_value: number | null
+          assistance: string | null
+          bodywork_type: string | null
+          bodywork_value: number | null
+          bonus: number | null
+          casco_percentage: number | null
+          casco_value: number | null
+          claims_count: number | null
+          coverage_type: Database["public"]["Enums"]["coverage_type"] | null
+          equipment_type: string | null
+          equipment_value: number | null
+          franchise_type: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          policy_id: string
+          rcf_dc: number | null
+          rcf_dm: number | null
+          rcf_dmo: number | null
+          reserve_car: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          app_death?: number | null
+          app_disability?: number | null
+          armoring_value?: number | null
+          assistance?: string | null
+          bodywork_type?: string | null
+          bodywork_value?: number | null
+          bonus?: number | null
+          casco_percentage?: number | null
+          casco_value?: number | null
+          claims_count?: number | null
+          coverage_type?: Database["public"]["Enums"]["coverage_type"] | null
+          equipment_type?: string | null
+          equipment_value?: number | null
+          franchise_type?: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage?:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          policy_id: string
+          rcf_dc?: number | null
+          rcf_dm?: number | null
+          rcf_dmo?: number | null
+          reserve_car?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          app_death?: number | null
+          app_disability?: number | null
+          armoring_value?: number | null
+          assistance?: string | null
+          bodywork_type?: string | null
+          bodywork_value?: number | null
+          bonus?: number | null
+          casco_percentage?: number | null
+          casco_value?: number | null
+          claims_count?: number | null
+          coverage_type?: Database["public"]["Enums"]["coverage_type"] | null
+          equipment_type?: string | null
+          equipment_value?: number | null
+          franchise_type?: Database["public"]["Enums"]["franchise_type"] | null
+          glass_coverage?:
+            | Database["public"]["Enums"]["glass_coverage_level"]
+            | null
+          policy_id?: string
+          rcf_dc?: number | null
+          rcf_dm?: number | null
+          rcf_dmo?: number | null
+          reserve_car?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policy_vehicles_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "policy_vehicles_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
             referencedColumns: ["id"]
           },
         ]
@@ -1121,7 +1441,20 @@ export type Database = {
         | "accepted"
         | "declined"
         | "waiting_info"
-      policy_status: "active" | "cancelled" | "renewed"
+      policy_endorsement_status:
+        | "waiting"
+        | "presented"
+        | "client_accepted"
+        | "effected"
+        | "not_closed"
+      policy_endorsement_type:
+        | "vehicle_inclusion"
+        | "vehicle_exclusion"
+        | "coverage_change"
+        | "extension"
+        | "administrative_correction"
+        | "cancellation"
+      policy_status: "active" | "cancelled" | "renewed" | "superseded"
       quotation_event_type: "comment" | "system"
       quotation_status:
         | "waiting"
@@ -1307,7 +1640,22 @@ export const Constants = {
         "declined",
         "waiting_info",
       ],
-      policy_status: ["active", "cancelled", "renewed"],
+      policy_endorsement_status: [
+        "waiting",
+        "presented",
+        "client_accepted",
+        "effected",
+        "not_closed",
+      ],
+      policy_endorsement_type: [
+        "vehicle_inclusion",
+        "vehicle_exclusion",
+        "coverage_change",
+        "extension",
+        "administrative_correction",
+        "cancellation",
+      ],
+      policy_status: ["active", "cancelled", "renewed", "superseded"],
       quotation_event_type: ["comment", "system"],
       quotation_status: [
         "waiting",

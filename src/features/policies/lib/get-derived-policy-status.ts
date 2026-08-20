@@ -2,7 +2,8 @@ import type { Policy } from "../types/policy";
 
 const EXPIRING_SOON_THRESHOLD_DAYS = 30;
 
-export type DerivedPolicyStatus = "active" | "expiring_soon" | "expired" | "cancelled" | "renewed";
+export type DerivedPolicyStatus =
+  "active" | "expiring_soon" | "expired" | "cancelled" | "renewed" | "superseded";
 
 // Status persistido (`cancelled`/`renewed`) sempre vence — uma apólice
 // substituída ou cancelada não "vence" por data. `coverage_end` ausente

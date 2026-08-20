@@ -1,27 +1,27 @@
 # Implementation Plan
 
-- [ ] 1. Schema e RLS base
-  - [ ] 1.1 Migration: enums `policy_endorsement_type`, `policy_endorsement_status`
+- [x] 1. Schema e RLS base
+  - [x] 1.1 Migration: enums `policy_endorsement_type`, `policy_endorsement_status`
     - _Requirements: infra_
-  - [ ] 1.2 Migration: `ALTER TYPE policy_status ADD VALUE 'superseded'`
+  - [x] 1.2 Migration: `ALTER TYPE policy_status ADD VALUE 'superseded'`
     - _Requirements: infra_
-  - [ ] 1.3 Migration: `ALTER TABLE policies` — `previous_version_id`, `root_policy_id`
+  - [x] 1.3 Migration: `ALTER TABLE policies` — `previous_version_id`, `root_policy_id`
     - _Requirements: 4.2_
-  - [ ] 1.4 Migration: tabela `policy_vehicles` (mesmos ~19 campos de `quotation_vehicles`, `on delete restrict` em `vehicle_id`)
+  - [x] 1.4 Migration: tabela `policy_vehicles` (mesmos ~19 campos de `quotation_vehicles`, `on delete restrict` em `vehicle_id`)
     - _Requirements: 12.1_
-  - [ ] 1.5 Migration: `CREATE OR REPLACE` em `create_policy_from_effected_quotation` (spec `policies`) — copia `quotation_vehicles` → `policy_vehicles` na primeira versão
+  - [x] 1.5 Migration: `CREATE OR REPLACE` em `create_policy_from_effected_quotation` (spec `policies`) — copia `quotation_vehicles` → `policy_vehicles` na primeira versão
     - _Requirements: 12.1_
-  - [ ] 1.6 Migration: tabela `policy_endorsements` (tipo, status, campos por tipo, negociação, resposta do cliente, efetivação)
+  - [x] 1.6 Migration: tabela `policy_endorsements` (tipo, status, campos por tipo, negociação, resposta do cliente, efetivação)
     - _Requirements: 1.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1_
-  - [ ] 1.7 Migration: trigger `validate_policy_endorsement_fields` (`BEFORE INSERT`) — campos obrigatórios por tipo, veículo do cliente certo, veículo já coberto, apólice-alvo vigente
+  - [x] 1.7 Migration: trigger `validate_policy_endorsement_fields` (`BEFORE INSERT`) — campos obrigatórios por tipo, veículo do cliente certo, veículo já coberto, apólice-alvo vigente
     - _Requirements: 1.2, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1_
-  - [ ] 1.8 Migration: trigger `enforce_policy_endorsement_status_transition` (`BEFORE UPDATE OF status`) — máquina de estados completa por role
+  - [x] 1.8 Migration: trigger `enforce_policy_endorsement_status_transition` (`BEFORE UPDATE OF status`) — máquina de estados completa por role
     - _Requirements: 1.1, 2.1, 2.2, 3.1, 3.2, 4.1, 4.4, 4.5_
-  - [ ] 1.9 Migration: trigger `apply_policy_endorsement_effect` (`AFTER UPDATE OF status`) — nova versão + `policy_vehicles` + `superseded`, ou `cancelled` direto
+  - [x] 1.9 Migration: trigger `apply_policy_endorsement_effect` (`AFTER UPDATE OF status`) — nova versão + `policy_vehicles` + `superseded`, ou `cancelled` direto
     - _Requirements: 4.2, 4.3, 5.2, 6.2, 7.2, 8.2, 9.2, 10.2, 10.3_
-  - [ ] 1.10 Migration: RLS de `policy_vehicles` (select amplo via `is_my_policy_client`, sem insert/update/delete pra usuário)
+  - [x] 1.10 Migration: RLS de `policy_vehicles` (select amplo via `is_my_policy_client`, sem insert/update/delete pra usuário)
     - _Requirements: 12.1_
-  - [ ] 1.11 Migration: RLS de `policy_endorsements` (select amplo; insert por `seller` dono ou gestão; update por `analyst`/gestão/`seller` dono — o trigger valida qual transição cada um pode fazer; sem delete)
+  - [x] 1.11 Migration: RLS de `policy_endorsements` (select amplo; insert por `seller` dono ou gestão; update por `analyst`/gestão/`seller` dono — o trigger valida qual transição cada um pode fazer; sem delete)
     - _Requirements: 1.3, 2.1, 3.1, 4.4_
 
 - [ ] 2. Camada de dados do frontend

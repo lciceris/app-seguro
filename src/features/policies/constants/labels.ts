@@ -6,6 +6,7 @@ export const POLICY_STATUS_LABELS: Record<Database["public"]["Enums"]["policy_st
   active: "Ativa",
   cancelled: "Cancelada",
   renewed: "Renovada",
+  superseded: "Substituída por endosso",
 };
 
 // Status derivado — o que aparece de fato na listagem/detalhe (sobrepõe o
@@ -16,6 +17,7 @@ export const DERIVED_POLICY_STATUS_LABELS: Record<DerivedPolicyStatus, string> =
   expired: "Vencida",
   cancelled: "Cancelada",
   renewed: "Renovada",
+  superseded: "Substituída por endosso",
 };
 
 export const DERIVED_POLICY_STATUS_BADGE_CLASSES: Record<DerivedPolicyStatus, string> = {
@@ -24,4 +26,5 @@ export const DERIVED_POLICY_STATUS_BADGE_CLASSES: Record<DerivedPolicyStatus, st
   expired: "border-transparent bg-red-100 text-red-700",
   cancelled: "border-transparent bg-slate-100 text-slate-500",
   renewed: "border-transparent bg-violet-100 text-violet-700",
+  superseded: "border-transparent bg-slate-100 text-slate-600",
 };
