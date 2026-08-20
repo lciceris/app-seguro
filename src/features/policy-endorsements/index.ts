@@ -3,5 +3,6 @@ export * from "./hooks/use-policy-endorsements-by-chain";
 export * from "./hooks/use-policy-endorsement";
 export * from "./hooks/use-create-policy-endorsement";
 export * from "./hooks/use-advance-policy-endorsement-status";
+export * from "./hooks/use-current-policy-version";
 export * from "./types/policy-endorsement";
 export * from "./constants/labels";

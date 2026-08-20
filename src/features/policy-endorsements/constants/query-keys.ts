@@ -7,6 +7,8 @@ export const policyEndorsementKeys = {
   chain: (policyId: string) => [...policyEndorsementKeys.chains(), policyId] as const,
   details: () => [...policyEndorsementKeys.all, "detail"] as const,
   detail: (id: string) => [...policyEndorsementKeys.details(), id] as const,
+  currentVersion: (policyId: string) =>
+    [...policyEndorsementKeys.all, "current-version", policyId] as const,
 };
 
 export const policyVehicleKeys = {

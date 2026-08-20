@@ -38,12 +38,12 @@
   - [x] 3.1 Adicionar seção/aba "Veículos" no `policy-detail-drawer` (spec `policies`) — lista `policy_vehicles` da versão sendo vista, view-only, resumo de cobertura por veículo
     - _Requirements: 12.1_
 
-- [ ] 4. Seção de endossos no detalhe da apólice
-  - [ ] 4.1 Adicionar seção "Endossos" no `policy-detail-drawer` — lista os da cadeia inteira (`root_policy_id`), badge de status, link pro detalhe de cada um
+- [x] 4. Seção de endossos no detalhe da apólice
+  - [x] 4.1 Adicionar seção "Endossos" no `policy-detail-drawer` — lista os da cadeia inteira (`root_policy_id`), badge de status, link pro detalhe de cada um
     - _Requirements: 12.2, 12.5_
-  - [ ] 4.2 Indicação "essa não é a versão mais recente" + link pra versão atual, quando aplicável
+  - [x] 4.2 Indicação "essa não é a versão mais recente" + link pra versão atual, quando aplicável
     - _Requirements: 12.3_
-  - [ ] 4.3 Botão "Abrir endosso" na seção — visível só quando a versão vista é `active` e o usuário tem permissão
+  - [x] 4.3 Botão "Abrir endosso" na seção — visível só quando a versão vista é `active` e o usuário tem permissão
     - _Requirements: 1.2, 1.3_
 
 - [ ] 5. Criar endosso

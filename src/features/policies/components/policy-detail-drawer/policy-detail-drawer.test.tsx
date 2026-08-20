@@ -57,6 +57,11 @@ vi.mock("./policy-vehicles-section", () => ({
   PolicyVehiclesSection: () => null,
 }));
 
+// Isola do componente de endossos (tem seus próprios hooks, testado à parte).
+vi.mock("./policy-endorsements-section", () => ({
+  PolicyEndorsementsSection: () => null,
+}));
+
 function renderDrawer() {
   return renderWithProviders(
     <Routes>

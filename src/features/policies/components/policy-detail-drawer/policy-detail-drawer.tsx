@@ -21,6 +21,7 @@ import { useRenewedByPolicy } from "../../hooks/use-renewed-by-policy";
 import { useRenewedFromPolicy } from "../../hooks/use-renewed-from-policy";
 import { getDerivedPolicyStatus } from "../../lib/get-derived-policy-status";
 import { PolicyAttachmentsSection } from "./policy-attachments-section";
+import { PolicyEndorsementsSection } from "./policy-endorsements-section";
 import { PolicyVehiclesSection } from "./policy-vehicles-section";
 
 const MANAGE_ROLES = new Set(["supervisor", "brokerage_admin", "platform_admin"]);
@@ -165,6 +166,8 @@ export function PolicyDetailDrawer() {
               </div>
 
               <PolicyVehiclesSection policyId={policy.id} />
+
+              <PolicyEndorsementsSection policy={policy} />
 
               <PolicyAttachmentsSection policyId={policy.id} canManage={canManage} />
             </>
