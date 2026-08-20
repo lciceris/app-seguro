@@ -78,14 +78,23 @@
 
   Verificado com `seller` real pelo navegador via Playwright (script efêmero em `e2e/`, rodado e apagado depois): criada uma apólice existente pro cliente da cotação, o Select "Apólice anterior" no QAR lista corretamente `AP-QARPOL-0001`; selecionar e salvar grava `renewed_policy_id` certo em `quotation_qar` (confirmado direto no banco); reload da página mantém a seleção pré-preenchida. `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (45/103) e `npx playwright test` completo (16 testes) sem erros.
 
-- [ ] 7. Testes
-  - [ ] 7.1 Testes de componente: `policy-detail-drawer`, `edit-policy-drawer`
+- [x] 7. Testes
+  - [x] 7.1 Testes de componente: `policy-detail-drawer`, `edit-policy-drawer`
     - _Requirements: 2.1, 3.1, 5.6_
-  - [ ] 7.2 Testes de hook: `useUpdatePolicy`
+  - [x] 7.2 Testes de hook: `useUpdatePolicy`
     - _Requirements: 2.1_
-  - [ ] 7.3 Teste E2E: fluxo completo — cotação efetivada gera apólice automaticamente com os dados certos (seguradora vencedora, prêmio, soma de valores de veículo, vigência herdada); `supervisor` completa `policy_number` e anexa o documento
+  - [x] 7.3 Teste E2E: fluxo completo — cotação efetivada gera apólice automaticamente com os dados certos (seguradora vencedora, prêmio, soma de valores de veículo, vigência herdada); `supervisor` completa `policy_number` e anexa o documento
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 3.1_
-  - [ ] 7.4 Teste E2E: renovação — QAR vinculado a uma apólice existente; ao efetivar a nova cotação, a apólice antiga vira `renewed` e a nova aponta `renewed_from_policy_id` pra ela
+  - [x] 7.4 Teste E2E: renovação — QAR vinculado a uma apólice existente; ao efetivar a nova cotação, a apólice antiga vira `renewed` e a nova aponta `renewed_from_policy_id` pra ela
     - _Requirements: 4.1, 4.2, 4.3_
-  - [ ] 7.5 Teste E2E: isolamento — `seller` sem vínculo com o cliente não vê a apólice; `seller` não edita nem anexa documento
+  - [x] 7.5 Teste E2E: isolamento — `seller` sem vínculo com o cliente não vê a apólice; `seller` não edita nem anexa documento
     - _Requirements: 2.2, 5.2_
+
+  3 arquivos de teste de componente/hook (`policy-detail-drawer`, `edit-policy-drawer`, `use-update-policy`) e 3 specs E2E permanentes (`policies-flow.spec.ts`, `policies-renewal.spec.ts`, `policies-isolation.spec.ts`), seguindo o padrão já estabelecido nas specs anteriores.
+
+  **Duas descobertas reais durante a escrita dos testes (nenhuma delas bug de aplicação — as duas eram do próprio teste):**
+
+  1. **Accessible name de heading composto varia com quebra de linha.** `page.getByRole("heading", { name: "..." })` do Playwright computa o nome acessível concatenando os nós de texto — SEM espaço quando o texto cabe numa linha só (`"AP-2026-0001Vigente"`, confirmado no teste de componente isolado), mas COM espaço quando o texto é longo o bastante pra quebrar linha dentro do container (`"Pendente de emissão Vigente"`, ou até `"AP-PFLOW-0001 Vigente"` dependendo da largura). Isso só apareceu no fluxo E2E completo (números de apólice/textos maiores que no teste de componente) e levou a uma sessão de debug razoável — cheguei a suspeitar de race condition de dados, cache do PostgREST, replicação stale, até finalmente capturar o HTML real do dialog (via `[role="dialog"]` innerHTML) e ver a quebra de linha genuína no texto. Corrigido usando regex tolerante a espaço (`/texto\s*Vigente/`) em vez de string fixa nos testes E2E que passam por esse heading.
+  2. **Leitura logo após o trigger pode ver dado defasado uma vez em várias execuções** — observado uma única vez, numa leitura via `service_role` da `policies` recém-criada pelo trigger, imediatamente após o `UPDATE` de status confirmado com sucesso pela UI. Não reproduziu em ~8 execuções subsequentes. Adicionado um retry curto (até 5 tentativas, 500ms de intervalo) na leitura pós-efetivação em `policies-renewal.spec.ts` como proteção — não é uma correção de bug de aplicação (o trigger roda de forma síncrona e transacional; o mais provável é uma característica de leitura eventual consistency do Supabase hospedado), mas deixa o teste resiliente a esse tipo de blip raro.
+
+  Verificado com `seller`, `analyst` e `supervisor` reais pelo navegador via Playwright: fluxo completo de `waiting` até `effected` gerando a apólice automaticamente com todos os campos certos (seguradora vencedora, prêmio, soma de `casco_value`, vigência herdada), `supervisor` completando `policy_number` e anexando o documento oficial; cotação de renovação vinculada no QAR gerando a nova apólice com `renewed_from_policy_id` correto e marcando a antiga como `renewed`, refletido nos dois sentidos no drawer de detalhe; `seller` sem vínculo não vê a apólice (nem via listagem, nem via leitura direta) e `seller` dono do cliente vê mas não edita nem anexa documento (UI e RLS). `npx tsc --noEmit`, `npx eslint`, `npx vitest run` (48 arquivos/109 testes) e `npx playwright test` completo (20 testes, `--workers=2`) sem erros — com 5 workers em paralelo local um teste pré-existente e não relacionado (`vehicles-create`) deu timeout de contenção de recursos da máquina, não reproduziu isolado nem com menos paralelismo.
