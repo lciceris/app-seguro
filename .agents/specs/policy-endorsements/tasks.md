@@ -24,14 +24,14 @@
   - [x] 1.11 Migration: RLS de `policy_endorsements` (select amplo; insert por `seller` dono ou gestão; update por `analyst`/gestão/`seller` dono — o trigger valida qual transição cada um pode fazer; sem delete)
     - _Requirements: 1.3, 2.1, 3.1, 4.4_
 
-- [ ] 2. Camada de dados do frontend
-  - [ ] 2.1 Criar `features/policy-endorsements/types/` + `constants/query-keys.ts` + `constants/labels.ts` (tipo e status do endosso, em português)
+- [x] 2. Camada de dados do frontend
+  - [x] 2.1 Criar `features/policy-endorsements/types/` + `constants/query-keys.ts` + `constants/labels.ts` (tipo e status do endosso, em português)
     - _Requirements: infra_
-  - [ ] 2.2 Criar `features/policy-endorsements/api/` — `list-policy-vehicles` (veículos de uma versão)
+  - [x] 2.2 Criar `features/policy-endorsements/api/` — `list-policy-vehicles` (veículos de uma versão)
     - _Requirements: 12.1_
-  - [ ] 2.3 Criar `features/policy-endorsements/api/` — `list-policy-endorsements-by-chain` (toda a cadeia via `root_policy_id`), `get-policy-endorsement`, `create-policy-endorsement`, `advance-policy-endorsement-status`
+  - [x] 2.3 Criar `features/policy-endorsements/api/` — `list-policy-endorsements-by-chain` (toda a cadeia via `root_policy_id`), `get-policy-endorsement`, `create-policy-endorsement`, `advance-policy-endorsement-status`
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 12.2, 12.5_
-  - [ ] 2.4 Criar `features/policy-endorsements/hooks/` correspondentes
+  - [x] 2.4 Criar `features/policy-endorsements/hooks/` correspondentes
     - _Requirements: 1.1, 12.1, 12.2_
 
 - [ ] 3. Aba Veículos no detalhe da apólice
