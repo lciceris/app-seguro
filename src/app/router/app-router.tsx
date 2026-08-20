@@ -35,6 +35,7 @@ import { PoliciesPage } from "@/pages/policies/policies-page";
 import { PolicyDetailPage } from "@/pages/policies/[policyId]/policy-detail-page";
 import { EditPolicyPage } from "@/pages/policies/[policyId]/edit/edit-policy-page";
 import { AddPolicyEndorsementPage } from "@/pages/policies/[policyId]/endorsements/add/add-policy-endorsement-page";
+import { PolicyEndorsementDetailPage } from "@/pages/policies/[policyId]/endorsements/[endorsementId]/policy-endorsement-detail-page";
 
 export function AppRouter() {
   return (
@@ -186,6 +187,10 @@ export function AppRouter() {
       >
         <Route path="/policies" element={<PoliciesPage />}>
           <Route path=":policyId" element={<PolicyDetailPage />} />
+          <Route
+            path=":policyId/endorsements/:endorsementId"
+            element={<PolicyEndorsementDetailPage />}
+          />
 
           <Route
             element={

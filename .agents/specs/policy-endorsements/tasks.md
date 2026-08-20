@@ -54,10 +54,10 @@
   - [x] 5.3 Criar `pages/policies/[policyId]/endorsements/add/` como rota filha `/policies/:policyId/endorsements/add`
     - _Requirements: 1.1_
 
-- [ ] 6. Detalhe e ações de status do endosso
-  - [ ] 6.1 Criar `features/policy-endorsements/components/policy-endorsement-detail-drawer/` — dados preenchidos, ações de transição visíveis conforme status atual e role (registrar retorno da seguradora, registrar resposta do cliente, efetivar, não fechado com motivo)
+- [x] 6. Detalhe e ações de status do endosso
+  - [x] 6.1 Criar `features/policy-endorsements/components/policy-endorsement-detail-drawer/` — dados preenchidos, ações de transição visíveis conforme status atual e role (registrar retorno da seguradora, registrar resposta do cliente, efetivar, não fechado com motivo)
     - _Requirements: 2.1, 2.2, 3.1, 3.2, 4.1, 4.4, 4.5_
-  - [ ] 6.2 Criar `pages/policies/[policyId]/endorsements/[endorsementId]/` como rota filha `/policies/:policyId/endorsements/:endorsementId`
+  - [x] 6.2 Criar `pages/policies/[policyId]/endorsements/[endorsementId]/` como rota filha `/policies/:policyId/endorsements/:endorsementId`
     - _Requirements: 2.1, 3.1, 4.1_
 
 - [ ] 7. PDF do endosso
