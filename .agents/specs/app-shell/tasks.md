@@ -24,10 +24,10 @@
   - [x] 3.2 Envolver a árvore de rotas autenticadas com `<ProtectedRoute><AppShell>...</AppShell></ProtectedRoute>`, sem alterar nenhuma rota internamente
     - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 4. Testes
-  - [ ] 4.1 Teste de componente: `app-sidebar` — perfis diferentes veem grupos/itens diferentes (ex. `viewer` não vê "Veículos"; só `platform_admin` vê o grupo "Plataforma"); item ativo reflete a rota atual
+- [x] 4. Testes
+  - [x] 4.1 Teste de componente: `app-sidebar` — perfis diferentes veem grupos/itens diferentes (ex. `viewer` não vê "Veículos"; só `platform_admin` vê o grupo "Plataforma"); item ativo reflete a rota atual
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
-  - [ ] 4.2 Teste de componente: `user-menu` — mostra nome/e-mail/perfil; "Sair" aciona `useLogout`; "Meu perfil" está desabilitado
+  - [x] 4.2 Teste de componente: `user-menu` — mostra nome/e-mail/perfil; "Sair" aciona `useLogout`; "Meu perfil" está desabilitado
     - _Requirements: 3.1, 4.1, 4.2, 4.3_
-  - [ ] 4.3 Teste E2E leve: sidebar mostra os itens certos pra um perfil (`seller`) e navegar por ela troca de página corretamente
+  - [x] 4.3 Teste E2E leve: sidebar mostra os itens certos pra um perfil (`seller`) e navegar por ela troca de página corretamente
     - _Requirements: 1.1, 2.1, 2.2, 2.3_

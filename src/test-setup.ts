@@ -25,3 +25,19 @@ class ResizeObserverStub {
   disconnect = vi.fn();
 }
 globalThis.ResizeObserver = ResizeObserverStub;
+
+// jsdom também não implementa matchMedia — usado pelo hook useIsMobile, por sua
+// vez usado pelo SidebarProvider (app-shell) pra decidir entre sidebar fixa e
+// off-canvas.
+window.matchMedia =
+  window.matchMedia ||
+  vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
