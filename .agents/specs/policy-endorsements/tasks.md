@@ -66,14 +66,14 @@
   - [x] 7.2 Botão "Baixar PDF" no detalhe do endosso, visível só quando `status = 'effected'`
     - _Requirements: 11.2, 11.3_
 
-- [ ] 8. Testes
-  - [ ] 8.1 Testes de componente: `create-policy-endorsement-drawer`, `policy-endorsement-detail-drawer`
+- [x] 8. Testes
+  - [x] 8.1 Testes de componente: `create-policy-endorsement-drawer`, `policy-endorsement-detail-drawer`
     - _Requirements: 1.1, 2.1, 3.1, 4.1_
-  - [ ] 8.2 Testes de hook: `useCreatePolicyEndorsement`, `useAdvancePolicyEndorsementStatus`
+  - [x] 8.2 Testes de hook: `useCreatePolicyEndorsement`, `useAdvancePolicyEndorsementStatus`
     - _Requirements: 1.1, 4.1_
-  - [ ] 8.3 Teste E2E: fluxo completo de inclusão de veículo — `seller` abre → `analyst` registra retorno da seguradora → `seller` registra aceite do cliente → `supervisor` efetiva → nova versão criada com o veículo incluído, `policy_number` inalterado, versão anterior `superseded`
+  - [x] 8.3 Teste E2E: fluxo completo de inclusão de veículo — `seller` abre → `analyst` registra retorno da seguradora → `seller` registra aceite do cliente → `supervisor` efetiva → nova versão criada com o veículo incluído, `policy_number` inalterado, versão anterior `superseded`
     - _Requirements: 1.1–1.2, 2.1, 3.1, 4.1–4.2, 5.1–5.2_
-  - [ ] 8.4 Teste E2E: cancelamento — fluxo completo até `effected`, versão vigente vira `cancelled` sem nova linha, nenhum novo endosso pode ser aberto nela
+  - [x] 8.4 Teste E2E: cancelamento — fluxo completo até `effected`, versão vigente vira `cancelled` sem nova linha, nenhum novo endosso pode ser aberto nela
     - _Requirements: 10.1–10.3_
-  - [ ] 8.5 Teste E2E: isolamento e permissões — `seller` sem vínculo não vê o endosso; `analyst` não abre endosso nem efetiva; `seller` não efetiva
+  - [x] 8.5 Teste E2E: isolamento e permissões — `seller` sem vínculo não vê o endosso; `analyst` não abre endosso nem efetiva; `seller` não efetiva
     - _Requirements: 1.3, 4.4_
