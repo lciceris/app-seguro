@@ -41,7 +41,7 @@ export function VehicleDetailDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[1000px]">
+      <SheetContent size="lg">
         <SheetHeader>
           <SheetTitle>Detalhe do veículo</SheetTitle>
         </SheetHeader>

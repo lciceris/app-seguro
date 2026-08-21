@@ -141,7 +141,7 @@ export function EditBrokerageDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[720px]">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle>Editar corretora</SheetTitle>
         </SheetHeader>

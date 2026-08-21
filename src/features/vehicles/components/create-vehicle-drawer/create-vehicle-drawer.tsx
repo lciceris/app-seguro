@@ -115,7 +115,7 @@ export function CreateVehicleDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[720px]">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle>Novo veículo</SheetTitle>
         </SheetHeader>

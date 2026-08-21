@@ -34,7 +34,7 @@ export function InsurerDetailDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[1000px]">
+      <SheetContent size="lg">
         <SheetHeader>
           <SheetTitle>Detalhe da seguradora</SheetTitle>
         </SheetHeader>

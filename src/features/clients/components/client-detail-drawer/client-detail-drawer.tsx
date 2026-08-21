@@ -240,7 +240,7 @@ export function ClientDetailDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[1000px]">
+      <SheetContent size="lg">
         <SheetHeader>
           <SheetTitle>Detalhe do cliente</SheetTitle>
         </SheetHeader>

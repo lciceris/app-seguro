@@ -56,7 +56,7 @@ export function QuotationVehicleCoverageDrawer({
 
   return (
     <Sheet open={quotationVehicle !== null} onOpenChange={onOpenChange}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[720px]">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle>Cobertura — {quotationVehicle?.vehicles?.plate ?? "Veículo"}</SheetTitle>
         </SheetHeader>

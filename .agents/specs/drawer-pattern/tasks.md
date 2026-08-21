@@ -6,10 +6,10 @@
   - [x] 1.2 Verificar visualmente em navegador real com um drawer qualquer (antes de migrar os outros 22) — abre de baixo, largura cheia, container centralizado, fechar funciona (overlay/Escape/X)
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2_
 
-- [ ] 2. Migração dos 23 drawers existentes
-  - [ ] 2.1 Migrar os 17 drawers de `size="md"` (720px, sem `className`): `clients/create-client-drawer`, `clients/edit-client-drawer`, `brokerages/edit-brokerage-drawer`, `brokerages/create-brokerage-drawer`, `policy-endorsements/create-policy-endorsement-drawer`, `policy-endorsements/policy-endorsement-detail-drawer`, `policies/edit-policy-drawer`, `users/edit-user-drawer`, `users/invite-user-drawer`, `insurers/create-insurer-drawer`, `insurers/edit-insurer-drawer`, `vehicles/create-vehicle-drawer`, `vehicles/edit-vehicle-drawer`, `quotations/create-quotation-drawer`, `quotations/edit-quotation-drawer`, `quotations/quotation-vehicles-tab/quotation-vehicle-coverage-drawer`, `quotations/quotation-insurers-tab/quotation-insurer-drawer`
+- [x] 2. Migração dos 23 drawers existentes
+  - [x] 2.1 Migrar os 17 drawers de `size="md"` (720px, sem `className`): `clients/create-client-drawer`, `clients/edit-client-drawer`, `brokerages/edit-brokerage-drawer`, `brokerages/create-brokerage-drawer`, `policy-endorsements/create-policy-endorsement-drawer`, `policy-endorsements/policy-endorsement-detail-drawer`, `policies/edit-policy-drawer`, `users/edit-user-drawer`, `users/invite-user-drawer`, `insurers/create-insurer-drawer`, `insurers/edit-insurer-drawer`, `vehicles/create-vehicle-drawer`, `vehicles/edit-vehicle-drawer`, `quotations/create-quotation-drawer`, `quotations/edit-quotation-drawer`, `quotations/quotation-vehicles-tab/quotation-vehicle-coverage-drawer`, `quotations/quotation-insurers-tab/quotation-insurer-drawer`
     - _Requirements: 4.1, 4.2_
-  - [ ] 2.2 Migrar os 6 drawers de `size="lg"` (1000px): `clients/client-detail-drawer`, `brokerages/brokerage-detail-drawer`, `policies/policy-detail-drawer`, `users/user-detail-drawer`, `insurers/insurer-detail-drawer`, `vehicles/vehicle-detail-drawer`
+  - [x] 2.2 Migrar os 6 drawers de `size="lg"` (1000px): `clients/client-detail-drawer`, `brokerages/brokerage-detail-drawer`, `policies/policy-detail-drawer`, `users/user-detail-drawer`, `insurers/insurer-detail-drawer`, `vehicles/vehicle-detail-drawer`
     - _Requirements: 4.1, 4.2_
 
 - [ ] 3. Verificação final

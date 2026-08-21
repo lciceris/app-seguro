@@ -62,7 +62,7 @@ export function PolicyDetailDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[1000px]">
+      <SheetContent size="lg">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             {isLoading ? (

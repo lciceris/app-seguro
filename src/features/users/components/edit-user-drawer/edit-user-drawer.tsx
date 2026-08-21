@@ -143,7 +143,7 @@ export function EditUserDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[720px]">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle>Editar usuário</SheetTitle>
         </SheetHeader>

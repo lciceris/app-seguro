@@ -64,7 +64,7 @@ export function QuotationInsurerDrawer({
 
   return (
     <Sheet open={quotationInsurer !== null} onOpenChange={onOpenChange}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[720px]">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             {quotationInsurer?.insurers?.name ?? "Seguradora"}

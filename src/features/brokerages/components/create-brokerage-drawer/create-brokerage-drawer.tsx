@@ -50,7 +50,7 @@ export function CreateBrokerageDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent className="flex w-full flex-col sm:max-w-[720px]">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle>Nova corretora</SheetTitle>
         </SheetHeader>
