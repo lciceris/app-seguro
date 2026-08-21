@@ -1,9 +1,9 @@
 # Implementation Plan
 
-- [ ] 1. Primitivo `SheetContent`
-  - [ ] 1.1 Implementar em `src/shared/components/ui/sheet.tsx`: default de `side` pra `"bottom"`, prop `size` (`md`/`lg`), container centralizado + botão de fechar só quando `side === "bottom"`, `top-4`/`sm:top-10` + `rounded-t-2xl` + `slide-in/out-from-bottom-full`
+- [x] 1. Primitivo `SheetContent`
+  - [x] 1.1 Implementar em `src/shared/components/ui/sheet.tsx`: default de `side` pra `"bottom"`, prop `size` (`md`/`lg`), container centralizado + botão de fechar só quando `side === "bottom"`, `top-4`/`sm:top-10` + `rounded-t-2xl` + `slide-in/out-from-bottom-full`
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 3.1, 3.2_
-  - [ ] 1.2 Verificar visualmente em navegador real com um drawer qualquer (antes de migrar os outros 22) — abre de baixo, largura cheia, container centralizado, fechar funciona (overlay/Escape/X)
+  - [x] 1.2 Verificar visualmente em navegador real com um drawer qualquer (antes de migrar os outros 22) — abre de baixo, largura cheia, container centralizado, fechar funciona (overlay/Escape/X)
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2_
 
 - [ ] 2. Migração dos 23 drawers existentes
