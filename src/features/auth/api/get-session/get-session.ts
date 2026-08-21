@@ -11,7 +11,7 @@ export async function getSession(): Promise<Usuario | null> {
   const { data, error } = await supabase
     .from("users")
     .select(
-      "id, brokerage_id, role, status, full_name, avatar_url, brokerages(name, primary_color, logo_url, status)",
+      "id, brokerage_id, role, status, full_name, email, avatar_url, brokerages(name, primary_color, logo_url, status)",
     )
     .eq("id", session.user.id)
     .single();
@@ -29,6 +29,7 @@ export async function getSession(): Promise<Usuario | null> {
     role: data.role,
     status: data.status,
     full_name: data.full_name,
+    email: data.email,
     avatar_url: data.avatar_url,
     brokerage_name: data.brokerages?.name ?? null,
     primary_color: data.brokerages?.primary_color ?? null,

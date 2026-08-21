@@ -1,11 +1,11 @@
 # Implementation Plan
 
-- [ ] 1. Fundação
-  - [ ] 1.1 `npx shadcn add sidebar avatar dropdown-menu`
+- [x] 1. Fundação
+  - [x] 1.1 `npx shadcn add sidebar avatar dropdown-menu`
     - _Requirements: infra_
-  - [ ] 1.2 Criar `src/app/layout/nav-items.ts` (`NAV_GROUPS`) — fonte única dos itens de menu por perfil
+  - [x] 1.2 Criar `src/app/layout/nav-items.ts` (`NAV_GROUPS`) — fonte única dos itens de menu por perfil
     - _Requirements: 2.1, 2.2, 2.4_
-  - [ ] 1.3 Adicionar `email` em `getSession`/`Usuario` (spec `auth`, sem migration)
+  - [x] 1.3 Adicionar `email` em `getSession`/`Usuario` (spec `auth`, sem migration)
     - _Requirements: 4.1_
 
 - [ ] 2. Componentes do shell

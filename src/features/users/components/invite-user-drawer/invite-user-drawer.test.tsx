@@ -22,6 +22,7 @@ describe("InviteUserDrawer", () => {
         role: "brokerage_admin",
         status: "active",
         full_name: "Admin Teste",
+        email: "admin-teste@appseguro.dev",
         avatar_url: null,
         brokerage_name: "Corretora",
         primary_color: null,

@@ -14,6 +14,7 @@ const usuarioFake = {
   role: "seller" as const,
   status: "active" as const,
   full_name: "Teste",
+  email: "teste@appseguro.dev",
   avatar_url: null,
   brokerage_name: "Corretora",
   primary_color: null,

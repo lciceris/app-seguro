@@ -21,6 +21,7 @@ describe("SetPasswordScreen", () => {
         role: "seller",
         status: "active",
         full_name: "Teste",
+        email: "teste@appseguro.dev",
         avatar_url: null,
         brokerage_name: "Corretora",
         primary_color: null,

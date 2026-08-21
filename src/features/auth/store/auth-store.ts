@@ -8,6 +8,7 @@ export interface Usuario {
   role: Database["public"]["Enums"]["user_role"];
   status: Database["public"]["Enums"]["user_status"];
   full_name: string;
+  email: string;
   avatar_url: string | null;
   // brokerage_name/primary_color/logo_url só ficam null num embed que falhou de
   // fato (não pelo status — a policy brokerages_select_own_unconditional garante
