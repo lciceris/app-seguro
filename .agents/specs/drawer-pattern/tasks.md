@@ -12,8 +12,8 @@
   - [x] 2.2 Migrar os 6 drawers de `size="lg"` (1000px): `clients/client-detail-drawer`, `brokerages/brokerage-detail-drawer`, `policies/policy-detail-drawer`, `users/user-detail-drawer`, `insurers/insurer-detail-drawer`, `vehicles/vehicle-detail-drawer`
     - _Requirements: 4.1, 4.2_
 
-- [ ] 3. Verificação final
-  - [ ] 3.1 Rodar `tsc --noEmit` + `eslint` + `vitest run` + suíte E2E completa — confirmar zero regressão (nenhum teste depende de largura/lado da folha)
+- [x] 3. Verificação final
+  - [x] 3.1 Rodar `tsc --noEmit` + `eslint` + `vitest run` + suíte E2E completa — confirmar zero regressão (nenhum teste depende de largura/lado da folha)
     - _Requirements: 4.1, 4.2_
-  - [ ] 3.2 Verificação visual em navegador real de uma amostra (um `create`, um `edit`, um `detail`) confirmando o padrão novo consistente entre eles
+  - [x] 3.2 Verificação visual em navegador real de uma amostra (um `create`, um `edit`, um `detail`) confirmando o padrão novo consistente entre eles
     - _Requirements: 1.1, 1.2, 2.1, 2.2, 3.1, 3.2, 4.3_
