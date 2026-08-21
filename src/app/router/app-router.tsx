@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
 import { ProtectedRoute } from "@/features/auth";
+import { AppShell } from "@/app/layout/app-shell";
+import { allowedRolesFor } from "@/app/layout/nav-items";
 import { AccountDeactivatedPage } from "@/pages/account-deactivated/account-deactivated-page";
 import { HomePage } from "@/pages/home/home-page";
 import { LoginPage } from "@/pages/login/login-page";
@@ -45,169 +47,133 @@ export function AppRouter() {
       <Route path="/account-deactivated" element={<AccountDeactivatedPage />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<HomePage />} />
-      </Route>
+        <Route element={<AppShell />}>
+          <Route path="/" element={<HomePage />} />
 
-      <Route
-        element={
-          <ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin", "supervisor"]} />
-        }
-      >
-        <Route path="/users" element={<UsersPage />}>
-          <Route path=":userId" element={<UserDetailPage />} />
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/users")} />}>
+            <Route path="/users" element={<UsersPage />}>
+              <Route path=":userId" element={<UserDetailPage />} />
 
-          <Route element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}>
-            <Route path="add" element={<AddUserPage />} />
-            <Route path=":userId/edit" element={<EditUserPage />} />
+              <Route
+                element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}
+              >
+                <Route path="add" element={<AddUserPage />} />
+                <Route path=":userId/edit" element={<EditUserPage />} />
+              </Route>
+            </Route>
           </Route>
-        </Route>
-      </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={["platform_admin"]} />}>
-        <Route path="/brokerages" element={<BrokeragesPage />}>
-          <Route path="add" element={<AddBrokeragePage />} />
-          <Route path=":brokerageId" element={<BrokerageDetailPage />} />
-          <Route path=":brokerageId/edit" element={<EditBrokeragePage />} />
-        </Route>
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/brokerages")} />}>
+            <Route path="/brokerages" element={<BrokeragesPage />}>
+              <Route path="add" element={<AddBrokeragePage />} />
+              <Route path=":brokerageId" element={<BrokerageDetailPage />} />
+              <Route path=":brokerageId/edit" element={<EditBrokeragePage />} />
+            </Route>
+          </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}>
-        <Route path="/my-brokerage" element={<MyBrokeragePage />} />
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/my-brokerage")} />}>
+            <Route path="/my-brokerage" element={<MyBrokeragePage />} />
+          </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={["platform_admin"]} />}>
-        <Route path="/admin/insurers" element={<InsurersPage />}>
-          <Route path="add" element={<AddInsurerPage />} />
-          <Route path=":insurerId" element={<InsurerDetailPage />} />
-          <Route path=":insurerId/edit" element={<EditInsurerPage />} />
-        </Route>
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/admin/insurers")} />}>
+            <Route path="/admin/insurers" element={<InsurersPage />}>
+              <Route path="add" element={<AddInsurerPage />} />
+              <Route path=":insurerId" element={<InsurerDetailPage />} />
+              <Route path=":insurerId/edit" element={<EditInsurerPage />} />
+            </Route>
+          </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}>
-        <Route path="/my-insurers" element={<MyInsurersPage />} />
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/my-insurers")} />}>
+            <Route path="/my-insurers" element={<MyInsurersPage />} />
+          </Route>
 
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller", "viewer"]}
-          />
-        }
-      >
-        <Route path="/clients" element={<ClientsPage />}>
-          <Route path=":clientId" element={<ClientDetailPage />} />
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/clients")} />}>
+            <Route path="/clients" element={<ClientsPage />}>
+              <Route path=":clientId" element={<ClientDetailPage />} />
 
-          <Route
-            element={
-              <ProtectedRoute
-                allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+                  />
+                }
+              >
+                <Route path="add" element={<AddClientPage />} />
+                <Route path=":clientId/edit" element={<EditClientPage />} />
+              </Route>
+            </Route>
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/vehicles")} />}>
+            <Route path="/vehicles" element={<VehiclesPage />}>
+              <Route path="add" element={<AddVehiclePage />} />
+              <Route path=":vehicleId" element={<VehicleDetailPage />} />
+              <Route path=":vehicleId/edit" element={<EditVehiclePage />} />
+            </Route>
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/quotations")} />}>
+            <Route path="/quotations" element={<QuotationsPage />}>
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+                  />
+                }
+              >
+                <Route path="add" element={<AddQuotationPage />} />
+              </Route>
+            </Route>
+
+            {/* Página cheia, não drawer — não fica dentro do <Outlet/> de /quotations
+                (ver .agents/specs/quotations/design.md, "Divergência de padrão"). */}
+            <Route path="/quotations/:quotationId" element={<QuotationDetailPage />}>
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={[
+                      "platform_admin",
+                      "brokerage_admin",
+                      "supervisor",
+                      "analyst",
+                      "seller",
+                    ]}
+                  />
+                }
+              >
+                <Route path="edit" element={<EditQuotationPage />} />
+              </Route>
+            </Route>
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/policies")} />}>
+            <Route path="/policies" element={<PoliciesPage />}>
+              <Route path=":policyId" element={<PolicyDetailPage />} />
+              <Route
+                path=":policyId/endorsements/:endorsementId"
+                element={<PolicyEndorsementDetailPage />}
               />
-            }
-          >
-            <Route path="add" element={<AddClientPage />} />
-            <Route path=":clientId/edit" element={<EditClientPage />} />
-          </Route>
-        </Route>
-      </Route>
 
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
-          />
-        }
-      >
-        <Route path="/vehicles" element={<VehiclesPage />}>
-          <Route path="add" element={<AddVehiclePage />} />
-          <Route path=":vehicleId" element={<VehicleDetailPage />} />
-          <Route path=":vehicleId/edit" element={<EditVehiclePage />} />
-        </Route>
-      </Route>
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["platform_admin", "brokerage_admin", "supervisor"]}
+                  />
+                }
+              >
+                <Route path=":policyId/edit" element={<EditPolicyPage />} />
+              </Route>
 
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={[
-              "platform_admin",
-              "brokerage_admin",
-              "supervisor",
-              "analyst",
-              "seller",
-              "viewer",
-            ]}
-          />
-        }
-      >
-        <Route path="/quotations" element={<QuotationsPage />}>
-          <Route
-            element={
-              <ProtectedRoute
-                allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
-              />
-            }
-          >
-            <Route path="add" element={<AddQuotationPage />} />
-          </Route>
-        </Route>
-
-        {/* Página cheia, não drawer — não fica dentro do <Outlet/> de /quotations
-            (ver .agents/specs/quotations/design.md, "Divergência de padrão"). */}
-        <Route path="/quotations/:quotationId" element={<QuotationDetailPage />}>
-          <Route
-            element={
-              <ProtectedRoute
-                allowedRoles={[
-                  "platform_admin",
-                  "brokerage_admin",
-                  "supervisor",
-                  "analyst",
-                  "seller",
-                ]}
-              />
-            }
-          >
-            <Route path="edit" element={<EditQuotationPage />} />
-          </Route>
-        </Route>
-      </Route>
-
-      <Route
-        element={
-          <ProtectedRoute
-            allowedRoles={[
-              "platform_admin",
-              "brokerage_admin",
-              "supervisor",
-              "analyst",
-              "seller",
-              "viewer",
-            ]}
-          />
-        }
-      >
-        <Route path="/policies" element={<PoliciesPage />}>
-          <Route path=":policyId" element={<PolicyDetailPage />} />
-          <Route
-            path=":policyId/endorsements/:endorsementId"
-            element={<PolicyEndorsementDetailPage />}
-          />
-
-          <Route
-            element={
-              <ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin", "supervisor"]} />
-            }
-          >
-            <Route path=":policyId/edit" element={<EditPolicyPage />} />
-          </Route>
-
-          <Route
-            element={
-              <ProtectedRoute
-                allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
-              />
-            }
-          >
-            <Route path=":policyId/endorsements/add" element={<AddPolicyEndorsementPage />} />
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+                  />
+                }
+              >
+                <Route path=":policyId/endorsements/add" element={<AddPolicyEndorsementPage />} />
+              </Route>
+            </Route>
           </Route>
         </Route>
       </Route>

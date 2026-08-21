@@ -18,10 +18,10 @@
   - [x] 2.4 Criar `src/app/layout/app-shell.tsx` — `SidebarProvider` + `AppSidebar` + `SidebarInset` (`AppHeader` + `<Outlet/>`)
     - _Requirements: 1.1, 1.3, 5.1, 5.2_
 
-- [ ] 3. Integração no router
-  - [ ] 3.1 Refatorar `app-router.tsx` — cada `<ProtectedRoute allowedRoles={...}>` de topo passa a ler o array de `NAV_GROUPS` em vez de repetir inline
+- [x] 3. Integração no router
+  - [x] 3.1 Refatorar `app-router.tsx` — cada `<ProtectedRoute allowedRoles={...}>` de topo passa a ler o array de `NAV_GROUPS` em vez de repetir inline
     - _Requirements: 2.2_
-  - [ ] 3.2 Envolver a árvore de rotas autenticadas com `<ProtectedRoute><AppShell>...</AppShell></ProtectedRoute>`, sem alterar nenhuma rota internamente
+  - [x] 3.2 Envolver a árvore de rotas autenticadas com `<ProtectedRoute><AppShell>...</AppShell></ProtectedRoute>`, sem alterar nenhuma rota internamente
     - _Requirements: 1.1, 1.2, 1.3_
 
 - [ ] 4. Testes
