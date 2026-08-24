@@ -132,12 +132,12 @@
 
   **Testes E2E** (`npx playwright test`, contra o Supabase real): `e2e/brokerages-create.spec.ts` cobre tanto a criação pela UI real (confirmando o rollback quando o convite falha por SMTP) quanto "definir senha → login" via `generateLink` (mesma técnica da spec `users`, contorna só a limitação de envio de e-mail). `e2e/brokerages-deactivate.spec.ts` desativa uma corretora pela UI, confirma que um usuário dela cai em `/account-deactivated` com a mensagem de **corretora** (não de conta — o núcleo do que a Task 9 corrigiu), reativa, e confirma que o login volta a funcionar. Encontrado e corrigido no caminho: a home do `brokerage_admin` (`/quotations`) ainda não é uma rota implementada, então nada reage a um `signOut()` feito ali navegando pra `/login` sozinho — o teste precisou navegar explicitamente. Todos os 6 testes E2E do projeto passando (3 novos + `auth`/`users-invite`/`users-deactivate` já existentes).
 
-- [ ] 11. Schema — cadastro completo de empresa
-  - [ ] 11.1 Migration: colunas novas em `brokerages` (`trade_name`, `tax_id` com `unique`, `business_code`, `state_registration`, `email`, `phone`, `zip_code`, `street`, `street_number`, `complement`, `neighborhood`, `city`, `state`, `representative_name`, `representative_email`, `financial_name`, `financial_email`, `plan_expires_at`)
+- [x] 11. Schema — cadastro completo de empresa
+  - [x] 11.1 Migration: colunas novas em `brokerages` (`trade_name`, `tax_id` com `unique`, `business_code`, `state_registration`, `email`, `phone`, `zip_code`, `street`, `street_number`, `complement`, `neighborhood`, `city`, `state`, `representative_name`, `representative_email`, `financial_name`, `financial_email`, `plan_expires_at`)
     - _Requirements: 2.2_
-  - [ ] 11.2 Migration: atualizar `enforce_brokerage_update_columns` — `brokerage_admin` ganha as colunas de empresa (todas exceto `plan_expires_at`); `platform_admin` ganha `plan_expires_at`
+  - [x] 11.2 Migration: atualizar `enforce_brokerage_update_columns` — `brokerage_admin` ganha as colunas de empresa (todas exceto `plan_expires_at`); `platform_admin` ganha `plan_expires_at`
     - _Requirements: 4.2, 4.3, 6.1_
-  - [ ] 11.3 Regenerar `database-types.ts`
+  - [x] 11.3 Regenerar `database-types.ts`
     - _Requirements: infra_
 
 - [ ] 12. Busca de CNPJ/CEP (infra compartilhada)
