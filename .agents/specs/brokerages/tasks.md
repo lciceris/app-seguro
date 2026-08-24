@@ -131,3 +131,45 @@
   **Testes de componente/hook** (`npx vitest run`): 33/33 passando (13 novos desta spec + os 20 já existentes de `auth`/`users`, sem nenhuma regressão). `edit-brokerage-drawer` precisou de `@testing-library/user-event` + `within(listbox)` pra interagir com o `Select` do Radix, mesmo padrão já usado em `invite-user-drawer`/`edit-user-drawer` da spec `users`.
 
   **Testes E2E** (`npx playwright test`, contra o Supabase real): `e2e/brokerages-create.spec.ts` cobre tanto a criação pela UI real (confirmando o rollback quando o convite falha por SMTP) quanto "definir senha → login" via `generateLink` (mesma técnica da spec `users`, contorna só a limitação de envio de e-mail). `e2e/brokerages-deactivate.spec.ts` desativa uma corretora pela UI, confirma que um usuário dela cai em `/account-deactivated` com a mensagem de **corretora** (não de conta — o núcleo do que a Task 9 corrigiu), reativa, e confirma que o login volta a funcionar. Encontrado e corrigido no caminho: a home do `brokerage_admin` (`/quotations`) ainda não é uma rota implementada, então nada reage a um `signOut()` feito ali navegando pra `/login` sozinho — o teste precisou navegar explicitamente. Todos os 6 testes E2E do projeto passando (3 novos + `auth`/`users-invite`/`users-deactivate` já existentes).
+
+- [ ] 11. Schema — cadastro completo de empresa
+  - [ ] 11.1 Migration: colunas novas em `brokerages` (`trade_name`, `tax_id` com `unique`, `business_code`, `state_registration`, `email`, `phone`, `zip_code`, `street`, `street_number`, `complement`, `neighborhood`, `city`, `state`, `representative_name`, `representative_email`, `financial_name`, `financial_email`, `plan_expires_at`)
+    - _Requirements: 2.2_
+  - [ ] 11.2 Migration: atualizar `enforce_brokerage_update_columns` — `brokerage_admin` ganha as colunas de empresa (todas exceto `plan_expires_at`); `platform_admin` ganha `plan_expires_at`
+    - _Requirements: 4.2, 4.3, 6.1_
+  - [ ] 11.3 Regenerar `database-types.ts`
+    - _Requirements: infra_
+
+- [ ] 12. Busca de CNPJ/CEP (infra compartilhada)
+  - [ ] 12.1 Criar `src/shared/lib/brasil-api.ts` (`fetchCnpjData`)
+    - _Requirements: 7.1_
+  - [ ] 12.2 Criar `src/shared/lib/via-cep.ts` (`fetchCepData`)
+    - _Requirements: 7.2_
+
+- [ ] 13. Cadastro completo (criação, platform_admin)
+  - [ ] 13.1 Atualizar Edge Function `create-brokerage` — aceita e insere os campos de empresa (opcionais) além de `brokerage_name`/`admin_full_name`/`admin_email`
+    - _Requirements: 2.2_
+  - [ ] 13.2 Atualizar `create-brokerage-schema.ts` + `api/create-brokerage.ts` (`CreateBrokerageInput`) com os campos novos
+    - _Requirements: 2.2_
+  - [ ] 13.3 Atualizar `create-brokerage-drawer.tsx` — seções Identificação/Endereço/Representante/Financeiro (mesmo padrão de `create-client-drawer`) + botões "Buscar" (CNPJ/CEP)
+    - _Requirements: 2.2, 7.1, 7.2, 7.3_
+
+- [ ] 14. Edição pela própria corretora (brokerage_admin)
+  - [ ] 14.1 Atualizar `edit-own-brokerage-schema.ts` + `api/update-own-brokerage.ts` com os campos de empresa
+    - _Requirements: 6.1_
+  - [ ] 14.2 Atualizar `own-brokerage-screen.tsx` — mesmas seções + busca do 13.3
+    - _Requirements: 6.1, 7.1, 7.2, 7.3, 7.4_
+
+- [ ] 15. Edição pelo platform_admin — data de expiração do plano
+  - [ ] 15.1 Atualizar `edit-brokerage-schema.ts` + `api/update-brokerage.ts` + `edit-brokerage-drawer.tsx` — campo `plan_expires_at` (`DatePicker`) ao lado de `plan_id`
+    - _Requirements: 4.2_
+
+- [ ] 16. Detalhe — exibir todos os dados
+  - [ ] 16.1 Atualizar `brokerage-detail-drawer.tsx` — exibe todos os campos novos (somente leitura) + `plan_expires_at`
+    - _Requirements: 4.1_
+
+- [ ] 17. Testes
+  - [ ] 17.1 Atualizar testes de componente existentes (`create-brokerage-drawer`, `own-brokerage-screen`, `edit-brokerage-drawer`) pros campos novos — mock de `fetchCnpjData`/`fetchCepData`
+    - _Requirements: 2.2, 4.2, 6.1, 7.1, 7.2, 7.3_
+  - [ ] 17.2 Atualizar `e2e/brokerages-create.spec.ts` — preenche (parte d)os campos novos manualmente e confirma persistência (sem exercitar a busca de verdade, ver design.md)
+    - _Requirements: 2.2_
