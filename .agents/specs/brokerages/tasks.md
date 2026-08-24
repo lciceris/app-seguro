@@ -168,8 +168,8 @@
   - [x] 16.1 Atualizar `brokerage-detail-drawer.tsx` — exibe todos os campos novos (somente leitura) + `plan_expires_at`
     - _Requirements: 4.1_
 
-- [ ] 17. Testes
-  - [ ] 17.1 Atualizar testes de componente existentes (`create-brokerage-drawer`, `own-brokerage-screen`, `edit-brokerage-drawer`) pros campos novos — mock de `fetchCnpjData`/`fetchCepData`
+- [x] 17. Testes
+  - [x] 17.1 Atualizar testes de componente existentes (`create-brokerage-drawer`, `own-brokerage-screen`, `edit-brokerage-drawer`) pros campos novos — mock de `fetchCnpjData`/`fetchCepData`
     - _Requirements: 2.2, 4.2, 6.1, 7.1, 7.2, 7.3_
-  - [ ] 17.2 Atualizar `e2e/brokerages-create.spec.ts` — preenche (parte d)os campos novos manualmente e confirma persistência (sem exercitar a busca de verdade, ver design.md)
+  - [x] 17.2 Atualizar `e2e/brokerages-create.spec.ts` — preenche (parte d)os campos novos manualmente e confirma persistência (sem exercitar a busca de verdade, ver design.md)
     - _Requirements: 2.2_

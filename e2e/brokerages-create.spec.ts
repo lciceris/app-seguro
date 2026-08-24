@@ -95,13 +95,29 @@ test("platform_admin cria corretora pela UI (convite falha por SMTP, sem deixar 
   await page.click("text=Nova corretora");
   await page.waitForURL("**/brokerages/add");
 
+  // Preenchimento manual dos campos de empresa (sem usar "Buscar") — a
+  // chamada real à BrasilAPI/ViaCEP fica fora do escopo automatizado (ver
+  // design.md, Testing Strategy). Intercepta o payload enviado à Edge
+  // Function pra confirmar que esses campos chegam corretos até o backend.
+  let invokeBody: Record<string, unknown> | undefined;
+  await page.route("**/functions/v1/create-brokerage", async (route) => {
+    invokeBody = route.request().postDataJSON();
+    await route.continue();
+  });
+
   const newBrokerageName = `Corretora UI E2E ${Date.now()}`;
   await page.fill("#brokerage_name", newBrokerageName);
+  await page.fill("#trade_name", "Nome Fantasia E2E");
+  await page.fill("#tax_id", "11222333000181");
   await page.fill("#admin_full_name", "Admin Via UI");
   await page.fill("#admin_email", `e2e-ui-admin-${Date.now()}@appseguro.dev`);
   await page.click('button[type="submit"]');
 
   await expect(page.locator("[data-sonner-toast]")).toBeVisible();
+
+  expect(invokeBody?.brokerage_name).toBe(newBrokerageName);
+  expect(invokeBody?.trade_name).toBe("Nome Fantasia E2E");
+  expect(invokeBody?.tax_id).toBe("11222333000181");
 
   const admin = adminClient();
   const { data: leftover } = await admin
