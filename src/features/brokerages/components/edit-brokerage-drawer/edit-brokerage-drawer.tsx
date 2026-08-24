@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
+import { DatePicker } from "@/shared/components/ui/date-picker";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import {
@@ -56,6 +57,7 @@ function EditBrokerageForm({
     defaultValues: {
       name: brokerage.name,
       plan_id: brokerage.plan_id ?? NO_PLAN_VALUE,
+      plan_expires_at: brokerage.plan_expires_at ? new Date(brokerage.plan_expires_at) : null,
     },
   });
 
@@ -65,6 +67,9 @@ function EditBrokerageForm({
         id: brokerage.id,
         name: values.name,
         plan_id: values.plan_id === NO_PLAN_VALUE ? null : values.plan_id,
+        plan_expires_at: values.plan_expires_at
+          ? values.plan_expires_at.toISOString().slice(0, 10)
+          : null,
       },
       {
         onSuccess: () => {
@@ -114,6 +119,17 @@ function EditBrokerageForm({
               )}
             />
             {errors.plan_id && <p className="text-sm text-destructive">{errors.plan_id.message}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="plan_expires_at">Data de expiração do plano</Label>
+            <Controller
+              name="plan_expires_at"
+              control={control}
+              render={({ field }) => (
+                <DatePicker id="plan_expires_at" value={field.value} onChange={field.onChange} />
+              )}
+            />
           </div>
         </form>
       </div>

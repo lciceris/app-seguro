@@ -21,12 +21,12 @@ describe("useUpdateBrokerage", () => {
 
   it("chama a api de atualização com os dados informados", async () => {
     const { updateBrokerage } = await import("../../api/update-brokerage");
-    const updatedBrokerage = { id: "b1", name: "Editada", plan_id: null };
+    const updatedBrokerage = { id: "b1", name: "Editada", plan_id: null, plan_expires_at: null };
     vi.mocked(updateBrokerage).mockResolvedValue(updatedBrokerage as never);
 
     const { result } = renderHook(() => useUpdateBrokerage(), { wrapper: createWrapper() });
 
-    const input = { id: "b1", name: "Editada", plan_id: null };
+    const input = { id: "b1", name: "Editada", plan_id: null, plan_expires_at: null };
     result.current.mutate(input);
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));

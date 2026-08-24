@@ -7,6 +7,7 @@ export interface UpdateBrokerageInput {
   id: string;
   name: string;
   plan_id: string | null;
+  plan_expires_at: string | null;
 }
 
 export async function updateBrokerage({ id, ...values }: UpdateBrokerageInput) {

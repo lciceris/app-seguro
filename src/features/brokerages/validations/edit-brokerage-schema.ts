@@ -7,6 +7,7 @@ export const NO_PLAN_VALUE = "none";
 export const editBrokerageSchema = z.object({
   name: z.string().min(1, "Informe o nome"),
   plan_id: z.string(),
+  plan_expires_at: z.date().nullable(),
 });
 
 export type EditBrokerageFormValues = z.infer<typeof editBrokerageSchema>;

@@ -160,8 +160,8 @@
   - [x] 14.2 Atualizar `own-brokerage-screen.tsx` — mesmas seções + busca do 13.3
     - _Requirements: 6.1, 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 15. Edição pelo platform_admin — data de expiração do plano
-  - [ ] 15.1 Atualizar `edit-brokerage-schema.ts` + `api/update-brokerage.ts` + `edit-brokerage-drawer.tsx` — campo `plan_expires_at` (`DatePicker`) ao lado de `plan_id`
+- [x] 15. Edição pelo platform_admin — data de expiração do plano
+  - [x] 15.1 Atualizar `edit-brokerage-schema.ts` + `api/update-brokerage.ts` + `edit-brokerage-drawer.tsx` — campo `plan_expires_at` (`DatePicker`) ao lado de `plan_id`
     - _Requirements: 4.2_
 
 - [ ] 16. Detalhe — exibir todos os dados
