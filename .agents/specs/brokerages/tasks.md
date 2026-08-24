@@ -173,3 +173,13 @@
     - _Requirements: 2.2, 4.2, 6.1, 7.1, 7.2, 7.3_
   - [x] 17.2 Atualizar `e2e/brokerages-create.spec.ts` — preenche (parte d)os campos novos manualmente e confirma persistência (sem exercitar a busca de verdade, ver design.md)
     - _Requirements: 2.2_
+
+- [x] 18. Refinamento: representante = primeiro admin + placeholders/máscaras/layout do sistema antigo
+  - [x] 18.1 Remover `admin_full_name`/`admin_email` — `representative_name`/`representative_email` passam a ser obrigatórios na criação e servem de fonte pro convite (`create-brokerage-schema.ts`, `api/create-brokerage.ts`, Edge Function `create-brokerage`)
+    - _Requirements: 2.1, 2.2_
+  - [x] 18.2 Criar `src/shared/lib/masks.ts` (`formatCnpj`, `formatPhone`, `formatCep`) replicando as máscaras do sistema antigo (`fleet-auth-gate/src/lib/format.ts` + `formatCep` local de `admin.brokerages.tsx`)
+    - _Requirements: infra_
+  - [x] 18.3 Aplicar placeholders, máscaras e layout em grid (seções Empresa/Endereço/Representante e contato) em `create-brokerage-drawer.tsx` e `own-brokerage-screen.tsx`, e formatação de exibição (CNPJ/telefone/CEP) em `brokerage-detail-drawer.tsx`
+    - _Requirements: 2.2, 6.1_
+  - [x] 18.4 Atualizar testes de componente (`create-brokerage-drawer`, `use-create-brokerage`) e `e2e/brokerages-create.spec.ts` pro representante único e a nova máscara
+    - _Requirements: 2.2_

@@ -16,6 +16,12 @@ O cadastro original desta spec só pedia nome da corretora + nome/email do prime
 - **Cadastro (Requirement 2)**: `platform_admin` preenche tudo — inclusive os dados de empresa — no onboarding. Plano/status continuam de fora (Requirement 2.4, inalterado).
 - **Dali em diante**: os dados de empresa (CNPJ, endereço, contatos) passam a ser responsabilidade do **`brokerage_admin`** (Requirement 6, ampliado) — a própria corretora mantém seus dados administrativos sem depender de suporte da plataforma. `platform_admin` continua vendo esses dados no detalhe (Requirement 4.1), mas não edita mais por ali (Requirement 4.2/4.3, ajustado) — só nome/plano/status.
 
+### Representante = primeiro administrador (refinamento pós-implementação)
+
+Teste manual apontou uma duplicação: o cadastro tinha uma seção "Representante" (dado de empresa, opcional) E uma seção "Primeiro administrador" (nome/e-mail, obrigatórios, usados pro convite) — na prática a mesma pessoa preenchida duas vezes. Requirement 2 (AC1/AC2) e o design foram ajustados pra eliminar a duplicação: **o representante é quem é convidado como primeiro `brokerage_admin`** — nome/e-mail do representante passam a ser obrigatórios na criação, e não existe mais um campo "admin" separado. `brokerage_admin`/`platform_admin` continuam podendo editar o representante depois (Requirement 6), sem essa obrigatoriedade (a pessoa já tem conta).
+
+Nesse mesmo refinamento, o formulário de criação e o de edição pelo `brokerage_admin` (Requirement 6) passaram a replicar os placeholders, máscaras (CNPJ, telefone, CEP, UF maiúsculo) e o agrupamento de seções do formulário equivalente do sistema antigo (`fleet-auth-gate`, `src/features/admin/pages/admin.brokerages.tsx`) — inclusive consolidando "Representante" e "Financeiro" numa única seção "Representante e contato", como já era feito lá.
+
 ## Requirements
 
 ### Requirement 1: Corretora especial da plataforma
@@ -28,15 +34,15 @@ O cadastro original desta spec só pedia nome da corretora + nome/email do prime
 2. WHEN a listagem de corretoras-cliente (Requirement 3) é exibida THEN o sistema SHALL excluir essa corretora especial do resultado.
 3. A corretora especial segue as mesmas regras de RLS de qualquer outra — não tem tratamento privilegiado de acesso a dados, só é excluída da listagem de gestão.
 
-### Requirement 2: Criar corretora (com o primeiro admin)
+### Requirement 2: Criar corretora (com o representante como primeiro admin)
 
-**User Story:** Como `platform_admin`, quero cadastrar uma nova corretora-cliente já com seu primeiro administrador, para dar onboarding completo sem depender de scripts manuais.
+**User Story:** Como `platform_admin`, quero cadastrar uma nova corretora-cliente já com seu representante como primeiro administrador, para dar onboarding completo sem depender de scripts manuais nem duplicar o mesmo contato em dois lugares do formulário.
 
 #### Acceptance Criteria
 
-1. WHEN `platform_admin` submete os dados da nova corretora e do primeiro administrador THEN o sistema SHALL criar a linha em `brokerages` E convidar esse usuário como `brokerage_admin` dela, reaproveitando o mecanismo de convite da spec `users` (Edge Function, envio de email, fluxo de "definir senha").
-2. Os dados da corretora que podem ser preenchidos na criação SHALL incluir: nome (razão social), nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo (CEP, logradouro, número, complemento, bairro, cidade, UF), nome/e-mail do representante, nome/e-mail do contato financeiro — só o nome é obrigatório, o resto é opcional. Os dados do primeiro administrador são nome e email (obrigatórios).
-3. IF a criação do usuário administrador falhar (ex: email inválido) THEN o sistema SHALL desfazer a criação da corretora — nunca deixar uma corretora órfã sem nenhum administrador.
+1. WHEN `platform_admin` submete os dados da nova corretora THEN o sistema SHALL criar a linha em `brokerages` E convidar o representante (nome/e-mail) como `brokerage_admin` dela, reaproveitando o mecanismo de convite da spec `users` (Edge Function, envio de email, fluxo de "definir senha") — não existe um "primeiro administrador" separado do representante, são a mesma pessoa/os mesmos dados.
+2. Os dados da corretora que podem ser preenchidos na criação SHALL incluir: nome (razão social), nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo (CEP, logradouro, número, complemento, bairro, cidade, UF), nome/e-mail do contato financeiro — todos opcionais. Nome da corretora e nome/e-mail do representante SHALL ser obrigatórios, pois o representante também é convidado como primeiro `brokerage_admin`.
+3. IF a criação do usuário administrador (a partir dos dados do representante) falhar (ex: email inválido) THEN o sistema SHALL desfazer a criação da corretora — nunca deixar uma corretora órfã sem nenhum administrador.
 4. WHEN um perfil diferente de `platform_admin` tenta criar uma corretora THEN o sistema SHALL negar a ação.
 5. A corretora nasce sem plano vinculado (`plan_id` nulo) e sem logo/cor primária — vincular um plano é uma ação de edição separada (Requirement 4); logo/cor são responsabilidade do `brokerage_admin` (Requirement 6), nunca preenchidos na criação.
 

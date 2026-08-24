@@ -131,7 +131,9 @@ platform_admin permitido mudar:
 
 ### Edge Function `create-brokerage` — payload estendido
 
-O `req.json()` passa a desestruturar todos os campos de empresa (opcionais, exceto `brokerage_name`/`admin_full_name`/`admin_email`) e incluí-los no `insert` inicial em `brokerages`. Sem mudança na lógica de rollback (Requirement 2.3) — só mais colunas no mesmo insert.
+O `req.json()` passa a desestruturar todos os campos de empresa (opcionais, exceto `brokerage_name`/`representative_name`/`representative_email`) e incluí-los no `insert` inicial em `brokerages`. Sem mudança na lógica de rollback (Requirement 2.3) — só mais colunas no mesmo insert.
+
+**Refinamento pós-implementação:** não existe mais um `admin_full_name`/`admin_email` separado — `representative_name`/`representative_email` (já fazem parte dos dados de empresa) servem de fonte pro convite (`inviteUserByEmail`) e pro insert em `users` (`full_name`/`email`). Ver "Representante = primeiro administrador" em `requirements.md`.
 
 ### Busca de CNPJ/CEP (Requirement 7)
 
@@ -207,11 +209,20 @@ Ambas as APIs são públicas, sem chave, com CORS liberado pra chamada direta do
 
 ### Frontend — componentes afetados
 
-- **`create-brokerage-drawer`**: ganha as mesmas seções de `create-client-drawer` (Identificação, Endereço, Representante, Financeiro), com "Buscar" ao lado de CNPJ e CEP. `create-brokerage-schema.ts` estendido com os campos novos (todos opcionais, mesmo padrão `z.string().optional()`/e-mail com `z.union([z.literal(""), z.string().email(...)]).optional()` já usado em `create-client-schema.ts`).
-- **`own-brokerage-screen`** (`brokerage_admin`): ganha as mesmas seções + busca. `edit-own-brokerage-schema.ts` estendido.
+- **`create-brokerage-drawer`**: seções **Empresa**, **Endereço**, **Representante e contato** (nome/e-mail do representante — obrigatórios, dobram como dados do primeiro admin — + financeiro, numa seção só), com "Buscar" ao lado de CNPJ e CEP. `create-brokerage-schema.ts` estendido (campos de empresa opcionais, mesmo padrão `z.string().optional()`/e-mail com `z.union([z.literal(""), z.string().email(...)]).optional()` já usado em `create-client-schema.ts`; `representative_name`/`representative_email` obrigatórios). Não existe seção "Primeiro administrador" separada.
+- **`own-brokerage-screen`** (`brokerage_admin`): mesmas seções (Empresa, Endereço, Representante e contato) + Identidade Visual, com busca. `edit-own-brokerage-schema.ts` estendido — aqui o representante continua opcional (a conta já existe).
 - **`edit-brokerage-drawer`** (`platform_admin`): ganha `plan_expires_at` (`DatePicker`) ao lado de `plan_id`. `edit-brokerage-schema.ts` estendido.
-- **`brokerage-detail-drawer`**: exibe todos os campos novos, somente leitura, incluindo `plan_expires_at`.
+- **`brokerage-detail-drawer`**: exibe todos os campos novos, somente leitura (CNPJ/telefone/CEP formatados com a mesma máscara do formulário), incluindo `plan_expires_at`. Seção "Representante e contato" também consolidada (sem "Financeiro" separado).
 - **`types/brokerage.ts`**: sem mudança manual — `Brokerage`/`BrokerageWithPlan` continuam derivando de `Database["public"]["Tables"]["brokerages"]["Row"]`; basta regenerar os tipos depois da migration.
+
+### Placeholders, máscaras e layout — replicados do sistema antigo
+
+O sistema antigo (`fleet-auth-gate`, `src/features/admin/pages/admin.brokerages.tsx`) já tinha um formulário equivalente, com placeholders, máscaras de digitação e agrupamento de seções bem definidos. `create-brokerage-drawer` e `own-brokerage-screen` replicam:
+
+- **Máscaras** (`src/shared/lib/masks.ts`, novo — `formatCnpj`, `formatPhone`, `formatCep`; digitação aplica a máscara via `onChange` que chama `setValue` do React Hook Form por cima do valor do `register`; UF vira maiúsculo automaticamente): CNPJ `00.000.000/0000-00`, telefone `(00) 00000-0000`, CEP `00000-000`. Ao persistir, os valores mascarados são convertidos de volta pra dígitos crus (`tax_id`, `phone`, `zip_code`) antes do insert/update — mesmo critério do sistema antigo (`formToPayload`).
+- **Placeholders**: idênticos aos do sistema antigo campo a campo (ex: CNAE → "Ex: 6499-3/99 - Descrição", Inscrição Estadual → "000.000.000.000", Logradouro → "Rua, Avenida, etc.", UF → "SP" etc.).
+- **Layout em grid**: cada seção usa um grid de 2 colunas (`grid grid-cols-2 gap-3`), com CNPJ+Buscar/Razão Social/CEP+Buscar/Logradouro ocupando a linha inteira (`col-span-2`) e Bairro/Cidade/UF numa sub-grade de 3 colunas (`grid-cols-[1fr_1fr_80px]`) — mesma disposição do sistema antigo, adaptada de `style` inline pra classes Tailwind (convenção do projeto atual).
+- **Busca de CNPJ/CEP também formata o retorno**: telefone e CEP vindos da BrasilAPI chegam como dígitos crus — `handleFetchCnpj` aplica `formatPhone`/`formatCep` no valor antes de preencher o campo, pra manter a mesma máscara de quando o usuário digita.
 
 ## Testing Strategy
 

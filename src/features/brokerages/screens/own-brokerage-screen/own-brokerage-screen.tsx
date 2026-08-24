@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { fetchCnpjData } from "@/shared/lib/brasil-api";
 import { fetchCepData } from "@/shared/lib/via-cep";
+import { formatCep, formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -23,6 +24,11 @@ function sanitize(value: string | undefined) {
   return value === "" || value === undefined ? null : value;
 }
 
+function digitsOnly(value: string | undefined) {
+  const digits = value?.replace(/\D/g, "") ?? "";
+  return digits === "" ? null : digits;
+}
+
 function paraPayload(id: string, values: EditOwnBrokerageFormValues): UpdateOwnBrokerageInput {
   return {
     id,
@@ -30,12 +36,12 @@ function paraPayload(id: string, values: EditOwnBrokerageFormValues): UpdateOwnB
     logo_url: sanitize(values.logo_url),
     primary_color: sanitize(values.primary_color),
     trade_name: sanitize(values.trade_name),
-    tax_id: sanitize(values.tax_id),
+    tax_id: digitsOnly(values.tax_id),
     business_code: sanitize(values.business_code),
     state_registration: sanitize(values.state_registration),
-    email: sanitize(values.email),
-    phone: sanitize(values.phone),
-    zip_code: sanitize(values.zip_code),
+    email: sanitize(values.email?.trim().toLowerCase()),
+    phone: digitsOnly(values.phone),
+    zip_code: digitsOnly(values.zip_code),
     street: sanitize(values.street),
     street_number: sanitize(values.street_number),
     complement: sanitize(values.complement),
@@ -43,9 +49,9 @@ function paraPayload(id: string, values: EditOwnBrokerageFormValues): UpdateOwnB
     city: sanitize(values.city),
     state: sanitize(values.state),
     representative_name: sanitize(values.representative_name),
-    representative_email: sanitize(values.representative_email),
+    representative_email: sanitize(values.representative_email?.trim().toLowerCase()),
     financial_name: sanitize(values.financial_name),
-    financial_email: sanitize(values.financial_email),
+    financial_email: sanitize(values.financial_email?.trim().toLowerCase()),
   };
 }
 
@@ -71,12 +77,12 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
       logo_url: brokerage.logo_url ?? "",
       primary_color: brokerage.primary_color ?? "",
       trade_name: brokerage.trade_name ?? "",
-      tax_id: brokerage.tax_id ?? "",
+      tax_id: brokerage.tax_id ? formatCnpj(brokerage.tax_id) : "",
       business_code: brokerage.business_code ?? "",
       state_registration: brokerage.state_registration ?? "",
       email: brokerage.email ?? "",
-      phone: brokerage.phone ?? "",
-      zip_code: brokerage.zip_code ?? "",
+      phone: brokerage.phone ? formatPhone(brokerage.phone) : "",
+      zip_code: brokerage.zip_code ? formatCep(brokerage.zip_code) : "",
       street: brokerage.street ?? "",
       street_number: brokerage.street_number ?? "",
       complement: brokerage.complement ?? "",
@@ -100,8 +106,8 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
       setValue("trade_name", data.trade_name ?? "");
       setValue("business_code", data.business_code ?? "");
       setValue("email", data.email ?? "");
-      setValue("phone", data.phone ?? "");
-      setValue("zip_code", data.zip_code ?? "");
+      setValue("phone", data.phone ? formatPhone(data.phone) : "");
+      setValue("zip_code", data.zip_code ? formatCep(data.zip_code) : "");
       setValue("street", data.street ?? "");
       setValue("street_number", data.street_number ?? "");
       setValue("complement", data.complement ?? "");
@@ -150,51 +156,78 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
           Empresa
         </p>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="tax_id">CNPJ</Label>
-          <div className="flex gap-2">
-            <Input id="tax_id" {...register("tax_id")} />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleFetchCnpj}
-              disabled={isFetchingCnpj}
-            >
-              {isFetchingCnpj ? "Buscando..." : "Buscar"}
-            </Button>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <Label htmlFor="tax_id">CNPJ</Label>
+            <div className="flex gap-2">
+              <Input
+                id="tax_id"
+                placeholder="00.000.000/0000-00"
+                maxLength={18}
+                {...register("tax_id")}
+                onChange={(e) => setValue("tax_id", formatCnpj(e.target.value))}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleFetchCnpj}
+                disabled={isFetchingCnpj}
+              >
+                {isFetchingCnpj ? "Buscando..." : "Buscar"}
+              </Button>
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="name">Razão social</Label>
-          <Input id="name" {...register("name")} />
-          {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-        </div>
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <Label htmlFor="name">Razão social</Label>
+            <Input id="name" placeholder="Razão social da empresa" {...register("name")} />
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="trade_name">Nome fantasia</Label>
-          <Input id="trade_name" {...register("trade_name")} />
-        </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="trade_name">Nome fantasia</Label>
+            <Input id="trade_name" placeholder="Nome fantasia" {...register("trade_name")} />
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="business_code">CNAE</Label>
-          <Input id="business_code" {...register("business_code")} />
-        </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="business_code">CNAE</Label>
+            <Input
+              id="business_code"
+              placeholder="Ex: 6499-3/99 - Descrição"
+              {...register("business_code")}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="state_registration">Inscrição estadual</Label>
-          <Input id="state_registration" {...register("state_registration")} />
-        </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="state_registration">Inscrição estadual</Label>
+            <Input
+              id="state_registration"
+              placeholder="000.000.000.000"
+              {...register("state_registration")}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="email">E-mail comercial</Label>
-          <Input id="email" type="email" {...register("email")} />
-          {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-        </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="email">E-mail comercial</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="contato@empresa.com.br"
+              {...register("email")}
+            />
+            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="phone">Telefone</Label>
-          <Input id="phone" {...register("phone")} />
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="phone">Telefone</Label>
+            <Input
+              id="phone"
+              placeholder="(00) 00000-0000"
+              maxLength={16}
+              {...register("phone")}
+              onChange={(e) => setValue("phone", formatPhone(e.target.value))}
+            />
+          </div>
         </div>
       </div>
 
@@ -203,87 +236,115 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
           Endereço
         </p>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="zip_code">CEP</Label>
-          <div className="flex gap-2">
-            <Input id="zip_code" {...register("zip_code")} />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleFetchCep}
-              disabled={isFetchingCep}
-            >
-              {isFetchingCep ? "Buscando..." : "Buscar"}
-            </Button>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <Label htmlFor="zip_code">CEP</Label>
+            <div className="flex max-w-[280px] gap-2">
+              <Input
+                id="zip_code"
+                placeholder="00000-000"
+                maxLength={9}
+                {...register("zip_code")}
+                onChange={(e) => setValue("zip_code", formatCep(e.target.value))}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleFetchCep}
+                disabled={isFetchingCep}
+              >
+                {isFetchingCep ? "Buscando..." : "Buscar"}
+              </Button>
+            </div>
+          </div>
+
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <Label htmlFor="street">Logradouro</Label>
+            <Input id="street" placeholder="Rua, Avenida, etc." {...register("street")} />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="street_number">Número</Label>
+            <Input id="street_number" placeholder="123" {...register("street_number")} />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="complement">Complemento</Label>
+            <Input id="complement" placeholder="Sala, Andar, etc." {...register("complement")} />
+          </div>
+
+          <div className="col-span-2 grid grid-cols-[1fr_1fr_80px] gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="neighborhood">Bairro</Label>
+              <Input id="neighborhood" placeholder="Bairro" {...register("neighborhood")} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="city">Cidade</Label>
+              <Input id="city" placeholder="Cidade" {...register("city")} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="state">UF</Label>
+              <Input
+                id="state"
+                placeholder="SP"
+                maxLength={2}
+                {...register("state")}
+                onChange={(e) => setValue("state", e.target.value.toUpperCase())}
+              />
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="street">Logradouro</Label>
-          <Input id="street" {...register("street")} />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="street_number">Número</Label>
-          <Input id="street_number" {...register("street_number")} />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="complement">Complemento</Label>
-          <Input id="complement" {...register("complement")} />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="neighborhood">Bairro</Label>
-          <Input id="neighborhood" {...register("neighborhood")} />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="city">Cidade</Label>
-          <Input id="city" {...register("city")} />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="state">UF</Label>
-          <Input id="state" maxLength={2} {...register("state")} />
-        </div>
       </div>
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-          Representante
+          Representante e contato
         </p>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="representative_name">Nome</Label>
-          <Input id="representative_name" {...register("representative_name")} />
-        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="representative_name">Nome do representante</Label>
+            <Input
+              id="representative_name"
+              placeholder="Nome completo"
+              {...register("representative_name")}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="representative_email">E-mail</Label>
-          <Input id="representative_email" type="email" {...register("representative_email")} />
-          {errors.representative_email && (
-            <p className="text-sm text-destructive">{errors.representative_email.message}</p>
-          )}
-        </div>
-      </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="representative_email">E-mail do representante</Label>
+            <Input
+              id="representative_email"
+              type="email"
+              placeholder="email@empresa.com.br"
+              {...register("representative_email")}
+            />
+            {errors.representative_email && (
+              <p className="text-sm text-destructive">{errors.representative_email.message}</p>
+            )}
+          </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-          Financeiro
-        </p>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="financial_name">Nome financeiro</Label>
+            <Input
+              id="financial_name"
+              placeholder="Nome completo"
+              {...register("financial_name")}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="financial_name">Nome</Label>
-          <Input id="financial_name" {...register("financial_name")} />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="financial_email">E-mail</Label>
-          <Input id="financial_email" type="email" {...register("financial_email")} />
-          {errors.financial_email && (
-            <p className="text-sm text-destructive">{errors.financial_email.message}</p>
-          )}
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="financial_email">E-mail financeiro</Label>
+            <Input
+              id="financial_email"
+              type="email"
+              placeholder="financeiro@empresa.com.br"
+              {...register("financial_email")}
+            />
+            {errors.financial_email && (
+              <p className="text-sm text-destructive">{errors.financial_email.message}</p>
+            )}
+          </div>
         </div>
       </div>
 

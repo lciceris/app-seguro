@@ -27,22 +27,38 @@ describe("CreateBrokerageDrawer", () => {
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
 
     expect(await screen.findByText("Informe o nome da corretora")).toBeInTheDocument();
-    expect(await screen.findByText("Informe o nome do administrador")).toBeInTheDocument();
-    expect(await screen.findByText("Informe o e-mail do administrador")).toBeInTheDocument();
+    expect(await screen.findByText("Informe o nome do representante")).toBeInTheDocument();
+    expect(await screen.findByText("Informe o e-mail do representante")).toBeInTheDocument();
     expect(mutateMock).not.toHaveBeenCalled();
   });
 
-  it("chama a mutation com os valores do formulário", async () => {
+  it("aplica a máscara de CNPJ e telefone durante a digitação", async () => {
+    renderWithProviders(<CreateBrokerageDrawer />);
+
+    fireEvent.change(screen.getByLabelText("CNPJ"), { target: { value: "11222333000181" } });
+    expect(screen.getByLabelText("CNPJ")).toHaveValue("11.222.333/0001-81");
+
+    fireEvent.change(screen.getByLabelText("Telefone"), { target: { value: "11987654321" } });
+    expect(screen.getByLabelText("Telefone")).toHaveValue("(11) 98765-4321");
+
+    fireEvent.change(screen.getByLabelText("CEP"), { target: { value: "01310100" } });
+    expect(screen.getByLabelText("CEP")).toHaveValue("01310-100");
+
+    fireEvent.change(screen.getByLabelText("UF"), { target: { value: "sp" } });
+    expect(screen.getByLabelText("UF")).toHaveValue("SP");
+  });
+
+  it("chama a mutation com os valores do formulário (representante = primeiro admin)", async () => {
     renderWithProviders(<CreateBrokerageDrawer />);
 
     fireEvent.change(screen.getByLabelText("Razão social"), {
       target: { value: "Nova Corretora" },
     });
-    fireEvent.change(screen.getByLabelText("Nome", { selector: "#admin_full_name" }), {
-      target: { value: "Admin Novo" },
+    fireEvent.change(screen.getByLabelText("Nome do representante"), {
+      target: { value: "Representante Novo" },
     });
-    fireEvent.change(screen.getByLabelText("E-mail", { selector: "#admin_email" }), {
-      target: { value: "admin@example.com" },
+    fireEvent.change(screen.getByLabelText("E-mail do representante"), {
+      target: { value: "representante@example.com" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
 
@@ -50,8 +66,8 @@ describe("CreateBrokerageDrawer", () => {
       expect(mutateMock).toHaveBeenCalledWith(
         {
           brokerage_name: "Nova Corretora",
-          admin_full_name: "Admin Novo",
-          admin_email: "admin@example.com",
+          representative_name: "Representante Novo",
+          representative_email: "representante@example.com",
           trade_name: null,
           tax_id: null,
           business_code: null,
@@ -65,8 +81,6 @@ describe("CreateBrokerageDrawer", () => {
           neighborhood: null,
           city: null,
           state: null,
-          representative_name: null,
-          representative_email: null,
           financial_name: null,
           financial_email: null,
         },
@@ -100,5 +114,9 @@ describe("CreateBrokerageDrawer", () => {
     expect(await screen.findByDisplayValue("Empresa Buscada LTDA")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Empresa Buscada")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Av. Paulista")).toBeInTheDocument();
+    // Telefone/CEP retornados como dígitos crus pela API — devem chegar
+    // formatados na tela (mesma máscara da digitação manual).
+    expect(screen.getByDisplayValue("(11) 4002-8922")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("01310-100")).toBeInTheDocument();
   });
 });

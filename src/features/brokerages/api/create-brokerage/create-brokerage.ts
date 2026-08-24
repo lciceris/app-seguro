@@ -1,10 +1,12 @@
 import { supabase } from "@/shared/lib/supabase";
 import { extractFunctionErrorMessage } from "@/shared/utils/extract-function-error-message";
 
+// O representante é convidado automaticamente como primeiro brokerage_admin
+// da corretora — não há um "admin" separado do representante.
 export interface CreateBrokerageInput {
   brokerage_name: string;
-  admin_full_name: string;
-  admin_email: string;
+  representative_name: string;
+  representative_email: string;
   trade_name: string | null;
   tax_id: string | null;
   business_code: string | null;
@@ -18,8 +20,6 @@ export interface CreateBrokerageInput {
   neighborhood: string | null;
   city: string | null;
   state: string | null;
-  representative_name: string | null;
-  representative_email: string | null;
   financial_name: string | null;
   financial_email: string | null;
 }

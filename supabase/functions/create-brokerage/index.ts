@@ -22,8 +22,6 @@ Deno.serve(async (req) => {
 
   const {
     brokerage_name,
-    admin_full_name,
-    admin_email,
     trade_name,
     tax_id,
     business_code,
@@ -78,8 +76,10 @@ Deno.serve(async (req) => {
 
   const appUrl = Deno.env.get("APP_URL") ?? "http://localhost:5173";
 
+  // O representante é convidado como primeiro brokerage_admin — não existe um
+  // "admin" separado do representante (ver requirements.md, Requirement 2).
   const { data: invited, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
-    admin_email,
+    representative_email,
     { redirectTo: `${appUrl}/set-password` },
   );
   if (inviteError) {
@@ -94,8 +94,8 @@ Deno.serve(async (req) => {
     brokerage_id: brokerage.id,
     role: "brokerage_admin",
     status: "active",
-    full_name: admin_full_name,
-    email: admin_email,
+    full_name: representative_name,
+    email: representative_email,
   });
   if (userError) {
     await supabaseAdmin.auth.admin.deleteUser(invited.user.id);

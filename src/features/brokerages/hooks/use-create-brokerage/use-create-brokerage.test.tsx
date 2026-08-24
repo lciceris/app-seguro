@@ -27,8 +27,8 @@ describe("useCreateBrokerage", () => {
 
     const input = {
       brokerage_name: "Nova Corretora",
-      admin_full_name: "Admin Novo",
-      admin_email: "admin@example.com",
+      representative_name: "Representante Novo",
+      representative_email: "representante@example.com",
       trade_name: null,
       tax_id: null,
       business_code: null,
@@ -42,8 +42,6 @@ describe("useCreateBrokerage", () => {
       neighborhood: null,
       city: null,
       state: null,
-      representative_name: null,
-      representative_email: null,
       financial_name: null,
       financial_email: null,
     };

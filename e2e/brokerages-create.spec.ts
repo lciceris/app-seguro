@@ -109,15 +109,18 @@ test("platform_admin cria corretora pela UI (convite falha por SMTP, sem deixar 
   await page.fill("#brokerage_name", newBrokerageName);
   await page.fill("#trade_name", "Nome Fantasia E2E");
   await page.fill("#tax_id", "11222333000181");
-  await page.fill("#admin_full_name", "Admin Via UI");
-  await page.fill("#admin_email", `e2e-ui-admin-${Date.now()}@appseguro.dev`);
+  await page.fill("#representative_name", "Representante Via UI");
+  await page.fill("#representative_email", `e2e-ui-admin-${Date.now()}@appseguro.dev`);
   await page.click('button[type="submit"]');
 
   await expect(page.locator("[data-sonner-toast]")).toBeVisible();
 
   expect(invokeBody?.brokerage_name).toBe(newBrokerageName);
   expect(invokeBody?.trade_name).toBe("Nome Fantasia E2E");
+  // Máscara de digitação aplicada no CNPJ — o payload chega com dígitos crus
+  // (convertido de volta antes do submit, ver create-brokerage-drawer.tsx).
   expect(invokeBody?.tax_id).toBe("11222333000181");
+  expect(invokeBody?.representative_name).toBe("Representante Via UI");
 
   const admin = adminClient();
   const { data: leftover } = await admin

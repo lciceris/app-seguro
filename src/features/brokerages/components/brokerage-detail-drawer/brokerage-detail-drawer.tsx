@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
+import { formatCep, formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import {
@@ -67,18 +68,27 @@ export function BrokerageDetailDrawer() {
                 </p>
                 <DetailField label="Razão social" value={brokerage.name} />
                 <DetailField label="Nome fantasia" value={brokerage.trade_name} />
-                <DetailField label="CNPJ" value={brokerage.tax_id} />
+                <DetailField
+                  label="CNPJ"
+                  value={brokerage.tax_id ? formatCnpj(brokerage.tax_id) : null}
+                />
                 <DetailField label="CNAE" value={brokerage.business_code} />
                 <DetailField label="Inscrição estadual" value={brokerage.state_registration} />
                 <DetailField label="E-mail comercial" value={brokerage.email} />
-                <DetailField label="Telefone" value={brokerage.phone} />
+                <DetailField
+                  label="Telefone"
+                  value={brokerage.phone ? formatPhone(brokerage.phone) : null}
+                />
               </div>
 
               <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Endereço
                 </p>
-                <DetailField label="CEP" value={brokerage.zip_code} />
+                <DetailField
+                  label="CEP"
+                  value={brokerage.zip_code ? formatCep(brokerage.zip_code) : null}
+                />
                 <DetailField label="Logradouro" value={brokerage.street} />
                 <DetailField label="Número" value={brokerage.street_number} />
                 <DetailField label="Complemento" value={brokerage.complement} />
@@ -89,18 +99,15 @@ export function BrokerageDetailDrawer() {
 
               <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Representante
+                  Representante e contato
                 </p>
-                <DetailField label="Nome" value={brokerage.representative_name} />
-                <DetailField label="E-mail" value={brokerage.representative_email} />
-              </div>
-
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Financeiro
-                </p>
-                <DetailField label="Nome" value={brokerage.financial_name} />
-                <DetailField label="E-mail" value={brokerage.financial_email} />
+                <DetailField label="Nome do representante" value={brokerage.representative_name} />
+                <DetailField
+                  label="E-mail do representante"
+                  value={brokerage.representative_email}
+                />
+                <DetailField label="Nome financeiro" value={brokerage.financial_name} />
+                <DetailField label="E-mail financeiro" value={brokerage.financial_email} />
               </div>
 
               <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
