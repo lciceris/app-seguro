@@ -74,34 +74,88 @@ export type Database = {
       }
       brokerages: {
         Row: {
+          business_code: string | null
+          city: string | null
+          complement: string | null
           created_at: string
+          email: string | null
+          financial_email: string | null
+          financial_name: string | null
           id: string
           logo_url: string | null
           name: string
+          neighborhood: string | null
+          phone: string | null
+          plan_expires_at: string | null
           plan_id: string | null
           primary_color: string | null
+          representative_email: string | null
+          representative_name: string | null
+          state: string | null
+          state_registration: string | null
           status: Database["public"]["Enums"]["brokerage_status"]
+          street: string | null
+          street_number: string | null
+          tax_id: string | null
+          trade_name: string | null
           updated_at: string
+          zip_code: string | null
         }
         Insert: {
+          business_code?: string | null
+          city?: string | null
+          complement?: string | null
           created_at?: string
+          email?: string | null
+          financial_email?: string | null
+          financial_name?: string | null
           id?: string
           logo_url?: string | null
           name: string
+          neighborhood?: string | null
+          phone?: string | null
+          plan_expires_at?: string | null
           plan_id?: string | null
           primary_color?: string | null
+          representative_email?: string | null
+          representative_name?: string | null
+          state?: string | null
+          state_registration?: string | null
           status?: Database["public"]["Enums"]["brokerage_status"]
+          street?: string | null
+          street_number?: string | null
+          tax_id?: string | null
+          trade_name?: string | null
           updated_at?: string
+          zip_code?: string | null
         }
         Update: {
+          business_code?: string | null
+          city?: string | null
+          complement?: string | null
           created_at?: string
+          email?: string | null
+          financial_email?: string | null
+          financial_name?: string | null
           id?: string
           logo_url?: string | null
           name?: string
+          neighborhood?: string | null
+          phone?: string | null
+          plan_expires_at?: string | null
           plan_id?: string | null
           primary_color?: string | null
+          representative_email?: string | null
+          representative_name?: string | null
+          state?: string | null
+          state_registration?: string | null
           status?: Database["public"]["Enums"]["brokerage_status"]
+          street?: string | null
+          street_number?: string | null
+          tax_id?: string | null
+          trade_name?: string | null
           updated_at?: string
+          zip_code?: string | null
         }
         Relationships: [
           {
