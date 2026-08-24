@@ -22,6 +22,10 @@ Teste manual apontou uma duplicação: o cadastro tinha uma seção "Representan
 
 Nesse mesmo refinamento, o formulário de criação e o de edição pelo `brokerage_admin` (Requirement 6) passaram a replicar os placeholders, máscaras (CNPJ, telefone, CEP, UF maiúsculo) e o agrupamento de seções do formulário equivalente do sistema antigo (`fleet-auth-gate`, `src/features/admin/pages/admin.brokerages.tsx`) — inclusive consolidando "Representante" e "Financeiro" numa única seção "Representante e contato", como já era feito lá.
 
+### platform_admin também edita dados de empresa (refinamento pós-implementação)
+
+Segundo ajuste do mesmo feedback: a edição do `platform_admin` (Requirement 4) estava restrita a nome/plano/status/data de expiração — só a criação (Requirement 2) tinha os campos de empresa. Isso quebrava a simetria com o sistema antigo, onde o mesmo formulário (`BrokerageFormFields`) serve tanto pra criar quanto pra editar. Requirement 4 (AC2/AC3) foi ajustado: `platform_admin` agora edita o mesmo conjunto de campos de empresa que preenche na criação — só logo/cor continuam exclusivos do `brokerage_admin` (Requirement 6), já que fazem parte da identidade visual do dia a dia da corretora, não do cadastro administrativo.
+
 ## Requirements
 
 ### Requirement 1: Corretora especial da plataforma
@@ -57,13 +61,13 @@ Nesse mesmo refinamento, o formulário de criação e o de edição pelo `broker
 
 ### Requirement 4: Ver detalhe e editar uma corretora (platform_admin)
 
-**User Story:** Como `platform_admin`, quero ver o detalhe completo de qualquer corretora-cliente e editar nome/plano, para corrigir informações administrativas ou ajustar o plano vinculado.
+**User Story:** Como `platform_admin`, quero ver o detalhe completo de qualquer corretora-cliente e editar tanto os dados administrativos (plano, status) quanto os dados de empresa, para poder corrigir cadastro ou dar suporte à corretora sem depender do `brokerage_admin` fazer isso.
 
 #### Acceptance Criteria
 
 1. WHEN `platform_admin` abre o detalhe de uma corretora THEN o sistema SHALL exibir todos os dados dela — nome, dados de empresa (nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço, representante, financeiro), plano vinculado, data de expiração do plano, status, logo e cor primária.
-2. WHEN `platform_admin` edita uma corretora THEN o sistema SHALL permitir alterar só nome, plano vinculado e data de expiração do plano.
-3. A edição dos demais dados (dados de empresa, logo, cor primária) não faz parte da gestão do `platform_admin` — é responsabilidade exclusiva do `brokerage_admin` da própria corretora (Requirement 6). `platform_admin` só preenche esses dados uma vez, na criação (Requirement 2); depois disso, mantê-los atualizados é responsabilidade da corretora.
+2. WHEN `platform_admin` edita uma corretora THEN o sistema SHALL permitir alterar nome, plano vinculado, data de expiração do plano, E todos os dados de empresa (nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo, representante, financeiro) — o mesmo conjunto de campos preenchível na criação (Requirement 2.2).
+3. Logo e cor primária continuam fora da edição do `platform_admin` — são responsabilidade exclusiva do `brokerage_admin` da própria corretora (Requirement 6), a única exceção à simetria entre criação e edição por esta via.
 4. WHEN um perfil diferente de `platform_admin` tenta ver o detalhe ou editar por essa via THEN o sistema SHALL negar a ação.
 
 ### Requirement 5: Desativar e reativar uma corretora

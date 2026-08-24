@@ -119,15 +119,16 @@ Mesma convenção de nomes já usada em `clients` (`zip_code`/`street`/`street_n
 O trigger da Task 1.7 (já existente) precisa reconhecer as colunas novas nos dois grupos:
 
 ```
-brokerage_admin permitido mudar:
-  name, trade_name, tax_id, business_code, state_registration, email, phone,
-  zip_code, street, street_number, complement, neighborhood, city, state,
-  representative_name, representative_email, financial_name, financial_email,
-  logo_url, primary_color
+brokerage_admin (v_is_own) NÃO pode mudar:
+  plan_id, status, plan_expires_at
+  (tudo mais — name + dados de empresa + logo_url/primary_color — liberado)
 
-platform_admin permitido mudar:
-  name, plan_id, plan_expires_at, status
+platform_admin NÃO pode mudar:
+  logo_url, primary_color
+  (tudo mais — name, plan_id, plan_expires_at, status + dados de empresa — liberado)
 ```
+
+**Refinamento pós-implementação** (ver "platform_admin também edita dados de empresa" em `requirements.md`): a versão original bloqueava `platform_admin` de mexer em qualquer dado de empresa, deixando só `name`/`plan_id`/`plan_expires_at`/`status` liberados. Isso quebrava a simetria com a criação (que já preenche esses campos) e com o formulário equivalente do sistema antigo, onde o mesmo form edita tudo. A trigger passou a bloquear `platform_admin` só de `logo_url`/`primary_color` (exclusivos do `brokerage_admin`) — implementado como *deny-list* em vez de *allow-list* pros dois grupos, mais simples de manter conforme novas colunas de empresa forem adicionadas no futuro.
 
 ### Edge Function `create-brokerage` — payload estendido
 

@@ -75,14 +75,19 @@ describe("EditBrokerageDrawer", () => {
   it("vem pré-preenchido com os dados atuais da corretora", () => {
     renderDrawer();
 
-    expect(screen.getByLabelText("Nome")).toHaveValue("Corretora Original");
+    expect(screen.getByLabelText("Razão social")).toHaveValue("Corretora Original");
   });
 
-  it("chama a mutation com os valores editados", async () => {
+  it("chama a mutation com os valores editados, incluindo dados de empresa", async () => {
     const user = userEvent.setup();
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Nome Editado" } });
+    fireEvent.change(screen.getByLabelText("Razão social"), {
+      target: { value: "Nome Editado" },
+    });
+    fireEvent.change(screen.getByLabelText("Nome fantasia"), {
+      target: { value: "Fantasia Editada" },
+    });
 
     await user.click(screen.getByRole("combobox", { name: "Plano" }));
     const listbox = await screen.findByRole("listbox");
@@ -97,9 +102,33 @@ describe("EditBrokerageDrawer", () => {
           name: "Nome Editado",
           plan_id: "p1",
           plan_expires_at: null,
+          trade_name: "Fantasia Editada",
+          tax_id: null,
+          business_code: null,
+          state_registration: null,
+          email: null,
+          phone: null,
+          zip_code: null,
+          street: null,
+          street_number: null,
+          complement: null,
+          neighborhood: null,
+          city: null,
+          state: null,
+          representative_name: null,
+          representative_email: null,
+          financial_name: null,
+          financial_email: null,
         },
         expect.any(Object),
       );
     });
+  });
+
+  it("aplica a máscara de CNPJ no campo pré-preenchido e na digitação", async () => {
+    renderDrawer();
+
+    fireEvent.change(screen.getByLabelText("CNPJ"), { target: { value: "11222333000181" } });
+    expect(screen.getByLabelText("CNPJ")).toHaveValue("11.222.333/0001-81");
   });
 });

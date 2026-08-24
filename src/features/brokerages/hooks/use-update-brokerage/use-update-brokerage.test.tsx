@@ -26,7 +26,29 @@ describe("useUpdateBrokerage", () => {
 
     const { result } = renderHook(() => useUpdateBrokerage(), { wrapper: createWrapper() });
 
-    const input = { id: "b1", name: "Editada", plan_id: null, plan_expires_at: null };
+    const input = {
+      id: "b1",
+      name: "Editada",
+      plan_id: null,
+      plan_expires_at: null,
+      trade_name: null,
+      tax_id: null,
+      business_code: null,
+      state_registration: null,
+      email: null,
+      phone: null,
+      zip_code: null,
+      street: null,
+      street_number: null,
+      complement: null,
+      neighborhood: null,
+      city: null,
+      state: null,
+      representative_name: null,
+      representative_email: null,
+      financial_name: null,
+      financial_email: null,
+    };
     result.current.mutate(input);
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));

@@ -183,3 +183,13 @@
     - _Requirements: 2.2, 6.1_
   - [x] 18.4 Atualizar testes de componente (`create-brokerage-drawer`, `use-create-brokerage`) e `e2e/brokerages-create.spec.ts` pro representante único e a nova máscara
     - _Requirements: 2.2_
+
+- [x] 19. platform_admin também edita dados de empresa (simetria com a criação)
+  - [x] 19.1 Migration: `enforce_brokerage_update_columns` — `platform_admin` só bloqueado de `logo_url`/`primary_color` (deny-list em vez de allow-list)
+    - _Requirements: 4.2, 4.3_
+  - [x] 19.2 Migration: `grant update` das colunas de empresa + `plan_expires_at` pro role `authenticated` — bug real encontrado em verificação manual (GRANT column-level nunca tinha sido estendido desde a Task 1, bloqueando toda edição dessas colunas antes mesmo da RLS)
+    - _Requirements: infra_
+  - [x] 19.3 Atualizar `edit-brokerage-schema.ts` + `api/update-brokerage.ts` + `edit-brokerage-drawer.tsx` — mesmas seções/máscaras/placeholders de `create-brokerage-drawer.tsx`, mantendo Plano e Status
+    - _Requirements: 4.2_
+  - [x] 19.4 Atualizar testes de componente (`edit-brokerage-drawer`, `use-update-brokerage`) — verificado fim a fim com submit real (criação e as duas edições) contra o banco
+    - _Requirements: 4.2_
