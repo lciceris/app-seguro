@@ -12,6 +12,17 @@ import {
 
 import { useBrokerage } from "../../hooks/use-brokerage";
 
+function DetailField({ label, value }: { label: string; value: string | null }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+        {label}
+      </span>
+      <span className="text-sm text-foreground">{value ?? "Não informado"}</span>
+    </div>
+  );
+}
+
 export function BrokerageDetailDrawer() {
   const navigate = useNavigate();
   const { brokerageId } = useParams<{ brokerageId: string }>();
@@ -49,38 +60,88 @@ export function BrokerageDetailDrawer() {
           )}
 
           {!isLoading && !isError && brokerage && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Nome
-                </span>
-                <span className="text-sm text-foreground">{brokerage.name}</span>
+            <>
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Empresa
+                </p>
+                <DetailField label="Razão social" value={brokerage.name} />
+                <DetailField label="Nome fantasia" value={brokerage.trade_name} />
+                <DetailField label="CNPJ" value={brokerage.tax_id} />
+                <DetailField label="CNAE" value={brokerage.business_code} />
+                <DetailField label="Inscrição estadual" value={brokerage.state_registration} />
+                <DetailField label="E-mail comercial" value={brokerage.email} />
+                <DetailField label="Telefone" value={brokerage.phone} />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Plano
-                </span>
-                <span className="text-sm text-foreground">
-                  {brokerage.plans?.name ?? "Sem plano"}
-                </span>
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Endereço
+                </p>
+                <DetailField label="CEP" value={brokerage.zip_code} />
+                <DetailField label="Logradouro" value={brokerage.street} />
+                <DetailField label="Número" value={brokerage.street_number} />
+                <DetailField label="Complemento" value={brokerage.complement} />
+                <DetailField label="Bairro" value={brokerage.neighborhood} />
+                <DetailField label="Cidade" value={brokerage.city} />
+                <DetailField label="UF" value={brokerage.state} />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Status
-                </span>
-                <span
-                  className={
-                    brokerage.status === "active"
-                      ? "text-sm font-medium text-emerald-700"
-                      : "text-sm font-medium text-slate-500"
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Representante
+                </p>
+                <DetailField label="Nome" value={brokerage.representative_name} />
+                <DetailField label="E-mail" value={brokerage.representative_email} />
+              </div>
+
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Financeiro
+                </p>
+                <DetailField label="Nome" value={brokerage.financial_name} />
+                <DetailField label="E-mail" value={brokerage.financial_email} />
+              </div>
+
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Plano e status
+                </p>
+                <DetailField label="Plano" value={brokerage.plans?.name ?? "Sem plano"} />
+                <DetailField
+                  label="Data de expiração do plano"
+                  value={
+                    brokerage.plan_expires_at
+                      ? new Date(brokerage.plan_expires_at + "T00:00:00").toLocaleDateString(
+                          "pt-BR",
+                        )
+                      : null
                   }
-                >
-                  {brokerage.status === "active" ? "Ativo" : "Inativo"}
-                </span>
+                />
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Status
+                  </span>
+                  <span
+                    className={
+                      brokerage.status === "active"
+                        ? "text-sm font-medium text-emerald-700"
+                        : "text-sm font-medium text-slate-500"
+                    }
+                  >
+                    {brokerage.status === "active" ? "Ativo" : "Inativo"}
+                  </span>
+                </div>
               </div>
-            </div>
+
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Identidade visual
+                </p>
+                <DetailField label="URL do logo" value={brokerage.logo_url} />
+                <DetailField label="Cor primária" value={brokerage.primary_color} />
+              </div>
+            </>
           )}
         </div>
 

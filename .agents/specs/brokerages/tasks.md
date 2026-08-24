@@ -164,8 +164,8 @@
   - [x] 15.1 Atualizar `edit-brokerage-schema.ts` + `api/update-brokerage.ts` + `edit-brokerage-drawer.tsx` — campo `plan_expires_at` (`DatePicker`) ao lado de `plan_id`
     - _Requirements: 4.2_
 
-- [ ] 16. Detalhe — exibir todos os dados
-  - [ ] 16.1 Atualizar `brokerage-detail-drawer.tsx` — exibe todos os campos novos (somente leitura) + `plan_expires_at`
+- [x] 16. Detalhe — exibir todos os dados
+  - [x] 16.1 Atualizar `brokerage-detail-drawer.tsx` — exibe todos os campos novos (somente leitura) + `plan_expires_at`
     - _Requirements: 4.1_
 
 - [ ] 17. Testes
