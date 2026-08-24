@@ -140,10 +140,10 @@
   - [x] 11.3 Regenerar `database-types.ts`
     - _Requirements: infra_
 
-- [ ] 12. Busca de CNPJ/CEP (infra compartilhada)
-  - [ ] 12.1 Criar `src/shared/lib/brasil-api.ts` (`fetchCnpjData`)
+- [x] 12. Busca de CNPJ/CEP (infra compartilhada)
+  - [x] 12.1 Criar `src/shared/lib/brasil-api.ts` (`fetchCnpjData`)
     - _Requirements: 7.1_
-  - [ ] 12.2 Criar `src/shared/lib/via-cep.ts` (`fetchCepData`)
+  - [x] 12.2 Criar `src/shared/lib/via-cep.ts` (`fetchCepData`)
     - _Requirements: 7.2_
 
 - [ ] 13. Cadastro completo (criação, platform_admin)
