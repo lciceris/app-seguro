@@ -154,10 +154,10 @@
   - [x] 13.3 Atualizar `create-brokerage-drawer.tsx` — seções Identificação/Endereço/Representante/Financeiro (mesmo padrão de `create-client-drawer`) + botões "Buscar" (CNPJ/CEP)
     - _Requirements: 2.2, 7.1, 7.2, 7.3_
 
-- [ ] 14. Edição pela própria corretora (brokerage_admin)
-  - [ ] 14.1 Atualizar `edit-own-brokerage-schema.ts` + `api/update-own-brokerage.ts` com os campos de empresa
+- [x] 14. Edição pela própria corretora (brokerage_admin)
+  - [x] 14.1 Atualizar `edit-own-brokerage-schema.ts` + `api/update-own-brokerage.ts` com os campos de empresa
     - _Requirements: 6.1_
-  - [ ] 14.2 Atualizar `own-brokerage-screen.tsx` — mesmas seções + busca do 13.3
+  - [x] 14.2 Atualizar `own-brokerage-screen.tsx` — mesmas seções + busca do 13.3
     - _Requirements: 6.1, 7.1, 7.2, 7.3, 7.4_
 
 - [ ] 15. Edição pelo platform_admin — data de expiração do plano
