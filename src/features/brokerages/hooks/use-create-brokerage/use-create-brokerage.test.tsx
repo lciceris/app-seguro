@@ -29,6 +29,23 @@ describe("useCreateBrokerage", () => {
       brokerage_name: "Nova Corretora",
       admin_full_name: "Admin Novo",
       admin_email: "admin@example.com",
+      trade_name: null,
+      tax_id: null,
+      business_code: null,
+      state_registration: null,
+      email: null,
+      phone: null,
+      zip_code: null,
+      street: null,
+      street_number: null,
+      complement: null,
+      neighborhood: null,
+      city: null,
+      state: null,
+      representative_name: null,
+      representative_email: null,
+      financial_name: null,
+      financial_email: null,
     };
     result.current.mutate(input);
 

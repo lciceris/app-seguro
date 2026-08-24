@@ -20,7 +20,28 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: auth.error }, auth.status);
   }
 
-  const { brokerage_name, admin_full_name, admin_email } = await req.json();
+  const {
+    brokerage_name,
+    admin_full_name,
+    admin_email,
+    trade_name,
+    tax_id,
+    business_code,
+    state_registration,
+    email,
+    phone,
+    zip_code,
+    street,
+    street_number,
+    complement,
+    neighborhood,
+    city,
+    state,
+    representative_name,
+    representative_email,
+    financial_name,
+    financial_email,
+  } = await req.json();
 
   const supabaseAdmin = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -29,7 +50,26 @@ Deno.serve(async (req) => {
 
   const { data: brokerage, error: brokerageError } = await supabaseAdmin
     .from("brokerages")
-    .insert({ name: brokerage_name })
+    .insert({
+      name: brokerage_name,
+      trade_name,
+      tax_id,
+      business_code,
+      state_registration,
+      email,
+      phone,
+      zip_code,
+      street,
+      street_number,
+      complement,
+      neighborhood,
+      city,
+      state,
+      representative_name,
+      representative_email,
+      financial_name,
+      financial_email,
+    })
     .select()
     .single();
   if (brokerageError) {

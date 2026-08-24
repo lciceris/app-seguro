@@ -146,12 +146,12 @@
   - [x] 12.2 Criar `src/shared/lib/via-cep.ts` (`fetchCepData`)
     - _Requirements: 7.2_
 
-- [ ] 13. Cadastro completo (criação, platform_admin)
-  - [ ] 13.1 Atualizar Edge Function `create-brokerage` — aceita e insere os campos de empresa (opcionais) além de `brokerage_name`/`admin_full_name`/`admin_email`
+- [x] 13. Cadastro completo (criação, platform_admin)
+  - [x] 13.1 Atualizar Edge Function `create-brokerage` — aceita e insere os campos de empresa (opcionais) além de `brokerage_name`/`admin_full_name`/`admin_email`
     - _Requirements: 2.2_
-  - [ ] 13.2 Atualizar `create-brokerage-schema.ts` + `api/create-brokerage.ts` (`CreateBrokerageInput`) com os campos novos
+  - [x] 13.2 Atualizar `create-brokerage-schema.ts` + `api/create-brokerage.ts` (`CreateBrokerageInput`) com os campos novos
     - _Requirements: 2.2_
-  - [ ] 13.3 Atualizar `create-brokerage-drawer.tsx` — seções Identificação/Endereço/Representante/Financeiro (mesmo padrão de `create-client-drawer`) + botões "Buscar" (CNPJ/CEP)
+  - [x] 13.3 Atualizar `create-brokerage-drawer.tsx` — seções Identificação/Endereço/Representante/Financeiro (mesmo padrão de `create-client-drawer`) + botões "Buscar" (CNPJ/CEP)
     - _Requirements: 2.2, 7.1, 7.2, 7.3_
 
 - [ ] 14. Edição pela própria corretora (brokerage_admin)
