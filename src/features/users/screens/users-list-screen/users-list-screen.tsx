@@ -6,7 +6,17 @@ import { toast } from "sonner";
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEmptyState,
+  TableErrorState,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeletonRow,
+} from "@/shared/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
 import { ROLE_LABELS } from "../../constants/role-labels";
@@ -41,166 +51,126 @@ export function UsersListScreen() {
         )}
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Nome
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                E-mail
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Perfil
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Status
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <tr key={index} className="border-b border-border">
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-32" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-40" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-24" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-16" />
-                  </td>
-                  <td className="px-4 py-3" />
-                </tr>
-              ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nome</TableHead>
+            <TableHead>E-mail</TableHead>
+            <TableHead>Perfil</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={5} />)}
 
-            {isError && !isLoading && (
-              <tr>
-                <td colSpan={5} className="px-4 py-8 text-center">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    Não foi possível carregar os usuários.
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Tentar novamente
-                  </Button>
-                </td>
-              </tr>
-            )}
+          {isError && !isLoading && (
+            <TableErrorState
+              colSpan={5}
+              message="Não foi possível carregar os usuários."
+              onRetry={() => refetch()}
+            />
+          )}
 
-            {!isLoading && !isError && users?.length === 0 && (
-              <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  Nenhum usuário cadastrado ainda.
-                </td>
-              </tr>
-            )}
+          {!isLoading && !isError && users?.length === 0 && (
+            <TableEmptyState colSpan={5} message="Nenhum usuário cadastrado ainda." />
+          )}
 
-            {!isLoading &&
-              !isError &&
-              users?.map((user) => (
-                <tr
-                  key={user.id}
-                  className="border-b border-border last:border-0 hover:bg-muted/50"
-                >
-                  <td className="px-4 py-3 text-foreground">{user.full_name}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{user.email}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{ROLE_LABELS[user.role]}</td>
-                  <td className="px-4 py-3">
-                    <Badge
-                      variant="outline"
-                      className={
-                        user.status === "active"
-                          ? "border-transparent bg-emerald-100 text-emerald-700"
-                          : "border-transparent bg-slate-100 text-slate-500"
-                      }
-                    >
-                      {user.status === "active" ? "Ativo" : "Inativo"}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1">
+          {!isLoading &&
+            !isError &&
+            users?.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell className="text-foreground">{user.full_name}</TableCell>
+                <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                <TableCell className="text-muted-foreground">{ROLE_LABELS[user.role]}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant="outline"
+                    className={
+                      user.status === "active"
+                        ? "border-transparent bg-emerald-100 text-emerald-700"
+                        : "border-transparent bg-slate-100 text-slate-500"
+                    }
+                  >
+                    {user.status === "active" ? "Ativo" : "Inativo"}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link to={`/users/${user.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Ver</TooltipContent>
+                    </Tooltip>
+                    {canManageUsers && (
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/users/${user.id}`}>
-                              <Eye className="h-4 w-4" />
+                            <Link to={`/users/${user.id}/edit`}>
+                              <Pencil className="h-4 w-4" />
                             </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Ver</TooltipContent>
+                        <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
-                      {canManageUsers && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button asChild variant="ghost" size="icon-sm">
-                              <Link to={`/users/${user.id}/edit`}>
-                                <Pencil className="h-4 w-4" />
-                              </Link>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>Editar</TooltipContent>
-                        </Tooltip>
-                      )}
-                      {canManageUsers && (
+                    )}
+                    {canManageUsers && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            onClick={() => setResetPasswordUserId(user.id)}
+                          >
+                            <KeyRound className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Resetar senha</TooltipContent>
+                      </Tooltip>
+                    )}
+                    {canManageUsers &&
+                      user.id !== usuario?.id &&
+                      (user.status === "active" ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button
                               variant="ghost"
                               size="icon-sm"
-                              onClick={() => setResetPasswordUserId(user.id)}
+                              onClick={() =>
+                                setDeactivateUser({ id: user.id, name: user.full_name })
+                              }
                             >
-                              <KeyRound className="h-4 w-4" />
+                              <UserX className="h-4 w-4" />
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>Resetar senha</TooltipContent>
+                          <TooltipContent>Desativar</TooltipContent>
                         </Tooltip>
-                      )}
-                      {canManageUsers &&
-                        user.id !== usuario?.id &&
-                        (user.status === "active" ? (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                onClick={() =>
-                                  setDeactivateUser({ id: user.id, name: user.full_name })
-                                }
-                              >
-                                <UserX className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Desativar</TooltipContent>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                onClick={() => handleReactivate(user.id)}
-                              >
-                                <UserCheck className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Reativar</TooltipContent>
-                          </Tooltip>
-                        ))}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() => handleReactivate(user.id)}
+                            >
+                              <UserCheck className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reativar</TooltipContent>
+                        </Tooltip>
+                      ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
 
       <Outlet />
 

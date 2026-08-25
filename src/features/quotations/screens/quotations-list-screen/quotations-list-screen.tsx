@@ -13,7 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEmptyState,
+  TableErrorState,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeletonRow,
+} from "@/shared/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
 import { QUOTATION_STATUS_BADGE_CLASSES, QUOTATION_STATUS_LABELS } from "../../constants/labels";
@@ -91,134 +101,94 @@ export function QuotationsListScreen() {
         </Select>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Número
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Cliente
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Vendedor
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Status
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Prazo
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <tr key={index} className="border-b border-border">
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-24" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-32" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-28" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-20" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-20" />
-                  </td>
-                  <td className="px-4 py-3" />
-                </tr>
-              ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Número</TableHead>
+            <TableHead>Cliente</TableHead>
+            <TableHead>Vendedor</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Prazo</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={6} />)}
 
-            {isError && !isLoading && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    Não foi possível carregar as cotações.
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Tentar novamente
-                  </Button>
-                </td>
-              </tr>
-            )}
+          {isError && !isLoading && (
+            <TableErrorState
+              colSpan={6}
+              message="Não foi possível carregar as cotações."
+              onRetry={() => refetch()}
+            />
+          )}
 
-            {!isLoading && !isError && filteredQuotations?.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  {search || statusFilter !== ALL_STATUS_VALUE
-                    ? "Nenhuma cotação encontrada pra esse filtro."
-                    : "Nenhuma cotação cadastrada ainda."}
-                </td>
-              </tr>
-            )}
+          {!isLoading && !isError && filteredQuotations?.length === 0 && (
+            <TableEmptyState
+              colSpan={6}
+              message={
+                search || statusFilter !== ALL_STATUS_VALUE
+                  ? "Nenhuma cotação encontrada pra esse filtro."
+                  : "Nenhuma cotação cadastrada ainda."
+              }
+            />
+          )}
 
-            {!isLoading &&
-              !isError &&
-              filteredQuotations?.map((quotation) => (
-                <tr
-                  key={quotation.id}
-                  className="border-b border-border last:border-0 hover:bg-muted/50"
-                >
-                  <td className="px-4 py-3 text-foreground">{quotation.number}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {quotation.clients?.legal_name ?? "—"}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {quotation.seller?.full_name ?? "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge
-                      variant="outline"
-                      className={QUOTATION_STATUS_BADGE_CLASSES[quotation.status]}
-                    >
-                      {QUOTATION_STATUS_LABELS[quotation.status]}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {quotation.due_date
-                      ? new Date(`${quotation.due_date}T00:00:00`).toLocaleDateString("pt-BR")
-                      : "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1">
+          {!isLoading &&
+            !isError &&
+            filteredQuotations?.map((quotation) => (
+              <TableRow key={quotation.id}>
+                <TableCell className="font-mono-data text-foreground">{quotation.number}</TableCell>
+                <TableCell className="text-muted-foreground">
+                  {quotation.clients?.legal_name ?? "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {quotation.seller?.full_name ?? "—"}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant="outline"
+                    className={QUOTATION_STATUS_BADGE_CLASSES[quotation.status]}
+                  >
+                    {QUOTATION_STATUS_LABELS[quotation.status]}
+                  </Badge>
+                </TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {quotation.due_date
+                    ? new Date(`${quotation.due_date}T00:00:00`).toLocaleDateString("pt-BR")
+                    : "—"}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link to={`/quotations/${quotation.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Ver</TooltipContent>
+                    </Tooltip>
+                    {canEdit && (
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/quotations/${quotation.id}`}>
-                              <Eye className="h-4 w-4" />
+                            <Link to={`/quotations/${quotation.id}/edit`}>
+                              <Pencil className="h-4 w-4" />
                             </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Ver</TooltipContent>
+                        <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
-                      {canEdit && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button asChild variant="ghost" size="icon-sm">
-                              <Link to={`/quotations/${quotation.id}/edit`}>
-                                <Pencil className="h-4 w-4" />
-                              </Link>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>Editar</TooltipContent>
-                        </Tooltip>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
 
       <Outlet />
     </div>

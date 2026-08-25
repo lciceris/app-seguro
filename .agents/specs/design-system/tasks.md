@@ -38,22 +38,22 @@
   - [x] 3.7 Migrar `policy-endorsement-detail-drawer.tsx` — corrige o drift (`if (!value) return null` some pra "Não informado"); nenhum teste existente cobria o caso de valor vazio, então nada precisou de ajuste
     - _Requirements: 2.2, 2.3_
 
-- [ ] 4. Tabela compartilhada, densidade nova
-  - [ ] 4.1 Criar primitivo(s) em `src/shared/components/ui/` (wrapper, header, linha, empty state, skeleton) com a densidade de `design.md` (`px-3 py-1.5`, `text-[12.5px]`, mono+tabular-nums em coluna técnica)
+- [x] 4. Tabela compartilhada, densidade nova
+  - [x] 4.1 Criar primitivo(s) em `src/shared/components/ui/` (wrapper, header, linha, empty state, skeleton) com a densidade de `design.md` (`px-3 py-1.5`, `text-[12.5px]`, mono+tabular-nums em coluna técnica)
     - _Requirements: 3.1, 5.1, 5.2_
-  - [ ] 4.2 Migrar `clients-list-screen.tsx`
+  - [x] 4.2 Migrar `clients-list-screen.tsx`
     - _Requirements: 3.2_
-  - [ ] 4.3 Migrar `vehicles-list-screen.tsx`
+  - [x] 4.3 Migrar `vehicles-list-screen.tsx`
     - _Requirements: 3.2_
-  - [ ] 4.4 Migrar `quotations-list-screen.tsx`
+  - [x] 4.4 Migrar `quotations-list-screen.tsx`
     - _Requirements: 3.2_
-  - [ ] 4.5 Migrar `insurers-list-screen.tsx`
+  - [x] 4.5 Migrar `insurers-list-screen.tsx`
     - _Requirements: 3.2_
-  - [ ] 4.6 Migrar `policies-list-screen.tsx`
+  - [x] 4.6 Migrar `policies-list-screen.tsx`
     - _Requirements: 3.2_
-  - [ ] 4.7 Migrar `users-list-screen.tsx`
+  - [x] 4.7 Migrar `users-list-screen.tsx`
     - _Requirements: 3.2_
-  - [ ] 4.8 Migrar `brokerages-list-screen.tsx`
+  - [x] 4.8 Migrar `brokerages-list-screen.tsx`
     - _Requirements: 3.2_
 
 - [ ] 5. Badge de status ativo/inativo com tokens novos (troca `bg-emerald-100 text-emerald-700`/`bg-slate-100 text-slate-500` hardcoded pelos tokens do Task 1.1)

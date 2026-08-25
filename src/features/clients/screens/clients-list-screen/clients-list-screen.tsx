@@ -7,7 +7,17 @@ import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEmptyState,
+  TableErrorState,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeletonRow,
+} from "@/shared/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
 import { CLIENT_TYPE_LABELS, SEGMENT_BADGE_CLASSES, SEGMENT_LABELS } from "../../constants/labels";
@@ -77,164 +87,124 @@ export function ClientsListScreen() {
         />
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Nome
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Tipo
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                CPF/CNPJ
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Cidade/UF
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Segmento
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <tr key={index} className="border-b border-border">
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-32" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-24" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-24" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-20" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-16" />
-                  </td>
-                  <td className="px-4 py-3" />
-                </tr>
-              ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nome</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>CPF/CNPJ</TableHead>
+            <TableHead>Cidade/UF</TableHead>
+            <TableHead>Segmento</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={6} />)}
 
-            {isError && !isLoading && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    Não foi possível carregar os clientes.
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Tentar novamente
-                  </Button>
-                </td>
-              </tr>
-            )}
+          {isError && !isLoading && (
+            <TableErrorState
+              colSpan={6}
+              message="Não foi possível carregar os clientes."
+              onRetry={() => refetch()}
+            />
+          )}
 
-            {!isLoading && !isError && filteredClients?.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  {search
-                    ? "Nenhum cliente encontrado pra essa busca."
-                    : "Nenhum cliente cadastrado ainda."}
-                </td>
-              </tr>
-            )}
+          {!isLoading && !isError && filteredClients?.length === 0 && (
+            <TableEmptyState
+              colSpan={6}
+              message={
+                search
+                  ? "Nenhum cliente encontrado pra essa busca."
+                  : "Nenhum cliente cadastrado ainda."
+              }
+            />
+          )}
 
-            {!isLoading &&
-              !isError &&
-              filteredClients?.map((client) => (
-                <tr
-                  key={client.id}
-                  className="border-b border-border last:border-0 hover:bg-muted/50"
-                >
-                  <td className="px-4 py-3 text-foreground">
-                    {client.legal_name}
-                    {client.trade_name && (
-                      <span className="block text-xs text-muted-foreground">
-                        {client.trade_name}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {CLIENT_TYPE_LABELS[client.client_type]}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">{client.tax_id ?? "—"}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {client.city ? `${client.city}${client.state ? `/${client.state}` : ""}` : "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge variant="outline" className={SEGMENT_BADGE_CLASSES[client.segment]}>
-                      {SEGMENT_LABELS[client.segment]}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1">
+          {!isLoading &&
+            !isError &&
+            filteredClients?.map((client) => (
+              <TableRow key={client.id}>
+                <TableCell className="text-foreground">
+                  {client.legal_name}
+                  {client.trade_name && (
+                    <span className="block text-xs text-muted-foreground">{client.trade_name}</span>
+                  )}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {CLIENT_TYPE_LABELS[client.client_type]}
+                </TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {client.tax_id ?? "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {client.city ? `${client.city}${client.state ? `/${client.state}` : ""}` : "—"}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={SEGMENT_BADGE_CLASSES[client.segment]}>
+                    {SEGMENT_LABELS[client.segment]}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link to={`/clients/${client.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Ver</TooltipContent>
+                    </Tooltip>
+                    {canEdit && (
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/clients/${client.id}`}>
-                              <Eye className="h-4 w-4" />
+                            <Link to={`/clients/${client.id}/edit`}>
+                              <Pencil className="h-4 w-4" />
                             </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Ver</TooltipContent>
+                        <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
-                      {canEdit && (
+                    )}
+                    {canDeactivate &&
+                      (client.segment === "inactive" ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Button asChild variant="ghost" size="icon-sm">
-                              <Link to={`/clients/${client.id}/edit`}>
-                                <Pencil className="h-4 w-4" />
-                              </Link>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() => handleReactivate(client.id)}
+                            >
+                              <UserCheck className="h-4 w-4" />
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>Editar</TooltipContent>
+                          <TooltipContent>Reativar</TooltipContent>
                         </Tooltip>
-                      )}
-                      {canDeactivate &&
-                        (client.segment === "inactive" ? (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                onClick={() => handleReactivate(client.id)}
-                              >
-                                <UserCheck className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Reativar</TooltipContent>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon-sm"
-                                onClick={() =>
-                                  setDeactivateClient({ id: client.id, name: client.legal_name })
-                                }
-                              >
-                                <UserX className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Inativar</TooltipContent>
-                          </Tooltip>
-                        ))}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() =>
+                                setDeactivateClient({ id: client.id, name: client.legal_name })
+                              }
+                            >
+                              <UserX className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Inativar</TooltipContent>
+                        </Tooltip>
+                      ))}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
 
       <Outlet />
 
