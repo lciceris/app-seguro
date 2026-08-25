@@ -36,8 +36,8 @@
   - [x] 4.1 Adicionar seção "Listagens — contador e busca" em `docs/dev/ui-guidelines.md` com o padrão e snippet
     - _Requirements: 4.1_
 
-- [ ] 5. Verificação final
-  - [ ] 5.1 Conferir/ajustar testes de componente existentes das 7 telas que dependem de `colSpan`/contagem de células (Tasks 3.1-3.2 mudam `colSpan`); rodar `tsc`/`eslint`/`vitest` completos
-    - _Requirements: infra_
-  - [ ] 5.2 Screenshot real (Playwright, script efêmero) de Corretoras (listagem) comparando com o protótipo `app-seguro Denso` aprovado — confere contador, busca e as 2 colunas novas
+- [x] 5. Verificação final
+  - [x] 5.1 Conferir/ajustar testes de componente existentes das 7 telas que dependem de `colSpan`/contagem de células (Tasks 3.1-3.2 mudam `colSpan`); rodar `tsc`/`eslint`/`vitest` completos
+    - _Requirements: infra_ — nenhum teste de componente existe pras 3 telas afetadas (`brokerages-list-screen`, `insurers-list-screen`, `policies-list-screen`); suíte completa 55/55 arquivos, 134/134 testes, sem regressão
+  - [x] 5.2 Screenshot real (Playwright, script efêmero) de Corretoras (listagem) comparando com o protótipo `app-seguro Denso` aprovado — confere contador, busca e as 2 colunas novas
     - _Requirements: infra_
