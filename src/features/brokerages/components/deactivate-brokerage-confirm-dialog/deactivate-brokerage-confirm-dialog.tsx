@@ -55,7 +55,11 @@ export function DeactivateBrokerageConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm} disabled={deactivateBrokerage.isPending}>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={handleConfirm}
+            disabled={deactivateBrokerage.isPending}
+          >
             {deactivateBrokerage.isPending ? "Desativando..." : "Desativar"}
           </AlertDialogAction>
         </AlertDialogFooter>

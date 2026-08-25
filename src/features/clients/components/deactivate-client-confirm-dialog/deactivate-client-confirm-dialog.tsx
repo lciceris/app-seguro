@@ -54,7 +54,11 @@ export function DeactivateClientConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm} disabled={deactivateClient.isPending}>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={handleConfirm}
+            disabled={deactivateClient.isPending}
+          >
             {deactivateClient.isPending ? "Inativando..." : "Inativar"}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -54,7 +54,11 @@ export function DeactivateVehicleConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm} disabled={deactivateVehicle.isPending}>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={handleConfirm}
+            disabled={deactivateVehicle.isPending}
+          >
             {deactivateVehicle.isPending ? "Inativando..." : "Inativar"}
           </AlertDialogAction>
         </AlertDialogFooter>

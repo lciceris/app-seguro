@@ -64,14 +64,14 @@
   - [x] 5.3 `vehicles-list-screen.tsx` + `vehicle-detail-drawer.tsx`
     - _Requirements: 5.1, 5.2_
 
-- [ ] 6. Botão destrutivo nas confirmações de desativação (`variant="destructive"`, token já existente)
-  - [ ] 6.1 `deactivate-client-confirm-dialog.tsx`
+- [x] 6. Botão destrutivo nas confirmações de desativação (`variant="destructive"`, token já existente)
+  - [x] 6.1 `deactivate-client-confirm-dialog.tsx`
     - _Requirements: 4.1, 4.2_
-  - [ ] 6.2 `deactivate-confirm-dialog.tsx` (users)
+  - [x] 6.2 `deactivate-confirm-dialog.tsx` (users)
     - _Requirements: 4.1, 4.2_
-  - [ ] 6.3 `deactivate-vehicle-confirm-dialog.tsx`
+  - [x] 6.3 `deactivate-vehicle-confirm-dialog.tsx`
     - _Requirements: 4.1, 4.2_
-  - [ ] 6.4 `deactivate-brokerage-confirm-dialog.tsx`
+  - [x] 6.4 `deactivate-brokerage-confirm-dialog.tsx`
     - _Requirements: 4.1, 4.2_
 
 - [ ] 7. Documentação viva
