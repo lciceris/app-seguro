@@ -74,8 +74,8 @@
   - [x] 6.4 `deactivate-brokerage-confirm-dialog.tsx`
     - _Requirements: 4.1, 4.2_
 
-- [ ] 7. Documentação viva
-  - [ ] 7.1 Preencher `docs/dev/ui-guidelines.md` com os tokens, grid de formulário, `DetailField`, tabela compartilhada, hierarquia de botão — com snippet de código curto por convenção
+- [x] 7. Documentação viva
+  - [x] 7.1 Preencher `docs/dev/ui-guidelines.md` com os tokens, grid de formulário, `DetailField`, tabela compartilhada, hierarquia de botão — com snippet de código curto por convenção
     - _Requirements: 6.1, 6.2_
 
 - [ ] 8. Verificação final
