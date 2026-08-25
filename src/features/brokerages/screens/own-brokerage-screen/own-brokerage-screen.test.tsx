@@ -18,7 +18,7 @@ const brokerageFake = {
   plan_expires_at: null,
   status: "active" as const,
   trade_name: null,
-  tax_id: null,
+  tax_id: "11222333000181",
   business_code: null,
   state_registration: null,
   email: null,
@@ -67,13 +67,24 @@ describe("OwnBrokerageScreen", () => {
   it("vem pré-preenchido com os dados atuais", () => {
     renderWithProviders(<OwnBrokerageScreen />);
 
-    expect(screen.getByLabelText("Razão social")).toHaveValue("Minha Corretora");
+    expect(screen.getByLabelText("Razão social *")).toHaveValue("Minha Corretora");
+    expect(screen.getByLabelText("CNPJ *")).toHaveValue("11.222.333/0001-81");
+  });
+
+  it("mostra erro de validação quando o CNPJ é limpo", async () => {
+    renderWithProviders(<OwnBrokerageScreen />);
+
+    fireEvent.change(screen.getByLabelText("CNPJ *"), { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
+
+    expect(await screen.findByText("Informe o CNPJ")).toBeInTheDocument();
+    expect(mutateMock).not.toHaveBeenCalled();
   });
 
   it("chama a mutation com os valores editados", async () => {
     renderWithProviders(<OwnBrokerageScreen />);
 
-    fireEvent.change(screen.getByLabelText("Razão social"), { target: { value: "Nome Novo" } });
+    fireEvent.change(screen.getByLabelText("Razão social *"), { target: { value: "Nome Novo" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => {
@@ -84,7 +95,7 @@ describe("OwnBrokerageScreen", () => {
           logo_url: null,
           primary_color: null,
           trade_name: null,
-          tax_id: null,
+          tax_id: "11222333000181",
           business_code: null,
           state_registration: null,
           email: null,

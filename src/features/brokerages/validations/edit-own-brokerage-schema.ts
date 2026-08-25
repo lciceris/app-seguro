@@ -5,7 +5,7 @@ export const editOwnBrokerageSchema = z.object({
   logo_url: z.string().optional(),
   primary_color: z.string().optional(),
   trade_name: z.string().optional(),
-  tax_id: z.string().optional(),
+  tax_id: z.string().min(1, "Informe o CNPJ"),
   business_code: z.string().optional(),
   state_registration: z.string().optional(),
   email: z.union([z.literal(""), z.string().email("E-mail inválido")]).optional(),

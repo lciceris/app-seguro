@@ -12,7 +12,7 @@ export const editBrokerageSchema = z.object({
   plan_id: z.string(),
   plan_expires_at: z.date().nullable(),
   trade_name: z.string().optional(),
-  tax_id: z.string().optional(),
+  tax_id: z.string().min(1, "Informe o CNPJ"),
   business_code: z.string().optional(),
   state_registration: z.string().optional(),
   email: z.union([z.literal(""), z.string().email("E-mail inválido")]).optional(),

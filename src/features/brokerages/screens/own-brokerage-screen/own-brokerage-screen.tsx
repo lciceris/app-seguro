@@ -199,7 +199,7 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
 
         <div className="grid grid-cols-2 gap-3">
           <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="tax_id">CNPJ</Label>
+            <Label htmlFor="tax_id">CNPJ *</Label>
             <div className="flex gap-2">
               <Input
                 id="tax_id"
@@ -217,10 +217,11 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
                 {isFetchingCnpj ? "Buscando..." : "Buscar"}
               </Button>
             </div>
+            {errors.tax_id && <p className="text-sm text-destructive">{errors.tax_id.message}</p>}
           </div>
 
           <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="name">Razão social</Label>
+            <Label htmlFor="name">Razão social *</Label>
             <Input id="name" placeholder="Razão social da empresa" {...register("name")} />
             {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>

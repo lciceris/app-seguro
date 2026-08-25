@@ -27,6 +27,7 @@ describe("CreateBrokerageDrawer", () => {
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
 
     expect(await screen.findByText("Informe o nome da corretora")).toBeInTheDocument();
+    expect(await screen.findByText("Informe o CNPJ")).toBeInTheDocument();
     expect(await screen.findByText("Informe o nome do representante")).toBeInTheDocument();
     expect(await screen.findByText("Informe o e-mail do representante")).toBeInTheDocument();
     expect(mutateMock).not.toHaveBeenCalled();
@@ -35,8 +36,8 @@ describe("CreateBrokerageDrawer", () => {
   it("aplica a máscara de CNPJ e telefone durante a digitação", async () => {
     renderWithProviders(<CreateBrokerageDrawer />);
 
-    fireEvent.change(screen.getByLabelText("CNPJ"), { target: { value: "11222333000181" } });
-    expect(screen.getByLabelText("CNPJ")).toHaveValue("11.222.333/0001-81");
+    fireEvent.change(screen.getByLabelText("CNPJ *"), { target: { value: "11222333000181" } });
+    expect(screen.getByLabelText("CNPJ *")).toHaveValue("11.222.333/0001-81");
 
     fireEvent.change(screen.getByLabelText("Telefone"), { target: { value: "11987654321" } });
     expect(screen.getByLabelText("Telefone")).toHaveValue("(11) 98765-4321");
@@ -51,13 +52,16 @@ describe("CreateBrokerageDrawer", () => {
   it("chama a mutation com os valores do formulário (representante = primeiro admin)", async () => {
     renderWithProviders(<CreateBrokerageDrawer />);
 
-    fireEvent.change(screen.getByLabelText("Razão social"), {
+    fireEvent.change(screen.getByLabelText("Razão social *"), {
       target: { value: "Nova Corretora" },
     });
-    fireEvent.change(screen.getByLabelText("Nome do representante"), {
+    fireEvent.change(screen.getByLabelText("CNPJ *"), {
+      target: { value: "11222333000181" },
+    });
+    fireEvent.change(screen.getByLabelText("Nome do representante *"), {
       target: { value: "Representante Novo" },
     });
-    fireEvent.change(screen.getByLabelText("E-mail do representante"), {
+    fireEvent.change(screen.getByLabelText("E-mail do representante *"), {
       target: { value: "representante@example.com" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
@@ -72,7 +76,7 @@ describe("CreateBrokerageDrawer", () => {
           plan_expires_at: null,
           primary_color: null,
           trade_name: null,
-          tax_id: null,
+          tax_id: "11222333000181",
           business_code: null,
           state_registration: null,
           email: null,
@@ -110,7 +114,7 @@ describe("CreateBrokerageDrawer", () => {
 
     renderWithProviders(<CreateBrokerageDrawer />);
 
-    fireEvent.change(screen.getByLabelText("CNPJ"), { target: { value: "11222333000181" } });
+    fireEvent.change(screen.getByLabelText("CNPJ *"), { target: { value: "11222333000181" } });
     // "Buscar" aparece 2x (CNPJ e CEP) — o de CNPJ vem primeiro no DOM.
     fireEvent.click(screen.getAllByRole("button", { name: "Buscar" })[0]);
 

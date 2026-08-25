@@ -34,6 +34,10 @@ Como o path do logo no Storage depende do id da corretora (só existe depois do 
 
 Logo e cor primária passam a usar os mesmos componentes em toda a spec (criação e edição pelo `brokerage_admin`, Requirement 6): upload real de arquivo de imagem (não uma URL digitada) e um color picker (não um campo de texto livre).
 
+### CNPJ obrigatório + convenção de asterisco (refinamento pós-implementação)
+
+Quarto ajuste do mesmo ciclo de feedback: CNPJ virou obrigatório em qualquer contexto onde o campo aparece — criação (Requirement 2.2), edição pelo `platform_admin` (Requirement 4.2) e edição pelo `brokerage_admin` (Requirement 6.1) — é o identificador legal da empresa, não faz sentido uma corretora existir sem ele soltar de vez. Junto disso, **todo campo obrigatório em qualquer formulário desta spec passa a ter um `*` no label** (ex: "CNPJ *", "Razão social *") — convenção visual simples pra sinalizar obrigatoriedade sem depender só da mensagem de erro aparecer depois do submit. Essa convenção do `*` é adotada como padrão geral do projeto daqui pra frente, não só nesta spec.
+
 ## Requirements
 
 ### Requirement 1: Corretora especial da plataforma
@@ -53,7 +57,7 @@ Logo e cor primária passam a usar os mesmos componentes em toda a spec (criaç�
 #### Acceptance Criteria
 
 1. WHEN `platform_admin` submete os dados da nova corretora THEN o sistema SHALL criar a linha em `brokerages` E convidar o representante (nome/e-mail) como `brokerage_admin` dela, reaproveitando o mecanismo de convite da spec `users` (Edge Function, envio de email, fluxo de "definir senha") — não existe um "primeiro administrador" separado do representante, são a mesma pessoa/os mesmos dados.
-2. Os dados da corretora que podem ser preenchidos na criação SHALL incluir: nome (razão social), nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo (CEP, logradouro, número, complemento, bairro, cidade, UF), nome/e-mail do contato financeiro, plano vinculado, data de expiração do plano, logo e cor primária — todos opcionais. Nome da corretora e nome/e-mail do representante SHALL ser obrigatórios, pois o representante também é convidado como primeiro `brokerage_admin`.
+2. Os dados da corretora que podem ser preenchidos na criação SHALL incluir: nome (razão social), nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo (CEP, logradouro, número, complemento, bairro, cidade, UF), nome/e-mail do contato financeiro, plano vinculado, data de expiração do plano, logo e cor primária — todos opcionais, EXCETO nome da corretora, CNPJ e nome/e-mail do representante, que SHALL ser obrigatórios (o representante também é convidado como primeiro `brokerage_admin`; CNPJ é o identificador legal da empresa, exigido em qualquer contexto de cadastro/edição — Requirements 4 e 6).
 3. IF a criação do usuário administrador (a partir dos dados do representante) falhar (ex: email inválido) THEN o sistema SHALL desfazer a criação da corretora — nunca deixar uma corretora órfã sem nenhum administrador.
 4. WHEN um perfil diferente de `platform_admin` tenta criar uma corretora THEN o sistema SHALL negar a ação.
 5. O logo SHALL ser enviado como arquivo de imagem (upload real pro Storage, não uma URL digitada) e a cor primária SHALL ser selecionada por um color picker (não um campo de texto livre) — mesmo padrão usado depois na edição (Requirements 4 e 6).

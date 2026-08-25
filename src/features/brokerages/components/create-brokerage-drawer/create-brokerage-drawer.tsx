@@ -215,7 +215,7 @@ export function CreateBrokerageDrawer() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="tax_id">CNPJ</Label>
+                <Label htmlFor="tax_id">CNPJ *</Label>
                 <div className="flex gap-2">
                   <Input
                     id="tax_id"
@@ -233,10 +233,13 @@ export function CreateBrokerageDrawer() {
                     {isFetchingCnpj ? "Buscando..." : "Buscar"}
                   </Button>
                 </div>
+                {errors.tax_id && (
+                  <p className="text-sm text-destructive">{errors.tax_id.message}</p>
+                )}
               </div>
 
               <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="brokerage_name">Razão social</Label>
+                <Label htmlFor="brokerage_name">Razão social *</Label>
                 <Input
                   id="brokerage_name"
                   placeholder="Razão social da empresa"
@@ -370,7 +373,7 @@ export function CreateBrokerageDrawer() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="representative_name">Nome do representante</Label>
+                <Label htmlFor="representative_name">Nome do representante *</Label>
                 <Input
                   id="representative_name"
                   placeholder="Nome completo"
@@ -382,7 +385,7 @@ export function CreateBrokerageDrawer() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="representative_email">E-mail do representante</Label>
+                <Label htmlFor="representative_email">E-mail do representante *</Label>
                 <Input
                   id="representative_email"
                   type="email"

@@ -18,7 +18,7 @@ const brokerageFake = {
   logo_url: null,
   primary_color: null,
   trade_name: null,
-  tax_id: null,
+  tax_id: "11222333000181",
   business_code: null,
   state_registration: null,
   email: null,
@@ -75,14 +75,15 @@ describe("EditBrokerageDrawer", () => {
   it("vem pré-preenchido com os dados atuais da corretora", () => {
     renderDrawer();
 
-    expect(screen.getByLabelText("Razão social")).toHaveValue("Corretora Original");
+    expect(screen.getByLabelText("Razão social *")).toHaveValue("Corretora Original");
+    expect(screen.getByLabelText("CNPJ *")).toHaveValue("11.222.333/0001-81");
   });
 
   it("chama a mutation com os valores editados, incluindo dados de empresa", async () => {
     const user = userEvent.setup();
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("Razão social"), {
+    fireEvent.change(screen.getByLabelText("Razão social *"), {
       target: { value: "Nome Editado" },
     });
     fireEvent.change(screen.getByLabelText("Nome fantasia"), {
@@ -103,7 +104,7 @@ describe("EditBrokerageDrawer", () => {
           plan_id: "p1",
           plan_expires_at: null,
           trade_name: "Fantasia Editada",
-          tax_id: null,
+          tax_id: "11222333000181",
           business_code: null,
           state_registration: null,
           email: null,
@@ -128,7 +129,7 @@ describe("EditBrokerageDrawer", () => {
   it("aplica a máscara de CNPJ no campo pré-preenchido e na digitação", async () => {
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("CNPJ"), { target: { value: "11222333000181" } });
-    expect(screen.getByLabelText("CNPJ")).toHaveValue("11.222.333/0001-81");
+    fireEvent.change(screen.getByLabelText("CNPJ *"), { target: { value: "31442600000142" } });
+    expect(screen.getByLabelText("CNPJ *")).toHaveValue("31.442.600/0001-42");
   });
 });

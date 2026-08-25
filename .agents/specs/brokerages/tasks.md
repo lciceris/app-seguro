@@ -209,3 +209,11 @@
     - _Requirements: 6.1_
   - [x] 20.7 Atualizar testes de componente (`create-brokerage-drawer`, `own-brokerage-screen`) — verificado fim a fim com submit real (upload de logo + cor persistidos no Storage/banco)
     - _Requirements: 2.2, 2.5, 6.1_
+
+- [x] 21. CNPJ obrigatório + convenção de asterisco em campos obrigatórios
+  - [x] 21.1 Tornar `tax_id` obrigatório em `create-brokerage-schema.ts`, `edit-brokerage-schema.ts` e `edit-own-brokerage-schema.ts`
+    - _Requirements: 2.2, 4.2, 6.1_
+  - [x] 21.2 Adicionar `*` no label de todo campo obrigatório em `create-brokerage-drawer.tsx`, `edit-brokerage-drawer.tsx` e `own-brokerage-screen.tsx` (CNPJ, Razão social, Nome/E-mail do representante)
+    - _Requirements: 2.2, 4.2, 6.1_
+  - [x] 21.3 Atualizar testes de componente (`create-brokerage-drawer`, `edit-brokerage-drawer`, `own-brokerage-screen`) pro CNPJ obrigatório e labels com `*`
+    - _Requirements: 2.2, 4.2, 6.1_
