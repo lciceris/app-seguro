@@ -1,9 +1,9 @@
 # Tasks — design-system
 
-- [ ] 1. Tokens de cor e tipografia
-  - [ ] 1.1 Adicionar tokens `--success`/`--success-bg`/`--success-text`, `--neutral-bg`/`--neutral-text`, `--warning`/`--warning-bg`/`--warning-text` em `src/styles/globals.css` (`:root` + `@theme inline`)
+- [x] 1. Tokens de cor e tipografia
+  - [x] 1.1 Adicionar tokens `--success`/`--success-bg`/`--success-text`, `--neutral-bg`/`--neutral-text`, `--warning`/`--warning-bg`/`--warning-text` em `src/styles/globals.css` (`:root` + `@theme inline`)
     - _Requirements: 5.1_
-  - [ ] 1.2 Instalar `@fontsource-variable/ibm-plex-mono`, importar em `globals.css`, adicionar `--font-mono-data` e uma classe utilitária pra dado técnico de tabela (CNPJ, telefone, CEP, data, ID)
+  - [x] 1.2 Instalar `@fontsource/ibm-plex-mono` (a versão variable não existe pra essa fonte), importar em `globals.css`, adicionar `--font-mono-data` e a utility `font-mono-data` (via `@utility`, Tailwind v4) pra dado técnico de tabela (CNPJ, telefone, CEP, data, ID)
     - _Requirements: 5.1_
 
 - [ ] 2. Grid de 2 colunas nos formulários (sweep mecânico, sem mudança de campo/validação)
