@@ -208,7 +208,7 @@ export function CreateBrokerageDrawer() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Empresa
             </p>
@@ -297,7 +297,7 @@ export function CreateBrokerageDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Endereço
             </p>
@@ -366,7 +366,7 @@ export function CreateBrokerageDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Representante e contato
             </p>
@@ -421,7 +421,7 @@ export function CreateBrokerageDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Plano
             </p>
@@ -461,7 +461,7 @@ export function CreateBrokerageDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Identidade visual
             </p>

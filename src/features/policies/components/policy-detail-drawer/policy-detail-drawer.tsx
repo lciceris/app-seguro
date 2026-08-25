@@ -73,7 +73,7 @@ export function PolicyDetailDrawer() {
 
         <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
           {isLoading && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <Skeleton className="h-4 w-48" />
               <Skeleton className="h-4 w-40" />
               <Skeleton className="h-4 w-32" />
@@ -81,7 +81,7 @@ export function PolicyDetailDrawer() {
           )}
 
           {isError && !isLoading && (
-            <div className="rounded-xl border border-border bg-card p-5 text-center">
+            <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
               <p className="mb-2 text-sm text-muted-foreground">
                 Não foi possível carregar os dados da apólice.
               </p>
@@ -93,7 +93,7 @@ export function PolicyDetailDrawer() {
 
           {!isLoading && !isError && policy && (
             <>
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Dados gerais
                 </p>
@@ -108,7 +108,7 @@ export function PolicyDetailDrawer() {
                 <DetailField label="Fim da vigência" value={formatDate(policy.coverage_end)} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Origem
                 </p>

@@ -93,7 +93,7 @@ function ClientSellersSection({ clientId, canManage }: { clientId: string; canMa
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5">
+    <div className="flex flex-col gap-3 rounded-xl border border-border bg-card shadow-sm p-5">
       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
         Vendedores vinculados
       </p>
@@ -237,7 +237,7 @@ export function ClientDetailDrawer() {
 
         <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
           {isLoading && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <Skeleton className="h-4 w-48" />
               <Skeleton className="h-4 w-40" />
               <Skeleton className="h-4 w-32" />
@@ -246,7 +246,7 @@ export function ClientDetailDrawer() {
           )}
 
           {isError && !isLoading && (
-            <div className="rounded-xl border border-border bg-card p-5 text-center">
+            <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
               <p className="mb-2 text-sm text-muted-foreground">
                 Não foi possível carregar os dados do cliente.
               </p>
@@ -258,7 +258,7 @@ export function ClientDetailDrawer() {
 
           {!isLoading && !isError && client && (
             <>
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Identificação
                 </p>
@@ -279,7 +279,7 @@ export function ClientDetailDrawer() {
                 <DetailField label="Inscrição estadual" value={client.state_registration} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Endereço
                 </p>
@@ -292,7 +292,7 @@ export function ClientDetailDrawer() {
                 <DetailField label="UF" value={client.state} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Contato comercial
                 </p>
@@ -302,7 +302,7 @@ export function ClientDetailDrawer() {
                 <DetailField label="Telefone" value={client.contact_phone} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Contato financeiro
                 </p>
@@ -310,7 +310,7 @@ export function ClientDetailDrawer() {
                 <DetailField label="E-mail" value={client.financial_email} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Configurações
                 </p>
@@ -328,7 +328,7 @@ export function ClientDetailDrawer() {
                 <DetailField label="Origem do lead" value={client.lead_source} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Observações
                 </p>

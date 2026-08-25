@@ -125,7 +125,7 @@ export function CreateVehicleDrawer() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Identificação
             </p>
@@ -250,7 +250,7 @@ export function CreateVehicleDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Valores
             </p>
@@ -278,7 +278,7 @@ export function CreateVehicleDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Circulação
             </p>
@@ -345,7 +345,7 @@ export function CreateVehicleDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Observações
             </p>

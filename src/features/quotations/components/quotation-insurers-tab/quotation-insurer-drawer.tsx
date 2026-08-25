@@ -188,7 +188,7 @@ function ResponseForm({
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 bg-muted p-5"
       >
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Retorno
           </p>

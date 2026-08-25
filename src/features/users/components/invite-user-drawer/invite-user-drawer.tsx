@@ -90,7 +90,7 @@ export function InviteUserDrawer() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="full_name">Nome</Label>

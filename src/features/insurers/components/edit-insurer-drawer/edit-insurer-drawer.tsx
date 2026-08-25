@@ -90,7 +90,7 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
       >
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Identificação
           </p>
@@ -125,7 +125,7 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Contato comercial
           </p>
@@ -136,7 +136,7 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Configurações
           </p>
@@ -159,7 +159,7 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Observações
           </p>
@@ -199,7 +199,7 @@ export function EditInsurerDrawer() {
         {(isLoading || isError) && (
           <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
             {isLoading && (
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
@@ -207,7 +207,7 @@ export function EditInsurerDrawer() {
             )}
 
             {isError && !isLoading && (
-              <div className="rounded-xl border border-border bg-card p-5 text-center">
+              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
                 <p className="mb-2 text-sm text-muted-foreground">
                   Não foi possível carregar os dados da seguradora.
                 </p>

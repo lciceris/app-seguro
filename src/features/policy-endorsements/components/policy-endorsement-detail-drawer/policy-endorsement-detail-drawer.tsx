@@ -95,7 +95,7 @@ export function PolicyEndorsementDetailDrawer() {
           <>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
               {isLoading && (
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <Skeleton className="h-4 w-48" />
                   <Skeleton className="h-4 w-40" />
                   <Skeleton className="h-4 w-32" />
@@ -103,7 +103,7 @@ export function PolicyEndorsementDetailDrawer() {
               )}
 
               {isError && !isLoading && (
-                <div className="rounded-xl border border-border bg-card p-5 text-center">
+                <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
                   <p className="mb-2 text-sm text-muted-foreground">
                     Não foi possível carregar os dados do endosso.
                   </p>
@@ -115,7 +115,7 @@ export function PolicyEndorsementDetailDrawer() {
 
               {!isLoading && !isError && endorsement && (
                 <>
-                  <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                  <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                     <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                       Dados gerais
                     </p>
@@ -176,7 +176,7 @@ export function PolicyEndorsementDetailDrawer() {
                   </div>
 
                   {endorsement.responded_at && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                         Retorno da seguradora
                       </p>
@@ -193,7 +193,7 @@ export function PolicyEndorsementDetailDrawer() {
                   )}
 
                   {endorsement.client_responded_at && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                         Resposta do cliente
                       </p>
@@ -206,7 +206,7 @@ export function PolicyEndorsementDetailDrawer() {
                   )}
 
                   {endorsement.status === "not_closed" && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                         Não fechado
                       </p>
@@ -215,7 +215,7 @@ export function PolicyEndorsementDetailDrawer() {
                   )}
 
                   {endorsement.effected_at && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                         Efetivação
                       </p>

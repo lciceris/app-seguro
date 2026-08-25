@@ -164,7 +164,7 @@ export function CreateClientDrawer() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Identificação
             </p>
@@ -235,7 +235,7 @@ export function CreateClientDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Endereço
             </p>
@@ -278,7 +278,7 @@ export function CreateClientDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Contato comercial
             </p>
@@ -309,7 +309,7 @@ export function CreateClientDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Contato financeiro
             </p>
@@ -330,7 +330,7 @@ export function CreateClientDrawer() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Configurações
             </p>
@@ -365,7 +365,7 @@ export function CreateClientDrawer() {
           </div>
 
           {!isSeller && (
-            <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-3 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Vendedores responsáveis
               </p>
@@ -411,7 +411,7 @@ export function CreateClientDrawer() {
             </div>
           )}
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Observações
             </p>

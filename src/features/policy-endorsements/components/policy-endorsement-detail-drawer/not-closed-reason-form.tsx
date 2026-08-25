@@ -59,7 +59,7 @@ export function NotClosedReasonForm({ endorsementId, onBack }: NotClosedReasonFo
         <form
           id="not-closed-reason-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-1.5 rounded-xl border border-border bg-card p-5"
+          className="flex flex-col gap-1.5 rounded-xl border border-border bg-card shadow-sm p-5"
         >
           <p className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Marcar como não fechado

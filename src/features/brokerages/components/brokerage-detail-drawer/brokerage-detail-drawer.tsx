@@ -32,7 +32,7 @@ export function BrokerageDetailDrawer() {
 
         <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
           {isLoading && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <Skeleton className="h-4 w-48" />
               <Skeleton className="h-4 w-40" />
               <Skeleton className="h-4 w-24" />
@@ -40,7 +40,7 @@ export function BrokerageDetailDrawer() {
           )}
 
           {isError && !isLoading && (
-            <div className="rounded-xl border border-border bg-card p-5 text-center">
+            <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
               <p className="mb-2 text-sm text-muted-foreground">
                 Não foi possível carregar os dados da corretora.
               </p>
@@ -52,7 +52,7 @@ export function BrokerageDetailDrawer() {
 
           {!isLoading && !isError && brokerage && (
             <>
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Empresa
                 </p>
@@ -71,7 +71,7 @@ export function BrokerageDetailDrawer() {
                 />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Endereço
                 </p>
@@ -87,7 +87,7 @@ export function BrokerageDetailDrawer() {
                 <DetailField label="UF" value={brokerage.state} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Representante e contato
                 </p>
@@ -100,7 +100,7 @@ export function BrokerageDetailDrawer() {
                 <DetailField label="E-mail financeiro" value={brokerage.financial_email} />
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Plano e status
                 </p>
@@ -131,7 +131,7 @@ export function BrokerageDetailDrawer() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                   Identidade visual
                 </p>

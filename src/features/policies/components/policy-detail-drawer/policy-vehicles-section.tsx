@@ -20,7 +20,7 @@ export function PolicyVehiclesSection({ policyId }: PolicyVehiclesSectionProps) 
   const { data: policyVehicles, isLoading, isError, refetch } = usePolicyVehicles(policyId);
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
         Veículos
       </p>

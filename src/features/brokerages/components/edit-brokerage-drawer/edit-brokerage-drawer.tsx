@@ -187,7 +187,7 @@ function EditBrokerageForm({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Plano e status
             </p>
@@ -230,7 +230,7 @@ function EditBrokerageForm({
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Empresa
             </p>
@@ -313,7 +313,7 @@ function EditBrokerageForm({
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Endereço
             </p>
@@ -382,7 +382,7 @@ function EditBrokerageForm({
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Representante e contato
             </p>
@@ -467,14 +467,14 @@ export function EditBrokerageDrawer() {
         {(isLoading || isError) && (
           <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
             {isLoading && (
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
               </div>
             )}
 
             {isError && !isLoading && (
-              <div className="rounded-xl border border-border bg-card p-5 text-center">
+              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
                 <p className="mb-2 text-sm text-muted-foreground">
                   Não foi possível carregar os dados da corretora.
                 </p>

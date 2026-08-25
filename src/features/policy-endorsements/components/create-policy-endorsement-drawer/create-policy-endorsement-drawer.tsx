@@ -202,7 +202,7 @@ export function CreatePolicyEndorsementDrawer() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Tipo de endosso
             </p>
@@ -231,7 +231,7 @@ export function CreatePolicyEndorsementDrawer() {
           </div>
 
           {endorsementType === "vehicle_inclusion" && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Veículo
               </p>
@@ -267,7 +267,7 @@ export function CreatePolicyEndorsementDrawer() {
           )}
 
           {(endorsementType === "vehicle_exclusion" || endorsementType === "coverage_change") && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Veículo
               </p>
@@ -308,7 +308,7 @@ export function CreatePolicyEndorsementDrawer() {
           )}
 
           {(endorsementType === "vehicle_inclusion" || endorsementType === "coverage_change") && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Cobertura
               </p>
@@ -492,7 +492,7 @@ export function CreatePolicyEndorsementDrawer() {
           )}
 
           {endorsementType === "extension" && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Prorrogação
               </p>
@@ -517,7 +517,7 @@ export function CreatePolicyEndorsementDrawer() {
           )}
 
           {endorsementType === "administrative_correction" && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Correção administrativa
               </p>
@@ -583,7 +583,7 @@ export function CreatePolicyEndorsementDrawer() {
 
           {(endorsementType === "administrative_correction" ||
             endorsementType === "cancellation") && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Motivo
               </p>
