@@ -26,6 +26,14 @@ Nesse mesmo refinamento, o formulário de criação e o de edição pelo `broker
 
 Segundo ajuste do mesmo feedback: a edição do `platform_admin` (Requirement 4) estava restrita a nome/plano/status/data de expiração — só a criação (Requirement 2) tinha os campos de empresa. Isso quebrava a simetria com o sistema antigo, onde o mesmo formulário (`BrokerageFormFields`) serve tanto pra criar quanto pra editar. Requirement 4 (AC2/AC3) foi ajustado: `platform_admin` agora edita o mesmo conjunto de campos de empresa que preenche na criação — só logo/cor continuam exclusivos do `brokerage_admin` (Requirement 6), já que fazem parte da identidade visual do dia a dia da corretora, não do cadastro administrativo.
 
+### Plano e identidade visual entram no cadastro (refinamento pós-implementação)
+
+Terceiro ajuste do mesmo feedback, a partir de um print do formulário de criação do sistema antigo: lá, a criação já incluía Plano/Data de expiração e Identidade Visual (logo + cor) na mesma tela — nesta spec, esses campos só apareciam depois, na edição. Requirement 2 (AC2) foi ampliado: a criação agora também inclui plano vinculado, data de expiração do plano, logo e cor primária, todos opcionais. **Status não entra no cadastro** — diferente do sistema antigo, aqui desativar/reativar é uma ação dedicada, com efeito de bloquear login de todos os usuários da corretora (Requirement 5); toda corretora nasce ativa, e colocar um dropdown de status solto no formulário duplicaria esse controle com semântica mais fraca.
+
+Como o path do logo no Storage depende do id da corretora (só existe depois do insert), o fluxo é: a Edge Function cria a corretora (com plano/cor, que não dependem de upload) → o frontend sobe o arquivo do logo → um UPDATE pontual de `logo_url` fecha o cadastro. Esse UPDATE, feito pelo `platform_admin` logo após criar, só é permitido enquanto `logo_url`/`primary_color` ainda estiverem nulos (ver Requirement 6) — depois de definidos uma vez, voltam a ser exclusivos do `brokerage_admin`.
+
+Logo e cor primária passam a usar os mesmos componentes em toda a spec (criação e edição pelo `brokerage_admin`, Requirement 6): upload real de arquivo de imagem (não uma URL digitada) e um color picker (não um campo de texto livre).
+
 ## Requirements
 
 ### Requirement 1: Corretora especial da plataforma
@@ -45,10 +53,10 @@ Segundo ajuste do mesmo feedback: a edição do `platform_admin` (Requirement 4)
 #### Acceptance Criteria
 
 1. WHEN `platform_admin` submete os dados da nova corretora THEN o sistema SHALL criar a linha em `brokerages` E convidar o representante (nome/e-mail) como `brokerage_admin` dela, reaproveitando o mecanismo de convite da spec `users` (Edge Function, envio de email, fluxo de "definir senha") — não existe um "primeiro administrador" separado do representante, são a mesma pessoa/os mesmos dados.
-2. Os dados da corretora que podem ser preenchidos na criação SHALL incluir: nome (razão social), nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo (CEP, logradouro, número, complemento, bairro, cidade, UF), nome/e-mail do contato financeiro — todos opcionais. Nome da corretora e nome/e-mail do representante SHALL ser obrigatórios, pois o representante também é convidado como primeiro `brokerage_admin`.
+2. Os dados da corretora que podem ser preenchidos na criação SHALL incluir: nome (razão social), nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo (CEP, logradouro, número, complemento, bairro, cidade, UF), nome/e-mail do contato financeiro, plano vinculado, data de expiração do plano, logo e cor primária — todos opcionais. Nome da corretora e nome/e-mail do representante SHALL ser obrigatórios, pois o representante também é convidado como primeiro `brokerage_admin`.
 3. IF a criação do usuário administrador (a partir dos dados do representante) falhar (ex: email inválido) THEN o sistema SHALL desfazer a criação da corretora — nunca deixar uma corretora órfã sem nenhum administrador.
 4. WHEN um perfil diferente de `platform_admin` tenta criar uma corretora THEN o sistema SHALL negar a ação.
-5. A corretora nasce sem plano vinculado (`plan_id` nulo) e sem logo/cor primária — vincular um plano é uma ação de edição separada (Requirement 4); logo/cor são responsabilidade do `brokerage_admin` (Requirement 6), nunca preenchidos na criação.
+5. O logo SHALL ser enviado como arquivo de imagem (upload real pro Storage, não uma URL digitada) e a cor primária SHALL ser selecionada por um color picker (não um campo de texto livre) — mesmo padrão usado depois na edição (Requirements 4 e 6).
 
 ### Requirement 3: Listar corretoras
 
@@ -88,7 +96,7 @@ Segundo ajuste do mesmo feedback: a edição do `platform_admin` (Requirement 4)
 
 #### Acceptance Criteria
 
-1. WHEN `brokerage_admin` edita a própria corretora THEN o sistema SHALL permitir alterar: nome, nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo, representante (nome/e-mail), contato financeiro (nome/e-mail), logo e cor primária.
+1. WHEN `brokerage_admin` edita a própria corretora THEN o sistema SHALL permitir alterar: nome, nome fantasia, CNPJ, CNAE, inscrição estadual, e-mail comercial, telefone, endereço completo, representante (nome/e-mail), contato financeiro (nome/e-mail), logo (upload de arquivo de imagem) e cor primária (color picker).
 2. `brokerage_admin` NÃO pode alterar o plano vinculado nem o `status` da própria corretora — essas ações são exclusivas de `platform_admin` (Requirements 4 e 5).
 3. WHEN um perfil diferente de `brokerage_admin`/`platform_admin` tenta editar a corretora THEN o sistema SHALL negar a ação.
 4. `platform_admin`, quando autenticado sob a corretora especial da plataforma (Requirement 1), também pode editar os próprios dados por esta mesma via.

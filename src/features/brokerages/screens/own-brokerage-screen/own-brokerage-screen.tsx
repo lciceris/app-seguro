@@ -1,18 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Upload, X } from "lucide-react";
+import { useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { fetchCnpjData } from "@/shared/lib/brasil-api";
 import { fetchCepData } from "@/shared/lib/via-cep";
 import { formatCep, formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
+import { ColorPicker } from "@/shared/components/ui/color-picker";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 import { useOwnBrokerage } from "../../hooks/use-own-brokerage";
 import { useUpdateOwnBrokerage } from "../../hooks/use-update-own-brokerage";
+import { uploadBrokerageLogo } from "../../api/upload-brokerage-logo";
 import type { Brokerage } from "../../types/brokerage";
 import type { UpdateOwnBrokerageInput } from "../../api/update-own-brokerage";
 import {
@@ -63,10 +66,15 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
 
   const [isFetchingCnpj, setIsFetchingCnpj] = useState(false);
   const [isFetchingCep, setIsFetchingCep] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState("");
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
+    control,
     getValues,
     setValue,
     formState: { errors },
@@ -138,8 +146,41 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
     }
   }
 
-  function onSubmit(values: EditOwnBrokerageFormValues) {
-    updateOwnBrokerage.mutate(paraPayload(brokerage.id, values), {
+  function handleLogoFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Imagem muito grande. Máximo 2MB.");
+      return;
+    }
+    if (logoPreviewUrl) URL.revokeObjectURL(logoPreviewUrl);
+    setLogoFile(file);
+    setLogoPreviewUrl(URL.createObjectURL(file));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function handleLogoRemove() {
+    if (logoPreviewUrl) URL.revokeObjectURL(logoPreviewUrl);
+    setLogoFile(null);
+    setLogoPreviewUrl("");
+    setValue("logo_url", "");
+  }
+
+  async function onSubmit(values: EditOwnBrokerageFormValues) {
+    let logoUrl = values.logo_url;
+    if (logoFile) {
+      setIsUploadingLogo(true);
+      try {
+        logoUrl = await uploadBrokerageLogo({ brokerageId: brokerage.id, file: logoFile });
+      } catch {
+        toast.error("Não foi possível enviar o logo.");
+        setIsUploadingLogo(false);
+        return;
+      }
+      setIsUploadingLogo(false);
+    }
+
+    updateOwnBrokerage.mutate(paraPayload(brokerage.id, { ...values, logo_url: logoUrl }), {
       onSuccess: () => {
         toast.success("Corretora atualizada com sucesso");
       },
@@ -354,22 +395,67 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
         </p>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="logo_url">URL do logo</Label>
-          <Input id="logo_url" {...register("logo_url")} />
-          {errors.logo_url && <p className="text-sm text-destructive">{errors.logo_url.message}</p>}
+          <Label>Logo</Label>
+          {logoPreviewUrl || getValues("logo_url") ? (
+            <div className="flex items-center gap-3 rounded-lg border border-border bg-muted p-2.5">
+              <img
+                src={logoPreviewUrl || getValues("logo_url")}
+                alt="Logo"
+                className="size-12 shrink-0 rounded-full border-2 border-border bg-card object-contain p-1"
+              />
+              <span className="flex-1 truncate text-sm text-muted-foreground">
+                {logoFile?.name ?? "Logo atual"}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="shrink-0 text-destructive hover:text-destructive"
+                onClick={handleLogoRemove}
+              >
+                <X className="size-3.5" />
+                Remover
+              </Button>
+            </div>
+          ) : (
+            <label className="block cursor-pointer">
+              <div className="rounded-lg border-2 border-dashed border-border bg-muted p-5 text-center">
+                <Upload className="mx-auto mb-2 size-5 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">Clique para enviar uma imagem</p>
+                <p className="mt-1 text-xs text-muted-foreground">PNG, JPG, SVG até 2MB</p>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/svg+xml"
+                className="hidden"
+                onChange={handleLogoFile}
+              />
+            </label>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="primary_color">Cor primária</Label>
-          <Input id="primary_color" placeholder="#3B82F6" {...register("primary_color")} />
+          <Controller
+            name="primary_color"
+            control={control}
+            render={({ field }) => (
+              <ColorPicker id="primary_color" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
           {errors.primary_color && (
             <p className="text-sm text-destructive">{errors.primary_color.message}</p>
           )}
         </div>
       </div>
 
-      <Button type="submit" disabled={updateOwnBrokerage.isPending} className="self-start">
-        {updateOwnBrokerage.isPending ? "Salvando..." : "Salvar"}
+      <Button
+        type="submit"
+        disabled={updateOwnBrokerage.isPending || isUploadingLogo}
+        className="self-start"
+      >
+        {updateOwnBrokerage.isPending || isUploadingLogo ? "Salvando..." : "Salvar"}
       </Button>
     </form>
   );

@@ -111,6 +111,7 @@ test("platform_admin cria corretora pela UI (convite falha por SMTP, sem deixar 
   await page.fill("#tax_id", "11222333000181");
   await page.fill("#representative_name", "Representante Via UI");
   await page.fill("#representative_email", `e2e-ui-admin-${Date.now()}@appseguro.dev`);
+  await page.fill("#primary_color", "#123456");
   await page.click('button[type="submit"]');
 
   await expect(page.locator("[data-sonner-toast]")).toBeVisible();
@@ -121,6 +122,11 @@ test("platform_admin cria corretora pela UI (convite falha por SMTP, sem deixar 
   // (convertido de volta antes do submit, ver create-brokerage-drawer.tsx).
   expect(invokeBody?.tax_id).toBe("11222333000181");
   expect(invokeBody?.representative_name).toBe("Representante Via UI");
+  expect(invokeBody?.primary_color).toBe("#123456");
+  // Upload de logo depende do id retornado pela criação (fora do escopo
+  // automatizado aqui, já que o convite falha por SMTP e a corretora é
+  // desfeita — ver design.md); coberto no submit real de
+  // own-brokerage-screen.test.tsx.
 
   const admin = adminClient();
   const { data: leftover } = await admin

@@ -2,6 +2,7 @@ import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithProviders } from "@/shared/lib/test-utils";
+import { uploadBrokerageLogo } from "../../api/upload-brokerage-logo";
 
 import { OwnBrokerageScreen } from "./own-brokerage-screen";
 
@@ -54,6 +55,10 @@ vi.mock("@/shared/lib/via-cep", () => ({
   fetchCepData: vi.fn(),
 }));
 
+vi.mock("../../api/upload-brokerage-logo", () => ({
+  uploadBrokerageLogo: vi.fn(),
+}));
+
 describe("OwnBrokerageScreen", () => {
   beforeEach(() => {
     mutateMock.mockClear();
@@ -69,9 +74,6 @@ describe("OwnBrokerageScreen", () => {
     renderWithProviders(<OwnBrokerageScreen />);
 
     fireEvent.change(screen.getByLabelText("Razão social"), { target: { value: "Nome Novo" } });
-    fireEvent.change(screen.getByLabelText("URL do logo"), {
-      target: { value: "https://exemplo.com/logo.png" },
-    });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => {
@@ -79,7 +81,7 @@ describe("OwnBrokerageScreen", () => {
         {
           id: "b1",
           name: "Nome Novo",
-          logo_url: "https://exemplo.com/logo.png",
+          logo_url: null,
           primary_color: null,
           trade_name: null,
           tax_id: null,
@@ -120,5 +122,25 @@ describe("OwnBrokerageScreen", () => {
     fireEvent.click(screen.getAllByRole("button", { name: "Buscar" })[1]);
 
     expect(await screen.findByDisplayValue("Av. Paulista")).toBeInTheDocument();
+  });
+
+  it("faz upload do logo selecionado e envia a URL na mutation", async () => {
+    vi.mocked(uploadBrokerageLogo).mockResolvedValue("https://cdn.example.com/b1/logo");
+
+    renderWithProviders(<OwnBrokerageScreen />);
+
+    const file = new File(["logo"], "logo.png", { type: "image/png" });
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    fireEvent.change(input, { target: { files: [file] } });
+
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
+
+    await vi.waitFor(() => {
+      expect(uploadBrokerageLogo).toHaveBeenCalledWith({ brokerageId: "b1", file });
+      expect(mutateMock).toHaveBeenCalledWith(
+        expect.objectContaining({ logo_url: "https://cdn.example.com/b1/logo" }),
+        expect.any(Object),
+      );
+    });
   });
 });

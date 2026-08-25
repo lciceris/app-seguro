@@ -124,9 +124,11 @@ brokerage_admin (v_is_own) NÃO pode mudar:
   (tudo mais — name + dados de empresa + logo_url/primary_color — liberado)
 
 platform_admin NÃO pode mudar:
-  logo_url, primary_color
+  logo_url, primary_color — EXCETO a primeira vez (old.logo_url/old.primary_color nulos)
   (tudo mais — name, plan_id, plan_expires_at, status + dados de empresa — liberado)
 ```
+
+**Refinamento** (ver "Plano e identidade visual entram no cadastro" em `requirements.md`): a criação agora inclui logo/cor, mas o upload do logo só é possível depois que a corretora já existe (o path do Storage usa o id) — o fluxo real é INSERT (via Edge Function, sem essa trigger) → upload do arquivo → um UPDATE pontual de `logo_url` feito pelo `platform_admin`. Pra esse UPDATE não ser barrado, a trigger permite `platform_admin` definir `logo_url`/`primary_color` **uma única vez** (transição de `null` pra um valor) — depois de definidos, voltam a ser exclusivos do `brokerage_admin`, como já era.
 
 **Refinamento pós-implementação** (ver "platform_admin também edita dados de empresa" em `requirements.md`): a versão original bloqueava `platform_admin` de mexer em qualquer dado de empresa, deixando só `name`/`plan_id`/`plan_expires_at`/`status` liberados. Isso quebrava a simetria com a criação (que já preenche esses campos) e com o formulário equivalente do sistema antigo, onde o mesmo form edita tudo. A trigger passou a bloquear `platform_admin` só de `logo_url`/`primary_color` (exclusivos do `brokerage_admin`) — implementado como *deny-list* em vez de *allow-list* pros dois grupos, mais simples de manter conforme novas colunas de empresa forem adicionadas no futuro.
 
@@ -210,11 +212,20 @@ Ambas as APIs são públicas, sem chave, com CORS liberado pra chamada direta do
 
 ### Frontend — componentes afetados
 
-- **`create-brokerage-drawer`**: seções **Empresa**, **Endereço**, **Representante e contato** (nome/e-mail do representante — obrigatórios, dobram como dados do primeiro admin — + financeiro, numa seção só), com "Buscar" ao lado de CNPJ e CEP. `create-brokerage-schema.ts` estendido (campos de empresa opcionais, mesmo padrão `z.string().optional()`/e-mail com `z.union([z.literal(""), z.string().email(...)]).optional()` já usado em `create-client-schema.ts`; `representative_name`/`representative_email` obrigatórios). Não existe seção "Primeiro administrador" separada.
-- **`own-brokerage-screen`** (`brokerage_admin`): mesmas seções (Empresa, Endereço, Representante e contato) + Identidade Visual, com busca. `edit-own-brokerage-schema.ts` estendido — aqui o representante continua opcional (a conta já existe).
-- **`edit-brokerage-drawer`** (`platform_admin`): ganha `plan_expires_at` (`DatePicker`) ao lado de `plan_id`. `edit-brokerage-schema.ts` estendido.
+- **`create-brokerage-drawer`**: seções **Empresa**, **Endereço**, **Representante e contato** (nome/e-mail do representante — obrigatórios, dobram como dados do primeiro admin — + financeiro, numa seção só), **Plano** (`plan_id` + `plan_expires_at`, opcionais) e **Identidade Visual** (upload de logo + `ColorPicker`), com "Buscar" ao lado de CNPJ e CEP. `create-brokerage-schema.ts` estendido (campos de empresa opcionais, mesmo padrão `z.string().optional()`/e-mail com `z.union([z.literal(""), z.string().email(...)]).optional()` já usado em `create-client-schema.ts`; `representative_name`/`representative_email` obrigatórios). Não existe seção "Primeiro administrador" separada. Sem "Status" (ver requirements.md).
+- **`own-brokerage-screen`** (`brokerage_admin`): mesmas seções (Empresa, Endereço, Representante e contato) + Identidade Visual (upload de logo + `ColorPicker`), com busca. `edit-own-brokerage-schema.ts` estendido — aqui o representante continua opcional (a conta já existe).
+- **`edit-brokerage-drawer`** (`platform_admin`): ganha `plan_expires_at` (`DatePicker`) ao lado de `plan_id`. `edit-brokerage-schema.ts` estendido. Sem Identidade Visual — permanece exclusiva do `brokerage_admin` na edição contínua.
 - **`brokerage-detail-drawer`**: exibe todos os campos novos, somente leitura (CNPJ/telefone/CEP formatados com a mesma máscara do formulário), incluindo `plan_expires_at`. Seção "Representante e contato" também consolidada (sem "Financeiro" separado).
 - **`types/brokerage.ts`**: sem mudança manual — `Brokerage`/`BrokerageWithPlan` continuam derivando de `Database["public"]["Tables"]["brokerages"]["Row"]`; basta regenerar os tipos depois da migration.
+
+### Upload de logo e color picker
+
+- **Bucket `brokerage-assets`** (público, path `{brokerage_id}/logo`) — migration nova, mesmo padrão de `policy-documents`/`qar-attachments` (policies em `storage.objects` usando `storage.foldername(name)` + `get_my_role()`/`get_my_brokerage_id()`), mas com bucket `public: true` (o logo é exibido sem autenticação — sidebar, cor dinâmica). `platform_admin` pode escrever em qualquer pasta (onboarding); `brokerage_admin` só na própria.
+  - **Policies necessárias**: INSERT, UPDATE, **e SELECT** — bug real encontrado em verificação manual: `upload(..., { upsert: true })` falhava com "new row violates row-level security policy" mesmo no primeiro upload (sem conflito real). O bucket público dispensa RLS pra *servir* os bytes via URL pública, mas o storage-api ainda roda uma query SQL normal (sujeita a RLS) pra checar conflito de upsert — sem uma policy de SELECT em `storage.objects`, essa checagem falha e o upsert inteiro é negado, mesmo num objeto novo. Corrigido com uma policy de SELECT idêntica às de INSERT/UPDATE.
+- **`api/upload-brokerage-logo.ts`** (novo): `uploadBrokerageLogo({ brokerageId, file })` — `supabase.storage.from("brokerage-assets").upload(`${brokerageId}/logo`, file, { upsert: true, contentType: file.type })` + `getPublicUrl` (com `?t=${Date.now()}` pra invalidar cache de navegador ao trocar o logo). Path fixo (não randomizado como os anexos) — o logo é um arquivo único por corretora, substituído em vez de acumulado.
+- **Fluxo na criação** (`create-brokerage-drawer`): arquivo fica só em estado local (`useState<File | null>` + preview via `URL.createObjectURL`) até o submit. No `onSuccess` da mutation de criação (que já retorna o `brokerage.id`), se houver arquivo: `uploadBrokerageLogo` → `supabase.from("brokerages").update({ logo_url })`. Falha no upload não desfaz a corretora (só um toast de aviso) — diferente da falha de convite (Requirement 2.3), que é fatal.
+- **Fluxo na edição** (`own-brokerage-screen`): mesmo padrão de estado local; como o `brokerage.id` já existe, o upload acontece dentro do próprio `onSubmit`, e a URL resultante entra no mesmo payload de `updateOwnBrokerage` (não precisa de um UPDATE à parte).
+- **`ColorPicker`** (`src/shared/components/ui/color-picker.tsx`, novo primitivo compartilhado): `<input type="color">` nativo + `Input` de texto em hex lado a lado (mesmo padrão do sistema antigo), sem preview de "item ativo/inativo" (considerado excessivo pro escopo atual — o próprio dinamismo de `--primary` na sidebar já serve de preview ao vivo depois de salvo).
 
 ### Placeholders, máscaras e layout — replicados do sistema antigo
 

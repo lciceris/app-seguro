@@ -193,3 +193,19 @@
     - _Requirements: 4.2_
   - [x] 19.4 Atualizar testes de componente (`edit-brokerage-drawer`, `use-update-brokerage`) — verificado fim a fim com submit real (criação e as duas edições) contra o banco
     - _Requirements: 4.2_
+
+- [x] 20. Plano e identidade visual no cadastro (upload de logo + color picker)
+  - [x] 20.1 Migration: bucket `brokerage-assets` (público) + policies INSERT/UPDATE/SELECT em `storage.objects` — bug real encontrado em verificação manual (upsert falhava sem policy de SELECT, mesmo bucket público)
+    - _Requirements: 2.2, 2.5_
+  - [x] 20.2 Migration: `enforce_brokerage_update_columns` — `platform_admin` pode definir `logo_url`/`primary_color` uma única vez (transição de null), pra fechar o UPDATE pontual do logo pós-criação
+    - _Requirements: 2.2_
+  - [x] 20.3 Criar `src/shared/components/ui/color-picker.tsx` (input nativo `type="color"` + texto hex)
+    - _Requirements: 2.5, 6.1_
+  - [x] 20.4 Criar `api/upload-brokerage-logo.ts` (`uploadBrokerageLogo`) — upload + `getPublicUrl`, path fixo `{brokerage_id}/logo`, `upsert: true`
+    - _Requirements: 2.5, 6.1_
+  - [x] 20.5 Atualizar `create-brokerage-schema.ts` + `api/create-brokerage.ts` + Edge Function `create-brokerage` — `plan_id`/`plan_expires_at`/`primary_color` no insert; `create-brokerage-drawer.tsx` ganha seções Plano e Identidade Visual, upload do logo no `onSuccess` da criação
+    - _Requirements: 2.2, 2.5_
+  - [x] 20.6 Atualizar `own-brokerage-screen.tsx` — logo/cor trocam de texto livre pra upload de arquivo + `ColorPicker`
+    - _Requirements: 6.1_
+  - [x] 20.7 Atualizar testes de componente (`create-brokerage-drawer`, `own-brokerage-screen`) — verificado fim a fim com submit real (upload de logo + cor persistidos no Storage/banco)
+    - _Requirements: 2.2, 2.5, 6.1_

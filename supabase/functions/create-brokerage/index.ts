@@ -22,6 +22,9 @@ Deno.serve(async (req) => {
 
   const {
     brokerage_name,
+    plan_id,
+    plan_expires_at,
+    primary_color,
     trade_name,
     tax_id,
     business_code,
@@ -50,6 +53,9 @@ Deno.serve(async (req) => {
     .from("brokerages")
     .insert({
       name: brokerage_name,
+      plan_id,
+      plan_expires_at,
+      primary_color,
       trade_name,
       tax_id,
       business_code,

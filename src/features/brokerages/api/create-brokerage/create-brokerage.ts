@@ -1,5 +1,6 @@
 import { supabase } from "@/shared/lib/supabase";
 import { extractFunctionErrorMessage } from "@/shared/utils/extract-function-error-message";
+import type { Brokerage } from "../../types/brokerage";
 
 // O representante é convidado automaticamente como primeiro brokerage_admin
 // da corretora — não há um "admin" separado do representante.
@@ -7,6 +8,9 @@ export interface CreateBrokerageInput {
   brokerage_name: string;
   representative_name: string;
   representative_email: string;
+  plan_id: string | null;
+  plan_expires_at: string | null;
+  primary_color: string | null;
   trade_name: string | null;
   tax_id: string | null;
   business_code: string | null;
@@ -25,11 +29,14 @@ export interface CreateBrokerageInput {
 }
 
 export async function createBrokerage(input: CreateBrokerageInput) {
-  const { data, error } = await supabase.functions.invoke("create-brokerage", { body: input });
+  const { data, error } = await supabase.functions.invoke<{ brokerage: Brokerage }>(
+    "create-brokerage",
+    { body: input },
+  );
 
   if (error) {
     const message = await extractFunctionErrorMessage(error);
     throw new Error(message ?? error.message);
   }
-  return data;
+  return data!;
 }
