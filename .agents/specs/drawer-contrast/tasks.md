@@ -4,22 +4,22 @@
   - [x] 1.1 `bg-black/10` → `bg-black/35` no `SheetOverlay`; `top-16`/`sm:top-28` → `top-9` único no `SheetContent`
     - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 2. Corpo do drawer sem `bg-muted` (25 arquivos, sweep mecânico)
-  - [ ] 2.1 `clients`: `create-client-drawer.tsx`, `edit-client-drawer.tsx`, `client-detail-drawer.tsx`
+- [x] 2. Corpo do drawer sem `bg-muted` (25 arquivos, sweep mecânico)
+  - [x] 2.1 `clients`: `create-client-drawer.tsx`, `edit-client-drawer.tsx`, `client-detail-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.2 `vehicles`: `create-vehicle-drawer.tsx`, `edit-vehicle-drawer.tsx`, `vehicle-detail-drawer.tsx`
+  - [x] 2.2 `vehicles`: `create-vehicle-drawer.tsx`, `edit-vehicle-drawer.tsx`, `vehicle-detail-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.3 `quotations`: `create-quotation-drawer.tsx`, `edit-quotation-drawer.tsx`, `quotation-vehicle-coverage-drawer.tsx`, `quotation-insurer-drawer.tsx`
+  - [x] 2.3 `quotations`: `create-quotation-drawer.tsx`, `edit-quotation-drawer.tsx`, `quotation-vehicle-coverage-drawer.tsx`, `quotation-insurer-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.4 `insurers`: `create-insurer-drawer.tsx`, `edit-insurer-drawer.tsx`, `insurer-detail-drawer.tsx`
+  - [x] 2.4 `insurers`: `create-insurer-drawer.tsx`, `edit-insurer-drawer.tsx`, `insurer-detail-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.5 `policies`: `edit-policy-drawer.tsx`, `policy-detail-drawer.tsx`
+  - [x] 2.5 `policies`: `edit-policy-drawer.tsx`, `policy-detail-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.6 `policy-endorsements`: `create-policy-endorsement-drawer.tsx`, `policy-endorsement-detail-drawer.tsx`, `insurer-response-form.tsx`, `not-closed-reason-form.tsx`
+  - [x] 2.6 `policy-endorsements`: `create-policy-endorsement-drawer.tsx`, `policy-endorsement-detail-drawer.tsx`, `insurer-response-form.tsx`, `not-closed-reason-form.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.7 `users`: `invite-user-drawer.tsx`, `edit-user-drawer.tsx`, `user-detail-drawer.tsx`
+  - [x] 2.7 `users`: `invite-user-drawer.tsx`, `edit-user-drawer.tsx`, `user-detail-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
-  - [ ] 2.8 `brokerages`: `create-brokerage-drawer.tsx`, `edit-brokerage-drawer.tsx`, `brokerage-detail-drawer.tsx`
+  - [x] 2.8 `brokerages`: `create-brokerage-drawer.tsx`, `edit-brokerage-drawer.tsx`, `brokerage-detail-drawer.tsx`
     - _Requirements: 2.1, 2.2, 2.3_
 
 - [ ] 3. Cards de seção com `shadow-sm` (28 arquivos = os 25 acima + 3 sub-componentes)

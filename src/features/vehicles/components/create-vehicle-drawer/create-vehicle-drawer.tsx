@@ -123,7 +123,7 @@ export function CreateVehicleDrawer() {
         <form
           id="create-vehicle-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-4 overflow-y-auto bg-muted p-5"
+          className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
           <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">

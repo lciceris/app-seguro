@@ -88,7 +88,7 @@ export function InviteUserDrawer() {
         <form
           id="invite-user-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-4 overflow-y-auto bg-muted p-5"
+          className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
         >
           <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
             <div className="grid grid-cols-2 gap-3">

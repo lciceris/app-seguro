@@ -46,7 +46,7 @@ export function NotClosedReasonForm({ endorsementId, onBack }: NotClosedReasonFo
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-4 overflow-y-auto bg-muted p-5">
+      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
         <button
           type="button"
           onClick={onBack}

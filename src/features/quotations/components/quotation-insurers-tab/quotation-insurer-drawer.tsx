@@ -128,7 +128,7 @@ export function QuotationInsurerDrawer({
         )}
 
         {quotationInsurer && (
-          <div className="flex flex-col gap-4 overflow-y-auto bg-muted p-5 pt-0">
+          <div className="flex flex-col gap-4 overflow-y-auto p-5 pt-0">
             <QuotationInsurerEventsTimeline
               quotationInsurerId={quotationInsurer.id}
               canComment={canEdit}
