@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { formatCep, formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
+import { DetailField } from "@/shared/components/ui/detail-field";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import {
   Sheet,
@@ -12,17 +13,6 @@ import {
 } from "@/shared/components/ui/sheet";
 
 import { useBrokerage } from "../../hooks/use-brokerage";
-
-function DetailField({ label, value }: { label: string; value: string | null }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-        {label}
-      </span>
-      <span className="text-sm text-foreground">{value ?? "Não informado"}</span>
-    </div>
-  );
-}
 
 export function BrokerageDetailDrawer() {
   const navigate = useNavigate();

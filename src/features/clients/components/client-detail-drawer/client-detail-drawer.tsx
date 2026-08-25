@@ -7,6 +7,7 @@ import { useAuthStore } from "@/features/auth";
 import { useUsers } from "@/features/users";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { DetailField } from "@/shared/components/ui/detail-field";
 import {
   Select,
   SelectContent,
@@ -30,17 +31,6 @@ import { useClientSellers } from "../../hooks/use-client-sellers";
 import { useRemoveClientSeller } from "../../hooks/use-remove-client-seller";
 import { useSetPrimaryClientSeller } from "../../hooks/use-set-primary-client-seller";
 import type { ClientSellerWithUser } from "../../types/client";
-
-function DetailField({ label, value }: { label: string; value: string | null }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-        {label}
-      </span>
-      <span className="text-sm text-foreground">{value ?? "Não informado"}</span>
-    </div>
-  );
-}
 
 function ClientSellersSection({ clientId, canManage }: { clientId: string; canManage: boolean }) {
   const { data: clientSellers, isLoading } = useClientSellers(clientId);

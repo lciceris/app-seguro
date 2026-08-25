@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { COVERAGE_TYPE_LABELS } from "@/features/quotations";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { DetailField } from "@/shared/components/ui/detail-field";
 import {
   Sheet,
   SheetContent,
@@ -27,18 +28,6 @@ import { PolicyEndorsementStatusActions } from "./policy-endorsement-status-acti
 
 const VEHICLE_TYPES = new Set(["vehicle_inclusion", "vehicle_exclusion", "coverage_change"]);
 const COVERAGE_TYPES = new Set(["vehicle_inclusion", "coverage_change"]);
-
-function DetailField({ label, value }: { label: string; value: string | null }) {
-  if (!value) return null;
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-        {label}
-      </span>
-      <span className="text-sm text-foreground">{value}</span>
-    </div>
-  );
-}
 
 function formatCurrency(value: number | null) {
   if (value === null) return null;

@@ -22,20 +22,20 @@
   - [x] 2.7 `users`: `invite-user-drawer.tsx`, `edit-user-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 3. `DetailField` compartilhado
-  - [ ] 3.1 Criar `src/shared/components/ui/detail-field.tsx` + teste (renderiza "Não informado" pra valor nulo/vazio)
+- [x] 3. `DetailField` compartilhado
+  - [x] 3.1 Criar `src/shared/components/ui/detail-field.tsx` + teste (renderiza "Não informado" pra valor nulo/vazio)
     - _Requirements: 2.1, 2.2_
-  - [ ] 3.2 Migrar `client-detail-drawer.tsx`
+  - [x] 3.2 Migrar `client-detail-drawer.tsx`
     - _Requirements: 2.3_
-  - [ ] 3.3 Migrar `vehicle-detail-drawer.tsx`
+  - [x] 3.3 Migrar `vehicle-detail-drawer.tsx`
     - _Requirements: 2.3_
-  - [ ] 3.4 Migrar `insurer-detail-drawer.tsx`
+  - [x] 3.4 Migrar `insurer-detail-drawer.tsx`
     - _Requirements: 2.3_
-  - [ ] 3.5 Migrar `policy-detail-drawer.tsx`
+  - [x] 3.5 Migrar `policy-detail-drawer.tsx`
     - _Requirements: 2.3_
-  - [ ] 3.6 Migrar `brokerage-detail-drawer.tsx`
+  - [x] 3.6 Migrar `brokerage-detail-drawer.tsx`
     - _Requirements: 2.3_
-  - [ ] 3.7 Migrar `policy-endorsement-detail-drawer.tsx` — corrige o drift (`if (!value) return null` some pra "Não informado"), ajustar teste que hoje espera o campo ausente
+  - [x] 3.7 Migrar `policy-endorsement-detail-drawer.tsx` — corrige o drift (`if (!value) return null` some pra "Não informado"); nenhum teste existente cobria o caso de valor vazio, então nada precisou de ajuste
     - _Requirements: 2.2, 2.3_
 
 - [ ] 4. Tabela compartilhada, densidade nova

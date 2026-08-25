@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { DetailField } from "@/shared/components/ui/detail-field";
 import {
   Sheet,
   SheetContent,
@@ -25,17 +26,6 @@ import { PolicyEndorsementsSection } from "./policy-endorsements-section";
 import { PolicyVehiclesSection } from "./policy-vehicles-section";
 
 const MANAGE_ROLES = new Set(["supervisor", "brokerage_admin", "platform_admin"]);
-
-function DetailField({ label, value }: { label: string; value: string | null }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-        {label}
-      </span>
-      <span className="text-sm text-foreground">{value ?? "Não informado"}</span>
-    </div>
-  );
-}
 
 function formatCurrency(value: number | null) {
   if (value === null) return null;
