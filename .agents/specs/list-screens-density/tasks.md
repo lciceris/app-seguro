@@ -32,8 +32,8 @@
   - [x] 3.3 `policies-list-screen.tsx`: sub-linha com número da cotação de origem (`policy.quotations?.number`) na coluna "Número", sem coluna nova
     - _Requirements: 3.3, 3.4_
 
-- [ ] 4. Documentação viva
-  - [ ] 4.1 Adicionar seção "Listagens — contador e busca" em `docs/dev/ui-guidelines.md` com o padrão e snippet
+- [x] 4. Documentação viva
+  - [x] 4.1 Adicionar seção "Listagens — contador e busca" em `docs/dev/ui-guidelines.md` com o padrão e snippet
     - _Requirements: 4.1_
 
 - [ ] 5. Verificação final

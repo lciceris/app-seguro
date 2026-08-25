@@ -100,6 +100,47 @@ import {
 
 Não tenta abstrair "colunas configuráveis" — cada tela compõe o próprio conjunto de `TableHead`/`TableCell`. Coluna de dado técnico leva `font-mono-data`.
 
+## Listagens — contador e busca
+
+Toda listagem SEMPRE tem um contador de itens abaixo do `<h1>`, e SEMPRE tem busca quando a lista puder crescer além de ~10-15 itens (na prática, todas as 7 listagens hoje). Sem abstração compartilhada — cada tela escreve seu próprio texto (singular/plural, gênero do substantivo variam por entidade) e sua própria busca client-side via `useMemo`.
+
+```tsx
+const [search, setSearch] = useState("");
+
+const filteredItems = useMemo(() => {
+  if (!items) return items;
+  const query = normalize(search.trim());
+  if (!query) return items;
+  return items.filter((item) => normalize(item.name).includes(query));
+}, [items, search]);
+
+const totalCount = items?.length ?? 0;
+const filteredCount = filteredItems?.length ?? totalCount;
+```
+
+```tsx
+<div className="mb-4 flex items-center justify-between">
+  <div>
+    <h1 className="text-lg font-semibold text-foreground">Título</h1>
+    {!isLoading && items && (
+      <p className="text-xs text-muted-foreground">
+        {filteredCount !== totalCount
+          ? `${filteredCount} de ${totalCount} itens`
+          : totalCount === 1
+            ? "1 item cadastrado"
+            : `${totalCount} itens cadastrados`}
+      </p>
+    )}
+  </div>
+  <Button asChild>{/* criar */}</Button>
+</div>
+
+<div className="mb-4 relative max-w-sm">
+  <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+  <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar..." className="pl-9" />
+</div>
+```
+
 ## Botões — hierarquia
 
 | Papel | Como |
