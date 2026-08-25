@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { toast } from "sonner";
 
+import { formatCnpj } from "@/shared/lib/masks";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -95,6 +96,8 @@ export function BrokeragesListScreen() {
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
+            <TableHead>CNPJ</TableHead>
+            <TableHead>Criada em</TableHead>
             <TableHead>Plano</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Ações</TableHead>
@@ -102,11 +105,11 @@ export function BrokeragesListScreen() {
         </TableHeader>
         <TableBody>
           {isLoading &&
-            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={4} />)}
+            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={6} />)}
 
           {isError && !isLoading && (
             <TableErrorState
-              colSpan={4}
+              colSpan={6}
               message="Não foi possível carregar as corretoras."
               onRetry={() => refetch()}
             />
@@ -114,7 +117,7 @@ export function BrokeragesListScreen() {
 
           {!isLoading && !isError && filteredBrokerages?.length === 0 && (
             <TableEmptyState
-              colSpan={4}
+              colSpan={6}
               message={
                 search
                   ? "Nenhuma corretora encontrada pra essa busca."
@@ -128,6 +131,12 @@ export function BrokeragesListScreen() {
             filteredBrokerages?.map((brokerage) => (
               <TableRow key={brokerage.id}>
                 <TableCell className="text-foreground">{brokerage.name}</TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {brokerage.tax_id ? formatCnpj(brokerage.tax_id) : "—"}
+                </TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {new Date(brokerage.created_at).toLocaleDateString("pt-BR")}
+                </TableCell>
                 <TableCell className="text-muted-foreground">
                   {brokerage.plans?.name ?? "Sem plano"}
                 </TableCell>

@@ -24,12 +24,12 @@
   - [x] 2.3 `brokerages-list-screen.tsx`: idem, filtrando por nome/CNPJ; contador da Task 1.7 passa a considerar a lista filtrada
     - _Requirements: 2.1, 2.2, 2.3, 1.2_
 
-- [ ] 3. Colunas novas com dado já buscado
-  - [ ] 3.1 `brokerages-list-screen.tsx`: colunas CNPJ (`font-mono-data`, `formatCnpj`) e "Criada em" (`font-mono-data`); ajustar `cells`/`colSpan` de 4 pra 6
+- [x] 3. Colunas novas com dado já buscado
+  - [x] 3.1 `brokerages-list-screen.tsx`: colunas CNPJ (`font-mono-data`, `formatCnpj`) e "Criada em" (`font-mono-data`); ajustar `cells`/`colSpan` de 4 pra 6
     - _Requirements: 3.1, 3.4, 3.5_
-  - [ ] 3.2 `insurers-list-screen.tsx`: coluna "Contato" (`contact_name ?? phone ?? email ?? "—"`); ajustar `cells`/`colSpan` de 3 pra 4
+  - [x] 3.2 `insurers-list-screen.tsx`: coluna "Contato" (`contact_name ?? phone ?? email ?? "—"`); ajustar `cells`/`colSpan` de 3 pra 4
     - _Requirements: 3.2, 3.4_
-  - [ ] 3.3 `policies-list-screen.tsx`: sub-linha com número da cotação de origem (`policy.quotations?.number`) na coluna "Número", sem coluna nova
+  - [x] 3.3 `policies-list-screen.tsx`: sub-linha com número da cotação de origem (`policy.quotations?.number`) na coluna "Número", sem coluna nova
     - _Requirements: 3.3, 3.4_
 
 - [ ] 4. Documentação viva

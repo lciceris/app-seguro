@@ -80,16 +80,17 @@ export function InsurersListScreen() {
           <TableRow>
             <TableHead>Nome</TableHead>
             <TableHead>CNPJ</TableHead>
+            <TableHead>Contato</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {isLoading &&
-            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={3} />)}
+            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={4} />)}
 
           {isError && !isLoading && (
             <TableErrorState
-              colSpan={3}
+              colSpan={4}
               message="Não foi possível carregar as seguradoras."
               onRetry={() => refetch()}
             />
@@ -97,7 +98,7 @@ export function InsurersListScreen() {
 
           {!isLoading && !isError && filteredInsurers?.length === 0 && (
             <TableEmptyState
-              colSpan={3}
+              colSpan={4}
               message={
                 search
                   ? "Nenhuma seguradora encontrada pra essa busca."
@@ -113,6 +114,9 @@ export function InsurersListScreen() {
                 <TableCell className="text-foreground">{insurer.name}</TableCell>
                 <TableCell className="font-mono-data text-muted-foreground">
                   {insurer.cnpj ?? "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {insurer.contact_name ?? insurer.phone ?? insurer.email ?? "—"}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-end gap-1">

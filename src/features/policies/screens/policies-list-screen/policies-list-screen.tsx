@@ -173,6 +173,11 @@ export function PoliciesListScreen() {
                 <TableRow key={policy.id}>
                   <TableCell className="font-mono-data text-foreground">
                     {policy.policy_number ?? "Pendente de emissão"}
+                    {policy.quotations?.number && (
+                      <span className="block font-mono-data text-xs text-muted-foreground">
+                        Cotação {policy.quotations.number}
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {policy.clients?.legal_name ?? "—"}
