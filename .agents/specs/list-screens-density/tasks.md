@@ -16,12 +16,12 @@
   - [x] 1.7 `brokerages-list-screen.tsx` (sem filtro ainda nesta task — total bruto; ganha filtro na Task 2)
     - _Requirements: 1.1, 1.3_
 
-- [ ] 2. Busca nas telas que não têm hoje
-  - [ ] 2.1 `insurers-list-screen.tsx`: `Input` + `useMemo` filtrando por nome/CNPJ; `TableEmptyState` ganha mensagem de busca vazia; contador da Task 1.4 passa a considerar a lista filtrada
+- [x] 2. Busca nas telas que não têm hoje
+  - [x] 2.1 `insurers-list-screen.tsx`: `Input` + `useMemo` filtrando por nome/CNPJ; `TableEmptyState` ganha mensagem de busca vazia; contador da Task 1.4 passa a considerar a lista filtrada
     - _Requirements: 2.1, 2.2, 2.3, 1.2_
-  - [ ] 2.2 `users-list-screen.tsx`: idem, filtrando por nome/e-mail; contador da Task 1.6 passa a considerar a lista filtrada
+  - [x] 2.2 `users-list-screen.tsx`: idem, filtrando por nome/e-mail; contador da Task 1.6 passa a considerar a lista filtrada
     - _Requirements: 2.1, 2.2, 2.3, 1.2_
-  - [ ] 2.3 `brokerages-list-screen.tsx`: idem, filtrando por nome/CNPJ; contador da Task 1.7 passa a considerar a lista filtrada
+  - [x] 2.3 `brokerages-list-screen.tsx`: idem, filtrando por nome/CNPJ; contador da Task 1.7 passa a considerar a lista filtrada
     - _Requirements: 2.1, 2.2, 2.3, 1.2_
 
 - [ ] 3. Colunas novas com dado já buscado

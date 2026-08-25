@@ -1,11 +1,12 @@
-import { Eye, KeyRound, Pencil, UserCheck, UserX } from "lucide-react";
-import { useState } from "react";
+import { Eye, KeyRound, Pencil, Search, UserCheck, UserX } from "lucide-react";
+import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
 import {
   Table,
   TableBody,
@@ -25,10 +26,18 @@ import { useReactivateUser } from "../../hooks/use-reactivate-user";
 import { ResetPasswordDialog } from "../../components/reset-password-dialog";
 import { DeactivateConfirmDialog } from "../../components/deactivate-confirm-dialog";
 
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 export function UsersListScreen() {
   const { data: users, isLoading, isError, refetch } = useUsers();
   const usuario = useAuthStore((state) => state.usuario);
   const canManageUsers = usuario?.role === "platform_admin" || usuario?.role === "brokerage_admin";
+  const [search, setSearch] = useState("");
   const [resetPasswordUserId, setResetPasswordUserId] = useState<string | null>(null);
   const [deactivateUser, setDeactivateUser] = useState<{ id: string; name: string } | null>(null);
   const reactivateUser = useReactivateUser();
@@ -40,6 +49,21 @@ export function UsersListScreen() {
     });
   }
 
+  const filteredUsers = useMemo(() => {
+    if (!users) return users;
+    const query = normalize(search.trim());
+    if (!query) return users;
+
+    return users.filter((user) => {
+      const name = normalize(user.full_name);
+      const email = normalize(user.email);
+      return name.includes(query) || email.includes(query);
+    });
+  }, [users, search]);
+
+  const totalCount = users?.length ?? 0;
+  const filteredCount = filteredUsers?.length ?? totalCount;
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
@@ -47,7 +71,11 @@ export function UsersListScreen() {
           <h1 className="text-lg font-semibold text-foreground">Usuários</h1>
           {!isLoading && users && (
             <p className="text-xs text-muted-foreground">
-              {users.length === 1 ? "1 usuário cadastrado" : `${users.length} usuários cadastrados`}
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} usuários`
+                : totalCount === 1
+                  ? "1 usuário cadastrado"
+                  : `${totalCount} usuários cadastrados`}
             </p>
           )}
         </div>
@@ -56,6 +84,16 @@ export function UsersListScreen() {
             <Link to="/users/add">Convidar usuário</Link>
           </Button>
         )}
+      </div>
+
+      <div className="mb-4 relative max-w-sm">
+        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Buscar por nome ou e-mail"
+          className="pl-9"
+        />
       </div>
 
       <Table>
@@ -80,13 +118,20 @@ export function UsersListScreen() {
             />
           )}
 
-          {!isLoading && !isError && users?.length === 0 && (
-            <TableEmptyState colSpan={5} message="Nenhum usuário cadastrado ainda." />
+          {!isLoading && !isError && filteredUsers?.length === 0 && (
+            <TableEmptyState
+              colSpan={5}
+              message={
+                search
+                  ? "Nenhum usuário encontrado pra essa busca."
+                  : "Nenhum usuário cadastrado ainda."
+              }
+            />
           )}
 
           {!isLoading &&
             !isError &&
-            users?.map((user) => (
+            filteredUsers?.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="text-foreground">{user.full_name}</TableCell>
                 <TableCell className="text-muted-foreground">{user.email}</TableCell>

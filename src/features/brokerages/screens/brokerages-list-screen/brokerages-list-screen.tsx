@@ -1,10 +1,11 @@
-import { Eye, Pencil, UserCheck, UserX } from "lucide-react";
-import { useState } from "react";
+import { Eye, Pencil, Search, UserCheck, UserX } from "lucide-react";
+import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
 import {
   Table,
   TableBody,
@@ -22,8 +23,16 @@ import { DeactivateBrokerageConfirmDialog } from "../../components/deactivate-br
 import { useBrokerages } from "../../hooks/use-brokerages";
 import { useReactivateBrokerage } from "../../hooks/use-reactivate-brokerage";
 
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 export function BrokeragesListScreen() {
   const { data: brokerages, isLoading, isError, refetch } = useBrokerages();
+  const [search, setSearch] = useState("");
   const [deactivateBrokerage, setDeactivateBrokerage] = useState<{
     id: string;
     name: string;
@@ -37,6 +46,21 @@ export function BrokeragesListScreen() {
     });
   }
 
+  const filteredBrokerages = useMemo(() => {
+    if (!brokerages) return brokerages;
+    const query = normalize(search.trim());
+    if (!query) return brokerages;
+
+    return brokerages.filter((brokerage) => {
+      const name = normalize(brokerage.name);
+      const taxId = brokerage.tax_id ? normalize(brokerage.tax_id) : "";
+      return name.includes(query) || taxId.includes(query);
+    });
+  }, [brokerages, search]);
+
+  const totalCount = brokerages?.length ?? 0;
+  const filteredCount = filteredBrokerages?.length ?? totalCount;
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
@@ -44,15 +68,27 @@ export function BrokeragesListScreen() {
           <h1 className="text-lg font-semibold text-foreground">Corretoras</h1>
           {!isLoading && brokerages && (
             <p className="text-xs text-muted-foreground">
-              {brokerages.length === 1
-                ? "1 corretora cadastrada"
-                : `${brokerages.length} corretoras cadastradas`}
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} corretoras`
+                : totalCount === 1
+                  ? "1 corretora cadastrada"
+                  : `${totalCount} corretoras cadastradas`}
             </p>
           )}
         </div>
         <Button asChild>
           <Link to="/brokerages/add">Nova corretora</Link>
         </Button>
+      </div>
+
+      <div className="mb-4 relative max-w-sm">
+        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Buscar por nome ou CNPJ"
+          className="pl-9"
+        />
       </div>
 
       <Table>
@@ -76,13 +112,20 @@ export function BrokeragesListScreen() {
             />
           )}
 
-          {!isLoading && !isError && brokerages?.length === 0 && (
-            <TableEmptyState colSpan={4} message="Nenhuma corretora cadastrada ainda." />
+          {!isLoading && !isError && filteredBrokerages?.length === 0 && (
+            <TableEmptyState
+              colSpan={4}
+              message={
+                search
+                  ? "Nenhuma corretora encontrada pra essa busca."
+                  : "Nenhuma corretora cadastrada ainda."
+              }
+            />
           )}
 
           {!isLoading &&
             !isError &&
-            brokerages?.map((brokerage) => (
+            filteredBrokerages?.map((brokerage) => (
               <TableRow key={brokerage.id}>
                 <TableCell className="text-foreground">{brokerage.name}</TableCell>
                 <TableCell className="text-muted-foreground">
