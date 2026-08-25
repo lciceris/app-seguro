@@ -59,10 +59,24 @@ export function VehiclesListScreen() {
     });
   }, [vehicles, search]);
 
+  const totalCount = vehicles?.length ?? 0;
+  const filteredCount = filteredVehicles?.length ?? totalCount;
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Veículos</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Veículos</h1>
+          {!isLoading && vehicles && (
+            <p className="text-xs text-muted-foreground">
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} veículos`
+                : totalCount === 1
+                  ? "1 veículo cadastrado"
+                  : `${totalCount} veículos cadastrados`}
+            </p>
+          )}
+        </div>
         <Button asChild>
           <Link to="/vehicles/add">Novo veículo</Link>
         </Button>

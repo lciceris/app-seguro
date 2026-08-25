@@ -43,7 +43,14 @@ export function UsersListScreen() {
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Usuários</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Usuários</h1>
+          {!isLoading && users && (
+            <p className="text-xs text-muted-foreground">
+              {users.length === 1 ? "1 usuário cadastrado" : `${users.length} usuários cadastrados`}
+            </p>
+          )}
+        </div>
         {canManageUsers && (
           <Button asChild>
             <Link to="/users/add">Convidar usuário</Link>

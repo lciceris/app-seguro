@@ -23,7 +23,16 @@ export function InsurersListScreen() {
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Seguradoras</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Seguradoras</h1>
+          {!isLoading && insurers && (
+            <p className="text-xs text-muted-foreground">
+              {insurers.length === 1
+                ? "1 seguradora cadastrada"
+                : `${insurers.length} seguradoras cadastradas`}
+            </p>
+          )}
+        </div>
         <Button asChild>
           <Link to="/admin/insurers/add">Nova seguradora</Link>
         </Button>

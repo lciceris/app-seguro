@@ -82,10 +82,24 @@ export function PoliciesListScreen() {
     });
   }, [policies, search, statusFilter]);
 
+  const totalCount = policies?.length ?? 0;
+  const filteredCount = filteredPolicies?.length ?? totalCount;
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Apólices</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Apólices</h1>
+          {!isLoading && policies && (
+            <p className="text-xs text-muted-foreground">
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} apólices`
+                : totalCount === 1
+                  ? "1 apólice emitida"
+                  : `${totalCount} apólices emitidas`}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="mb-4 flex items-center gap-3">

@@ -65,10 +65,24 @@ export function QuotationsListScreen() {
     });
   }, [quotations, search, statusFilter]);
 
+  const totalCount = quotations?.length ?? 0;
+  const filteredCount = filteredQuotations?.length ?? totalCount;
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Cotações</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Cotações</h1>
+          {!isLoading && quotations && (
+            <p className="text-xs text-muted-foreground">
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} cotações`
+                : totalCount === 1
+                  ? "1 cotação cadastrada"
+                  : `${totalCount} cotações cadastradas`}
+            </p>
+          )}
+        </div>
         {canCreate && (
           <Button asChild>
             <Link to="/quotations/add">Nova cotação</Link>

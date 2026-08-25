@@ -66,10 +66,24 @@ export function ClientsListScreen() {
     });
   }, [clients, search]);
 
+  const totalCount = clients?.length ?? 0;
+  const filteredCount = filteredClients?.length ?? totalCount;
+
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Clientes</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Clientes</h1>
+          {!isLoading && clients && (
+            <p className="text-xs text-muted-foreground">
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} clientes`
+                : totalCount === 1
+                  ? "1 cliente cadastrado"
+                  : `${totalCount} clientes cadastrados`}
+            </p>
+          )}
+        </div>
         {canEdit && (
           <Button asChild>
             <Link to="/clients/add">Novo cliente</Link>

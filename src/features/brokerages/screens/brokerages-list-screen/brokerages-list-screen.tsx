@@ -40,7 +40,16 @@ export function BrokeragesListScreen() {
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-foreground">Corretoras</h1>
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Corretoras</h1>
+          {!isLoading && brokerages && (
+            <p className="text-xs text-muted-foreground">
+              {brokerages.length === 1
+                ? "1 corretora cadastrada"
+                : `${brokerages.length} corretoras cadastradas`}
+            </p>
+          )}
+        </div>
         <Button asChild>
           <Link to="/brokerages/add">Nova corretora</Link>
         </Button>
