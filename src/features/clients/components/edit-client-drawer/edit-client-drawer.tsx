@@ -128,67 +128,69 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
             Identificação
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="client_type">Tipo</Label>
-            <Controller
-              name="client_type"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="client_type" className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="individual">Pessoa física</SelectItem>
-                    <SelectItem value="company">Pessoa jurídica</SelectItem>
-                  </SelectContent>
-                </Select>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="client_type">Tipo</Label>
+              <Controller
+                name="client_type"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id="client_type" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="individual">Pessoa física</SelectItem>
+                      <SelectItem value="company">Pessoa jurídica</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
+
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="legal_name">Razão social / Nome completo</Label>
+              <Input id="legal_name" {...register("legal_name")} />
+              {errors.legal_name && (
+                <p className="text-sm text-destructive">{errors.legal_name.message}</p>
               )}
-            />
-          </div>
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="legal_name">Razão social / Nome completo</Label>
-            <Input id="legal_name" {...register("legal_name")} />
-            {errors.legal_name && (
-              <p className="text-sm text-destructive">{errors.legal_name.message}</p>
-            )}
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="trade_name">Nome fantasia</Label>
+              <Input id="trade_name" {...register("trade_name")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="trade_name">Nome fantasia</Label>
-            <Input id="trade_name" {...register("trade_name")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="tax_id">CPF/CNPJ</Label>
+              <Input id="tax_id" {...register("tax_id")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="tax_id">CPF/CNPJ</Label>
-            <Input id="tax_id" {...register("tax_id")} />
-          </div>
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="birth_date">Data de nascimento (PF)</Label>
+              <Controller
+                name="birth_date"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker id="birth_date" value={field.value} onChange={field.onChange} />
+                )}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="birth_date">Data de nascimento (PF)</Label>
-            <Controller
-              name="birth_date"
-              control={control}
-              render={({ field }) => (
-                <DatePicker id="birth_date" value={field.value} onChange={field.onChange} />
-              )}
-            />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="business_code">CNAE (PJ)</Label>
+              <Input id="business_code" {...register("business_code")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="business_code">CNAE (PJ)</Label>
-            <Input id="business_code" {...register("business_code")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="industry">Setor (PJ)</Label>
+              <Input id="industry" {...register("industry")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="industry">Setor (PJ)</Label>
-            <Input id="industry" {...register("industry")} />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="state_registration">Inscrição estadual (PJ)</Label>
-            <Input id="state_registration" {...register("state_registration")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="state_registration">Inscrição estadual (PJ)</Label>
+              <Input id="state_registration" {...register("state_registration")} />
+            </div>
           </div>
         </div>
 
@@ -197,39 +199,41 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
             Endereço
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="zip_code">CEP</Label>
-            <Input id="zip_code" {...register("zip_code")} />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="zip_code">CEP</Label>
+              <Input id="zip_code" {...register("zip_code")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="street">Logradouro</Label>
-            <Input id="street" {...register("street")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="street_number">Número</Label>
+              <Input id="street_number" {...register("street_number")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="street_number">Número</Label>
-            <Input id="street_number" {...register("street_number")} />
-          </div>
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="street">Logradouro</Label>
+              <Input id="street" {...register("street")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="complement">Complemento</Label>
-            <Input id="complement" {...register("complement")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="complement">Complemento</Label>
+              <Input id="complement" {...register("complement")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="neighborhood">Bairro</Label>
-            <Input id="neighborhood" {...register("neighborhood")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="neighborhood">Bairro</Label>
+              <Input id="neighborhood" {...register("neighborhood")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="city">Cidade</Label>
-            <Input id="city" {...register("city")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="city">Cidade</Label>
+              <Input id="city" {...register("city")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="state">UF</Label>
-            <Input id="state" maxLength={2} {...register("state")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="state">UF</Label>
+              <Input id="state" maxLength={2} {...register("state")} />
+            </div>
           </div>
         </div>
 
@@ -238,27 +242,29 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
             Contato comercial
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contact_name">Nome do contato</Label>
-            <Input id="contact_name" {...register("contact_name")} />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact_name">Nome do contato</Label>
+              <Input id="contact_name" {...register("contact_name")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contact_role">Cargo</Label>
-            <Input id="contact_role" {...register("contact_role")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact_role">Cargo</Label>
+              <Input id="contact_role" {...register("contact_role")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contact_email">E-mail</Label>
-            <Input id="contact_email" type="email" {...register("contact_email")} />
-            {errors.contact_email && (
-              <p className="text-sm text-destructive">{errors.contact_email.message}</p>
-            )}
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact_email">E-mail</Label>
+              <Input id="contact_email" type="email" {...register("contact_email")} />
+              {errors.contact_email && (
+                <p className="text-sm text-destructive">{errors.contact_email.message}</p>
+              )}
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contact_phone">Telefone</Label>
-            <Input id="contact_phone" {...register("contact_phone")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact_phone">Telefone</Label>
+              <Input id="contact_phone" {...register("contact_phone")} />
+            </div>
           </div>
         </div>
 
@@ -267,17 +273,19 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
             Contato financeiro
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="financial_name">Nome do contato</Label>
-            <Input id="financial_name" {...register("financial_name")} />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="financial_name">Nome do contato</Label>
+              <Input id="financial_name" {...register("financial_name")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="financial_email">E-mail</Label>
-            <Input id="financial_email" type="email" {...register("financial_email")} />
-            {errors.financial_email && (
-              <p className="text-sm text-destructive">{errors.financial_email.message}</p>
-            )}
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="financial_email">E-mail</Label>
+              <Input id="financial_email" type="email" {...register("financial_email")} />
+              {errors.financial_email && (
+                <p className="text-sm text-destructive">{errors.financial_email.message}</p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -286,30 +294,32 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
             Configurações
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="segment">Segmento</Label>
-            <Controller
-              name="segment"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="segment" className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="lead">Lead</SelectItem>
-                    <SelectItem value="active">Ativo</SelectItem>
-                    <SelectItem value="vip">VIP</SelectItem>
-                    <SelectItem value="inactive">Inativo</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="segment">Segmento</Label>
+              <Controller
+                name="segment"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id="segment" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lead">Lead</SelectItem>
+                      <SelectItem value="active">Ativo</SelectItem>
+                      <SelectItem value="vip">VIP</SelectItem>
+                      <SelectItem value="inactive">Inativo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="lead_source">Origem do lead</Label>
-            <Input id="lead_source" {...register("lead_source")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="lead_source">Origem do lead</Label>
+              <Input id="lead_source" {...register("lead_source")} />
+            </div>
           </div>
         </div>
 

@@ -6,20 +6,20 @@
   - [x] 1.2 Instalar `@fontsource/ibm-plex-mono` (a versão variable não existe pra essa fonte), importar em `globals.css`, adicionar `--font-mono-data` e a utility `font-mono-data` (via `@utility`, Tailwind v4) pra dado técnico de tabela (CNPJ, telefone, CEP, data, ID)
     - _Requirements: 5.1_
 
-- [ ] 2. Grid de 2 colunas nos formulários (sweep mecânico, sem mudança de campo/validação)
-  - [ ] 2.1 `clients`: `create-client-drawer.tsx`, `edit-client-drawer.tsx`
+- [x] 2. Grid de 2 colunas nos formulários (sweep mecânico, sem mudança de campo/validação)
+  - [x] 2.1 `clients`: `create-client-drawer.tsx`, `edit-client-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
-  - [ ] 2.2 `vehicles`: `create-vehicle-drawer.tsx`, `edit-vehicle-drawer.tsx`
+  - [x] 2.2 `vehicles`: `create-vehicle-drawer.tsx`, `edit-vehicle-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
-  - [ ] 2.3 `quotations`: `create-quotation-drawer.tsx`, `edit-quotation-drawer.tsx`
+  - [x] 2.3 `quotations`: `create-quotation-drawer.tsx`, `edit-quotation-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
-  - [ ] 2.4 `insurers`: `create-insurer-drawer.tsx`, `edit-insurer-drawer.tsx`
+  - [x] 2.4 `insurers`: `create-insurer-drawer.tsx`, `edit-insurer-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
-  - [ ] 2.5 `policies`: `edit-policy-drawer.tsx`
+  - [x] 2.5 `policies`: `edit-policy-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
-  - [ ] 2.6 `policy-endorsements`: `create-policy-endorsement-drawer.tsx`
+  - [x] 2.6 `policy-endorsements`: `create-policy-endorsement-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
-  - [ ] 2.7 `users`: `invite-user-drawer.tsx`, `edit-user-drawer.tsx`
+  - [x] 2.7 `users`: `invite-user-drawer.tsx`, `edit-user-drawer.tsx`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
 - [ ] 3. `DetailField` compartilhado

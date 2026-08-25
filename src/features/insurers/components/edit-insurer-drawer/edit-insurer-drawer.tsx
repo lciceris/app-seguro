@@ -95,31 +95,33 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
             Identificação
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="name">Nome</Label>
-            <Input id="name" {...register("name")} />
-            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="name">Nome</Label>
+              <Input id="name" {...register("name")} />
+              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cnpj">CNPJ</Label>
-            <Input id="cnpj" placeholder="00.000.000/0000-00" {...register("cnpj")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="cnpj">CNPJ</Label>
+              <Input id="cnpj" placeholder="00.000.000/0000-00" {...register("cnpj")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="email">E-mail</Label>
-            <Input id="email" type="email" {...register("email")} />
-            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">E-mail</Label>
+              <Input id="email" type="email" {...register("email")} />
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="phone">Telefone Comercial</Label>
-            <Input id="phone" placeholder="(00) 00000-0000" {...register("phone")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="phone">Telefone Comercial</Label>
+              <Input id="phone" placeholder="(00) 00000-0000" {...register("phone")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="website">Website</Label>
-            <Input id="website" placeholder="https://" {...register("website")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="website">Website</Label>
+              <Input id="website" placeholder="https://" {...register("website")} />
+            </div>
           </div>
         </div>
 
@@ -139,19 +141,21 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
             Configurações
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="response_time_days">Prazo de resposta (dias)</Label>
-            <Input
-              id="response_time_days"
-              type="number"
-              min={0}
-              {...register("response_time_days")}
-            />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="response_time_days">Prazo de resposta (dias)</Label>
+              <Input
+                id="response_time_days"
+                type="number"
+                min={0}
+                {...register("response_time_days")}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="display_order">Ordem de exibição</Label>
-            <Input id="display_order" type="number" min={0} {...register("display_order")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="display_order">Ordem de exibição</Label>
+              <Input id="display_order" type="number" min={0} {...register("display_order")} />
+            </div>
           </div>
         </div>
 

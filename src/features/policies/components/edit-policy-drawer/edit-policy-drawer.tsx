@@ -91,31 +91,33 @@ function EditPolicyForm({
             Emissão
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="policy_number">Número da apólice</Label>
-            <Input id="policy_number" {...register("policy_number")} />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="policy_number">Número da apólice</Label>
+              <Input id="policy_number" {...register("policy_number")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="coverage_start">Início da vigência</Label>
-            <Controller
-              name="coverage_start"
-              control={control}
-              render={({ field }) => (
-                <DatePicker id="coverage_start" value={field.value} onChange={field.onChange} />
-              )}
-            />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="coverage_start">Início da vigência</Label>
+              <Controller
+                name="coverage_start"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker id="coverage_start" value={field.value} onChange={field.onChange} />
+                )}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="coverage_end">Fim da vigência</Label>
-            <Controller
-              name="coverage_end"
-              control={control}
-              render={({ field }) => (
-                <DatePicker id="coverage_end" value={field.value} onChange={field.onChange} />
-              )}
-            />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="coverage_end">Fim da vigência</Label>
+              <Controller
+                name="coverage_end"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker id="coverage_end" value={field.value} onChange={field.onChange} />
+                )}
+              />
+            </div>
           </div>
         </div>
 
@@ -124,19 +126,26 @@ function EditPolicyForm({
             Valores
           </p>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="premium_amount">Prêmio (R$)</Label>
-            <Input id="premium_amount" type="number" step="0.01" {...register("premium_amount")} />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="premium_amount">Prêmio (R$)</Label>
+              <Input
+                id="premium_amount"
+                type="number"
+                step="0.01"
+                {...register("premium_amount")}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="total_fleet_value">Valor total da frota (R$)</Label>
-            <Input
-              id="total_fleet_value"
-              type="number"
-              step="0.01"
-              {...register("total_fleet_value")}
-            />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="total_fleet_value">Valor total da frota (R$)</Label>
+              <Input
+                id="total_fleet_value"
+                type="number"
+                step="0.01"
+                {...register("total_fleet_value")}
+              />
+            </div>
           </div>
         </div>
       </form>
