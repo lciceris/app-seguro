@@ -30,8 +30,8 @@
   - [x] 3.3 Confirmar via grep que os 15 arquivos fora de escopo (páginas, não drawer) não foram tocados
     - _Requirements: 3.2_
 
-- [ ] 4. Documentação e verificação final
-  - [ ] 4.1 Atualizar `docs/dev/ui-guidelines.md` (card de seção com `shadow-sm`, corpo do drawer sem fundo cinza)
+- [x] 4. Documentação e verificação final
+  - [x] 4.1 Atualizar `docs/dev/ui-guidelines.md` (card de seção com `shadow-sm`, corpo do drawer sem fundo cinza)
     - _Requirements: 3.3_
-  - [ ] 4.2 Rodar `tsc`/`eslint`/`vitest` completos; screenshot real (Playwright efêmero) de 1 cadastro, 1 edição, 1 detalhe confirmando overlay, vão, corpo branco e sombra dos cards
+  - [x] 4.2 Rodar `tsc`/`eslint`/`vitest` completos; screenshot real (Playwright efêmero) de 1 cadastro, 1 edição, 1 detalhe confirmando overlay, vão, corpo branco e sombra dos cards
     - _Requirements: infra_

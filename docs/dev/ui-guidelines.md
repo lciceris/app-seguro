@@ -29,12 +29,16 @@ Tudo em `src/styles/globals.css`, exposto via `@theme inline` (Tailwind v4) — 
 | Corpo, formulário, tabela | Inter (`font-data`) | aplicado automaticamente em `<table>` |
 | Dado técnico em tabela (CNPJ, telefone, CEP, número de cotação/apólice, data, ID) | IBM Plex Mono (`font-mono-data`) | `<TableCell className="font-mono-data">` |
 
+## Drawer — overlay, corpo e cards de seção
+
+O corpo do drawer (`overflow-y-auto`) **não leva `bg-muted`** — fica branco, herdando o `bg-popover` do `SheetContent`. Cada seção se destaca do corpo branco só por borda + `shadow-sm`, nunca por diferença de cor de fundo (decidido em `.agents/specs/drawer-contrast/`, validado com o usuário via protótipo interativo antes de implementar — overlay `bg-black/35` e vão do topo `top-9`, ambos já no `sheet.tsx`, não precisam ser repetidos por tela).
+
 ## Formulários — grid de 2 colunas
 
 Todo formulário de cadastro/edição usa uma seção-card com um grid interno de 2 colunas. Campo curto (texto curto, número, telefone, CEP, UF) fica lado a lado; `Select`, `Textarea` e campo de texto longo (nome, endereço) ocupam a linha inteira.
 
 ```tsx
-<div className="rounded-xl border border-border bg-card p-5">
+<div className="rounded-xl border border-border bg-card shadow-sm p-5">
   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
     Identificação
   </p>
@@ -52,6 +56,8 @@ Todo formulário de cadastro/edição usa uma seção-card com um grid interno d
 ```
 
 Campo obrigatório sempre leva `*` no label (`"CNPJ *"`), além da mensagem de erro inline abaixo do campo.
+
+O `shadow-sm` só se aplica a cards de seção **dentro de um drawer** (`Sheet`). Páginas cheias que usam o mesmo card de seção (ex: `own-brokerage-screen`, `quotation-detail-screen`) mantêm sem sombra — lá o fundo da página já é `--background` (cinza claro), então a borda sozinha já basta pra destacar o card branco.
 
 ## Telas de detalhe — `DetailField`
 
