@@ -78,6 +78,6 @@
   - [x] 7.1 Preencher `docs/dev/ui-guidelines.md` com os tokens, grid de formulário, `DetailField`, tabela compartilhada, hierarquia de botão — com snippet de código curto por convenção
     - _Requirements: 6.1, 6.2_
 
-- [ ] 8. Verificação final
-  - [ ] 8.1 Screenshot real (Playwright, script efêmero) de 1 listagem, 1 cadastro e 1 detalhe migrados, comparando com os protótipos aprovados; rodar `tsc`/`eslint`/`vitest` completos
+- [x] 8. Verificação final
+  - [x] 8.1 Screenshot real (Playwright, script efêmero) de 1 listagem, 1 cadastro e 1 detalhe migrados, comparando com os protótipos aprovados; rodar `tsc`/`eslint`/`vitest` completos
     - _Requirements: infra_
