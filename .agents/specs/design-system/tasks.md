@@ -56,12 +56,12 @@
   - [x] 4.8 Migrar `brokerages-list-screen.tsx`
     - _Requirements: 3.2_
 
-- [ ] 5. Badge de status ativo/inativo com tokens novos (troca `bg-emerald-100 text-emerald-700`/`bg-slate-100 text-slate-500` hardcoded pelos tokens do Task 1.1)
-  - [ ] 5.1 `brokerages-list-screen.tsx` + `brokerage-detail-drawer.tsx`
+- [x] 5. Badge de status ativo/inativo com tokens novos (troca `bg-emerald-100 text-emerald-700`/`bg-slate-100 text-slate-500` hardcoded pelos tokens do Task 1.1)
+  - [x] 5.1 `brokerages-list-screen.tsx` + `brokerage-detail-drawer.tsx`
     - _Requirements: 5.1, 5.2_
-  - [ ] 5.2 `users-list-screen.tsx` + `user-detail-drawer.tsx`
+  - [x] 5.2 `users-list-screen.tsx` + `user-detail-drawer.tsx`
     - _Requirements: 5.1, 5.2_
-  - [ ] 5.3 `vehicles-list-screen.tsx` + `vehicle-detail-drawer.tsx`
+  - [x] 5.3 `vehicles-list-screen.tsx` + `vehicle-detail-drawer.tsx`
     - _Requirements: 5.1, 5.2_
 
 - [ ] 6. Botão destrutivo nas confirmações de desativação (`variant="destructive"`, token já existente)

@@ -131,8 +131,8 @@ export function VehiclesListScreen() {
                     variant="outline"
                     className={
                       vehicle.is_active
-                        ? "border-transparent bg-emerald-100 text-emerald-700"
-                        : "border-transparent bg-slate-100 text-slate-500"
+                        ? "border-transparent bg-success-bg text-success-text"
+                        : "border-transparent bg-neutral-bg text-neutral-text"
                     }
                   >
                     {vehicle.is_active ? "Ativo" : "Inativo"}

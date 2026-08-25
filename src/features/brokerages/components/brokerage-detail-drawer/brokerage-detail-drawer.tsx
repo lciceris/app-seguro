@@ -122,8 +122,8 @@ export function BrokerageDetailDrawer() {
                   <span
                     className={
                       brokerage.status === "active"
-                        ? "text-sm font-medium text-emerald-700"
-                        : "text-sm font-medium text-slate-500"
+                        ? "text-sm font-medium text-success-text"
+                        : "text-sm font-medium text-neutral-text"
                     }
                   >
                     {brokerage.status === "active" ? "Ativo" : "Inativo"}

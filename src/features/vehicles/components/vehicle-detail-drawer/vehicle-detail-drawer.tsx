@@ -72,8 +72,8 @@ export function VehicleDetailDrawer() {
                     variant="outline"
                     className={
                       vehicle.is_active
-                        ? "w-fit border-transparent bg-emerald-100 text-emerald-700"
-                        : "w-fit border-transparent bg-slate-100 text-slate-500"
+                        ? "w-fit border-transparent bg-success-bg text-success-text"
+                        : "w-fit border-transparent bg-neutral-bg text-neutral-text"
                     }
                   >
                     {vehicle.is_active ? "Ativo" : "Inativo"}

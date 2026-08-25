@@ -84,8 +84,8 @@ export function BrokeragesListScreen() {
                     variant="outline"
                     className={
                       brokerage.status === "active"
-                        ? "border-transparent bg-emerald-100 text-emerald-700"
-                        : "border-transparent bg-slate-100 text-slate-500"
+                        ? "border-transparent bg-success-bg text-success-text"
+                        : "border-transparent bg-neutral-bg text-neutral-text"
                     }
                   >
                     {brokerage.status === "active" ? "Ativo" : "Inativo"}
