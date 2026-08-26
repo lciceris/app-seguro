@@ -29,9 +29,55 @@ Tudo em `src/styles/globals.css`, exposto via `@theme inline` (Tailwind v4) — 
 | Corpo, formulário, tabela | Inter (`font-data`) | aplicado automaticamente em `<table>` |
 | Dado técnico em tabela (CNPJ, telefone, CEP, número de cotação/apólice, data, ID) | IBM Plex Mono (`font-mono-data`) | `<TableCell className="font-mono-data">` |
 
-## Drawer — overlay, corpo e cards de seção
+## Drawer de cadastro/edição — padrão obrigatório
 
-O corpo do drawer (`overflow-y-auto`) **não leva `bg-muted`** — fica branco, herdando o `bg-popover` do `SheetContent`. Cada seção se destaca do corpo branco só por borda + `shadow-sm`, nunca por diferença de cor de fundo (decidido em `.agents/specs/drawer-contrast/`, validado com o usuário via protótipo interativo antes de implementar — overlay `bg-black/35` e vão do topo `top-9`, ambos já no `sheet.tsx`, não precisam ser repetidos por tela).
+Todo drawer novo (`Sheet`/`SheetContent`) segue esta estrutura sem exceção — é o padrão fechado nas specs `drawer-pattern` → `design-system` → `drawer-contrast` → `drawer-layout-refinements`, validado com o usuário via protótipo interativo antes de cada mudança:
+
+- Abre de baixo pra cima, ocupa a tela inteira: overlay `bg-black/35`, vão do topo `top-9` — ambos já embutidos em `sheet.tsx`, nunca repetir por tela.
+- **Corpo cinza claro** (`bg-background`), nunca `bg-muted` (quase idêntico ao branco, foi o problema original) — o elemento com `overflow-y-auto` não leva `max-w` nem padding direto: o scroll nasce na borda real da tela.
+- Conteúdo (título do header, cards do corpo, botões do footer) sempre centralizado na mesma coluna: `max-w-[720px]` em cadastro/edição (`size` padrão), `max-w-[1000px]` em detalhe (`size="lg"`). `SheetHeader`/`SheetFooter` já centralizam sozinhos — o corpo é o único pedaço que cada drawer monta à mão.
+- Cards de seção com `shadow-sm` (não só borda) — é o que os destaca do corpo cinza.
+- X do header sempre no canto absoluto da tela, nunca alinhado à coluna — convenção universal de "fechar" (decisão registrada em `drawer-layout-refinements`, não alterar sem motivo novo).
+
+Template de um drawer de cadastro:
+
+```tsx
+<Sheet open onOpenChange={(open) => !open && handleClose()}>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Novo X</SheetTitle>
+    </SheetHeader>
+
+    <form
+      id="create-x-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex-1 min-h-0 overflow-y-auto bg-background"
+    >
+      <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            Identificação
+          </p>
+          {/* grid de 2 colunas — ver seção "Formulários" abaixo */}
+        </div>
+      </div>
+    </form>
+
+    <SheetFooter className="flex-row justify-end">
+      <Button variant="outline" onClick={handleClose}>
+        Cancelar
+      </Button>
+      <Button type="submit" form="create-x-form">
+        Criar
+      </Button>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>
+```
+
+Drawer de detalhe (`<SheetContent size="lg">`): mesma estrutura, `<div>` no lugar de `<form>`, `max-w-[1000px]` no wrapper interno do corpo, `DetailField` no lugar de `Label`+`Input`.
+
+`SheetHeader`/`SheetFooter` já cuidam de fundo (`bg-card`), borda (`border-b`/`border-t`) e recentralização do conteúdo — não adicionar `border`/`bg` de novo por cima; o `className` de call-site é só pro alinhamento interno (`flex-row justify-end`, `flex-row items-center justify-between`, etc.).
 
 ## Formulários — grid de 2 colunas
 
@@ -159,7 +205,3 @@ const filteredCount = filteredItems?.length ?? totalCount;
 ## Empty states e loading
 
 Texto de vazio segue o padrão `"Nenhum X encontrado/cadastrado"` (busca vs. lista realmente vazia têm mensagens diferentes — ver `TableEmptyState`). Loading usa `TableSkeletonRow`/`Skeleton`, nunca spinner de página inteira pra uma lista.
-
-## Drawers
-
-Ver `.agents/specs/drawer-pattern/` — abrem de baixo pra cima, ocupam a tela inteira, conteúdo centralizado (720px cadastro/edição, 1000px visualização).
