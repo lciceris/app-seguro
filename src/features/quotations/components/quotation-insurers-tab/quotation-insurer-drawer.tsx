@@ -128,11 +128,13 @@ export function QuotationInsurerDrawer({
         )}
 
         {quotationInsurer && (
-          <div className="flex flex-col gap-4 overflow-y-auto p-5 pt-0">
-            <QuotationInsurerEventsTimeline
-              quotationInsurerId={quotationInsurer.id}
-              canComment={canEdit}
-            />
+          <div className="min-h-0 overflow-y-auto bg-background">
+            <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5 pt-0">
+              <QuotationInsurerEventsTimeline
+                quotationInsurerId={quotationInsurer.id}
+                canComment={canEdit}
+              />
+            </div>
           </div>
         )}
 
@@ -182,11 +184,11 @@ function ResponseForm({
   });
 
   return (
-    <fieldset disabled={!canEdit} className="flex flex-1 flex-col gap-4 overflow-y-auto">
+    <fieldset disabled={!canEdit} className="flex-1 min-h-0 overflow-y-auto bg-background">
       <form
         id="quotation-insurer-response-form"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 bg-muted p-5"
+        className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5"
       >
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">

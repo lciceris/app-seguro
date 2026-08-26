@@ -29,73 +29,75 @@ export function UserDetailDrawer() {
           <SheetTitle>Detalhe do usuário</SheetTitle>
         </SheetHeader>
 
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-          {isLoading && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <Skeleton className="h-4 w-48" />
-              <Skeleton className="h-4 w-64" />
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-          )}
-
-          {isError && !isLoading && (
-            <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-              <p className="mb-2 text-sm text-muted-foreground">
-                Não foi possível carregar os dados do usuário.
-              </p>
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                Tentar novamente
-              </Button>
-            </div>
-          )}
-
-          {!isLoading && !isError && user && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Nome
-                </span>
-                <span className="text-sm text-foreground">{user.full_name}</span>
+        <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+          <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5">
+            {isLoading && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-4 w-64" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-24" />
               </div>
+            )}
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  E-mail
-                </span>
-                <span className="text-sm text-foreground">{user.email}</span>
+            {isError && !isLoading && (
+              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                <p className="mb-2 text-sm text-muted-foreground">
+                  Não foi possível carregar os dados do usuário.
+                </p>
+                <Button variant="outline" size="sm" onClick={() => refetch()}>
+                  Tentar novamente
+                </Button>
               </div>
+            )}
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Telefone
-                </span>
-                <span className="text-sm text-foreground">{user.phone ?? "Não informado"}</span>
-              </div>
+            {!isLoading && !isError && user && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Nome
+                  </span>
+                  <span className="text-sm text-foreground">{user.full_name}</span>
+                </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Perfil
-                </span>
-                <span className="text-sm text-foreground">{ROLE_LABELS[user.role]}</span>
-              </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    E-mail
+                  </span>
+                  <span className="text-sm text-foreground">{user.email}</span>
+                </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Status
-                </span>
-                <span
-                  className={
-                    user.status === "active"
-                      ? "text-sm font-medium text-success-text"
-                      : "text-sm font-medium text-neutral-text"
-                  }
-                >
-                  {user.status === "active" ? "Ativo" : "Inativo"}
-                </span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Telefone
+                  </span>
+                  <span className="text-sm text-foreground">{user.phone ?? "Não informado"}</span>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Perfil
+                  </span>
+                  <span className="text-sm text-foreground">{ROLE_LABELS[user.role]}</span>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Status
+                  </span>
+                  <span
+                    className={
+                      user.status === "active"
+                        ? "text-sm font-medium text-success-text"
+                        : "text-sm font-medium text-neutral-text"
+                    }
+                  >
+                    {user.status === "active" ? "Ativo" : "Inativo"}
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <SheetFooter className="flex-row justify-end">

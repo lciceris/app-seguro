@@ -136,234 +136,236 @@ function EditVehicleForm({ vehicle, onSuccess }: { vehicle: Vehicle; onSuccess: 
       <form
         id="edit-vehicle-form"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
+        className="flex-1 min-h-0 overflow-y-auto bg-background"
       >
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Identificação
-          </p>
+        <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Identificação
+            </p>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 flex flex-col gap-1.5">
-              <Label htmlFor="client_id">Cliente</Label>
-              <Controller
-                name="client_id"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="client_id" className="w-full">
-                      <SelectValue placeholder="Selecione um cliente" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {clients?.map((client) => (
-                        <SelectItem key={client.id} value={client.id}>
-                          {client.legal_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2 flex flex-col gap-1.5">
+                <Label htmlFor="client_id">Cliente</Label>
+                <Controller
+                  name="client_id"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id="client_id" className="w-full">
+                        <SelectValue placeholder="Selecione um cliente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {clients?.map((client) => (
+                          <SelectItem key={client.id} value={client.id}>
+                            {client.legal_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.client_id && (
+                  <p className="text-sm text-destructive">{errors.client_id.message}</p>
                 )}
-              />
-              {errors.client_id && (
-                <p className="text-sm text-destructive">{errors.client_id.message}</p>
-              )}
-            </div>
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="plate">Placa</Label>
-              <Input id="plate" {...register("plate")} />
-              {errors.plate && <p className="text-sm text-destructive">{errors.plate.message}</p>}
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="plate">Placa</Label>
+                <Input id="plate" {...register("plate")} />
+                {errors.plate && <p className="text-sm text-destructive">{errors.plate.message}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="chassis">Chassi</Label>
-              <Input id="chassis" {...register("chassis")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="chassis">Chassi</Label>
+                <Input id="chassis" {...register("chassis")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="identification_code">Código de identificação</Label>
-              <Input id="identification_code" {...register("identification_code")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="identification_code">Código de identificação</Label>
+                <Input id="identification_code" {...register("identification_code")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="renavam">RENAVAM</Label>
-              <Input id="renavam" {...register("renavam")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="renavam">RENAVAM</Label>
+                <Input id="renavam" {...register("renavam")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="brand">Marca</Label>
-              <Input id="brand" {...register("brand")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="brand">Marca</Label>
+                <Input id="brand" {...register("brand")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="model">Modelo</Label>
-              <Input id="model" {...register("model")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="model">Modelo</Label>
+                <Input id="model" {...register("model")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="manufacture_year">Ano de fabricação</Label>
-              <Input id="manufacture_year" type="number" {...register("manufacture_year")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="manufacture_year">Ano de fabricação</Label>
+                <Input id="manufacture_year" type="number" {...register("manufacture_year")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="model_year">Ano do modelo</Label>
-              <Input id="model_year" type="number" {...register("model_year")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="model_year">Ano do modelo</Label>
+                <Input id="model_year" type="number" {...register("model_year")} />
+              </div>
 
-            <div className="col-span-2 flex flex-col gap-1.5">
-              <Label htmlFor="vehicle_type">Tipo</Label>
-              <Controller
-                name="vehicle_type"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="vehicle_type" className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={NO_VEHICLE_TYPE_VALUE}>Não informado</SelectItem>
-                      {Object.entries(VEHICLE_TYPE_LABELS).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
+              <div className="col-span-2 flex flex-col gap-1.5">
+                <Label htmlFor="vehicle_type">Tipo</Label>
+                <Controller
+                  name="vehicle_type"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id="vehicle_type" className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={NO_VEHICLE_TYPE_VALUE}>Não informado</SelectItem>
+                        {Object.entries(VEHICLE_TYPE_LABELS).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
 
-            <div className="col-span-2 flex flex-col gap-1.5">
-              <Label htmlFor="vehicle_usage">Uso</Label>
-              <Controller
-                name="vehicle_usage"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="vehicle_usage" className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={NO_VEHICLE_USAGE_VALUE}>Não informado</SelectItem>
-                      {Object.entries(VEHICLE_USAGE_LABELS).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
+              <div className="col-span-2 flex flex-col gap-1.5">
+                <Label htmlFor="vehicle_usage">Uso</Label>
+                <Controller
+                  name="vehicle_usage"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id="vehicle_usage" className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={NO_VEHICLE_USAGE_VALUE}>Não informado</SelectItem>
+                        {Object.entries(VEHICLE_USAGE_LABELS).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="fuel_type">Combustível</Label>
-              <Input id="fuel_type" {...register("fuel_type")} />
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="fuel_type">Combustível</Label>
+                <Input id="fuel_type" {...register("fuel_type")} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Valores
-          </p>
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Valores
+            </p>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="fipe_code">Código FIPE</Label>
-              <Input id="fipe_code" {...register("fipe_code")} />
-            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="fipe_code">Código FIPE</Label>
+                <Input id="fipe_code" {...register("fipe_code")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="fipe_value">Valor FIPE (R$)</Label>
-              <Input id="fipe_value" type="number" step="0.01" {...register("fipe_value")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="fipe_value">Valor FIPE (R$)</Label>
+                <Input id="fipe_value" type="number" step="0.01" {...register("fipe_value")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="declared_value">Valor declarado (R$)</Label>
-              <Input
-                id="declared_value"
-                type="number"
-                step="0.01"
-                {...register("declared_value")}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Circulação
-          </p>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="overnight_zip_code">CEP de pernoite</Label>
-              <Input id="overnight_zip_code" {...register("overnight_zip_code")} />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="main_state">UF principal</Label>
-              <Input id="main_state" maxLength={2} {...register("main_state")} />
-            </div>
-
-            <div className="col-span-2 flex items-center gap-2">
-              <Controller
-                name="has_tracker"
-                control={control}
-                render={({ field }) => (
-                  <Checkbox
-                    id="has_tracker"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                )}
-              />
-              <Label htmlFor="has_tracker" className="font-normal">
-                Possui rastreador
-              </Label>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="tracker_model">Modelo do rastreador</Label>
-              <Input id="tracker_model" {...register("tracker_model")} />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="accessories">Acessórios</Label>
-              <Input id="accessories" {...register("accessories")} />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="main_driver">Condutor principal</Label>
-              <Input id="main_driver" {...register("main_driver")} />
-            </div>
-
-            <div className="col-span-2 flex items-center gap-2">
-              <Controller
-                name="has_claim_history"
-                control={control}
-                render={({ field }) => (
-                  <Checkbox
-                    id="has_claim_history"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                )}
-              />
-              <Label htmlFor="has_claim_history" className="font-normal">
-                Possui histórico de sinistro
-              </Label>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="declared_value">Valor declarado (R$)</Label>
+                <Input
+                  id="declared_value"
+                  type="number"
+                  step="0.01"
+                  {...register("declared_value")}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Observações
-          </p>
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Circulação
+            </p>
 
-          <Textarea id="notes" rows={4} {...register("notes")} />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="overnight_zip_code">CEP de pernoite</Label>
+                <Input id="overnight_zip_code" {...register("overnight_zip_code")} />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="main_state">UF principal</Label>
+                <Input id="main_state" maxLength={2} {...register("main_state")} />
+              </div>
+
+              <div className="col-span-2 flex items-center gap-2">
+                <Controller
+                  name="has_tracker"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="has_tracker"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
+                />
+                <Label htmlFor="has_tracker" className="font-normal">
+                  Possui rastreador
+                </Label>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="tracker_model">Modelo do rastreador</Label>
+                <Input id="tracker_model" {...register("tracker_model")} />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="accessories">Acessórios</Label>
+                <Input id="accessories" {...register("accessories")} />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="main_driver">Condutor principal</Label>
+                <Input id="main_driver" {...register("main_driver")} />
+              </div>
+
+              <div className="col-span-2 flex items-center gap-2">
+                <Controller
+                  name="has_claim_history"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="has_claim_history"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
+                />
+                <Label htmlFor="has_claim_history" className="font-normal">
+                  Possui histórico de sinistro
+                </Label>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Observações
+            </p>
+
+            <Textarea id="notes" rows={4} {...register("notes")} />
+          </div>
         </div>
       </form>
 
@@ -403,25 +405,27 @@ export function EditVehicleDrawer() {
         </SheetHeader>
 
         {(isLoading || isError) && (
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-            {isLoading && (
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-              </div>
-            )}
+          <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+            <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+              {isLoading && (
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                </div>
+              )}
 
-            {isError && !isLoading && (
-              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-                <p className="mb-2 text-sm text-muted-foreground">
-                  Não foi possível carregar os dados do veículo.
-                </p>
-                <Button variant="outline" size="sm" onClick={() => refetch()}>
-                  Tentar novamente
-                </Button>
-              </div>
-            )}
+              {isError && !isLoading && (
+                <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                  <p className="mb-2 text-sm text-muted-foreground">
+                    Não foi possível carregar os dados do veículo.
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => refetch()}>
+                    Tentar novamente
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

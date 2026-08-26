@@ -75,51 +75,53 @@ function EditUserForm({ user, onSuccess }: { user: User; onSuccess: () => void }
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-        <form
-          id="edit-user-form"
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5"
-        >
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="full_name">Nome</Label>
-              <Input id="full_name" {...register("full_name")} />
-              {errors.full_name && (
-                <p className="text-sm text-destructive">{errors.full_name.message}</p>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="phone">Telefone</Label>
-              <Input id="phone" {...register("phone")} />
-              {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
-            </div>
-
-            <div className="col-span-2 flex flex-col gap-1.5">
-              <Label htmlFor="role">Perfil</Label>
-              <Controller
-                name="role"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="role" className="w-full">
-                      <SelectValue placeholder="Selecione um perfil" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {EDITABLE_ROLES.map((role) => (
-                        <SelectItem key={role} value={role}>
-                          {ROLE_LABELS[role]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+      <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+        <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+          <form
+            id="edit-user-form"
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5"
+          >
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="full_name">Nome</Label>
+                <Input id="full_name" {...register("full_name")} />
+                {errors.full_name && (
+                  <p className="text-sm text-destructive">{errors.full_name.message}</p>
                 )}
-              />
-              {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="phone">Telefone</Label>
+                <Input id="phone" {...register("phone")} />
+                {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
+              </div>
+
+              <div className="col-span-2 flex flex-col gap-1.5">
+                <Label htmlFor="role">Perfil</Label>
+                <Controller
+                  name="role"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id="role" className="w-full">
+                        <SelectValue placeholder="Selecione um perfil" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {EDITABLE_ROLES.map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {ROLE_LABELS[role]}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
 
       <SheetFooter className="flex-row justify-end">
@@ -151,25 +153,27 @@ export function EditUserDrawer() {
         </SheetHeader>
 
         {(isLoading || isError) && (
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-            {isLoading && (
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-              </div>
-            )}
+          <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+            <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+              {isLoading && (
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                </div>
+              )}
 
-            {isError && !isLoading && (
-              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-                <p className="mb-2 text-sm text-muted-foreground">
-                  Não foi possível carregar os dados do usuário.
-                </p>
-                <Button variant="outline" size="sm" onClick={() => refetch()}>
-                  Tentar novamente
-                </Button>
-              </div>
-            )}
+              {isError && !isLoading && (
+                <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                  <p className="mb-2 text-sm text-muted-foreground">
+                    Não foi possível carregar os dados do usuário.
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => refetch()}>
+                    Tentar novamente
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

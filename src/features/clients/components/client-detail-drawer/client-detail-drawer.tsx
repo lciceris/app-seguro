@@ -235,109 +235,111 @@ export function ClientDetailDrawer() {
           <SheetTitle>Detalhe do cliente</SheetTitle>
         </SheetHeader>
 
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-          {isLoading && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <Skeleton className="h-4 w-48" />
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-          )}
-
-          {isError && !isLoading && (
-            <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-              <p className="mb-2 text-sm text-muted-foreground">
-                Não foi possível carregar os dados do cliente.
-              </p>
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                Tentar novamente
-              </Button>
-            </div>
-          )}
-
-          {!isLoading && !isError && client && (
-            <>
+        <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+          <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5">
+            {isLoading && (
               <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Identificação
-                </p>
-                <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
-                <DetailField label="Razão social / Nome completo" value={client.legal_name} />
-                <DetailField label="Nome fantasia" value={client.trade_name} />
-                <DetailField label="CPF/CNPJ" value={client.tax_id} />
-                <DetailField
-                  label="Data de nascimento"
-                  value={
-                    client.birth_date
-                      ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
-                      : null
-                  }
-                />
-                <DetailField label="CNAE" value={client.business_code} />
-                <DetailField label="Setor" value={client.industry} />
-                <DetailField label="Inscrição estadual" value={client.state_registration} />
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-24" />
               </div>
+            )}
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Endereço
+            {isError && !isLoading && (
+              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                <p className="mb-2 text-sm text-muted-foreground">
+                  Não foi possível carregar os dados do cliente.
                 </p>
-                <DetailField label="CEP" value={client.zip_code} />
-                <DetailField label="Logradouro" value={client.street} />
-                <DetailField label="Número" value={client.street_number} />
-                <DetailField label="Complemento" value={client.complement} />
-                <DetailField label="Bairro" value={client.neighborhood} />
-                <DetailField label="Cidade" value={client.city} />
-                <DetailField label="UF" value={client.state} />
+                <Button variant="outline" size="sm" onClick={() => refetch()}>
+                  Tentar novamente
+                </Button>
               </div>
+            )}
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Contato comercial
-                </p>
-                <DetailField label="Nome do contato" value={client.contact_name} />
-                <DetailField label="Cargo" value={client.contact_role} />
-                <DetailField label="E-mail" value={client.contact_email} />
-                <DetailField label="Telefone" value={client.contact_phone} />
-              </div>
-
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Contato financeiro
-                </p>
-                <DetailField label="Nome do contato" value={client.financial_name} />
-                <DetailField label="E-mail" value={client.financial_email} />
-              </div>
-
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Configurações
-                </p>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Segmento
-                  </span>
-                  <Badge
-                    variant="outline"
-                    className={`w-fit ${SEGMENT_BADGE_CLASSES[client.segment]}`}
-                  >
-                    {SEGMENT_LABELS[client.segment]}
-                  </Badge>
+            {!isLoading && !isError && client && (
+              <>
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Identificação
+                  </p>
+                  <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
+                  <DetailField label="Razão social / Nome completo" value={client.legal_name} />
+                  <DetailField label="Nome fantasia" value={client.trade_name} />
+                  <DetailField label="CPF/CNPJ" value={client.tax_id} />
+                  <DetailField
+                    label="Data de nascimento"
+                    value={
+                      client.birth_date
+                        ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
+                        : null
+                    }
+                  />
+                  <DetailField label="CNAE" value={client.business_code} />
+                  <DetailField label="Setor" value={client.industry} />
+                  <DetailField label="Inscrição estadual" value={client.state_registration} />
                 </div>
-                <DetailField label="Origem do lead" value={client.lead_source} />
-              </div>
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Observações
-                </p>
-                <DetailField label="Observações" value={client.notes} />
-              </div>
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Endereço
+                  </p>
+                  <DetailField label="CEP" value={client.zip_code} />
+                  <DetailField label="Logradouro" value={client.street} />
+                  <DetailField label="Número" value={client.street_number} />
+                  <DetailField label="Complemento" value={client.complement} />
+                  <DetailField label="Bairro" value={client.neighborhood} />
+                  <DetailField label="Cidade" value={client.city} />
+                  <DetailField label="UF" value={client.state} />
+                </div>
 
-              <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
-            </>
-          )}
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Contato comercial
+                  </p>
+                  <DetailField label="Nome do contato" value={client.contact_name} />
+                  <DetailField label="Cargo" value={client.contact_role} />
+                  <DetailField label="E-mail" value={client.contact_email} />
+                  <DetailField label="Telefone" value={client.contact_phone} />
+                </div>
+
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Contato financeiro
+                  </p>
+                  <DetailField label="Nome do contato" value={client.financial_name} />
+                  <DetailField label="E-mail" value={client.financial_email} />
+                </div>
+
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Configurações
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                      Segmento
+                    </span>
+                    <Badge
+                      variant="outline"
+                      className={`w-fit ${SEGMENT_BADGE_CLASSES[client.segment]}`}
+                    >
+                      {SEGMENT_LABELS[client.segment]}
+                    </Badge>
+                  </div>
+                  <DetailField label="Origem do lead" value={client.lead_source} />
+                </div>
+
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Observações
+                  </p>
+                  <DetailField label="Observações" value={client.notes} />
+                </div>
+
+                <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
+              </>
+            )}
+          </div>
         </div>
 
         <SheetFooter className="flex-row justify-end">

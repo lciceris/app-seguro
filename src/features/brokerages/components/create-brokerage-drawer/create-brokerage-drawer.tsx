@@ -206,320 +206,330 @@ export function CreateBrokerageDrawer() {
         <form
           id="create-brokerage-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
+          className="flex-1 min-h-0 overflow-y-auto bg-background"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Empresa
-            </p>
+          <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Empresa
+              </p>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="tax_id">CNPJ *</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="tax_id"
-                    placeholder="00.000.000/0000-00"
-                    maxLength={18}
-                    {...register("tax_id")}
-                    onChange={(e) => setValue("tax_id", formatCnpj(e.target.value))}
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleFetchCnpj}
-                    disabled={isFetchingCnpj}
-                  >
-                    {isFetchingCnpj ? "Buscando..." : "Buscar"}
-                  </Button>
-                </div>
-                {errors.tax_id && (
-                  <p className="text-sm text-destructive">{errors.tax_id.message}</p>
-                )}
-              </div>
-
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="brokerage_name">Razão social *</Label>
-                <Input
-                  id="brokerage_name"
-                  placeholder="Razão social da empresa"
-                  {...register("brokerage_name")}
-                />
-                {errors.brokerage_name && (
-                  <p className="text-sm text-destructive">{errors.brokerage_name.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="trade_name">Nome fantasia</Label>
-                <Input id="trade_name" placeholder="Nome fantasia" {...register("trade_name")} />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="business_code">CNAE</Label>
-                <Input
-                  id="business_code"
-                  placeholder="Ex: 6499-3/99 - Descrição"
-                  {...register("business_code")}
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="state_registration">Inscrição estadual</Label>
-                <Input
-                  id="state_registration"
-                  placeholder="000.000.000.000"
-                  {...register("state_registration")}
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="email">E-mail comercial</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="contato@empresa.com.br"
-                  {...register("email")}
-                />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="phone">Telefone</Label>
-                <Input
-                  id="phone"
-                  placeholder="(00) 00000-0000"
-                  maxLength={16}
-                  {...register("phone")}
-                  onChange={(e) => setValue("phone", formatPhone(e.target.value))}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Endereço
-            </p>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="zip_code">CEP</Label>
-                <div className="flex max-w-[280px] gap-2">
-                  <Input
-                    id="zip_code"
-                    placeholder="00000-000"
-                    maxLength={9}
-                    {...register("zip_code")}
-                    onChange={(e) => setValue("zip_code", formatCep(e.target.value))}
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleFetchCep}
-                    disabled={isFetchingCep}
-                  >
-                    {isFetchingCep ? "Buscando..." : "Buscar"}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="street">Logradouro</Label>
-                <Input id="street" placeholder="Rua, Avenida, etc." {...register("street")} />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="street_number">Número</Label>
-                <Input id="street_number" placeholder="123" {...register("street_number")} />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="complement">Complemento</Label>
-                <Input
-                  id="complement"
-                  placeholder="Sala, Andar, etc."
-                  {...register("complement")}
-                />
-              </div>
-
-              <div className="col-span-2 grid grid-cols-[1fr_1fr_80px] gap-3">
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="neighborhood">Bairro</Label>
-                  <Input id="neighborhood" placeholder="Bairro" {...register("neighborhood")} />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="city">Cidade</Label>
-                  <Input id="city" placeholder="Cidade" {...register("city")} />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="state">UF</Label>
-                  <Input
-                    id="state"
-                    placeholder="SP"
-                    maxLength={2}
-                    {...register("state")}
-                    onChange={(e) => setValue("state", e.target.value.toUpperCase())}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Representante e contato
-            </p>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="representative_name">Nome do representante *</Label>
-                <Input
-                  id="representative_name"
-                  placeholder="Nome completo"
-                  {...register("representative_name")}
-                />
-                {errors.representative_name && (
-                  <p className="text-sm text-destructive">{errors.representative_name.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="representative_email">E-mail do representante *</Label>
-                <Input
-                  id="representative_email"
-                  type="email"
-                  placeholder="email@empresa.com.br"
-                  {...register("representative_email")}
-                />
-                {errors.representative_email && (
-                  <p className="text-sm text-destructive">{errors.representative_email.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="financial_name">Nome financeiro</Label>
-                <Input
-                  id="financial_name"
-                  placeholder="Nome completo"
-                  {...register("financial_name")}
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="financial_email">E-mail financeiro</Label>
-                <Input
-                  id="financial_email"
-                  type="email"
-                  placeholder="financeiro@empresa.com.br"
-                  {...register("financial_email")}
-                />
-                {errors.financial_email && (
-                  <p className="text-sm text-destructive">{errors.financial_email.message}</p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Plano
-            </p>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="plan_id">Plano</Label>
-              <Controller
-                name="plan_id"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="plan_id" className="w-full">
-                      <SelectValue placeholder="Selecione um plano" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={NO_PLAN_VALUE}>Sem plano</SelectItem>
-                      {plans?.map((plan) => (
-                        <SelectItem key={plan.id} value={plan.id}>
-                          {plan.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="plan_expires_at">Data de expiração do plano</Label>
-              <Controller
-                name="plan_expires_at"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker id="plan_expires_at" value={field.value} onChange={field.onChange} />
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Identidade visual
-            </p>
-
-            <div className="flex flex-col gap-1.5">
-              <Label>Logo</Label>
-              {logoPreviewUrl ? (
-                <div className="flex items-center gap-3 rounded-lg border border-border bg-muted p-2.5">
-                  <img
-                    src={logoPreviewUrl}
-                    alt="Logo"
-                    className="size-12 shrink-0 rounded-full border-2 border-border bg-card object-contain p-1"
-                  />
-                  <span className="flex-1 truncate text-sm text-muted-foreground">
-                    {logoFile?.name}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="shrink-0 text-destructive hover:text-destructive"
-                    onClick={handleLogoRemove}
-                  >
-                    <X className="size-3.5" />
-                    Remover
-                  </Button>
-                </div>
-              ) : (
-                <label className="block cursor-pointer">
-                  <div className="rounded-lg border-2 border-dashed border-border bg-muted p-5 text-center">
-                    <Upload className="mx-auto mb-2 size-5 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Clique para enviar uma imagem</p>
-                    <p className="mt-1 text-xs text-muted-foreground">PNG, JPG, SVG até 2MB</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="tax_id">CNPJ *</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="tax_id"
+                      placeholder="00.000.000/0000-00"
+                      maxLength={18}
+                      {...register("tax_id")}
+                      onChange={(e) => setValue("tax_id", formatCnpj(e.target.value))}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleFetchCnpj}
+                      disabled={isFetchingCnpj}
+                    >
+                      {isFetchingCnpj ? "Buscando..." : "Buscar"}
+                    </Button>
                   </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/png,image/jpeg,image/svg+xml"
-                    className="hidden"
-                    onChange={handleLogoFile}
+                  {errors.tax_id && (
+                    <p className="text-sm text-destructive">{errors.tax_id.message}</p>
+                  )}
+                </div>
+
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="brokerage_name">Razão social *</Label>
+                  <Input
+                    id="brokerage_name"
+                    placeholder="Razão social da empresa"
+                    {...register("brokerage_name")}
                   />
-                </label>
-              )}
+                  {errors.brokerage_name && (
+                    <p className="text-sm text-destructive">{errors.brokerage_name.message}</p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="trade_name">Nome fantasia</Label>
+                  <Input id="trade_name" placeholder="Nome fantasia" {...register("trade_name")} />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="business_code">CNAE</Label>
+                  <Input
+                    id="business_code"
+                    placeholder="Ex: 6499-3/99 - Descrição"
+                    {...register("business_code")}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="state_registration">Inscrição estadual</Label>
+                  <Input
+                    id="state_registration"
+                    placeholder="000.000.000.000"
+                    {...register("state_registration")}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="email">E-mail comercial</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="contato@empresa.com.br"
+                    {...register("email")}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-destructive">{errors.email.message}</p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="phone">Telefone</Label>
+                  <Input
+                    id="phone"
+                    placeholder="(00) 00000-0000"
+                    maxLength={16}
+                    {...register("phone")}
+                    onChange={(e) => setValue("phone", formatPhone(e.target.value))}
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="primary_color">Cor primária</Label>
-              <Controller
-                name="primary_color"
-                control={control}
-                render={({ field }) => (
-                  <ColorPicker
-                    id="primary_color"
-                    value={field.value ?? ""}
-                    onChange={field.onChange}
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Endereço
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="zip_code">CEP</Label>
+                  <div className="flex max-w-[280px] gap-2">
+                    <Input
+                      id="zip_code"
+                      placeholder="00000-000"
+                      maxLength={9}
+                      {...register("zip_code")}
+                      onChange={(e) => setValue("zip_code", formatCep(e.target.value))}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleFetchCep}
+                      disabled={isFetchingCep}
+                    >
+                      {isFetchingCep ? "Buscando..." : "Buscar"}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="street">Logradouro</Label>
+                  <Input id="street" placeholder="Rua, Avenida, etc." {...register("street")} />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="street_number">Número</Label>
+                  <Input id="street_number" placeholder="123" {...register("street_number")} />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="complement">Complemento</Label>
+                  <Input
+                    id="complement"
+                    placeholder="Sala, Andar, etc."
+                    {...register("complement")}
                   />
+                </div>
+
+                <div className="col-span-2 grid grid-cols-[1fr_1fr_80px] gap-3">
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="neighborhood">Bairro</Label>
+                    <Input id="neighborhood" placeholder="Bairro" {...register("neighborhood")} />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="city">Cidade</Label>
+                    <Input id="city" placeholder="Cidade" {...register("city")} />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="state">UF</Label>
+                    <Input
+                      id="state"
+                      placeholder="SP"
+                      maxLength={2}
+                      {...register("state")}
+                      onChange={(e) => setValue("state", e.target.value.toUpperCase())}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Representante e contato
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="representative_name">Nome do representante *</Label>
+                  <Input
+                    id="representative_name"
+                    placeholder="Nome completo"
+                    {...register("representative_name")}
+                  />
+                  {errors.representative_name && (
+                    <p className="text-sm text-destructive">{errors.representative_name.message}</p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="representative_email">E-mail do representante *</Label>
+                  <Input
+                    id="representative_email"
+                    type="email"
+                    placeholder="email@empresa.com.br"
+                    {...register("representative_email")}
+                  />
+                  {errors.representative_email && (
+                    <p className="text-sm text-destructive">
+                      {errors.representative_email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="financial_name">Nome financeiro</Label>
+                  <Input
+                    id="financial_name"
+                    placeholder="Nome completo"
+                    {...register("financial_name")}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="financial_email">E-mail financeiro</Label>
+                  <Input
+                    id="financial_email"
+                    type="email"
+                    placeholder="financeiro@empresa.com.br"
+                    {...register("financial_email")}
+                  />
+                  {errors.financial_email && (
+                    <p className="text-sm text-destructive">{errors.financial_email.message}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Plano
+              </p>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="plan_id">Plano</Label>
+                <Controller
+                  name="plan_id"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id="plan_id" className="w-full">
+                        <SelectValue placeholder="Selecione um plano" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={NO_PLAN_VALUE}>Sem plano</SelectItem>
+                        {plans?.map((plan) => (
+                          <SelectItem key={plan.id} value={plan.id}>
+                            {plan.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="plan_expires_at">Data de expiração do plano</Label>
+                <Controller
+                  name="plan_expires_at"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      id="plan_expires_at"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Identidade visual
+              </p>
+
+              <div className="flex flex-col gap-1.5">
+                <Label>Logo</Label>
+                {logoPreviewUrl ? (
+                  <div className="flex items-center gap-3 rounded-lg border border-border bg-muted p-2.5">
+                    <img
+                      src={logoPreviewUrl}
+                      alt="Logo"
+                      className="size-12 shrink-0 rounded-full border-2 border-border bg-card object-contain p-1"
+                    />
+                    <span className="flex-1 truncate text-sm text-muted-foreground">
+                      {logoFile?.name}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="shrink-0 text-destructive hover:text-destructive"
+                      onClick={handleLogoRemove}
+                    >
+                      <X className="size-3.5" />
+                      Remover
+                    </Button>
+                  </div>
+                ) : (
+                  <label className="block cursor-pointer">
+                    <div className="rounded-lg border-2 border-dashed border-border bg-muted p-5 text-center">
+                      <Upload className="mx-auto mb-2 size-5 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">Clique para enviar uma imagem</p>
+                      <p className="mt-1 text-xs text-muted-foreground">PNG, JPG, SVG até 2MB</p>
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/svg+xml"
+                      className="hidden"
+                      onChange={handleLogoFile}
+                    />
+                  </label>
                 )}
-              />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="primary_color">Cor primária</Label>
+                <Controller
+                  name="primary_color"
+                  control={control}
+                  render={({ field }) => (
+                    <ColorPicker
+                      id="primary_color"
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </div>
             </div>
           </div>
         </form>

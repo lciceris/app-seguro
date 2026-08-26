@@ -200,371 +200,310 @@ export function CreatePolicyEndorsementDrawer() {
         <form
           id="create-policy-endorsement-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
+          className="flex-1 min-h-0 overflow-y-auto bg-background"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Tipo de endosso
-            </p>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="endorsement_type">Tipo</Label>
-              <Controller
-                name="endorsement_type"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="endorsement_type" className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(POLICY_ENDORSEMENT_TYPE_LABELS).map(([value, label]) => (
-                        <SelectItem key={value} value={value}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-          </div>
-
-          {endorsementType === "vehicle_inclusion" && (
+          <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
             <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Veículo
+                Tipo de endosso
               </p>
+
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="vehicle_id">Veículo do cliente</Label>
+                <Label htmlFor="endorsement_type">Tipo</Label>
                 <Controller
-                  name="vehicle_id"
+                  name="endorsement_type"
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger id="vehicle_id" className="w-full">
-                        <SelectValue placeholder="Selecione um veículo" />
+                      <SelectTrigger id="endorsement_type" className="w-full">
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={NO_VEHICLE_VALUE} disabled>
-                          Selecione um veículo
-                        </SelectItem>
-                        {inclusionCandidates.map((vehicle) => (
-                          <SelectItem key={vehicle.id} value={vehicle.id}>
-                            {vehicle.plate} —{" "}
-                            {[vehicle.brand, vehicle.model].filter(Boolean).join(" ")}
+                        {Object.entries(POLICY_ENDORSEMENT_TYPE_LABELS).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>
+                            {label}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   )}
                 />
-                {errors.vehicle_id && (
-                  <p className="text-sm text-destructive">{errors.vehicle_id.message}</p>
-                )}
               </div>
             </div>
-          )}
 
-          {(endorsementType === "vehicle_exclusion" || endorsementType === "coverage_change") && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Veículo
-              </p>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="vehicle_id">Veículo coberto</Label>
-                <Controller
-                  name="vehicle_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger id="vehicle_id" className="w-full">
-                        <SelectValue placeholder="Selecione um veículo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value={NO_VEHICLE_VALUE} disabled>
-                          Selecione um veículo
-                        </SelectItem>
-                        {(policyVehicles ?? []).map((policyVehicle) => (
-                          <SelectItem
-                            key={policyVehicle.vehicle_id}
-                            value={policyVehicle.vehicle_id}
-                          >
-                            {policyVehicle.vehicles?.plate ?? "—"} —{" "}
-                            {[policyVehicle.vehicles?.brand, policyVehicle.vehicles?.model]
-                              .filter(Boolean)
-                              .join(" ")}
+            {endorsementType === "vehicle_inclusion" && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Veículo
+                </p>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="vehicle_id">Veículo do cliente</Label>
+                  <Controller
+                    name="vehicle_id"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger id="vehicle_id" className="w-full">
+                          <SelectValue placeholder="Selecione um veículo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NO_VEHICLE_VALUE} disabled>
+                            Selecione um veículo
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                          {inclusionCandidates.map((vehicle) => (
+                            <SelectItem key={vehicle.id} value={vehicle.id}>
+                              {vehicle.plate} —{" "}
+                              {[vehicle.brand, vehicle.model].filter(Boolean).join(" ")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.vehicle_id && (
+                    <p className="text-sm text-destructive">{errors.vehicle_id.message}</p>
                   )}
-                />
-                {errors.vehicle_id && (
-                  <p className="text-sm text-destructive">{errors.vehicle_id.message}</p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {(endorsementType === "vehicle_inclusion" || endorsementType === "coverage_change") && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Cobertura
-              </p>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="coverage_type">Tipo de cobertura</Label>
-                  <Controller
-                    name="coverage_type"
-                    control={control}
-                    render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger id="coverage_type" className="w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={NO_COVERAGE_TYPE_VALUE}>Não informado</SelectItem>
-                          {Object.entries(COVERAGE_TYPE_LABELS).map(([value, label]) => (
-                            <SelectItem key={value} value={value}>
-                              {label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="casco_value">Valor de casco (R$)</Label>
-                  <Input id="casco_value" type="number" step="0.01" {...register("casco_value")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="casco_percentage">Percentual de casco (%)</Label>
-                  <Input
-                    id="casco_percentage"
-                    type="number"
-                    step="0.01"
-                    {...register("casco_percentage")}
-                  />
-                </div>
-
-                <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="franchise_type">Tipo de franquia</Label>
-                  <Controller
-                    name="franchise_type"
-                    control={control}
-                    render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger id="franchise_type" className="w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={NO_FRANCHISE_TYPE_VALUE}>Não informado</SelectItem>
-                          {Object.entries(FRANCHISE_TYPE_LABELS).map(([value, label]) => (
-                            <SelectItem key={value} value={value}>
-                              {label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="bonus">Bônus (%)</Label>
-                  <Input id="bonus" type="number" step="0.01" {...register("bonus")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="claims_count">Quantidade de sinistros</Label>
-                  <Input id="claims_count" type="number" {...register("claims_count")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="rcf_dm">RCF — Danos materiais (R$)</Label>
-                  <Input id="rcf_dm" type="number" step="0.01" {...register("rcf_dm")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="rcf_dc">RCF — Danos corporais (R$)</Label>
-                  <Input id="rcf_dc" type="number" step="0.01" {...register("rcf_dc")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="rcf_dmo">RCF — Danos morais (R$)</Label>
-                  <Input id="rcf_dmo" type="number" step="0.01" {...register("rcf_dmo")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="app_death">APP — Morte por passageiro (R$)</Label>
-                  <Input id="app_death" type="number" step="0.01" {...register("app_death")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="app_disability">APP — Invalidez por passageiro (R$)</Label>
-                  <Input
-                    id="app_disability"
-                    type="number"
-                    step="0.01"
-                    {...register("app_disability")}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="assistance">Assistência 24h</Label>
-                  <Input id="assistance" {...register("assistance")} />
-                </div>
-
-                <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="glass_coverage">Cobertura de vidros</Label>
-                  <Controller
-                    name="glass_coverage"
-                    control={control}
-                    render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger id="glass_coverage" className="w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={NO_GLASS_COVERAGE_VALUE}>Não informado</SelectItem>
-                          {Object.entries(GLASS_COVERAGE_LEVEL_LABELS).map(([value, label]) => (
-                            <SelectItem key={value} value={value}>
-                              {label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="reserve_car">Carro reserva</Label>
-                  <Input id="reserve_car" {...register("reserve_car")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="bodywork_value">Valor da blindagem (R$)</Label>
-                  <Input
-                    id="bodywork_value"
-                    type="number"
-                    step="0.01"
-                    {...register("bodywork_value")}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="bodywork_type">Tipo de blindagem</Label>
-                  <Input id="bodywork_type" {...register("bodywork_type")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="equipment_value">Valor de equipamentos (R$)</Label>
-                  <Input
-                    id="equipment_value"
-                    type="number"
-                    step="0.01"
-                    {...register("equipment_value")}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="equipment_type">Tipo de equipamentos</Label>
-                  <Input id="equipment_type" {...register("equipment_type")} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="armoring_value">Valor de armamento (R$)</Label>
-                  <Input
-                    id="armoring_value"
-                    type="number"
-                    step="0.01"
-                    {...register("armoring_value")}
-                  />
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {endorsementType === "extension" && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Prorrogação
-              </p>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="new_coverage_end">Nova data de fim de vigência</Label>
-                <Controller
-                  name="new_coverage_end"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      id="new_coverage_end"
-                      value={field.value}
-                      onChange={field.onChange}
+            {(endorsementType === "vehicle_exclusion" || endorsementType === "coverage_change") && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Veículo
+                </p>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="vehicle_id">Veículo coberto</Label>
+                  <Controller
+                    name="vehicle_id"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger id="vehicle_id" className="w-full">
+                          <SelectValue placeholder="Selecione um veículo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NO_VEHICLE_VALUE} disabled>
+                            Selecione um veículo
+                          </SelectItem>
+                          {(policyVehicles ?? []).map((policyVehicle) => (
+                            <SelectItem
+                              key={policyVehicle.vehicle_id}
+                              value={policyVehicle.vehicle_id}
+                            >
+                              {policyVehicle.vehicles?.plate ?? "—"} —{" "}
+                              {[policyVehicle.vehicles?.brand, policyVehicle.vehicles?.model]
+                                .filter(Boolean)
+                                .join(" ")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.vehicle_id && (
+                    <p className="text-sm text-destructive">{errors.vehicle_id.message}</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {(endorsementType === "vehicle_inclusion" || endorsementType === "coverage_change") && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Cobertura
+                </p>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2 flex flex-col gap-1.5">
+                    <Label htmlFor="coverage_type">Tipo de cobertura</Label>
+                    <Controller
+                      name="coverage_type"
+                      control={control}
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger id="coverage_type" className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={NO_COVERAGE_TYPE_VALUE}>Não informado</SelectItem>
+                            {Object.entries(COVERAGE_TYPE_LABELS).map(([value, label]) => (
+                              <SelectItem key={value} value={value}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
                     />
-                  )}
-                />
-                {errors.new_coverage_end && (
-                  <p className="text-sm text-destructive">{errors.new_coverage_end.message}</p>
-                )}
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="casco_value">Valor de casco (R$)</Label>
+                    <Input
+                      id="casco_value"
+                      type="number"
+                      step="0.01"
+                      {...register("casco_value")}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="casco_percentage">Percentual de casco (%)</Label>
+                    <Input
+                      id="casco_percentage"
+                      type="number"
+                      step="0.01"
+                      {...register("casco_percentage")}
+                    />
+                  </div>
+
+                  <div className="col-span-2 flex flex-col gap-1.5">
+                    <Label htmlFor="franchise_type">Tipo de franquia</Label>
+                    <Controller
+                      name="franchise_type"
+                      control={control}
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger id="franchise_type" className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={NO_FRANCHISE_TYPE_VALUE}>Não informado</SelectItem>
+                            {Object.entries(FRANCHISE_TYPE_LABELS).map(([value, label]) => (
+                              <SelectItem key={value} value={value}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="bonus">Bônus (%)</Label>
+                    <Input id="bonus" type="number" step="0.01" {...register("bonus")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="claims_count">Quantidade de sinistros</Label>
+                    <Input id="claims_count" type="number" {...register("claims_count")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="rcf_dm">RCF — Danos materiais (R$)</Label>
+                    <Input id="rcf_dm" type="number" step="0.01" {...register("rcf_dm")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="rcf_dc">RCF — Danos corporais (R$)</Label>
+                    <Input id="rcf_dc" type="number" step="0.01" {...register("rcf_dc")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="rcf_dmo">RCF — Danos morais (R$)</Label>
+                    <Input id="rcf_dmo" type="number" step="0.01" {...register("rcf_dmo")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="app_death">APP — Morte por passageiro (R$)</Label>
+                    <Input id="app_death" type="number" step="0.01" {...register("app_death")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="app_disability">APP — Invalidez por passageiro (R$)</Label>
+                    <Input
+                      id="app_disability"
+                      type="number"
+                      step="0.01"
+                      {...register("app_disability")}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="assistance">Assistência 24h</Label>
+                    <Input id="assistance" {...register("assistance")} />
+                  </div>
+
+                  <div className="col-span-2 flex flex-col gap-1.5">
+                    <Label htmlFor="glass_coverage">Cobertura de vidros</Label>
+                    <Controller
+                      name="glass_coverage"
+                      control={control}
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger id="glass_coverage" className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={NO_GLASS_COVERAGE_VALUE}>Não informado</SelectItem>
+                            {Object.entries(GLASS_COVERAGE_LEVEL_LABELS).map(([value, label]) => (
+                              <SelectItem key={value} value={value}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="reserve_car">Carro reserva</Label>
+                    <Input id="reserve_car" {...register("reserve_car")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="bodywork_value">Valor da blindagem (R$)</Label>
+                    <Input
+                      id="bodywork_value"
+                      type="number"
+                      step="0.01"
+                      {...register("bodywork_value")}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="bodywork_type">Tipo de blindagem</Label>
+                    <Input id="bodywork_type" {...register("bodywork_type")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="equipment_value">Valor de equipamentos (R$)</Label>
+                    <Input
+                      id="equipment_value"
+                      type="number"
+                      step="0.01"
+                      {...register("equipment_value")}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="equipment_type">Tipo de equipamentos</Label>
+                    <Input id="equipment_type" {...register("equipment_type")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="armoring_value">Valor de armamento (R$)</Label>
+                    <Input
+                      id="armoring_value"
+                      type="number"
+                      step="0.01"
+                      {...register("armoring_value")}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {endorsementType === "administrative_correction" && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Correção administrativa
-              </p>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="new_policy_number">Novo número da apólice</Label>
-                  <Input id="new_policy_number" {...register("new_policy_number")} />
-                </div>
-
+            {endorsementType === "extension" && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Prorrogação
+                </p>
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="new_premium_amount">Novo prêmio (R$)</Label>
-                  <Input
-                    id="new_premium_amount"
-                    type="number"
-                    step="0.01"
-                    {...register("new_premium_amount")}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="new_total_fleet_value">Novo valor total da frota (R$)</Label>
-                  <Input
-                    id="new_total_fleet_value"
-                    type="number"
-                    step="0.01"
-                    {...register("new_total_fleet_value")}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="new_coverage_start">Novo início de vigência</Label>
-                  <Controller
-                    name="new_coverage_start"
-                    control={control}
-                    render={({ field }) => (
-                      <DatePicker
-                        id="new_coverage_start"
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="new_coverage_end">Novo fim de vigência</Label>
+                  <Label htmlFor="new_coverage_end">Nova data de fim de vigência</Label>
                   <Controller
                     name="new_coverage_end"
                     control={control}
@@ -576,26 +515,94 @@ export function CreatePolicyEndorsementDrawer() {
                       />
                     )}
                   />
+                  {errors.new_coverage_end && (
+                    <p className="text-sm text-destructive">{errors.new_coverage_end.message}</p>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {(endorsementType === "administrative_correction" ||
-            endorsementType === "cancellation") && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Motivo
-              </p>
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="description">Descrição</Label>
-                <Textarea id="description" rows={4} {...register("description")} />
-                {errors.description && (
-                  <p className="text-sm text-destructive">{errors.description.message}</p>
-                )}
+            {endorsementType === "administrative_correction" && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Correção administrativa
+                </p>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2 flex flex-col gap-1.5">
+                    <Label htmlFor="new_policy_number">Novo número da apólice</Label>
+                    <Input id="new_policy_number" {...register("new_policy_number")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="new_premium_amount">Novo prêmio (R$)</Label>
+                    <Input
+                      id="new_premium_amount"
+                      type="number"
+                      step="0.01"
+                      {...register("new_premium_amount")}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="new_total_fleet_value">Novo valor total da frota (R$)</Label>
+                    <Input
+                      id="new_total_fleet_value"
+                      type="number"
+                      step="0.01"
+                      {...register("new_total_fleet_value")}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="new_coverage_start">Novo início de vigência</Label>
+                    <Controller
+                      name="new_coverage_start"
+                      control={control}
+                      render={({ field }) => (
+                        <DatePicker
+                          id="new_coverage_start"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="new_coverage_end">Novo fim de vigência</Label>
+                    <Controller
+                      name="new_coverage_end"
+                      control={control}
+                      render={({ field }) => (
+                        <DatePicker
+                          id="new_coverage_end"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {(endorsementType === "administrative_correction" ||
+              endorsementType === "cancellation") && (
+              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Motivo
+                </p>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="description">Descrição</Label>
+                  <Textarea id="description" rows={4} {...register("description")} />
+                  {errors.description && (
+                    <p className="text-sm text-destructive">{errors.description.message}</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </form>
 
         <SheetFooter className="flex-row justify-end">

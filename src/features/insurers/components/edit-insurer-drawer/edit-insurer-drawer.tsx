@@ -88,83 +88,85 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
       <form
         id="edit-insurer-form"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
+        className="flex-1 min-h-0 overflow-y-auto bg-background"
       >
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Identificação
-          </p>
+        <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Identificação
+            </p>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 flex flex-col gap-1.5">
-              <Label htmlFor="name">Nome</Label>
-              <Input id="name" {...register("name")} />
-              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2 flex flex-col gap-1.5">
+                <Label htmlFor="name">Nome</Label>
+                <Input id="name" {...register("name")} />
+                {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="cnpj">CNPJ</Label>
-              <Input id="cnpj" placeholder="00.000.000/0000-00" {...register("cnpj")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="cnpj">CNPJ</Label>
+                <Input id="cnpj" placeholder="00.000.000/0000-00" {...register("cnpj")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email">E-mail</Label>
-              <Input id="email" type="email" {...register("email")} />
-              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="email">E-mail</Label>
+                <Input id="email" type="email" {...register("email")} />
+                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="phone">Telefone Comercial</Label>
-              <Input id="phone" placeholder="(00) 00000-0000" {...register("phone")} />
-            </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="phone">Telefone Comercial</Label>
+                <Input id="phone" placeholder="(00) 00000-0000" {...register("phone")} />
+              </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="website">Website</Label>
-              <Input id="website" placeholder="https://" {...register("website")} />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Contato comercial
-          </p>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="contact_name">Nome do contato</Label>
-            <Input id="contact_name" {...register("contact_name")} />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Configurações
-          </p>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="response_time_days">Prazo de resposta (dias)</Label>
-              <Input
-                id="response_time_days"
-                type="number"
-                min={0}
-                {...register("response_time_days")}
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="display_order">Ordem de exibição</Label>
-              <Input id="display_order" type="number" min={0} {...register("display_order")} />
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="website">Website</Label>
+                <Input id="website" placeholder="https://" {...register("website")} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Observações
-          </p>
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Contato comercial
+            </p>
 
-          <Textarea id="notes" rows={4} {...register("notes")} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="contact_name">Nome do contato</Label>
+              <Input id="contact_name" {...register("contact_name")} />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Configurações
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="response_time_days">Prazo de resposta (dias)</Label>
+                <Input
+                  id="response_time_days"
+                  type="number"
+                  min={0}
+                  {...register("response_time_days")}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="display_order">Ordem de exibição</Label>
+                <Input id="display_order" type="number" min={0} {...register("display_order")} />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Observações
+            </p>
+
+            <Textarea id="notes" rows={4} {...register("notes")} />
+          </div>
         </div>
       </form>
 
@@ -197,25 +199,27 @@ export function EditInsurerDrawer() {
         </SheetHeader>
 
         {(isLoading || isError) && (
-          <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-            {isLoading && (
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-              </div>
-            )}
+          <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+            <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+              {isLoading && (
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="h-8 w-full" />
+                </div>
+              )}
 
-            {isError && !isLoading && (
-              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-                <p className="mb-2 text-sm text-muted-foreground">
-                  Não foi possível carregar os dados da seguradora.
-                </p>
-                <Button variant="outline" size="sm" onClick={() => refetch()}>
-                  Tentar novamente
-                </Button>
-              </div>
-            )}
+              {isError && !isLoading && (
+                <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                  <p className="mb-2 text-sm text-muted-foreground">
+                    Não foi possível carregar os dados da seguradora.
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => refetch()}>
+                    Tentar novamente
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

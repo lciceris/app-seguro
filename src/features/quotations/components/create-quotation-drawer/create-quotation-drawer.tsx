@@ -121,149 +121,155 @@ export function CreateQuotationDrawer() {
         <form
           id="create-quotation-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
+          className="flex-1 min-h-0 overflow-y-auto bg-background"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Identificação
-            </p>
+          <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Identificação
+              </p>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="client_id">Cliente</Label>
-                <Controller
-                  name="client_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger id="client_id" className="w-full">
-                        <SelectValue placeholder="Selecione um cliente" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {clients?.map((client) => (
-                          <SelectItem key={client.id} value={client.id}>
-                            {client.legal_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.client_id && (
-                  <p className="text-sm text-destructive">{errors.client_id.message}</p>
-                )}
-              </div>
-
-              {!isSeller && (
+              <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="seller_id">Vendedor responsável</Label>
+                  <Label htmlFor="client_id">Cliente</Label>
                   <Controller
-                    name="seller_id"
+                    name="client_id"
                     control={control}
                     render={({ field }) => (
                       <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger id="seller_id" className="w-full">
-                          <SelectValue placeholder="Selecione um vendedor" />
+                        <SelectTrigger id="client_id" className="w-full">
+                          <SelectValue placeholder="Selecione um cliente" />
                         </SelectTrigger>
                         <SelectContent>
-                          {sellers.map((seller) => (
-                            <SelectItem key={seller.id} value={seller.id}>
-                              {seller.full_name}
+                          {clients?.map((client) => (
+                            <SelectItem key={client.id} value={client.id}>
+                              {client.legal_name}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     )}
                   />
+                  {errors.client_id && (
+                    <p className="text-sm text-destructive">{errors.client_id.message}</p>
+                  )}
                 </div>
-              )}
 
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="quotation_type">Tipo</Label>
-                <Controller
-                  name="quotation_type"
-                  control={control}
-                  render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger id="quotation_type" className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value={NO_QUOTATION_TYPE_VALUE}>Não informado</SelectItem>
-                        <SelectItem value="new">Novo</SelectItem>
-                        <SelectItem value="renewal">Renovação</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
+                {!isSeller && (
+                  <div className="col-span-2 flex flex-col gap-1.5">
+                    <Label htmlFor="seller_id">Vendedor responsável</Label>
+                    <Controller
+                      name="seller_id"
+                      control={control}
+                      render={({ field }) => (
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger id="seller_id" className="w-full">
+                            <SelectValue placeholder="Selecione um vendedor" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sellers.map((seller) => (
+                              <SelectItem key={seller.id} value={seller.id}>
+                                {seller.full_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
+                )}
+
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="quotation_type">Tipo</Label>
+                  <Controller
+                    name="quotation_type"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger id="quotation_type" className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NO_QUOTATION_TYPE_VALUE}>Não informado</SelectItem>
+                          <SelectItem value="new">Novo</SelectItem>
+                          <SelectItem value="renewal">Renovação</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Cobertura pretendida
-            </p>
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Cobertura pretendida
+              </p>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="coverage_start">Início da cobertura</Label>
-                <Controller
-                  name="coverage_start"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker id="coverage_start" value={field.value} onChange={field.onChange} />
-                  )}
-                />
-              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="coverage_start">Início da cobertura</Label>
+                  <Controller
+                    name="coverage_start"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        id="coverage_start"
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                </div>
 
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="coverage_end">Fim da cobertura</Label>
-                <Controller
-                  name="coverage_end"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker id="coverage_end" value={field.value} onChange={field.onChange} />
-                  )}
-                />
-              </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="coverage_end">Fim da cobertura</Label>
+                  <Controller
+                    name="coverage_end"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker id="coverage_end" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </div>
 
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="coverages">Coberturas desejadas</Label>
-                <Input
-                  id="coverages"
-                  placeholder="Separadas por vírgula"
-                  {...register("coverages")}
-                />
-              </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="coverages">Coberturas desejadas</Label>
+                  <Input
+                    id="coverages"
+                    placeholder="Separadas por vírgula"
+                    {...register("coverages")}
+                  />
+                </div>
 
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="deductible_pref">Preferência de franquia</Label>
-                <Input id="deductible_pref" {...register("deductible_pref")} />
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="deductible_pref">Preferência de franquia</Label>
+                  <Input id="deductible_pref" {...register("deductible_pref")} />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Prazo e observações
-            </p>
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Prazo e observações
+              </p>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="due_date">Prazo pra fechar</Label>
-                <Controller
-                  name="due_date"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker id="due_date" value={field.value} onChange={field.onChange} />
-                  )}
-                />
-              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="due_date">Prazo pra fechar</Label>
+                  <Controller
+                    name="due_date"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker id="due_date" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </div>
 
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="seller_notes">Observações do vendedor</Label>
-                <Textarea id="seller_notes" rows={4} {...register("seller_notes")} />
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="seller_notes">Observações do vendedor</Label>
+                  <Textarea id="seller_notes" rows={4} {...register("seller_notes")} />
+                </div>
               </div>
             </div>
           </div>

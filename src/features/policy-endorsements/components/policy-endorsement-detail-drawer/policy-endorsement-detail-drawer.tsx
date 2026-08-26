@@ -93,140 +93,142 @@ export function PolicyEndorsementDetailDrawer() {
 
         {subView === "detail" && (
           <>
-            <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-              {isLoading && (
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <Skeleton className="h-4 w-48" />
-                  <Skeleton className="h-4 w-40" />
-                  <Skeleton className="h-4 w-32" />
-                </div>
-              )}
-
-              {isError && !isLoading && (
-                <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    Não foi possível carregar os dados do endosso.
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Tentar novamente
-                  </Button>
-                </div>
-              )}
-
-              {!isLoading && !isError && endorsement && (
-                <>
+            <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+              <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+                {isLoading && (
                   <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                    <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                      Dados gerais
-                    </p>
-                    <DetailField label="Descrição" value={endorsement.description} />
-                    {VEHICLE_TYPES.has(endorsement.endorsement_type) && (
-                      <DetailField
-                        label="Veículo"
-                        value={
-                          endorsement.vehicles
-                            ? `${endorsement.vehicles.plate} — ${[endorsement.vehicles.brand, endorsement.vehicles.model].filter(Boolean).join(" ")}`
-                            : null
-                        }
-                      />
-                    )}
-                    {COVERAGE_TYPES.has(endorsement.endorsement_type) && (
-                      <DetailField
-                        label="Cobertura"
-                        value={
-                          endorsement.coverage_type
-                            ? COVERAGE_TYPE_LABELS[endorsement.coverage_type]
-                            : null
-                        }
-                      />
-                    )}
-                    {COVERAGE_TYPES.has(endorsement.endorsement_type) && (
-                      <DetailField
-                        label="Valor de casco"
-                        value={formatCurrency(endorsement.casco_value)}
-                      />
-                    )}
-                    {(endorsement.endorsement_type === "extension" ||
-                      endorsement.endorsement_type === "administrative_correction") && (
-                      <DetailField
-                        label="Nova data de fim de vigência"
-                        value={formatDate(endorsement.new_coverage_end)}
-                      />
-                    )}
-                    {endorsement.endorsement_type === "administrative_correction" && (
-                      <>
-                        <DetailField
-                          label="Novo número da apólice"
-                          value={endorsement.new_policy_number}
-                        />
-                        <DetailField
-                          label="Novo prêmio"
-                          value={formatCurrency(endorsement.new_premium_amount)}
-                        />
-                        <DetailField
-                          label="Novo valor total da frota"
-                          value={formatCurrency(endorsement.new_total_fleet_value)}
-                        />
-                        <DetailField
-                          label="Novo início de vigência"
-                          value={formatDate(endorsement.new_coverage_start)}
-                        />
-                      </>
-                    )}
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-4 w-40" />
+                    <Skeleton className="h-4 w-32" />
                   </div>
+                )}
 
-                  {endorsement.responded_at && (
+                {isError && !isLoading && (
+                  <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      Não foi possível carregar os dados do endosso.
+                    </p>
+                    <Button variant="outline" size="sm" onClick={() => refetch()}>
+                      Tentar novamente
+                    </Button>
+                  </div>
+                )}
+
+                {!isLoading && !isError && endorsement && (
+                  <>
                     <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                       <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                        Retorno da seguradora
+                        Dados gerais
                       </p>
-                      <DetailField
-                        label="Ajuste de prêmio"
-                        value={formatCurrency(endorsement.premium_adjustment)}
-                      />
-                      <DetailField label="Notas" value={endorsement.insurer_response_notes} />
-                      <DetailField
-                        label="Registrado em"
-                        value={formatDateTime(endorsement.responded_at)}
-                      />
+                      <DetailField label="Descrição" value={endorsement.description} />
+                      {VEHICLE_TYPES.has(endorsement.endorsement_type) && (
+                        <DetailField
+                          label="Veículo"
+                          value={
+                            endorsement.vehicles
+                              ? `${endorsement.vehicles.plate} — ${[endorsement.vehicles.brand, endorsement.vehicles.model].filter(Boolean).join(" ")}`
+                              : null
+                          }
+                        />
+                      )}
+                      {COVERAGE_TYPES.has(endorsement.endorsement_type) && (
+                        <DetailField
+                          label="Cobertura"
+                          value={
+                            endorsement.coverage_type
+                              ? COVERAGE_TYPE_LABELS[endorsement.coverage_type]
+                              : null
+                          }
+                        />
+                      )}
+                      {COVERAGE_TYPES.has(endorsement.endorsement_type) && (
+                        <DetailField
+                          label="Valor de casco"
+                          value={formatCurrency(endorsement.casco_value)}
+                        />
+                      )}
+                      {(endorsement.endorsement_type === "extension" ||
+                        endorsement.endorsement_type === "administrative_correction") && (
+                        <DetailField
+                          label="Nova data de fim de vigência"
+                          value={formatDate(endorsement.new_coverage_end)}
+                        />
+                      )}
+                      {endorsement.endorsement_type === "administrative_correction" && (
+                        <>
+                          <DetailField
+                            label="Novo número da apólice"
+                            value={endorsement.new_policy_number}
+                          />
+                          <DetailField
+                            label="Novo prêmio"
+                            value={formatCurrency(endorsement.new_premium_amount)}
+                          />
+                          <DetailField
+                            label="Novo valor total da frota"
+                            value={formatCurrency(endorsement.new_total_fleet_value)}
+                          />
+                          <DetailField
+                            label="Novo início de vigência"
+                            value={formatDate(endorsement.new_coverage_start)}
+                          />
+                        </>
+                      )}
                     </div>
-                  )}
 
-                  {endorsement.client_responded_at && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                      <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                        Resposta do cliente
-                      </p>
-                      <DetailField label="Notas" value={endorsement.client_response_notes} />
-                      <DetailField
-                        label="Registrado em"
-                        value={formatDateTime(endorsement.client_responded_at)}
-                      />
-                    </div>
-                  )}
+                    {endorsement.responded_at && (
+                      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                          Retorno da seguradora
+                        </p>
+                        <DetailField
+                          label="Ajuste de prêmio"
+                          value={formatCurrency(endorsement.premium_adjustment)}
+                        />
+                        <DetailField label="Notas" value={endorsement.insurer_response_notes} />
+                        <DetailField
+                          label="Registrado em"
+                          value={formatDateTime(endorsement.responded_at)}
+                        />
+                      </div>
+                    )}
 
-                  {endorsement.status === "not_closed" && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                      <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                        Não fechado
-                      </p>
-                      <DetailField label="Motivo" value={endorsement.not_closed_reason} />
-                    </div>
-                  )}
+                    {endorsement.client_responded_at && (
+                      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                          Resposta do cliente
+                        </p>
+                        <DetailField label="Notas" value={endorsement.client_response_notes} />
+                        <DetailField
+                          label="Registrado em"
+                          value={formatDateTime(endorsement.client_responded_at)}
+                        />
+                      </div>
+                    )}
 
-                  {endorsement.effected_at && (
-                    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                      <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                        Efetivação
-                      </p>
-                      <DetailField
-                        label="Efetivado em"
-                        value={formatDateTime(endorsement.effected_at)}
-                      />
-                    </div>
-                  )}
-                </>
-              )}
+                    {endorsement.status === "not_closed" && (
+                      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                          Não fechado
+                        </p>
+                        <DetailField label="Motivo" value={endorsement.not_closed_reason} />
+                      </div>
+                    )}
+
+                    {endorsement.effected_at && (
+                      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                          Efetivação
+                        </p>
+                        <DetailField
+                          label="Efetivado em"
+                          value={formatDateTime(endorsement.effected_at)}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
 
             <SheetFooter className="flex-row items-center justify-between">

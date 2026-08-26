@@ -46,30 +46,32 @@ export function NotClosedReasonForm({ endorsementId, onBack }: NotClosedReasonFo
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar
-        </button>
+      <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+        <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar
+          </button>
 
-        <form
-          id="not-closed-reason-form"
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-1.5 rounded-xl border border-border bg-card shadow-sm p-5"
-        >
-          <p className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Marcar como não fechado
-          </p>
-          <Label htmlFor="not_closed_reason">Motivo</Label>
-          <Textarea id="not_closed_reason" rows={3} {...register("not_closed_reason")} />
-          {errors.not_closed_reason && (
-            <p className="text-sm text-destructive">{errors.not_closed_reason.message}</p>
-          )}
-        </form>
+          <form
+            id="not-closed-reason-form"
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-1.5 rounded-xl border border-border bg-card shadow-sm p-5"
+          >
+            <p className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+              Marcar como não fechado
+            </p>
+            <Label htmlFor="not_closed_reason">Motivo</Label>
+            <Textarea id="not_closed_reason" rows={3} {...register("not_closed_reason")} />
+            {errors.not_closed_reason && (
+              <p className="text-sm text-destructive">{errors.not_closed_reason.message}</p>
+            )}
+          </form>
+        </div>
       </div>
 
       <div className="flex items-center justify-end gap-2 border-t border-border bg-card p-4">

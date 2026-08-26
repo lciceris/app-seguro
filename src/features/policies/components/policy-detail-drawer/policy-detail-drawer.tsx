@@ -71,97 +71,102 @@ export function PolicyDetailDrawer() {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
-          {isLoading && (
-            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <Skeleton className="h-4 w-48" />
-              <Skeleton className="h-4 w-40" />
-              <Skeleton className="h-4 w-32" />
-            </div>
-          )}
-
-          {isError && !isLoading && (
-            <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-              <p className="mb-2 text-sm text-muted-foreground">
-                Não foi possível carregar os dados da apólice.
-              </p>
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                Tentar novamente
-              </Button>
-            </div>
-          )}
-
-          {!isLoading && !isError && policy && (
-            <>
+        <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+          <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5">
+            {isLoading && (
               <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Dados gerais
-                </p>
-                <DetailField label="Cliente" value={policy.clients?.legal_name ?? null} />
-                <DetailField label="Seguradora" value={policy.insurers?.name ?? null} />
-                <DetailField label="Prêmio" value={formatCurrency(policy.premium_amount)} />
-                <DetailField
-                  label="Valor total da frota"
-                  value={formatCurrency(policy.total_fleet_value)}
-                />
-                <DetailField label="Início da vigência" value={formatDate(policy.coverage_start)} />
-                <DetailField label="Fim da vigência" value={formatDate(policy.coverage_end)} />
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-32" />
               </div>
+            )}
 
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Origem
+            {isError && !isLoading && (
+              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+                <p className="mb-2 text-sm text-muted-foreground">
+                  Não foi possível carregar os dados da apólice.
                 </p>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Cotação
-                  </span>
-                  {policy.quotations ? (
-                    <Link
-                      to={`/quotations/${policy.quotations.id}`}
-                      className="text-sm text-primary hover:underline"
-                    >
-                      {policy.quotations.number}
-                    </Link>
-                  ) : (
-                    <span className="text-sm text-foreground">Não informado</span>
+                <Button variant="outline" size="sm" onClick={() => refetch()}>
+                  Tentar novamente
+                </Button>
+              </div>
+            )}
+
+            {!isLoading && !isError && policy && (
+              <>
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Dados gerais
+                  </p>
+                  <DetailField label="Cliente" value={policy.clients?.legal_name ?? null} />
+                  <DetailField label="Seguradora" value={policy.insurers?.name ?? null} />
+                  <DetailField label="Prêmio" value={formatCurrency(policy.premium_amount)} />
+                  <DetailField
+                    label="Valor total da frota"
+                    value={formatCurrency(policy.total_fleet_value)}
+                  />
+                  <DetailField
+                    label="Início da vigência"
+                    value={formatDate(policy.coverage_start)}
+                  />
+                  <DetailField label="Fim da vigência" value={formatDate(policy.coverage_end)} />
+                </div>
+
+                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Origem
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                      Cotação
+                    </span>
+                    {policy.quotations ? (
+                      <Link
+                        to={`/quotations/${policy.quotations.id}`}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        {policy.quotations.number}
+                      </Link>
+                    ) : (
+                      <span className="text-sm text-foreground">Não informado</span>
+                    )}
+                  </div>
+                  {renewedFrom && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                        Renova a apólice
+                      </span>
+                      <Link
+                        to={`/policies/${renewedFrom.id}`}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        {renewedFrom.policy_number ?? "Pendente de emissão"}
+                      </Link>
+                    </div>
+                  )}
+                  {renewedBy && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                        Renovada pela apólice
+                      </span>
+                      <Link
+                        to={`/policies/${renewedBy.id}`}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        {renewedBy.policy_number ?? "Pendente de emissão"}
+                      </Link>
+                    </div>
                   )}
                 </div>
-                {renewedFrom && (
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                      Renova a apólice
-                    </span>
-                    <Link
-                      to={`/policies/${renewedFrom.id}`}
-                      className="text-sm text-primary hover:underline"
-                    >
-                      {renewedFrom.policy_number ?? "Pendente de emissão"}
-                    </Link>
-                  </div>
-                )}
-                {renewedBy && (
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                      Renovada pela apólice
-                    </span>
-                    <Link
-                      to={`/policies/${renewedBy.id}`}
-                      className="text-sm text-primary hover:underline"
-                    >
-                      {renewedBy.policy_number ?? "Pendente de emissão"}
-                    </Link>
-                  </div>
-                )}
-              </div>
 
-              <PolicyVehiclesSection policyId={policy.id} />
+                <PolicyVehiclesSection policyId={policy.id} />
 
-              <PolicyEndorsementsSection policy={policy} />
+                <PolicyEndorsementsSection policy={policy} />
 
-              <PolicyAttachmentsSection policyId={policy.id} canManage={canManage} />
-            </>
-          )}
+                <PolicyAttachmentsSection policyId={policy.id} canManage={canManage} />
+              </>
+            )}
+          </div>
         </div>
 
         <SheetFooter className="flex-row justify-end">

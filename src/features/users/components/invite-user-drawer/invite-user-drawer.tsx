@@ -88,51 +88,57 @@ export function InviteUserDrawer() {
         <form
           id="invite-user-form"
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col gap-4 overflow-y-auto p-5"
+          className="flex-1 min-h-0 overflow-y-auto bg-background"
         >
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="full_name">Nome</Label>
-                <Input id="full_name" {...register("full_name")} />
-                {errors.full_name && (
-                  <p className="text-sm text-destructive">{errors.full_name.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" {...register("email")} />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="phone">Telefone</Label>
-                <Input id="phone" {...register("phone")} />
-                {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
-              </div>
-
-              <div className="col-span-2 flex flex-col gap-1.5">
-                <Label htmlFor="role">Perfil</Label>
-                <Controller
-                  name="role"
-                  control={control}
-                  render={({ field }) => (
-                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                      <SelectTrigger id="role" className="w-full">
-                        <SelectValue placeholder="Selecione um perfil" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {INVITABLE_ROLES.map((role) => (
-                          <SelectItem key={role} value={role}>
-                            {ROLE_LABELS[role]}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+          <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="full_name">Nome</Label>
+                  <Input id="full_name" {...register("full_name")} />
+                  {errors.full_name && (
+                    <p className="text-sm text-destructive">{errors.full_name.message}</p>
                   )}
-                />
-                {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="email">E-mail</Label>
+                  <Input id="email" type="email" {...register("email")} />
+                  {errors.email && (
+                    <p className="text-sm text-destructive">{errors.email.message}</p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="phone">Telefone</Label>
+                  <Input id="phone" {...register("phone")} />
+                  {errors.phone && (
+                    <p className="text-sm text-destructive">{errors.phone.message}</p>
+                  )}
+                </div>
+
+                <div className="col-span-2 flex flex-col gap-1.5">
+                  <Label htmlFor="role">Perfil</Label>
+                  <Controller
+                    name="role"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                        <SelectTrigger id="role" className="w-full">
+                          <SelectValue placeholder="Selecione um perfil" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {INVITABLE_ROLES.map((role) => (
+                            <SelectItem key={role} value={role}>
+                              {ROLE_LABELS[role]}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
+                </div>
               </div>
             </div>
           </div>
