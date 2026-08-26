@@ -100,14 +100,15 @@
     --chart-4: #F59E0B;
     --chart-5: #EC4899;
 
-    /* Sidebar: #0F172A slate-900 */
-    --sidebar: #0F172A;
-    --sidebar-foreground: #94A3B8;
-    --sidebar-primary: #1E293B;
-    --sidebar-primary-foreground: #F8FAFC;
-    --sidebar-accent: #1E293B;
-    --sidebar-accent-foreground: #F8FAFC;
-    --sidebar-border: #1E293B;
+    /* Sidebar clara (spec sidebar-light-redesign) — pronta pra virar escura de novo
+       via .dark quando o dark/light mode entrar */
+    --sidebar: #FFFFFF;
+    --sidebar-foreground: #475569;
+    --sidebar-primary: #F8FAFC;
+    --sidebar-primary-foreground: #0F172A;
+    --sidebar-accent: #F8FAFC;
+    --sidebar-accent-foreground: #0F172A;
+    --sidebar-border: #E2E8F0;
     --sidebar-ring: #4F46E5;
 
     /* ── Tokens semânticos (spec de negócio) ── */
