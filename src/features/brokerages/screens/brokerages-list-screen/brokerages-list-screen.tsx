@@ -8,6 +8,13 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -22,7 +29,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/
 
 import { DeactivateBrokerageConfirmDialog } from "../../components/deactivate-brokerage-confirm-dialog";
 import { useBrokerages } from "../../hooks/use-brokerages";
+import { usePlans } from "../../hooks/use-plans";
 import { useReactivateBrokerage } from "../../hooks/use-reactivate-brokerage";
+
+const ALL_STATUS_VALUE = "all";
+const ALL_PLAN_VALUE = "all";
+const NO_PLAN_VALUE = "none";
 
 function normalize(value: string) {
   return value
@@ -33,7 +45,10 @@ function normalize(value: string) {
 
 export function BrokeragesListScreen() {
   const { data: brokerages, isLoading, isError, refetch } = useBrokerages();
+  const { data: plans } = usePlans();
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState(ALL_STATUS_VALUE);
+  const [planFilter, setPlanFilter] = useState(ALL_PLAN_VALUE);
   const [deactivateBrokerage, setDeactivateBrokerage] = useState<{
     id: string;
     name: string;
@@ -50,14 +65,25 @@ export function BrokeragesListScreen() {
   const filteredBrokerages = useMemo(() => {
     if (!brokerages) return brokerages;
     const query = normalize(search.trim());
-    if (!query) return brokerages;
 
     return brokerages.filter((brokerage) => {
+      const matchesStatus = statusFilter === ALL_STATUS_VALUE || brokerage.status === statusFilter;
+      if (!matchesStatus) return false;
+
+      const matchesPlan =
+        planFilter === ALL_PLAN_VALUE ||
+        (planFilter === NO_PLAN_VALUE ? !brokerage.plan_id : brokerage.plan_id === planFilter);
+      if (!matchesPlan) return false;
+
+      if (!query) return true;
       const name = normalize(brokerage.name);
       const taxId = brokerage.tax_id ? normalize(brokerage.tax_id) : "";
       return name.includes(query) || taxId.includes(query);
     });
-  }, [brokerages, search]);
+  }, [brokerages, search, statusFilter, planFilter]);
+
+  const hasActiveFilter =
+    search !== "" || statusFilter !== ALL_STATUS_VALUE || planFilter !== ALL_PLAN_VALUE;
 
   const totalCount = brokerages?.length ?? 0;
   const filteredCount = filteredBrokerages?.length ?? totalCount;
@@ -83,14 +109,42 @@ export function BrokeragesListScreen() {
           </Button>
         </div>
 
-        <div className="mb-4 relative max-w-sm">
-          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Buscar por nome ou CNPJ"
-            className="pl-9"
-          />
+        <div className="mb-4 flex items-center gap-3">
+          <div className="relative max-w-sm flex-1">
+            <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Buscar por nome ou CNPJ"
+              className="pl-9"
+            />
+          </div>
+
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_STATUS_VALUE}>Todos os status</SelectItem>
+              <SelectItem value="active">Ativo</SelectItem>
+              <SelectItem value="inactive">Inativo</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={planFilter} onValueChange={setPlanFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Plano" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_PLAN_VALUE}>Todos os planos</SelectItem>
+              <SelectItem value={NO_PLAN_VALUE}>Sem plano</SelectItem>
+              {plans?.map((plan) => (
+                <SelectItem key={plan.id} value={plan.id}>
+                  {plan.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Table>
@@ -122,8 +176,8 @@ export function BrokeragesListScreen() {
               <TableEmptyState
                 colSpan={6}
                 message={
-                  search
-                    ? "Nenhuma corretora encontrada pra essa busca."
+                  hasActiveFilter
+                    ? "Nenhuma corretora encontrada pra esse filtro."
                     : "Nenhuma corretora cadastrada ainda."
                 }
               />
