@@ -32,32 +32,55 @@ export function BrokerageDetailDrawer() {
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
       <SheetContent size="lg">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            {isLoading ? (
-              <Skeleton className="h-6 w-40" />
-            ) : (
-              (brokerage?.name ?? "Detalhe da corretora")
-            )}
+          <div className="flex items-center gap-3">
             {!isLoading && brokerage && (
-              <Badge
-                variant="outline"
-                className={
-                  brokerage.status === "active"
-                    ? "border-transparent bg-success-bg text-success-text"
-                    : "border-transparent bg-neutral-bg text-neutral-text"
-                }
-              >
-                {brokerage.status === "active" ? "Ativo" : "Inativo"}
-              </Badge>
+              <>
+                {brokerage.logo_url ? (
+                  <img
+                    src={brokerage.logo_url}
+                    alt={brokerage.name}
+                    className="h-10 w-10 shrink-0 rounded-full border-[3px] object-cover"
+                    style={{ borderColor: brokerage.primary_color ?? undefined }}
+                  />
+                ) : (
+                  <div
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[3px] bg-muted text-sm font-semibold text-muted-foreground"
+                    style={{ borderColor: brokerage.primary_color ?? undefined }}
+                  >
+                    {brokerage.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+              </>
             )}
-          </SheetTitle>
-          {!isLoading && brokerage && (
-            <p className="text-xs text-muted-foreground">
-              {brokerage.plans?.name
-                ? `Detalhe da corretora · Plano ${brokerage.plans.name}`
-                : "Detalhe da corretora · Sem plano"}
-            </p>
-          )}
+            <div className="flex flex-col gap-0.5">
+              <SheetTitle className="flex items-center gap-2">
+                {isLoading ? (
+                  <Skeleton className="h-6 w-40" />
+                ) : (
+                  (brokerage?.name ?? "Detalhe da corretora")
+                )}
+                {!isLoading && brokerage && (
+                  <Badge
+                    variant="outline"
+                    className={
+                      brokerage.status === "active"
+                        ? "border-transparent bg-success-bg text-success-text"
+                        : "border-transparent bg-neutral-bg text-neutral-text"
+                    }
+                  >
+                    {brokerage.status === "active" ? "Ativo" : "Inativo"}
+                  </Badge>
+                )}
+              </SheetTitle>
+              {!isLoading && brokerage && (
+                <p className="text-xs text-muted-foreground">
+                  {brokerage.plans?.name
+                    ? `Detalhe da corretora · Plano ${brokerage.plans.name}`
+                    : "Detalhe da corretora · Sem plano"}
+                </p>
+              )}
+            </div>
+          </div>
         </SheetHeader>
 
         <div className="flex-1 min-h-0 overflow-y-auto bg-background">
@@ -176,18 +199,6 @@ export function BrokerageDetailDrawer() {
                           : null
                       }
                     />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Identidade visual
-                  </p>
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                    <div className="col-span-2">
-                      <DetailField label="URL do logo" value={brokerage.logo_url} />
-                    </div>
-                    <DetailField label="Cor primária" value={brokerage.primary_color} />
                   </div>
                 </div>
               </>

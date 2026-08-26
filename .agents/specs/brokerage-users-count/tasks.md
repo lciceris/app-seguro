@@ -15,6 +15,8 @@
     - _Requirements: 2.1, 2.2_
   - [x] 3.2 Resto da opção 5 do artifact "Detalhe Corretora" que tinha ficado de fora na primeira leva: cabeçalho consolidado (razão social + badge de status no título, "Detalhe da corretora · Plano X" no subtítulo, "Sem plano" quando não há plano) e grid de 2 colunas em todos os cards de `DetailField` (Empresa, Endereço, Representante e contato, Plano, Identidade visual) — campo "Status" sai do card "Plano e status" (renomeado pra só "Plano") já que subiu pro cabeçalho
     - _Requirements: —_
+  - [x] 3.3 Remove o card "Identidade visual" (mostrava só URL/hex crus, pouco útil como texto); logo (ou inicial do nome, mesmo fallback já usado em `app-sidebar.tsx`) passa a aparecer ao lado do título no cabeçalho, com borda de 3px na cor primária da própria corretora (`brokerage.primary_color`, via `style` inline — é a cor de uma corretora específica sendo visualizada por platform_admin, não a `--primary` do usuário logado)
+    - _Requirements: —_
 
 - [x] 4. Backlog e verificação final
   - [x] 4.1 Entrada em `docs/product/roadmap.md` pro KPI completo (conta vs. limite do plano) + gestão de plano
