@@ -41,12 +41,15 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   );
 }
 
+// Altura fixa (h-10) em vez de padding — casa com a altura real da linha
+// do corpo, que hoje é ditada pelos botões de ação (`icon-sm`, 28px +
+// padding), não pelo texto. Padding vertical sozinho nunca bateria isso.
 function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
     <th
       data-slot="table-head"
       className={cn(
-        "px-3 py-1.5 text-left text-[10.5px] font-semibold tracking-wider text-muted-foreground uppercase",
+        "h-10 px-3 text-left text-[10.5px] font-semibold tracking-wider text-muted-foreground uppercase",
         className,
       )}
       {...props}

@@ -15,7 +15,7 @@ export function ColorPicker({ id, value, onChange, placeholder = "#3B82F6" }: Co
         aria-label="Selecionar cor"
         value={/^#[0-9a-fA-F]{6}$/.test(value) ? value : "#000000"}
         onChange={(e) => onChange(e.target.value)}
-        className="h-8 w-10 shrink-0 cursor-pointer rounded-lg border border-input p-1"
+        className="h-9 w-10 shrink-0 cursor-pointer rounded-lg border border-input p-1"
       />
       <Input
         id={id}
