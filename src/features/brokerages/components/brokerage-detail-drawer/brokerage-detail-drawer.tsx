@@ -12,12 +12,16 @@ import {
   SheetTitle,
 } from "@/shared/components/ui/sheet";
 
+import { useActiveUsersCount } from "../../hooks/use-active-users-count";
 import { useBrokerage } from "../../hooks/use-brokerage";
 
 export function BrokerageDetailDrawer() {
   const navigate = useNavigate();
   const { brokerageId } = useParams<{ brokerageId: string }>();
   const { data: brokerage, isLoading, isError, refetch } = useBrokerage(brokerageId!);
+  const { data: activeUsersCount, isLoading: isLoadingUsersCount } = useActiveUsersCount(
+    brokerageId!,
+  );
 
   function handleClose() {
     navigate("/brokerages");
@@ -53,6 +57,22 @@ export function BrokerageDetailDrawer() {
 
             {!isLoading && !isError && brokerage && (
               <>
+                <div className="flex flex-col gap-2 rounded-xl border border-border bg-card shadow-sm p-5">
+                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    Usuários ativos
+                  </p>
+                  {isLoadingUsersCount ? (
+                    <Skeleton className="h-7 w-16" />
+                  ) : (
+                    <p className="text-2xl font-bold text-foreground">
+                      {activeUsersCount ?? "—"}
+                      <span className="ml-1.5 text-sm font-normal text-muted-foreground">
+                        usuários ativos
+                      </span>
+                    </p>
+                  )}
+                </div>
+
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Empresa
