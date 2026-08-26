@@ -117,7 +117,17 @@ import { DetailField } from "@/shared/components/ui/detail-field";
 
 Mostra `"Não informado"` pra valor nulo/vazio — nunca esconde o campo.
 
-## Tabelas — primitivo compartilhado
+## Listagens — padrão de página obrigatório
+
+Toda tela de listagem segue esta estrutura sem exceção — definida e validada com o usuário via protótipo interativo (2 rodadas de exploração + ajuste fino) em `.agents/specs/list-page-panel/`, com Corretoras como tela de validação:
+
+- Título+contador+botão, busca/filtro e a `Table` inteira ficam dentro de **um único painel branco** (`rounded-2xl border border-border bg-card shadow-sm p-5`) — o cinza da página (`--background`) vira só uma moldura ao redor, não aparece entre os blocos internos.
+- A `Table` continua com seu próprio container (borda + cantos arredondados) por dentro do painel — isso já é nativo do primitivo, não precisa de wrapper extra.
+- Header da tabela com fundo `#E9EDF2` (mais escuro que o corpo do painel, pra se destacar) e hover de linha suave (`bg-background/30`) — ambos já embutidos em `table.tsx`, não repetir por tela.
+- `Outlet` (drawer de rota aninhada) e diálogos de confirmação ficam **fora** do painel — são overlays, não conteúdo de página.
+- Contador de itens sempre abaixo do `<h1>`; busca sempre que a lista puder crescer além de ~10-15 itens (na prática, todas as 7 listagens hoje). Sem abstração compartilhada pra isso — cada tela escreve seu próprio texto (singular/plural varia por entidade) e sua própria busca client-side via `useMemo`.
+
+Template completo:
 
 ```tsx
 import {
@@ -125,38 +135,6 @@ import {
   TableEmptyState, TableErrorState, TableSkeletonRow,
 } from "@/shared/components/ui/table";
 
-<Table>
-  <TableHeader>
-    <TableRow>
-      <TableHead>Nome</TableHead>
-      <TableHead className="text-right">Ações</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    {isLoading && Array.from({ length: 3 }).map((_, i) => <TableSkeletonRow key={i} cells={2} />)}
-    {isError && !isLoading && (
-      <TableErrorState colSpan={2} message="Não foi possível carregar." onRetry={refetch} />
-    )}
-    {!isLoading && !isError && items?.length === 0 && (
-      <TableEmptyState colSpan={2} message="Nenhum item cadastrado ainda." />
-    )}
-    {items?.map((item) => (
-      <TableRow key={item.id}>
-        <TableCell>{item.name}</TableCell>
-        <TableCell className="text-right">{/* ações */}</TableCell>
-      </TableRow>
-    ))}
-  </TableBody>
-</Table>
-```
-
-Não tenta abstrair "colunas configuráveis" — cada tela compõe o próprio conjunto de `TableHead`/`TableCell`. Coluna de dado técnico leva `font-mono-data`.
-
-## Listagens — contador e busca
-
-Toda listagem SEMPRE tem um contador de itens abaixo do `<h1>`, e SEMPRE tem busca quando a lista puder crescer além de ~10-15 itens (na prática, todas as 7 listagens hoje). Sem abstração compartilhada — cada tela escreve seu próprio texto (singular/plural, gênero do substantivo variam por entidade) e sua própria busca client-side via `useMemo`.
-
-```tsx
 const [search, setSearch] = useState("");
 
 const filteredItems = useMemo(() => {
@@ -168,30 +146,62 @@ const filteredItems = useMemo(() => {
 
 const totalCount = items?.length ?? 0;
 const filteredCount = filteredItems?.length ?? totalCount;
-```
 
-```tsx
-<div className="mb-4 flex items-center justify-between">
-  <div>
-    <h1 className="text-lg font-semibold text-foreground">Título</h1>
-    {!isLoading && items && (
-      <p className="text-xs text-muted-foreground">
-        {filteredCount !== totalCount
-          ? `${filteredCount} de ${totalCount} itens`
-          : totalCount === 1
-            ? "1 item cadastrado"
-            : `${totalCount} itens cadastrados`}
-      </p>
-    )}
+return (
+  <div className="p-6">
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Título</h1>
+          {!isLoading && items && (
+            <p className="text-xs text-muted-foreground">
+              {filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} itens`
+                : totalCount === 1
+                  ? "1 item cadastrado"
+                  : `${totalCount} itens cadastrados`}
+            </p>
+          )}
+        </div>
+        <Button asChild>{/* criar */}</Button>
+      </div>
+
+      <div className="mb-4 relative max-w-sm">
+        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar..." className="pl-9" />
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nome</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading && Array.from({ length: 3 }).map((_, i) => <TableSkeletonRow key={i} cells={2} />)}
+          {isError && !isLoading && (
+            <TableErrorState colSpan={2} message="Não foi possível carregar." onRetry={refetch} />
+          )}
+          {!isLoading && !isError && items?.length === 0 && (
+            <TableEmptyState colSpan={2} message="Nenhum item cadastrado ainda." />
+          )}
+          {items?.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell className="text-right">{/* ações */}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+
+    <Outlet />
   </div>
-  <Button asChild>{/* criar */}</Button>
-</div>
-
-<div className="mb-4 relative max-w-sm">
-  <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-  <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar..." className="pl-9" />
-</div>
+);
 ```
+
+`Table` não tenta abstrair "colunas configuráveis" — cada tela compõe o próprio conjunto de `TableHead`/`TableCell`. Coluna de dado técnico leva `font-mono-data`.
 
 ## Botões — hierarquia
 

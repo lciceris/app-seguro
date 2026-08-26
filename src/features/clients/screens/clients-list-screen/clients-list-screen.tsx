@@ -71,154 +71,160 @@ export function ClientsListScreen() {
 
   return (
     <div className="p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">Clientes</h1>
-          {!isLoading && clients && (
-            <p className="text-xs text-muted-foreground">
-              {filteredCount !== totalCount
-                ? `${filteredCount} de ${totalCount} clientes`
-                : totalCount === 1
-                  ? "1 cliente cadastrado"
-                  : `${totalCount} clientes cadastrados`}
-            </p>
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-semibold text-foreground">Clientes</h1>
+            {!isLoading && clients && (
+              <p className="text-xs text-muted-foreground">
+                {filteredCount !== totalCount
+                  ? `${filteredCount} de ${totalCount} clientes`
+                  : totalCount === 1
+                    ? "1 cliente cadastrado"
+                    : `${totalCount} clientes cadastrados`}
+              </p>
+            )}
+          </div>
+          {canEdit && (
+            <Button asChild>
+              <Link to="/clients/add">Novo cliente</Link>
+            </Button>
           )}
         </div>
-        {canEdit && (
-          <Button asChild>
-            <Link to="/clients/add">Novo cliente</Link>
-          </Button>
-        )}
-      </div>
 
-      <div className="mb-4 relative max-w-sm">
-        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Buscar por nome ou CPF/CNPJ"
-          className="pl-9"
-        />
-      </div>
+        <div className="mb-4 relative max-w-sm">
+          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Buscar por nome ou CPF/CNPJ"
+            className="pl-9"
+          />
+        </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>Tipo</TableHead>
-            <TableHead>CPF/CNPJ</TableHead>
-            <TableHead>Cidade/UF</TableHead>
-            <TableHead>Segmento</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading &&
-            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={6} />)}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead>Tipo</TableHead>
+              <TableHead>CPF/CNPJ</TableHead>
+              <TableHead>Cidade/UF</TableHead>
+              <TableHead>Segmento</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading &&
+              Array.from({ length: 3 }).map((_, index) => (
+                <TableSkeletonRow key={index} cells={6} />
+              ))}
 
-          {isError && !isLoading && (
-            <TableErrorState
-              colSpan={6}
-              message="Não foi possível carregar os clientes."
-              onRetry={() => refetch()}
-            />
-          )}
+            {isError && !isLoading && (
+              <TableErrorState
+                colSpan={6}
+                message="Não foi possível carregar os clientes."
+                onRetry={() => refetch()}
+              />
+            )}
 
-          {!isLoading && !isError && filteredClients?.length === 0 && (
-            <TableEmptyState
-              colSpan={6}
-              message={
-                search
-                  ? "Nenhum cliente encontrado pra essa busca."
-                  : "Nenhum cliente cadastrado ainda."
-              }
-            />
-          )}
+            {!isLoading && !isError && filteredClients?.length === 0 && (
+              <TableEmptyState
+                colSpan={6}
+                message={
+                  search
+                    ? "Nenhum cliente encontrado pra essa busca."
+                    : "Nenhum cliente cadastrado ainda."
+                }
+              />
+            )}
 
-          {!isLoading &&
-            !isError &&
-            filteredClients?.map((client) => (
-              <TableRow key={client.id}>
-                <TableCell className="text-foreground">
-                  {client.legal_name}
-                  {client.trade_name && (
-                    <span className="block text-xs text-muted-foreground">{client.trade_name}</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {CLIENT_TYPE_LABELS[client.client_type]}
-                </TableCell>
-                <TableCell className="font-mono-data text-muted-foreground">
-                  {client.tax_id ?? "—"}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {client.city ? `${client.city}${client.state ? `/${client.state}` : ""}` : "—"}
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline" className={SEGMENT_BADGE_CLASSES[client.segment]}>
-                    {SEGMENT_LABELS[client.segment]}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center justify-end gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button asChild variant="ghost" size="icon-sm">
-                          <Link to={`/clients/${client.id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Ver</TooltipContent>
-                    </Tooltip>
-                    {canEdit && (
+            {!isLoading &&
+              !isError &&
+              filteredClients?.map((client) => (
+                <TableRow key={client.id}>
+                  <TableCell className="text-foreground">
+                    {client.legal_name}
+                    {client.trade_name && (
+                      <span className="block text-xs text-muted-foreground">
+                        {client.trade_name}
+                      </span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {CLIENT_TYPE_LABELS[client.client_type]}
+                  </TableCell>
+                  <TableCell className="font-mono-data text-muted-foreground">
+                    {client.tax_id ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {client.city ? `${client.city}${client.state ? `/${client.state}` : ""}` : "—"}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className={SEGMENT_BADGE_CLASSES[client.segment]}>
+                      {SEGMENT_LABELS[client.segment]}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-end gap-1">
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/clients/${client.id}/edit`}>
-                              <Pencil className="h-4 w-4" />
+                            <Link to={`/clients/${client.id}`}>
+                              <Eye className="h-4 w-4" />
                             </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Editar</TooltipContent>
+                        <TooltipContent>Ver</TooltipContent>
                       </Tooltip>
-                    )}
-                    {canDeactivate &&
-                      (client.segment === "inactive" ? (
+                      {canEdit && (
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon-sm"
-                              onClick={() => handleReactivate(client.id)}
-                            >
-                              <UserCheck className="h-4 w-4" />
+                            <Button asChild variant="ghost" size="icon-sm">
+                              <Link to={`/clients/${client.id}/edit`}>
+                                <Pencil className="h-4 w-4" />
+                              </Link>
                             </Button>
                           </TooltipTrigger>
-                          <TooltipContent>Reativar</TooltipContent>
+                          <TooltipContent>Editar</TooltipContent>
                         </Tooltip>
-                      ) : (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon-sm"
-                              onClick={() =>
-                                setDeactivateClient({ id: client.id, name: client.legal_name })
-                              }
-                            >
-                              <UserX className="h-4 w-4" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>Inativar</TooltipContent>
-                        </Tooltip>
-                      ))}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+                      )}
+                      {canDeactivate &&
+                        (client.segment === "inactive" ? (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={() => handleReactivate(client.id)}
+                              >
+                                <UserCheck className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Reativar</TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                onClick={() =>
+                                  setDeactivateClient({ id: client.id, name: client.legal_name })
+                                }
+                              >
+                                <UserX className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Inativar</TooltipContent>
+                          </Tooltip>
+                        ))}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <Outlet />
 

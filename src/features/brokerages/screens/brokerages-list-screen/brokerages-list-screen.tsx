@@ -64,151 +64,155 @@ export function BrokeragesListScreen() {
 
   return (
     <div className="p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">Corretoras</h1>
-          {!isLoading && brokerages && (
-            <p className="text-xs text-muted-foreground">
-              {filteredCount !== totalCount
-                ? `${filteredCount} de ${totalCount} corretoras`
-                : totalCount === 1
-                  ? "1 corretora cadastrada"
-                  : `${totalCount} corretoras cadastradas`}
-            </p>
-          )}
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-semibold text-foreground">Corretoras</h1>
+            {!isLoading && brokerages && (
+              <p className="text-xs text-muted-foreground">
+                {filteredCount !== totalCount
+                  ? `${filteredCount} de ${totalCount} corretoras`
+                  : totalCount === 1
+                    ? "1 corretora cadastrada"
+                    : `${totalCount} corretoras cadastradas`}
+              </p>
+            )}
+          </div>
+          <Button asChild>
+            <Link to="/brokerages/add">Nova corretora</Link>
+          </Button>
         </div>
-        <Button asChild>
-          <Link to="/brokerages/add">Nova corretora</Link>
-        </Button>
-      </div>
 
-      <div className="mb-4 relative max-w-sm">
-        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Buscar por nome ou CNPJ"
-          className="pl-9"
-        />
-      </div>
+        <div className="mb-4 relative max-w-sm">
+          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Buscar por nome ou CNPJ"
+            className="pl-9"
+          />
+        </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>CNPJ</TableHead>
-            <TableHead>Criada em</TableHead>
-            <TableHead>Plano</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading &&
-            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={6} />)}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead>CNPJ</TableHead>
+              <TableHead>Criada em</TableHead>
+              <TableHead>Plano</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading &&
+              Array.from({ length: 3 }).map((_, index) => (
+                <TableSkeletonRow key={index} cells={6} />
+              ))}
 
-          {isError && !isLoading && (
-            <TableErrorState
-              colSpan={6}
-              message="Não foi possível carregar as corretoras."
-              onRetry={() => refetch()}
-            />
-          )}
+            {isError && !isLoading && (
+              <TableErrorState
+                colSpan={6}
+                message="Não foi possível carregar as corretoras."
+                onRetry={() => refetch()}
+              />
+            )}
 
-          {!isLoading && !isError && filteredBrokerages?.length === 0 && (
-            <TableEmptyState
-              colSpan={6}
-              message={
-                search
-                  ? "Nenhuma corretora encontrada pra essa busca."
-                  : "Nenhuma corretora cadastrada ainda."
-              }
-            />
-          )}
+            {!isLoading && !isError && filteredBrokerages?.length === 0 && (
+              <TableEmptyState
+                colSpan={6}
+                message={
+                  search
+                    ? "Nenhuma corretora encontrada pra essa busca."
+                    : "Nenhuma corretora cadastrada ainda."
+                }
+              />
+            )}
 
-          {!isLoading &&
-            !isError &&
-            filteredBrokerages?.map((brokerage) => (
-              <TableRow key={brokerage.id}>
-                <TableCell className="text-foreground">{brokerage.name}</TableCell>
-                <TableCell className="font-mono-data text-muted-foreground">
-                  {brokerage.tax_id ? formatCnpj(brokerage.tax_id) : "—"}
-                </TableCell>
-                <TableCell className="font-mono-data text-muted-foreground">
-                  {new Date(brokerage.created_at).toLocaleDateString("pt-BR")}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {brokerage.plans?.name ?? "Sem plano"}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={
-                      brokerage.status === "active"
-                        ? "border-transparent bg-success-bg text-success-text"
-                        : "border-transparent bg-neutral-bg text-neutral-text"
-                    }
-                  >
-                    {brokerage.status === "active" ? "Ativo" : "Inativo"}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center justify-end gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button asChild variant="ghost" size="icon-sm">
-                          <Link to={`/brokerages/${brokerage.id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Ver</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button asChild variant="ghost" size="icon-sm">
-                          <Link to={`/brokerages/${brokerage.id}/edit`}>
-                            <Pencil className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Editar</TooltipContent>
-                    </Tooltip>
-                    {brokerage.status === "active" ? (
+            {!isLoading &&
+              !isError &&
+              filteredBrokerages?.map((brokerage) => (
+                <TableRow key={brokerage.id}>
+                  <TableCell className="text-foreground">{brokerage.name}</TableCell>
+                  <TableCell className="font-mono-data text-muted-foreground">
+                    {brokerage.tax_id ? formatCnpj(brokerage.tax_id) : "—"}
+                  </TableCell>
+                  <TableCell className="font-mono-data text-muted-foreground">
+                    {new Date(brokerage.created_at).toLocaleDateString("pt-BR")}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {brokerage.plans?.name ?? "Sem plano"}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={
+                        brokerage.status === "active"
+                          ? "border-transparent bg-success-bg text-success-text"
+                          : "border-transparent bg-neutral-bg text-neutral-text"
+                      }
+                    >
+                      {brokerage.status === "active" ? "Ativo" : "Inativo"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-end gap-1">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() =>
-                              setDeactivateBrokerage({ id: brokerage.id, name: brokerage.name })
-                            }
-                          >
-                            <UserX className="h-4 w-4" />
+                          <Button asChild variant="ghost" size="icon-sm">
+                            <Link to={`/brokerages/${brokerage.id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Desativar</TooltipContent>
+                        <TooltipContent>Ver</TooltipContent>
                       </Tooltip>
-                    ) : (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() => handleReactivate(brokerage.id)}
-                          >
-                            <UserCheck className="h-4 w-4" />
+                          <Button asChild variant="ghost" size="icon-sm">
+                            <Link to={`/brokerages/${brokerage.id}/edit`}>
+                              <Pencil className="h-4 w-4" />
+                            </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Reativar</TooltipContent>
+                        <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+                      {brokerage.status === "active" ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() =>
+                                setDeactivateBrokerage({ id: brokerage.id, name: brokerage.name })
+                              }
+                            >
+                              <UserX className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Desativar</TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              onClick={() => handleReactivate(brokerage.id)}
+                            >
+                              <UserCheck className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reativar</TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <Outlet />
 
