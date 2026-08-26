@@ -136,7 +136,7 @@ export function QuotationInsurerDrawer({
           </div>
         )}
 
-        <SheetFooter className="flex-row justify-end border-t border-border bg-card">
+        <SheetFooter className="flex-row justify-end">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Fechar
           </Button>

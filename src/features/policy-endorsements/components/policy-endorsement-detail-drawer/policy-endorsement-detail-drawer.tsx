@@ -229,7 +229,7 @@ export function PolicyEndorsementDetailDrawer() {
               )}
             </div>
 
-            <SheetFooter className="flex-row items-center justify-between border-t border-border bg-card">
+            <SheetFooter className="flex-row items-center justify-between">
               <div className="flex items-center gap-2">
                 {endorsement && (
                   <PolicyEndorsementStatusActions

@@ -142,7 +142,7 @@ export function VehicleDetailDrawer() {
           )}
         </div>
 
-        <SheetFooter className="flex-row justify-end border-t border-border bg-card">
+        <SheetFooter className="flex-row justify-end">
           <Button variant="outline" onClick={handleClose}>
             Fechar
           </Button>

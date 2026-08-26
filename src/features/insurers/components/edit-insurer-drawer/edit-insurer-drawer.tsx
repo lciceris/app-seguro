@@ -168,7 +168,7 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
         </div>
       </form>
 
-      <SheetFooter className="flex-row justify-end border-t border-border bg-card">
+      <SheetFooter className="flex-row justify-end">
         <Button variant="outline" onClick={onSuccess}>
           Cancelar
         </Button>

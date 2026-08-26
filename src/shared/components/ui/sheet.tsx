@@ -48,8 +48,11 @@ const SHEET_CONTENT_SIZES = {
 // centralizado (side="bottom") — eles "furam" essa largura pra ocupar a
 // folha inteira (ver Requirement 1 de .agents/specs/drawer-pattern), sem
 // precisar identificar/extrair esses filhos da árvore (o que seria frágil
-// pra árvores condicionais como policy-endorsement-detail-drawer).
-const SheetIsCenteredBodyContext = React.createContext(false);
+// pra árvores condicionais como policy-endorsement-detail-drawer). Carrega
+// o `size` pra recentralizar só o conteúdo (título/botões) na mesma coluna
+// do corpo, que agora ocupa a largura total pro scroll nascer na borda real
+// da tela (ver .agents/specs/drawer-layout-refinements/).
+const SheetCenteredBodyContext = React.createContext<keyof typeof SHEET_CONTENT_SIZES | null>(null);
 
 function SheetContent({
   className,
@@ -94,18 +97,14 @@ function SheetContent({
         {...props}
       >
         {side === "bottom" ? (
-          <SheetIsCenteredBodyContext.Provider value>
+          <SheetCenteredBodyContext.Provider value={size}>
             <div
-              className={cn(
-                "relative mx-auto flex h-full min-h-0 w-full flex-1 flex-col gap-4",
-                SHEET_CONTENT_SIZES[size],
-                className,
-              )}
+              className={cn("relative flex h-full min-h-0 w-full flex-1 flex-col gap-4", className)}
             >
               {children}
             </div>
             {closeButton}
-          </SheetIsCenteredBodyContext.Provider>
+          </SheetCenteredBodyContext.Provider>
         ) : (
           <>
             {children}
@@ -118,7 +117,7 @@ function SheetContent({
 }
 
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
-  const isCenteredBody = React.useContext(SheetIsCenteredBodyContext);
+  const size = React.useContext(SheetCenteredBodyContext);
   const header = (
     <div
       data-slot="sheet-header"
@@ -126,15 +125,20 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     />
   );
-  if (!isCenteredBody) return header;
-  // "Fura" o container centralizado do corpo — título e botão de fechar
-  // ocupam a largura inteira da folha, só o corpo abaixo fica centralizado.
-  return <div className="relative left-1/2 w-screen -translate-x-1/2">{header}</div>;
+  if (size === null) return header;
+  // "Fura" o container centralizado do corpo — a barra (fundo/borda) ocupa
+  // a folha inteira, mas o conteúdo (título) se recentraliza na mesma
+  // coluna do corpo, que agora também ocupa a largura total.
+  return (
+    <div className="relative left-1/2 w-screen -translate-x-1/2 border-b border-border bg-card">
+      <div className={cn("mx-auto w-full", SHEET_CONTENT_SIZES[size])}>{header}</div>
+    </div>
+  );
 }
 
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
-  const isCenteredBody = React.useContext(SheetIsCenteredBodyContext);
-  if (!isCenteredBody) {
+  const size = React.useContext(SheetCenteredBodyContext);
+  if (size === null) {
     return (
       <div
         data-slot="sheet-footer"
@@ -143,14 +147,19 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
       />
     );
   }
-  // "Fura" o container centralizado do corpo, igual ao SheetHeader —
-  // mt-auto vai pro wrapper (é ele o item flex de verdade dentro do
-  // container centralizado).
+  // "Fura" o container centralizado do corpo, igual ao SheetHeader — a
+  // barra ocupa a tela toda, o conteúdo (botões) se recentraliza na mesma
+  // coluna do corpo. mt-auto fica na barra, que é o item flex de verdade
+  // dentro do container centralizado.
   return (
-    <div className="relative left-1/2 mt-auto w-screen -translate-x-1/2">
+    <div className="relative left-1/2 mt-auto w-screen -translate-x-1/2 border-t border-border bg-card">
       <div
         data-slot="sheet-footer"
-        className={cn("flex flex-col gap-2 p-4", className)}
+        className={cn(
+          "mx-auto flex w-full flex-col gap-2 p-4",
+          SHEET_CONTENT_SIZES[size],
+          className,
+        )}
         {...props}
       />
     </div>
