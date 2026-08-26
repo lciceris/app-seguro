@@ -13,6 +13,8 @@
 - [x] 3. Card no drawer de detalhe
   - [x] 3.1 Card "Usuários ativos" em `brokerage-detail-drawer.tsx`, com loading próprio
     - _Requirements: 2.1, 2.2_
+  - [x] 3.2 Resto da opção 5 do artifact "Detalhe Corretora" que tinha ficado de fora na primeira leva: cabeçalho consolidado (razão social + badge de status no título, "Detalhe da corretora · Plano X" no subtítulo, "Sem plano" quando não há plano) e grid de 2 colunas em todos os cards de `DetailField` (Empresa, Endereço, Representante e contato, Plano, Identidade visual) — campo "Status" sai do card "Plano e status" (renomeado pra só "Plano") já que subiu pro cabeçalho
+    - _Requirements: —_
 
 - [x] 4. Backlog e verificação final
   - [x] 4.1 Entrada em `docs/product/roadmap.md` pro KPI completo (conta vs. limite do plano) + gestão de plano

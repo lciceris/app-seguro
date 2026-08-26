@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import { formatCep, formatCnpj, formatPhone } from "@/shared/lib/masks";
+import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -31,7 +32,32 @@ export function BrokerageDetailDrawer() {
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
       <SheetContent size="lg">
         <SheetHeader>
-          <SheetTitle>Detalhe da corretora</SheetTitle>
+          <SheetTitle className="flex items-center gap-2">
+            {isLoading ? (
+              <Skeleton className="h-6 w-40" />
+            ) : (
+              (brokerage?.name ?? "Detalhe da corretora")
+            )}
+            {!isLoading && brokerage && (
+              <Badge
+                variant="outline"
+                className={
+                  brokerage.status === "active"
+                    ? "border-transparent bg-success-bg text-success-text"
+                    : "border-transparent bg-neutral-bg text-neutral-text"
+                }
+              >
+                {brokerage.status === "active" ? "Ativo" : "Inativo"}
+              </Badge>
+            )}
+          </SheetTitle>
+          {!isLoading && brokerage && (
+            <p className="text-xs text-muted-foreground">
+              {brokerage.plans?.name
+                ? `Detalhe da corretora · Plano ${brokerage.plans.name}`
+                : "Detalhe da corretora · Sem plano"}
+            </p>
+          )}
         </SheetHeader>
 
         <div className="flex-1 min-h-0 overflow-y-auto bg-background">
@@ -77,81 +103,79 @@ export function BrokerageDetailDrawer() {
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Empresa
                   </p>
-                  <DetailField label="Razão social" value={brokerage.name} />
-                  <DetailField label="Nome fantasia" value={brokerage.trade_name} />
-                  <DetailField
-                    label="CNPJ"
-                    value={brokerage.tax_id ? formatCnpj(brokerage.tax_id) : null}
-                  />
-                  <DetailField label="CNAE" value={brokerage.business_code} />
-                  <DetailField label="Inscrição estadual" value={brokerage.state_registration} />
-                  <DetailField label="E-mail comercial" value={brokerage.email} />
-                  <DetailField
-                    label="Telefone"
-                    value={brokerage.phone ? formatPhone(brokerage.phone) : null}
-                  />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <div className="col-span-2">
+                      <DetailField label="Razão social" value={brokerage.name} />
+                    </div>
+                    <DetailField label="Nome fantasia" value={brokerage.trade_name} />
+                    <DetailField
+                      label="CNPJ"
+                      value={brokerage.tax_id ? formatCnpj(brokerage.tax_id) : null}
+                    />
+                    <DetailField label="CNAE" value={brokerage.business_code} />
+                    <DetailField label="Inscrição estadual" value={brokerage.state_registration} />
+                    <DetailField label="E-mail comercial" value={brokerage.email} />
+                    <DetailField
+                      label="Telefone"
+                      value={brokerage.phone ? formatPhone(brokerage.phone) : null}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Endereço
                   </p>
-                  <DetailField
-                    label="CEP"
-                    value={brokerage.zip_code ? formatCep(brokerage.zip_code) : null}
-                  />
-                  <DetailField label="Logradouro" value={brokerage.street} />
-                  <DetailField label="Número" value={brokerage.street_number} />
-                  <DetailField label="Complemento" value={brokerage.complement} />
-                  <DetailField label="Bairro" value={brokerage.neighborhood} />
-                  <DetailField label="Cidade" value={brokerage.city} />
-                  <DetailField label="UF" value={brokerage.state} />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <DetailField
+                      label="CEP"
+                      value={brokerage.zip_code ? formatCep(brokerage.zip_code) : null}
+                    />
+                    <div className="col-span-2">
+                      <DetailField label="Logradouro" value={brokerage.street} />
+                    </div>
+                    <DetailField label="Número" value={brokerage.street_number} />
+                    <DetailField label="Complemento" value={brokerage.complement} />
+                    <DetailField label="Bairro" value={brokerage.neighborhood} />
+                    <DetailField label="Cidade" value={brokerage.city} />
+                    <DetailField label="UF" value={brokerage.state} />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Representante e contato
                   </p>
-                  <DetailField
-                    label="Nome do representante"
-                    value={brokerage.representative_name}
-                  />
-                  <DetailField
-                    label="E-mail do representante"
-                    value={brokerage.representative_email}
-                  />
-                  <DetailField label="Nome financeiro" value={brokerage.financial_name} />
-                  <DetailField label="E-mail financeiro" value={brokerage.financial_email} />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <DetailField
+                      label="Nome do representante"
+                      value={brokerage.representative_name}
+                    />
+                    <DetailField
+                      label="E-mail do representante"
+                      value={brokerage.representative_email}
+                    />
+                    <DetailField label="Nome financeiro" value={brokerage.financial_name} />
+                    <DetailField label="E-mail financeiro" value={brokerage.financial_email} />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Plano e status
+                    Plano
                   </p>
-                  <DetailField label="Plano" value={brokerage.plans?.name ?? "Sem plano"} />
-                  <DetailField
-                    label="Data de expiração do plano"
-                    value={
-                      brokerage.plan_expires_at
-                        ? new Date(brokerage.plan_expires_at + "T00:00:00").toLocaleDateString(
-                            "pt-BR",
-                          )
-                        : null
-                    }
-                  />
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                      Status
-                    </span>
-                    <span
-                      className={
-                        brokerage.status === "active"
-                          ? "text-sm font-medium text-success-text"
-                          : "text-sm font-medium text-neutral-text"
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <DetailField label="Plano" value={brokerage.plans?.name ?? "Sem plano"} />
+                    <DetailField
+                      label="Data de expiração do plano"
+                      value={
+                        brokerage.plan_expires_at
+                          ? new Date(brokerage.plan_expires_at + "T00:00:00").toLocaleDateString(
+                              "pt-BR",
+                            )
+                          : null
                       }
-                    >
-                      {brokerage.status === "active" ? "Ativo" : "Inativo"}
-                    </span>
+                    />
                   </div>
                 </div>
 
@@ -159,8 +183,12 @@ export function BrokerageDetailDrawer() {
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Identidade visual
                   </p>
-                  <DetailField label="URL do logo" value={brokerage.logo_url} />
-                  <DetailField label="Cor primária" value={brokerage.primary_color} />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <div className="col-span-2">
+                      <DetailField label="URL do logo" value={brokerage.logo_url} />
+                    </div>
+                    <DetailField label="Cor primária" value={brokerage.primary_color} />
+                  </div>
                 </div>
               </>
             )}
