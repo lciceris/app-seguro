@@ -466,7 +466,7 @@ export function OwnBrokerageScreen() {
   const { data: brokerage, isLoading, isError, refetch } = useOwnBrokerage();
 
   return (
-    <div className="p-6">
+    <>
       <h1 className="mb-4 text-lg font-semibold text-foreground">Minha corretora</h1>
 
       {isLoading && (
@@ -489,6 +489,6 @@ export function OwnBrokerageScreen() {
       )}
 
       {!isLoading && !isError && brokerage && <OwnBrokerageForm brokerage={brokerage} />}
-    </div>
+    </>
   );
 }

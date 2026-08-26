@@ -35,7 +35,7 @@ export function InsurerCatalogScreen() {
   }
 
   return (
-    <div className="p-6">
+    <>
       <div className="mb-4">
         <h1 className="text-lg font-semibold text-foreground">Minhas seguradoras</h1>
         <p className="text-sm text-muted-foreground">
@@ -122,6 +122,6 @@ export function InsurerCatalogScreen() {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }

@@ -65,7 +65,7 @@ export function UsersListScreen() {
   const filteredCount = filteredUsers?.length ?? totalCount;
 
   return (
-    <div className="p-6">
+    <>
       <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <div>
@@ -240,6 +240,6 @@ export function UsersListScreen() {
         userName={deactivateUser?.name}
         onOpenChange={(open) => !open && setDeactivateUser(null)}
       />
-    </div>
+    </>
   );
 }

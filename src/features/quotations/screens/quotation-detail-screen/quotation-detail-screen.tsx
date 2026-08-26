@@ -92,7 +92,7 @@ export function QuotationDetailScreen() {
   const canEdit = usuario?.role !== "viewer";
 
   return (
-    <div className="p-6">
+    <>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button asChild variant="ghost" size="icon-sm">
@@ -174,6 +174,6 @@ export function QuotationDetailScreen() {
       )}
 
       <Outlet />
-    </div>
+    </>
   );
 }
