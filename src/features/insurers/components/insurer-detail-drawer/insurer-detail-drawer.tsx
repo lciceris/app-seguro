@@ -24,13 +24,13 @@ export function InsurerDetailDrawer() {
 
   return (
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent size="lg">
+      <SheetContent>
         <SheetHeader>
           <SheetTitle>Detalhe da seguradora</SheetTitle>
         </SheetHeader>
 
         <div className="flex-1 min-h-0 overflow-y-auto bg-background">
-          <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5">
+          <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
             {isLoading && (
               <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                 <Skeleton className="h-4 w-48" />

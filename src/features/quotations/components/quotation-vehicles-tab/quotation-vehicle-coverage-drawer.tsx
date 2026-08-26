@@ -56,7 +56,7 @@ export function QuotationVehicleCoverageDrawer({
 
   return (
     <Sheet open={quotationVehicle !== null} onOpenChange={onOpenChange}>
-      <SheetContent>
+      <SheetContent size="lg">
         <SheetHeader>
           <SheetTitle>Cobertura — {quotationVehicle?.vehicles?.plate ?? "Veículo"}</SheetTitle>
         </SheetHeader>
@@ -161,7 +161,7 @@ function CoverageForm({
         onSubmit={handleSubmit(onSubmit)}
         className="flex-1 min-h-0 overflow-y-auto bg-background"
       >
-        <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+        <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5">
           <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
             <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
               Cobertura geral

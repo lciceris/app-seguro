@@ -64,7 +64,7 @@ export function QuotationInsurerDrawer({
 
   return (
     <Sheet open={quotationInsurer !== null} onOpenChange={onOpenChange}>
-      <SheetContent>
+      <SheetContent size="lg">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             {quotationInsurer?.insurers?.name ?? "Seguradora"}
@@ -129,7 +129,7 @@ export function QuotationInsurerDrawer({
 
         {quotationInsurer && (
           <div className="min-h-0 overflow-y-auto bg-background">
-            <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5 pt-0">
+            <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5 pt-0">
               <QuotationInsurerEventsTimeline
                 quotationInsurerId={quotationInsurer.id}
                 canComment={canEdit}
@@ -188,7 +188,7 @@ function ResponseForm({
       <form
         id="quotation-insurer-response-form"
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5"
+        className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5"
       >
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
