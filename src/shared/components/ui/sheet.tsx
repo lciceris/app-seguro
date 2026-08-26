@@ -82,7 +82,7 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out",
+          "fixed z-50 flex flex-col overflow-hidden bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out",
           "data-[side=bottom]:inset-x-0 data-[side=bottom]:top-9 data-[side=bottom]:bottom-0 data-[side=bottom]:rounded-t-2xl data-[side=bottom]:border-t",
           "data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:sm:max-w-sm",
           "data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=right]:sm:max-w-sm",
@@ -98,9 +98,7 @@ function SheetContent({
       >
         {side === "bottom" ? (
           <SheetCenteredBodyContext.Provider value={size}>
-            <div
-              className={cn("relative flex h-full min-h-0 w-full flex-1 flex-col gap-4", className)}
-            >
+            <div className={cn("relative flex h-full min-h-0 w-full flex-1 flex-col", className)}>
               {children}
             </div>
             {closeButton}

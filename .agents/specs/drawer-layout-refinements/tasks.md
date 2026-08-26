@@ -26,3 +26,9 @@
     - _Requirements: 5.1_
   - [x] 4.2 Screenshot real (Playwright efêmero) de 1 cadastro (md), 1 edição (md) e 1 detalhe (lg) confirmando corpo cinza, título e botões alinhados à coluna; checagem via DOM confirmando scroll container em 100% da viewport (1280px) com conteúdo centralizado em 720px
     - _Requirements: 5.2_
+
+- [x] 5. Correção de 2 bugs visuais reportados após o uso ao vivo
+  - [x] 5.1 `gap-4` no wrapper centralizado do `SheetContent` deixava aparecer uma faixa do fundo branco (`bg-popover`) entre o header/footer (agora com `bg-card` próprio) e o corpo (`bg-background` cinza) — removido, header/footer/corpo já se separam pela borda, não precisam de gap
+    - _Requirements: —_
+  - [x] 5.2 `SheetContent` não tinha `overflow-hidden` — o header, agora com `bg-card` sólido e cantos quadrados, vazava visualmente por cima do canto arredondado (`rounded-t-2xl`) do drawer, que antes não tinha conteúdo opaco ali pra revelar o problema — adicionado `overflow-hidden` na caixa externa
+    - _Requirements: —_
