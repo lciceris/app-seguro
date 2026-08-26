@@ -23,3 +23,5 @@
     - _Requirements: —_
   - [x] 4.2 Altura de todos os inputs `h-8` → `h-9`: `Input` (componente compartilhado, usado em toda busca/formulário), `Select` (`data-[size=default]`, fica lado a lado com `Input` nos filtros de Cotações/Apólices) e `ColorPicker` (swatch de cor, fica lado a lado com `Input` de hex). Escopo deliberadamente restrito a controles de formulário — não inclui `Button` nem `Skeleton` de loading, que são preocupações diferentes.
     - _Requirements: —_
+  - [x] 4.3 `Button` `size="default"` (tamanho padrão, usado no botão primário "Criar"/"Salvar" etc.) `h-8` → `h-9`, pra bater com os inputs ao lado. Nota: isso deixa `size="default"` e `size="lg"` com classes idênticas (ambas já eram `gap-1.5 px-2.5 ...`, só a altura diferia) — nenhum call-site usa `size="lg"` hoje, então não há regressão visual, mas fica registrado como duplicação a resolver se `lg` ganhar uso real no futuro.
+    - _Requirements: —_
