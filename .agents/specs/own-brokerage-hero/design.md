@@ -66,6 +66,15 @@ Notas de implementação:
 - `handleLogoFile`/`handleLogoRemove`/`fileInputRef`/`uploadBrokerageLogo` continuam exatamente iguais — só a marcação ao redor muda.
 - Cards "Empresa"/"Endereço"/"Representante e contato" e o botão "Salvar" não mudam uma linha.
 
+## Addendum — usar a largura da tela
+
+Depois de aprovado, o usuário notou que a página inteira ficava presa num `max-w-2xl` (672px), sobrando muito espaço vazio à direita numa tela larga. Ajuste:
+
+- `max-w-2xl` → `max-w-5xl` no `<form>` e nos estados de loading/erro (evita "pulo" de largura ao carregar).
+- Cards "Empresa" e "Endereço" entram num `<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">` — lado a lado a partir de `lg` (1024px), empilhados abaixo disso.
+- "Representante e contato" continua full-width, fora do grid (é o único bloco sem par).
+- Hero não muda — ao ficar mais largo, o espaço extra vai naturalmente entre o texto (nome/CNPJ, `flex-1`) e o `ColorPicker` (`shrink-0`), sem precisar de CSS novo.
+
 ## Testing Strategy
 
 - `tsc`/`eslint`/`vitest run` completos — não deve haver teste de componente pra essa tela hoje (grep confirma), então sem teste pra ajustar.

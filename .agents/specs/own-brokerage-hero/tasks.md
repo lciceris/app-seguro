@@ -11,3 +11,9 @@
     - _Requirements: —_
   - [x] 2.2 Verificação visual via Playwright — confirmado: card "Identidade visual" não existe mais; avatar mostra inicial sem logo; nome/CNPJ atualizam ao vivo (`Corretora Verify Hero` → `Horizonte Corretora de Seguros Ltda.` / CNPJ formatado) enquanto digita no card Empresa; upload mostra preview + botão de remover sobreposto; salvar com CNPJ/e-mail/cor nova funciona (toast de sucesso)
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 3.1, 3.2_
+
+- [x] 3. Addendum — largura total (pedido depois da aprovação inicial)
+  - [x] 3.1 `max-w-2xl` → `max-w-5xl` (form + loading + erro); Empresa/Endereço em `grid lg:grid-cols-2`; Representante e contato continua full-width
+    - _Requirements: —_
+  - [x] 3.2 `tsc`/`eslint --fix` (reindentação)/`vitest run` completos; verificação visual via Playwright em 1440px e 1024px — 2 colunas lado a lado nos dois tamanhos, sem quebra
+    - _Requirements: —_

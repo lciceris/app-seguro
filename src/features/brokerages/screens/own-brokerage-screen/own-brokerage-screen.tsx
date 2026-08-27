@@ -194,7 +194,7 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
   const hasLogo = Boolean(logoPreviewUrl || getValues("logo_url"));
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-2xl flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-5xl flex-col gap-4">
       <div className="flex items-center gap-5 rounded-xl border border-border bg-card p-5">
         <div className="relative shrink-0">
           <label className="group block cursor-pointer">
@@ -254,147 +254,149 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-          Empresa
-        </p>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            Empresa
+          </p>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="tax_id">CNPJ *</Label>
-            <div className="flex gap-2">
-              <Input
-                id="tax_id"
-                placeholder="00.000.000/0000-00"
-                maxLength={18}
-                {...register("tax_id")}
-                onChange={(e) => setValue("tax_id", formatCnpj(e.target.value))}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleFetchCnpj}
-                disabled={isFetchingCnpj}
-              >
-                {isFetchingCnpj ? "Buscando..." : "Buscar"}
-              </Button>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="tax_id">CNPJ *</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="tax_id"
+                  placeholder="00.000.000/0000-00"
+                  maxLength={18}
+                  {...register("tax_id")}
+                  onChange={(e) => setValue("tax_id", formatCnpj(e.target.value))}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleFetchCnpj}
+                  disabled={isFetchingCnpj}
+                >
+                  {isFetchingCnpj ? "Buscando..." : "Buscar"}
+                </Button>
+              </div>
+              {errors.tax_id && <p className="text-sm text-destructive">{errors.tax_id.message}</p>}
             </div>
-            {errors.tax_id && <p className="text-sm text-destructive">{errors.tax_id.message}</p>}
-          </div>
 
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="name">Razão social *</Label>
-            <Input id="name" placeholder="Razão social da empresa" {...register("name")} />
-            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
-          </div>
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="name">Razão social *</Label>
+              <Input id="name" placeholder="Razão social da empresa" {...register("name")} />
+              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="trade_name">Nome fantasia</Label>
-            <Input id="trade_name" placeholder="Nome fantasia" {...register("trade_name")} />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="trade_name">Nome fantasia</Label>
+              <Input id="trade_name" placeholder="Nome fantasia" {...register("trade_name")} />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="business_code">CNAE</Label>
-            <Input
-              id="business_code"
-              placeholder="Ex: 6499-3/99 - Descrição"
-              {...register("business_code")}
-            />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="business_code">CNAE</Label>
+              <Input
+                id="business_code"
+                placeholder="Ex: 6499-3/99 - Descrição"
+                {...register("business_code")}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="state_registration">Inscrição estadual</Label>
-            <Input
-              id="state_registration"
-              placeholder="000.000.000.000"
-              {...register("state_registration")}
-            />
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="state_registration">Inscrição estadual</Label>
+              <Input
+                id="state_registration"
+                placeholder="000.000.000.000"
+                {...register("state_registration")}
+              />
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="email">E-mail comercial</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="contato@empresa.com.br"
-              {...register("email")}
-            />
-            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-          </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">E-mail comercial</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="contato@empresa.com.br"
+                {...register("email")}
+              />
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+            </div>
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="phone">Telefone</Label>
-            <Input
-              id="phone"
-              placeholder="(00) 00000-0000"
-              maxLength={16}
-              {...register("phone")}
-              onChange={(e) => setValue("phone", formatPhone(e.target.value))}
-            />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="phone">Telefone</Label>
+              <Input
+                id="phone"
+                placeholder="(00) 00000-0000"
+                maxLength={16}
+                {...register("phone")}
+                onChange={(e) => setValue("phone", formatPhone(e.target.value))}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-          Endereço
-        </p>
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
+          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            Endereço
+          </p>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="zip_code">CEP</Label>
-            <div className="flex max-w-[280px] gap-2">
-              <Input
-                id="zip_code"
-                placeholder="00000-000"
-                maxLength={9}
-                {...register("zip_code")}
-                onChange={(e) => setValue("zip_code", formatCep(e.target.value))}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleFetchCep}
-                disabled={isFetchingCep}
-              >
-                {isFetchingCep ? "Buscando..." : "Buscar"}
-              </Button>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="zip_code">CEP</Label>
+              <div className="flex max-w-[280px] gap-2">
+                <Input
+                  id="zip_code"
+                  placeholder="00000-000"
+                  maxLength={9}
+                  {...register("zip_code")}
+                  onChange={(e) => setValue("zip_code", formatCep(e.target.value))}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleFetchCep}
+                  disabled={isFetchingCep}
+                >
+                  {isFetchingCep ? "Buscando..." : "Buscar"}
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="street">Logradouro</Label>
-            <Input id="street" placeholder="Rua, Avenida, etc." {...register("street")} />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="street_number">Número</Label>
-            <Input id="street_number" placeholder="123" {...register("street_number")} />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="complement">Complemento</Label>
-            <Input id="complement" placeholder="Sala, Andar, etc." {...register("complement")} />
-          </div>
-
-          <div className="col-span-2 grid grid-cols-[1fr_1fr_80px] gap-3">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="neighborhood">Bairro</Label>
-              <Input id="neighborhood" placeholder="Bairro" {...register("neighborhood")} />
+            <div className="col-span-2 flex flex-col gap-1.5">
+              <Label htmlFor="street">Logradouro</Label>
+              <Input id="street" placeholder="Rua, Avenida, etc." {...register("street")} />
             </div>
+
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="city">Cidade</Label>
-              <Input id="city" placeholder="Cidade" {...register("city")} />
+              <Label htmlFor="street_number">Número</Label>
+              <Input id="street_number" placeholder="123" {...register("street_number")} />
             </div>
+
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="state">UF</Label>
-              <Input
-                id="state"
-                placeholder="SP"
-                maxLength={2}
-                {...register("state")}
-                onChange={(e) => setValue("state", e.target.value.toUpperCase())}
-              />
+              <Label htmlFor="complement">Complemento</Label>
+              <Input id="complement" placeholder="Sala, Andar, etc." {...register("complement")} />
+            </div>
+
+            <div className="col-span-2 grid grid-cols-[1fr_1fr_80px] gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="neighborhood">Bairro</Label>
+                <Input id="neighborhood" placeholder="Bairro" {...register("neighborhood")} />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="city">Cidade</Label>
+                <Input id="city" placeholder="Cidade" {...register("city")} />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="state">UF</Label>
+                <Input
+                  id="state"
+                  placeholder="SP"
+                  maxLength={2}
+                  {...register("state")}
+                  onChange={(e) => setValue("state", e.target.value.toUpperCase())}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -475,7 +477,7 @@ export function OwnBrokerageScreen() {
       <h1 className="mb-4 text-lg font-semibold text-foreground">Minha corretora</h1>
 
       {isLoading && (
-        <div className="flex max-w-2xl flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex max-w-5xl flex-col gap-4 rounded-xl border border-border bg-card p-5">
           <Skeleton className="h-8 w-full" />
           <Skeleton className="h-8 w-full" />
           <Skeleton className="h-8 w-full" />
@@ -483,7 +485,7 @@ export function OwnBrokerageScreen() {
       )}
 
       {isError && !isLoading && (
-        <div className="max-w-2xl rounded-xl border border-border bg-card p-5 text-center">
+        <div className="max-w-5xl rounded-xl border border-border bg-card p-5 text-center">
           <p className="mb-2 text-sm text-muted-foreground">
             Não foi possível carregar os dados da corretora.
           </p>
