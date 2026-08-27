@@ -43,7 +43,6 @@ describe("AppSidebar", () => {
     expect(screen.getByRole("link", { name: "Cotações" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Veículos" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Usuários" })).toBeInTheDocument();
-    expect(screen.queryByText("Plataforma")).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Corretoras" })).not.toBeInTheDocument();
   });
 
@@ -53,14 +52,13 @@ describe("AppSidebar", () => {
 
     expect(screen.getByRole("link", { name: "Clientes" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Veículos" })).not.toBeInTheDocument();
-    expect(screen.queryByText("Minha corretora")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Usuários" })).not.toBeInTheDocument();
   });
 
   it("só platform_admin vê o grupo Plataforma", () => {
     usuarioMock = { role: "platform_admin", brokerage_name: "Corretora Teste", logo_url: null };
     renderSidebar();
 
-    expect(screen.getByText("Plataforma")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Corretoras" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Seguradoras (catálogo)" })).toBeInTheDocument();
   });

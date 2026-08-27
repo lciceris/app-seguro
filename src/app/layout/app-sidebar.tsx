@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 
 import { useAuthStore } from "@/features/auth";
+import { cn } from "@/shared/lib/utils";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -26,12 +26,9 @@ export function AppSidebar() {
 
   if (!usuario) return null;
 
-  const groups = NAV_GROUPS.map((group) => ({
-    ...group,
-    items: group.items.filter(
-      (item) => !item.allowedRoles || item.allowedRoles.includes(usuario.role),
-    ),
-  })).filter((group) => group.items.length > 0);
+  const items = NAV_GROUPS.flatMap((group) => group.items).filter(
+    (item) => !item.allowedRoles || item.allowedRoles.includes(usuario.role),
+  );
 
   return (
     <Sidebar>
@@ -55,36 +52,32 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {groups.map((group, index) => (
-          <SidebarGroup key={group.label ?? `group-${index}`}>
-            {group.label && (
-              <SidebarGroupLabel className="mt-4 mb-0.5 h-auto px-3 py-1.5 text-[10.5px] font-bold tracking-wider text-sidebar-foreground/60 uppercase">
-                {group.label}
-              </SidebarGroupLabel>
-            )}
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items.map((item) => {
-                  const active = isItemActive(location.pathname, item.to);
-                  return (
-                    <SidebarMenuItem key={item.to}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={active}
-                        className={active ? "!bg-primary/10 !text-primary" : undefined}
-                      >
-                        <Link to={item.to}>
-                          <item.icon />
-                          <span>{item.label}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => {
+                const active = isItemActive(location.pathname, item.to);
+                return (
+                  <SidebarMenuItem key={item.to}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
+                      className={cn(
+                        "text-[14.5px] font-medium",
+                        active && "!bg-primary/10 !text-primary !font-bold",
+                      )}
+                    >
+                      <Link to={item.to}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
