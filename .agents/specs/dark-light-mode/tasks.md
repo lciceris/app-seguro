@@ -17,10 +17,10 @@
     - _Requirements: 3.1_
     - _Nota: tasks 2 e 3 viraram um commit só — é o mesmo bloco `.dark { ... }` contíguo em `globals.css`, sem benefício real em separar por hunk._
 
-- [ ] 4. Cor hardcoded que quebraria no escuro
-  - [ ] 4.1 Novo token `--table-header` (`table.tsx` para de usar `bg-[#E9EDF2]`)
+- [x] 4. Cor hardcoded que quebraria no escuro
+  - [x] 4.1 Novo token `--table-header` (`table.tsx` para de usar `bg-[#E9EDF2]`)
     - _Requirements: 4.1_
-  - [ ] 4.2 5 pontos com `amber-*` cru (estrela de vendedor principal ×2, banner de endosso pendente, badge de status de seguradora ×2) migram pro token `--warning`/`--warning-bg`/`--warning-text`
+  - [x] 4.2 5 pontos com `amber-*` cru (estrela de vendedor principal ×2, banner de endosso pendente, badge de status de seguradora ×2) migram pro token `--warning`/`--warning-bg`/`--warning-text`
     - _Requirements: 4.1_
 
 - [ ] 5. Verificação

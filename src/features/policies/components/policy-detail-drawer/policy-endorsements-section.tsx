@@ -62,13 +62,13 @@ export function PolicyEndorsementsSection({ policy }: PolicyEndorsementsSectionP
       </div>
 
       {isSuperseded && currentVersion && currentVersion.id !== policy.id && (
-        <div className="flex items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
-          <span className="text-sm text-amber-800">
+        <div className="flex items-center justify-between gap-2 rounded-lg border border-warning/20 bg-warning-bg px-3 py-2">
+          <span className="text-sm text-warning-text">
             Essa não é a versão mais recente da apólice — foi substituída por um endosso.
           </span>
           <Link
             to={`/policies/${currentVersion.id}`}
-            className="shrink-0 text-sm font-medium text-amber-800 underline underline-offset-2"
+            className="shrink-0 text-sm font-medium text-warning-text underline underline-offset-2"
           >
             Ver versão atual
           </Link>

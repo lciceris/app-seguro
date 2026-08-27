@@ -119,15 +119,13 @@ function ClientSellersSection({ clientId, canManage }: { clientId: string; canMa
                   <Star
                     className={
                       clientSeller.is_primary
-                        ? "h-4 w-4 fill-amber-400 text-amber-400"
+                        ? "h-4 w-4 fill-warning text-warning"
                         : "h-4 w-4 text-muted-foreground"
                     }
                   />
                 </Button>
               ) : (
-                clientSeller.is_primary && (
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                )
+                clientSeller.is_primary && <Star className="h-4 w-4 fill-warning text-warning" />
               )}
               <span className="flex-1 text-sm text-foreground">
                 {clientSeller.users?.full_name}

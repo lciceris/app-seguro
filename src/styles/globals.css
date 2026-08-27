@@ -17,6 +17,7 @@
     --color-warning: var(--warning);
     --color-warning-bg: var(--warning-bg);
     --color-warning-text: var(--warning-text);
+    --color-table-header: var(--table-header);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -108,6 +109,10 @@
     --sidebar-accent-foreground: #0F172A;
     --sidebar-border: #E2E8F0;
     --sidebar-ring: #4F46E5;
+
+    /* Header de tabela (spec design-system) — mais escuro que --muted de
+       propósito, pra dar mais contraste ao cabeçalho */
+    --table-header: #E9EDF2;
 
     /* ── Tokens semânticos (spec de negócio) ── */
     --primary-hover: #4338CA;
@@ -213,6 +218,8 @@
     --status-effected-text: #86EFAC;
     --status-notclosed-bg: #7F1D1D;
     --status-notclosed-text: #FCA5A5;
+
+    --table-header: #1E293B;
 }
 
 @layer base {

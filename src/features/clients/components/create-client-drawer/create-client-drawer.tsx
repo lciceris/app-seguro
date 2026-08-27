@@ -400,7 +400,7 @@ export function CreateClientDrawer() {
                           <Star
                             className={
                               selected.isPrimary
-                                ? "h-4 w-4 fill-amber-400 text-amber-400"
+                                ? "h-4 w-4 fill-warning text-warning"
                                 : "h-4 w-4 text-muted-foreground"
                             }
                           />

@@ -69,7 +69,10 @@ export function QuotationInsurerDrawer({
           <SheetTitle className="flex items-center gap-2">
             {quotationInsurer?.insurers?.name ?? "Seguradora"}
             {quotationInsurer?.is_winner && (
-              <Badge variant="outline" className="border-transparent bg-amber-100 text-amber-700">
+              <Badge
+                variant="outline"
+                className="border-transparent bg-warning-bg text-warning-text"
+              >
                 Vencedora
               </Badge>
             )}

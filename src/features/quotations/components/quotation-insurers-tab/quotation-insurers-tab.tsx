@@ -212,7 +212,7 @@ export function QuotationInsurersTab({ quotation }: QuotationInsurersTabProps) {
                     {quotationInsurer.is_winner ? (
                       <Badge
                         variant="outline"
-                        className="border-transparent bg-amber-100 text-amber-700"
+                        className="border-transparent bg-warning-bg text-warning-text"
                       >
                         Vencedora
                       </Badge>
