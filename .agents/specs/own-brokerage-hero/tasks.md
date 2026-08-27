@@ -17,3 +17,5 @@
     - _Requirements: —_
   - [x] 3.2 `tsc`/`eslint --fix` (reindentação)/`vitest run` completos; verificação visual via Playwright em 1440px e 1024px — 2 colunas lado a lado nos dois tamanhos, sem quebra
     - _Requirements: —_
+  - [x] 3.3 (usuário reportou: ainda sobrava espaço numa tela 1920) `max-w-5xl` → sem limite algum — medido via Playwright: form passou a ocupar 1616px dos 1664px da área de conteúdo em 1920px (só a diferença do padding)
+    - _Requirements: —_

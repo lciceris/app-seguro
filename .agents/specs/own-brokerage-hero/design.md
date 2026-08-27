@@ -70,7 +70,7 @@ Notas de implementação:
 
 Depois de aprovado, o usuário notou que a página inteira ficava presa num `max-w-2xl` (672px), sobrando muito espaço vazio à direita numa tela larga. Ajuste:
 
-- `max-w-2xl` → `max-w-5xl` no `<form>` e nos estados de loading/erro (evita "pulo" de largura ao carregar).
+- `max-w-2xl` → sem limite (`flex flex-col gap-4`, ocupando 100% da área de conteúdo) no `<form>` e nos estados de loading/erro — o usuário reportou que mesmo `max-w-5xl` (1024px) ainda sobrava bastante espaço vazio numa tela 1920 (medido: área de conteúdo ~1664px). Sem limite artificial, quem mantém os campos num tamanho confortável é o grid de 2 colunas (cards e campos internos), não um teto no container.
 - Cards "Empresa" e "Endereço" entram num `<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">` — lado a lado a partir de `lg` (1024px), empilhados abaixo disso.
 - "Representante e contato" continua full-width, fora do grid (é o único bloco sem par).
 - Hero não muda — ao ficar mais largo, o espaço extra vai naturalmente entre o texto (nome/CNPJ, `flex-1`) e o `ColorPicker` (`shrink-0`), sem precisar de CSS novo.

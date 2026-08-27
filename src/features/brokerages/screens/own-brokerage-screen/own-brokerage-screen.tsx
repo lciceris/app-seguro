@@ -194,7 +194,7 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
   const hasLogo = Boolean(logoPreviewUrl || getValues("logo_url"));
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-5xl flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="flex items-center gap-5 rounded-xl border border-border bg-card p-5">
         <div className="relative shrink-0">
           <label className="group block cursor-pointer">
@@ -477,7 +477,7 @@ export function OwnBrokerageScreen() {
       <h1 className="mb-4 text-lg font-semibold text-foreground">Minha corretora</h1>
 
       {isLoading && (
-        <div className="flex max-w-5xl flex-col gap-4 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
           <Skeleton className="h-8 w-full" />
           <Skeleton className="h-8 w-full" />
           <Skeleton className="h-8 w-full" />
@@ -485,7 +485,7 @@ export function OwnBrokerageScreen() {
       )}
 
       {isError && !isLoading && (
-        <div className="max-w-5xl rounded-xl border border-border bg-card p-5 text-center">
+        <div className="rounded-xl border border-border bg-card p-5 text-center">
           <p className="mb-2 text-sm text-muted-foreground">
             Não foi possível carregar os dados da corretora.
           </p>
