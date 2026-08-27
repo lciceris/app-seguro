@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -32,8 +32,9 @@ describe("UserMenu", () => {
 
     await user.click(screen.getByRole("button", { name: /Sofia Supervisor/ }));
 
-    expect(screen.getByText("sofia@appseguro.dev")).toBeInTheDocument();
-    expect(screen.getByText("Supervisor")).toBeInTheDocument();
+    const menu = within(screen.getByRole("menu"));
+    expect(menu.getByText("sofia@appseguro.dev")).toBeInTheDocument();
+    expect(menu.getByText("Supervisor")).toBeInTheDocument();
   });
 
   it("'Meu perfil' está desabilitado", async () => {
