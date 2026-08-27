@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/plus-jakarta-sans";
-@import "@fontsource-variable/inter";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 
@@ -9,7 +8,6 @@
 
 @theme inline {
     --font-sans: 'Plus Jakarta Sans Variable', system-ui, -apple-system, sans-serif;
-    --font-data: 'Inter Variable', system-ui, sans-serif;
     --font-mono-data: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
     --color-success: var(--success);
     --color-success-bg: var(--success-bg);
@@ -163,11 +161,6 @@
 
   body {
     @apply bg-background text-foreground;
-  }
-
-  /* Tabelas e dados numéricos usam Inter */
-  table {
-    font-family: var(--font-data);
   }
 
   button {

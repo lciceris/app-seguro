@@ -25,9 +25,10 @@ Tudo em `src/styles/globals.css`, exposto via `@theme inline` (Tailwind v4) — 
 
 | Papel | Fonte | Onde |
 |---|---|---|
-| Títulos de página/drawer | Plus Jakarta Sans (`font-sans`, padrão) | `<h1>`, `<SheetTitle>` |
-| Corpo, formulário, tabela | Inter (`font-data`) | aplicado automaticamente em `<table>` |
+| Todo o projeto (títulos, corpo, formulário, tabela, menu) | Plus Jakarta Sans (`font-sans`, padrão do `html`) | tudo, por herança — não precisa de classe |
 | Dado técnico em tabela (CNPJ, telefone, CEP, número de cotação/apólice, data, ID) | IBM Plex Mono (`font-mono-data`) | `<TableCell className="font-mono-data">` |
+
+> Até a spec `sidebar-flat-nav`/`project-font-unify`, corpo/tabela usavam Inter (`font-data`). O projeto unificou em uma fonte só (Plus Jakarta Sans) — Inter foi removida (`@fontsource-variable/inter` desinstalada). `font-mono-data` (IBM Plex Mono) continua à parte por ser uma escolha deliberada de alinhamento tabular para dado técnico, não uma fonte de UI geral.
 
 ## Drawer de cadastro/edição — padrão obrigatório
 
