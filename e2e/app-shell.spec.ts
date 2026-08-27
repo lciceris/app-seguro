@@ -67,8 +67,8 @@ test.describe("app-shell", () => {
     await expect(page.getByRole("link", { name: "Veículos" })).toBeVisible();
 
     await expect(page.getByRole("link", { name: "Usuários" })).not.toBeVisible();
-    await expect(page.getByText("Minha corretora")).not.toBeVisible();
-    await expect(page.getByText("Plataforma")).not.toBeVisible();
+    await expect(page.getByRole("link", { name: "Dados da corretora" })).not.toBeVisible();
+    await expect(page.getByRole("link", { name: "Corretoras" })).not.toBeVisible();
 
     await page.getByRole("link", { name: "Apólices" }).click();
     await page.waitForURL(/\/policies$/);

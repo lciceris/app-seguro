@@ -9,6 +9,8 @@
 - [x] 2. Ajustar `app-sidebar.test.tsx`
   - [x] 2.1 Troca as 3 asserções em cima do texto do rótulo de grupo por asserções em item real (rótulo não existe mais)
     - _Requirements: 1.1_
+  - [x] 2.2 (achado depois, ao revisar specs/testes da rodada) `e2e/app-shell.spec.ts` também tinha 2 asserções em cima do texto do rótulo (`getByText("Minha corretora")`/`getByText("Plataforma")` `.not.toBeVisible()`) — passavam de forma vazia (o texto nunca mais existe, pra nenhum papel) sem testar o filtro por papel de verdade. Trocadas por `getByRole("link", { name: "Dados da corretora" })`/`"Corretoras"` `.not.toBeVisible()`, que preservam a intenção original. Rodado `npx playwright test` completo pra conferir: 5 specs falharam na primeira passada só por timeout de login (flakiness do servidor/Supabase compartilhado sob carga de 25 specs sequenciais), todos passaram isolados depois — sem regressão real.
+    - _Requirements: 1.1_
 
 - [x] 3. Verificação
   - [x] 3.1 `tsc --noEmit`, `eslint`, `vitest run` completos — todos limpos
