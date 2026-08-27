@@ -148,6 +148,73 @@
     --status-notclosed-text: #991B1B;
 }
 
+.dark {
+    /* Superfícies — primary/ring ficam iguais (cor dinâmica da corretora,
+       spec dynamic-primary-color) */
+    --background: #020617;
+    --foreground: #F1F5F9;
+
+    --card: #0F172A;
+    --card-foreground: #F1F5F9;
+    --popover: #0F172A;
+    --popover-foreground: #F1F5F9;
+
+    --secondary: #1E293B;
+    --secondary-foreground: #F1F5F9;
+
+    --muted: #1E293B;
+    --muted-foreground: #94A3B8;
+
+    --accent: #1E293B;
+    --accent-foreground: #F1F5F9;
+
+    --destructive: #F87171;
+    --destructive-foreground: #FFFFFF;
+
+    --border: #1E293B;
+    --input: #1E293B;
+
+    /* Sidebar — mesmo par "branco puro / slate-950" já desenhado na spec
+       sidebar-light-redesign, nunca implementado até agora */
+    --sidebar: #020617;
+    --sidebar-foreground: #94A3B8;
+    --sidebar-primary: #1E293B;
+    --sidebar-primary-foreground: #F1F5F9;
+    --sidebar-accent: #1E293B;
+    --sidebar-accent-foreground: #F1F5F9;
+    --sidebar-border: #1E293B;
+
+    --primary-hover: #6366F1;
+    --primary-light: #1E1B4B;
+    --primary-text: #A5B4FC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #64748B;
+
+    /* Badges: inverte pro padrão fundo saturado escuro / texto pastel claro */
+    --success-bg: #064E3B;
+    --success-text: #6EE7B7;
+    --neutral-bg: #334155;
+    --neutral-text: #CBD5E1;
+
+    --warning-bg: #451A03;
+    --warning-text: #FCD34D;
+
+    --status-waiting-bg: #334155;
+    --status-waiting-text: #CBD5E1;
+    --status-progress-bg: #1E3A8A;
+    --status-progress-text: #93C5FD;
+    --status-negotiation-bg: #4C1D95;
+    --status-negotiation-text: #C4B5FD;
+    --status-presented-bg: #1E3A8A;
+    --status-presented-text: #93C5FD;
+    --status-effect-bg: #451A03;
+    --status-effect-text: #FCD34D;
+    --status-effected-bg: #14532D;
+    --status-effected-text: #86EFAC;
+    --status-notclosed-bg: #7F1D1D;
+    --status-notclosed-text: #FCA5A5;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
