@@ -77,6 +77,7 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
     control,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<EditOwnBrokerageFormValues>({
     resolver: zodResolver(editOwnBrokerageSchema),
@@ -190,8 +191,69 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
     });
   }
 
+  const hasLogo = Boolean(logoPreviewUrl || getValues("logo_url"));
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-2xl flex-col gap-4">
+      <div className="flex items-center gap-5 rounded-xl border border-border bg-card p-5">
+        <div className="relative shrink-0">
+          <label className="group block cursor-pointer">
+            {hasLogo ? (
+              <img
+                src={logoPreviewUrl || getValues("logo_url")}
+                alt="Logo"
+                className="size-20 rounded-2xl border-2 border-primary bg-card object-contain p-1.5"
+              />
+            ) : (
+              <div className="flex size-20 items-center justify-center rounded-2xl border-2 border-primary bg-primary/10 text-2xl font-bold text-primary">
+                {(watch("trade_name") || watch("name") || "C").charAt(0).toUpperCase()}
+              </div>
+            )}
+            <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/0 text-transparent transition-colors group-hover:bg-black/40 group-hover:text-white">
+              <Upload className="size-5" />
+            </span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/svg+xml"
+              className="hidden"
+              onChange={handleLogoFile}
+            />
+          </label>
+          {hasLogo && (
+            <button
+              type="button"
+              onClick={handleLogoRemove}
+              className="absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-destructive"
+            >
+              <X className="size-3" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <h2 className="truncate text-lg font-bold text-foreground">
+            {watch("name") || "Nova corretora"}
+          </h2>
+          <p className="truncate text-sm text-muted-foreground">
+            {watch("tax_id") ? `CNPJ ${watch("tax_id")}` : "CNPJ não informado"}
+          </p>
+        </div>
+
+        <div className="flex shrink-0 flex-col gap-1.5">
+          <Label htmlFor="primary_color" className="text-xs">
+            Cor primária
+          </Label>
+          <Controller
+            name="primary_color"
+            control={control}
+            render={({ field }) => (
+              <ColorPicker id="primary_color" value={field.value ?? ""} onChange={field.onChange} />
+            )}
+          />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Empresa
@@ -390,66 +452,9 @@ function OwnBrokerageForm({ brokerage }: { brokerage: Brokerage }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-          Identidade visual
-        </p>
-
-        <div className="flex flex-col gap-1.5">
-          <Label>Logo</Label>
-          {logoPreviewUrl || getValues("logo_url") ? (
-            <div className="flex items-center gap-3 rounded-lg border border-border bg-muted p-2.5">
-              <img
-                src={logoPreviewUrl || getValues("logo_url")}
-                alt="Logo"
-                className="size-12 shrink-0 rounded-full border-2 border-border bg-card object-contain p-1"
-              />
-              <span className="flex-1 truncate text-sm text-muted-foreground">
-                {logoFile?.name ?? "Logo atual"}
-              </span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="shrink-0 text-destructive hover:text-destructive"
-                onClick={handleLogoRemove}
-              >
-                <X className="size-3.5" />
-                Remover
-              </Button>
-            </div>
-          ) : (
-            <label className="block cursor-pointer">
-              <div className="rounded-lg border-2 border-dashed border-border bg-muted p-5 text-center">
-                <Upload className="mx-auto mb-2 size-5 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">Clique para enviar uma imagem</p>
-                <p className="mt-1 text-xs text-muted-foreground">PNG, JPG, SVG até 2MB</p>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/png,image/jpeg,image/svg+xml"
-                className="hidden"
-                onChange={handleLogoFile}
-              />
-            </label>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="primary_color">Cor primária</Label>
-          <Controller
-            name="primary_color"
-            control={control}
-            render={({ field }) => (
-              <ColorPicker id="primary_color" value={field.value ?? ""} onChange={field.onChange} />
-            )}
-          />
-          {errors.primary_color && (
-            <p className="text-sm text-destructive">{errors.primary_color.message}</p>
-          )}
-        </div>
-      </div>
+      {errors.primary_color && (
+        <p className="-mt-2 text-sm text-destructive">{errors.primary_color.message}</p>
+      )}
 
       <Button
         type="submit"
