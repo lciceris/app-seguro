@@ -23,8 +23,8 @@
   - [x] 4.2 5 pontos com `amber-*` cru (estrela de vendedor principal ×2, banner de endosso pendente, badge de status de seguradora ×2) migram pro token `--warning`/`--warning-bg`/`--warning-text`
     - _Requirements: 4.1_
 
-- [ ] 5. Verificação
-  - [ ] 5.1 `tsc --noEmit`, `eslint`, `vitest run` completos
+- [x] 5. Verificação
+  - [x] 5.1 `tsc --noEmit`, `eslint`, `vitest run` completos a cada task — todos limpos (134/134 testes)
     - _Requirements: —_
-  - [ ] 5.2 Verificação visual via Playwright — alternar tema em listagem (badges), drawer, sidebar+header e formulário; confirmar persistência entre reloads e ausência de flash com tema escuro salvo
+  - [x] 5.2 Verificação visual via Playwright — confirmado: botão alterna `dark` no `<html>` e grava/lê `localStorage`; reload com tema escuro salvo já nasce com a classe (sem flash); sidebar/header/tabela com o par branco↔slate-950; badge "Ativo" com fundo verde escuro/texto verde claro (par `success-bg`/`success-text`); drawer com overlay escurecendo corretamente o fundo já escuro, cards com hierarquia visual mantida
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 3.1, 4.1_
