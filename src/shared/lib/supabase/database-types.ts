@@ -72,6 +72,45 @@ export type Database = {
           },
         ]
       }
+      brokerage_insurer_order: {
+        Row: {
+          brokerage_id: string
+          created_at: string
+          display_order: number
+          insurer_id: string
+          updated_at: string
+        }
+        Insert: {
+          brokerage_id: string
+          created_at?: string
+          display_order: number
+          insurer_id: string
+          updated_at?: string
+        }
+        Update: {
+          brokerage_id?: string
+          created_at?: string
+          display_order?: number
+          insurer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brokerage_insurer_order_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "brokerage_insurer_order_insurer_id_fkey"
+            columns: ["insurer_id"]
+            isOneToOne: false
+            referencedRelation: "insurers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brokerages: {
         Row: {
           business_code: string | null

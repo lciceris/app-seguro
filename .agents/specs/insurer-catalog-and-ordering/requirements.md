@@ -12,9 +12,23 @@ Duas frentes na área de seguradoras: (1) `insurer-catalog-screen.tsx` ("Minhas 
 - Campo manual "Ordem de exibição" no formulário continua existindo — as setas são um jeito a mais de editar o mesmo dado, não um substituto.
 
 **Fora:**
-- Ordenação própria por corretora (não existe esse conceito no schema — `display_order` é global do catálogo, só platform_admin edita).
-- Setas/reordenação em `insurer-catalog-screen.tsx` — essa tela só exibe na ordem que o catálogo já definiu (a query já faz `order by display_order`), não edita.
 - Drag-and-drop (decidido contra, ver conversa).
+
+## Addendum — ordem própria por corretora em `insurer-catalog-screen.tsx`
+
+Pedido depois da entrega inicial: setas também em "Minhas seguradoras". Como `insurers.display_order` é global (edita todo mundo, inclusive outras corretoras), a escolha (perguntada ao usuário) foi por uma **ordem própria por corretora**, não reaproveitar o campo global — reordenar em `/my-insurers` não pode afetar outra corretora nem o catálogo do platform_admin.
+
+### Requirement 3: Ordenar seguradoras por corretora, sem afetar outras
+
+**User Story:** Como brokerage_admin, quero reordenar as seguradoras da minha corretora sem mudar a ordem de ninguém mais.
+
+#### Acceptance Criteria
+
+1. Cada corretora SHALL ter sua própria ordem de exibição das seguradoras, independente de outras corretoras e do catálogo global (`insurers.display_order`).
+2. Reordenar em `/my-insurers` NÃO SHALL alterar `insurers.display_order` nem a ordem vista por outra corretora.
+3. Sem preferência própria definida, a ordem SHALL cair pro `display_order` do catálogo global e, por fim, pelo nome.
+4. Só `brokerage_admin` SHALL ver/usar as setas (mesma regra do toggle); `platform_admin` continua em modo leitura, sem coluna de ordem.
+5. As mesmas regras de habilitação de `insurers-list-screen` valem aqui: desabilitado nas pontas da lista e enquanto uma busca está ativa.
 
 ## Requirements
 

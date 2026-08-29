@@ -7,6 +7,7 @@ import { InsurerCatalogScreen } from "./insurer-catalog-screen";
 
 const disableMutateMock = vi.fn();
 const enableMutateMock = vi.fn();
+const reorderMutateMock = vi.fn();
 
 const catalogFake = [
   {
@@ -18,11 +19,13 @@ const catalogFake = [
     website: null,
     contact_name: null,
     response_time_days: null,
-    display_order: null,
+    display_order: 0,
     notes: null,
+    logo_url: null,
     created_at: "",
     updated_at: "",
     brokerage_disabled_insurers: [],
+    brokerage_insurer_order: [],
   },
   {
     id: "i2",
@@ -33,11 +36,13 @@ const catalogFake = [
     website: null,
     contact_name: null,
     response_time_days: null,
-    display_order: null,
+    display_order: 1,
     notes: null,
+    logo_url: null,
     created_at: "",
     updated_at: "",
     brokerage_disabled_insurers: [{ brokerage_id: "b1" }],
+    brokerage_insurer_order: [],
   },
 ];
 
@@ -65,10 +70,15 @@ vi.mock("../../hooks/use-enable-insurer", () => ({
   useEnableInsurer: () => ({ mutate: enableMutateMock, isPending: false }),
 }));
 
+vi.mock("../../hooks/use-reorder-brokerage-insurer", () => ({
+  useReorderBrokerageInsurer: () => ({ mutate: reorderMutateMock, isPending: false }),
+}));
+
 describe("InsurerCatalogScreen", () => {
   beforeEach(() => {
     disableMutateMock.mockClear();
     enableMutateMock.mockClear();
+    reorderMutateMock.mockClear();
     roleMock = "brokerage_admin";
   });
 
@@ -100,11 +110,28 @@ describe("InsurerCatalogScreen", () => {
     expect(disableMutateMock).not.toHaveBeenCalled();
   });
 
-  it("platform_admin vê o estado em modo leitura, sem switch clicável", () => {
+  it("brokerage_admin vê setas de reordenar e move a primeira seguradora pra baixo", () => {
+    renderWithProviders(<InsurerCatalogScreen />);
+
+    const upButtons = screen.getAllByRole("button", { name: "Mover para cima" });
+    const downButtons = screen.getAllByRole("button", { name: "Mover para baixo" });
+    expect(upButtons[0]).toBeDisabled();
+    expect(downButtons[1]).toBeDisabled();
+
+    fireEvent.click(downButtons[0]);
+
+    expect(reorderMutateMock).toHaveBeenCalledWith({
+      first: { insurerId: "i1", display_order: 1 },
+      second: { insurerId: "i2", display_order: 0 },
+    });
+  });
+
+  it("platform_admin vê o estado em modo leitura, sem switch nem setas", () => {
     roleMock = "platform_admin";
     renderWithProviders(<InsurerCatalogScreen />);
 
     expect(screen.queryAllByRole("switch")).toHaveLength(0);
+    expect(screen.queryAllByRole("button", { name: "Mover para cima" })).toHaveLength(0);
     const rows = screen.getAllByRole("row").slice(1); // ignora a linha de cabeçalho
     expect(within(rows[0]).getByText("Habilitada")).toBeInTheDocument();
     expect(within(rows[1]).getByText("Desabilitada")).toBeInTheDocument();

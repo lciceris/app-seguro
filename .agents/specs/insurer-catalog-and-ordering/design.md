@@ -87,6 +87,42 @@ function handleMove(index: number, direction: -1 | 1) {
 - Os dois botões desabilitados quando `search` não está vazio (Requirement 2.5) — reordenar exige a lista completa (`insurers`, não `filteredInsurers`).
 - `reorderInsurer.isPending` desabilita os botões durante a troca, evitando duplo clique.
 
+## Addendum — ordem própria por corretora (`brokerage_insurer_order`)
+
+Nova tabela, mesmo padrão RLS de `brokerage_disabled_insurers` (select própria corretora; insert/update só `brokerage_admin`):
+
+```sql
+create table brokerage_insurer_order (
+  brokerage_id uuid not null references brokerages (id) on delete cascade,
+  insurer_id uuid not null references insurers (id) on delete cascade,
+  display_order integer not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (brokerage_id, insurer_id)
+);
+```
+
+`list-insurer-catalog.ts` embeda a nova tabela junto (`brokerage_insurer_order(display_order)`) — RLS já escopa pra própria corretora, então o embed vem vazio ou com 1 linha. `InsurerCatalogEntry` ganha esse campo.
+
+`insurer-catalog-screen.tsx`:
+- `effectiveOrder(insurer) = brokerage_insurer_order[0]?.display_order ?? insurer.display_order ?? Infinity` — ordem própria primeiro, catálogo global depois, nome por último (desempate).
+- Novo `sortedInsurers` (`useMemo`) ordena por `effectiveOrder` antes do filtro de busca — `filteredInsurers` passa a filtrar `sortedInsurers`, não o array cru do hook.
+- Coluna "Ordem" com as mesmas duas setas de `insurers-list-screen`, só renderizada quando `canToggle` (mesma regra do `Switch`) — `platform_admin` não vê a coluna.
+- `handleMove` chama `useReorderBrokerageInsurer` (novo hook), que faz `upsert` (não update simples — a linha pode não existir ainda) em `brokerage_insurer_order` via `swapBrokerageInsurerOrder` (`src/features/insurers/api/reorder-brokerage-insurer/`).
+
+```ts
+export async function swapBrokerageInsurerOrder({ brokerageId, first, second }) {
+  await supabase.from("brokerage_insurer_order").upsert(
+    { brokerage_id: brokerageId, insurer_id: first.insurerId, display_order: first.display_order },
+    { onConflict: "brokerage_id,insurer_id" },
+  );
+  await supabase.from("brokerage_insurer_order").upsert(
+    { brokerage_id: brokerageId, insurer_id: second.insurerId, display_order: second.display_order },
+    { onConflict: "brokerage_id,insurer_id" },
+  );
+}
+```
+
 ## Testing Strategy
 
 - `tsc`/`eslint`/`vitest run` completos.
