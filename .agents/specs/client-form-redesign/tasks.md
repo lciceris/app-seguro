@@ -47,5 +47,5 @@
     - _Requirements: —_
   - [x] 7.2 `tsc` / `eslint` / `vitest run` — 137/137 testes passando, 0 erros
     - _Requirements: —_
-  - [ ] 7.3 Verificação visual via Playwright (toggle PF/PJ, busca CNPJ, busca CEP, asteriscos, status badge na listagem e no detalhe)
+  - [x] 7.3 Verificação visual via Playwright: toggle PF/PJ troca campos corretamente (confirmado via `data-variant`, não só screenshot — a 1ª captura pegou a transição CSS a meio caminho, falso alarme investigado à parte), busca CNPJ real (BrasilAPI) preencheu razão social/nome fantasia/CNAE/endereço, busca CEP real (ViaCEP) preencheu logradouro/bairro, máscaras de CPF/CNPJ/CEP corretas, asteriscos nos labels obrigatórios, listagem mostra coluna Status com badge "Ativo" após criar cliente
     - _Requirements: —_
