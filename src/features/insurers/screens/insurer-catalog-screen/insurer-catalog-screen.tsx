@@ -1,10 +1,22 @@
+import { Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Input } from "@/shared/components/ui/input";
 import { Switch } from "@/shared/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEmptyState,
+  TableErrorState,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableSkeletonRow,
+} from "@/shared/components/ui/table";
 
 import { useDisableInsurer } from "../../hooks/use-disable-insurer";
 import { useEnableInsurer } from "../../hooks/use-enable-insurer";
@@ -15,13 +27,36 @@ function isEnabled(insurer: InsurerCatalogEntry) {
   return insurer.brokerage_disabled_insurers.length === 0;
 }
 
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 export function InsurerCatalogScreen() {
   const { data: insurers, isLoading, isError, refetch } = useInsurerCatalog();
   const disableInsurer = useDisableInsurer();
   const enableInsurer = useEnableInsurer();
+  const [search, setSearch] = useState("");
   // Só brokerage_admin habilita/desabilita (RLS restringe a mesma coisa) — platform_admin
   // acessa a mesma tela pra conferir o catálogo, mas só em modo leitura.
   const canToggle = useAuthStore((state) => state.usuario?.role === "brokerage_admin");
+
+  const filteredInsurers = useMemo(() => {
+    if (!insurers) return insurers;
+    const query = normalize(search.trim());
+    if (!query) return insurers;
+
+    return insurers.filter((insurer) => {
+      const name = normalize(insurer.name);
+      const cnpj = normalize(insurer.cnpj);
+      return name.includes(query) || cnpj.includes(query);
+    });
+  }, [insurers, search]);
+
+  const totalCount = insurers?.length ?? 0;
+  const filteredCount = filteredInsurers?.length ?? totalCount;
 
   function handleToggle(insurer: InsurerCatalogEntry, checked: boolean) {
     const mutation = checked ? enableInsurer : disableInsurer;
@@ -35,93 +70,91 @@ export function InsurerCatalogScreen() {
   }
 
   return (
-    <>
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
       <div className="mb-4">
         <h1 className="text-lg font-semibold text-foreground">Minhas seguradoras</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           Habilite ou desabilite as seguradoras disponíveis para sua corretora.
+          {!isLoading &&
+            insurers &&
+            ` ${
+              filteredCount !== totalCount
+                ? `${filteredCount} de ${totalCount} seguradoras`
+                : totalCount === 1
+                  ? "1 seguradora cadastrada"
+                  : `${totalCount} seguradoras cadastradas`
+            }`}
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Nome
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                CNPJ
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Habilitada
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <tr key={index} className="border-b border-border">
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-32" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-24" />
-                  </td>
-                  <td className="px-4 py-3" />
-                </tr>
-              ))}
-
-            {isError && !isLoading && (
-              <tr>
-                <td colSpan={3} className="px-4 py-8 text-center">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    Não foi possível carregar as seguradoras.
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Tentar novamente
-                  </Button>
-                </td>
-              </tr>
-            )}
-
-            {!isLoading && !isError && insurers?.length === 0 && (
-              <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  Nenhuma seguradora disponível ainda.
-                </td>
-              </tr>
-            )}
-
-            {!isLoading &&
-              !isError &&
-              insurers?.map((insurer) => (
-                <tr
-                  key={insurer.id}
-                  className="border-b border-border last:border-0 hover:bg-muted/50"
-                >
-                  <td className="px-4 py-3 text-foreground">{insurer.name}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{insurer.cnpj ?? "—"}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end">
-                      {canToggle ? (
-                        <Switch
-                          checked={isEnabled(insurer)}
-                          onCheckedChange={(checked) => handleToggle(insurer, checked)}
-                          disabled={disableInsurer.isPending || enableInsurer.isPending}
-                        />
-                      ) : (
-                        <Badge variant={isEnabled(insurer) ? "default" : "secondary"}>
-                          {isEnabled(insurer) ? "Habilitada" : "Desabilitada"}
-                        </Badge>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+      <div className="mb-4 relative max-w-sm">
+        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Buscar por nome ou CNPJ"
+          className="pl-9"
+        />
       </div>
-    </>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nome</TableHead>
+            <TableHead>CNPJ</TableHead>
+            <TableHead className="text-right">Habilitada</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, index) => <TableSkeletonRow key={index} cells={3} />)}
+
+          {isError && !isLoading && (
+            <TableErrorState
+              colSpan={3}
+              message="Não foi possível carregar as seguradoras."
+              onRetry={() => refetch()}
+            />
+          )}
+
+          {!isLoading && !isError && filteredInsurers?.length === 0 && (
+            <TableEmptyState
+              colSpan={3}
+              message={
+                search
+                  ? "Nenhuma seguradora encontrada pra essa busca."
+                  : "Nenhuma seguradora disponível ainda."
+              }
+            />
+          )}
+
+          {!isLoading &&
+            !isError &&
+            filteredInsurers?.map((insurer) => (
+              <TableRow key={insurer.id}>
+                <TableCell className="text-foreground">{insurer.name}</TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {insurer.cnpj}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end">
+                    {canToggle ? (
+                      <Switch
+                        checked={isEnabled(insurer)}
+                        onCheckedChange={(checked) => handleToggle(insurer, checked)}
+                        disabled={disableInsurer.isPending || enableInsurer.isPending}
+                      />
+                    ) : (
+                      <Badge variant={isEnabled(insurer) ? "default" : "secondary"}>
+                        {isEnabled(insurer) ? "Habilitada" : "Desabilitada"}
+                      </Badge>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
