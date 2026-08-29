@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
 import { useUsers } from "@/features/users";
+import { formatCnpj, formatCpf } from "@/shared/lib/masks";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
@@ -262,20 +263,40 @@ export function ClientDetailDrawer() {
                     Identificação
                   </p>
                   <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
-                  <DetailField label="Razão social / Nome completo" value={client.legal_name} />
-                  <DetailField label="Nome fantasia" value={client.trade_name} />
-                  <DetailField label="CPF/CNPJ" value={client.tax_id} />
                   <DetailField
-                    label="Data de nascimento"
+                    label={client.client_type === "company" ? "CNPJ" : "CPF"}
                     value={
-                      client.birth_date
-                        ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
+                      client.tax_id
+                        ? client.client_type === "company"
+                          ? formatCnpj(client.tax_id)
+                          : formatCpf(client.tax_id)
                         : null
                     }
                   />
-                  <DetailField label="CNAE" value={client.business_code} />
-                  <DetailField label="Setor" value={client.industry} />
-                  <DetailField label="Inscrição estadual" value={client.state_registration} />
+                  <DetailField
+                    label={client.client_type === "company" ? "Razão social" : "Nome completo"}
+                    value={client.legal_name}
+                  />
+                  {client.client_type === "company" && (
+                    <DetailField label="Nome fantasia" value={client.trade_name} />
+                  )}
+                  {client.client_type === "individual" && (
+                    <DetailField
+                      label="Data de nascimento"
+                      value={
+                        client.birth_date
+                          ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
+                          : null
+                      }
+                    />
+                  )}
+                  {client.client_type === "company" && (
+                    <>
+                      <DetailField label="CNAE" value={client.business_code} />
+                      <DetailField label="Setor" value={client.industry} />
+                      <DetailField label="Inscrição estadual" value={client.state_registration} />
+                    </>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">

@@ -49,3 +49,15 @@
     - _Requirements: —_
   - [x] 7.3 Verificação visual via Playwright: toggle PF/PJ troca campos corretamente (confirmado via `data-variant`, não só screenshot — a 1ª captura pegou a transição CSS a meio caminho, falso alarme investigado à parte), busca CNPJ real (BrasilAPI) preencheu razão social/nome fantasia/CNAE/endereço, busca CEP real (ViaCEP) preencheu logradouro/bairro, máscaras de CPF/CNPJ/CEP corretas, asteriscos nos labels obrigatórios, listagem mostra coluna Status com badge "Ativo" após criar cliente
     - _Requirements: —_
+
+## Addendum — client-detail-drawer
+
+Pedido complementar: alinhar a tela de "ver cliente" com o redesign do formulário.
+
+- [x] 8. `client-detail-drawer.tsx`: seção Identificação espelha a ordem/campos condicionais do formulário
+  - [x] 8.1 CNPJ/CPF logo após Tipo, com label dinâmico e valor mascarado (`formatCnpj`/`formatCpf`)
+    - _Requirements: 2.1, 3.1, 3.2_
+  - [x] 8.2 Razão social/Nome completo com label dinâmico; Nome fantasia/CNAE/Setor/Inscrição estadual só aparecem quando PJ; Data de nascimento só aparece quando PF
+    - _Requirements: 1.2_
+  - [x] 8.3 `tsc`/`eslint`/`vitest run` (137/137) + verificação visual via Playwright com um cliente PJ e um PF reais
+    - _Requirements: —_
