@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createInsurerSchema = z.object({
   name: z.string().min(1, "Informe o nome"),
-  cnpj: z.string().optional(),
+  cnpj: z.string().min(1, "Informe o CNPJ"),
   email: z.union([z.literal(""), z.string().email("E-mail inválido")]).optional(),
   phone: z.string().optional(),
   website: z.string().optional(),

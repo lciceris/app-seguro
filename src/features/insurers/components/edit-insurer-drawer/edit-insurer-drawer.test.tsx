@@ -19,6 +19,7 @@ const insurerFake = {
   response_time_days: 5,
   display_order: null,
   notes: null,
+  logo_url: null,
   created_at: "",
   updated_at: "",
 };
@@ -53,8 +54,8 @@ describe("EditInsurerDrawer", () => {
   it("vem pré-preenchido com os dados atuais da seguradora", () => {
     renderDrawer();
 
-    expect(screen.getByLabelText("Nome")).toHaveValue("Seguradora Original");
-    expect(screen.getByLabelText("CNPJ")).toHaveValue("12.345.678/0001-90");
+    expect(screen.getByLabelText("Nome *")).toHaveValue("Seguradora Original");
+    expect(screen.getByLabelText("CNPJ *")).toHaveValue("12.345.678/0001-90");
     expect(screen.getByLabelText("E-mail")).toHaveValue("contato@seguradora.com");
     expect(screen.getByLabelText("Prazo de resposta (dias)")).toHaveValue(5);
   });
@@ -62,7 +63,7 @@ describe("EditInsurerDrawer", () => {
   it("chama a mutation com os valores editados", async () => {
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Nome Editado" } });
+    fireEvent.change(screen.getByLabelText("Nome *"), { target: { value: "Nome Editado" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => {
@@ -78,6 +79,7 @@ describe("EditInsurerDrawer", () => {
           response_time_days: 5,
           display_order: null,
           notes: null,
+          logo_url: null,
         },
         expect.any(Object),
       );

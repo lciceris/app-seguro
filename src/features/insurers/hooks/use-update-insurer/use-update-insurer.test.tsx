@@ -28,7 +28,7 @@ describe("useUpdateInsurer", () => {
     const input = {
       id: "i1",
       name: "Seguradora Editada",
-      cnpj: null,
+      cnpj: "12.345.678/0001-90",
       email: null,
       phone: null,
       website: null,
@@ -36,6 +36,7 @@ describe("useUpdateInsurer", () => {
       response_time_days: null,
       display_order: null,
       notes: null,
+      logo_url: null,
     };
     result.current.mutate(input);
 

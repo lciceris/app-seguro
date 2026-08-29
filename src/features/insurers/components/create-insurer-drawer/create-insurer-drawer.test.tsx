@@ -28,7 +28,7 @@ describe("CreateInsurerDrawer", () => {
   it("mostra erro de validação para e-mail inválido", async () => {
     renderWithProviders(<CreateInsurerDrawer />);
 
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Seguradora X" } });
+    fireEvent.change(screen.getByLabelText("Nome *"), { target: { value: "Seguradora X" } });
     fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "invalido@semdominio" } });
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
 
@@ -39,8 +39,8 @@ describe("CreateInsurerDrawer", () => {
   it("chama a mutation convertendo campos vazios em null e numéricos em number", async () => {
     renderWithProviders(<CreateInsurerDrawer />);
 
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Seguradora X" } });
-    fireEvent.change(screen.getByLabelText("CNPJ"), {
+    fireEvent.change(screen.getByLabelText("Nome *"), { target: { value: "Seguradora X" } });
+    fireEvent.change(screen.getByLabelText("CNPJ *"), {
       target: { value: "12.345.678/0001-90" },
     });
     fireEvent.change(screen.getByLabelText("Prazo de resposta (dias)"), {
@@ -60,6 +60,7 @@ describe("CreateInsurerDrawer", () => {
           response_time_days: 5,
           display_order: null,
           notes: null,
+          logo_url: null,
         },
         expect.any(Object),
       );

@@ -57,6 +57,13 @@ export function InsurerDetailDrawer() {
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Identificação
                   </p>
+                  {insurer.logo_url && (
+                    <img
+                      src={insurer.logo_url}
+                      alt="Logo"
+                      className="size-16 rounded-lg border border-border bg-card object-contain p-1.5"
+                    />
+                  )}
                   <DetailField label="Nome" value={insurer.name} />
                   <DetailField label="CNPJ" value={insurer.cnpj} />
                   <DetailField label="E-mail" value={insurer.email} />
