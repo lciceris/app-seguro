@@ -97,7 +97,7 @@ export function CreateQuotationDrawer() {
   });
 
   function handleClose() {
-    navigate("/quotations");
+    navigate(searchParams.get("return_to") || "/quotations");
   }
 
   function onSubmit(values: CreateQuotationFormValues) {

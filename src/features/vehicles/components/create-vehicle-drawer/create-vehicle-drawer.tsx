@@ -99,7 +99,7 @@ export function CreateVehicleDrawer() {
   });
 
   function handleClose() {
-    navigate("/vehicles");
+    navigate(searchParams.get("return_to") || "/vehicles");
   }
 
   function onSubmit(values: CreateVehicleFormValues) {

@@ -40,3 +40,14 @@
     - _Requirements: —_
   - [x] 6.3 Verificação visual via Playwright com cliente/veículo/cotação/apólice reais: header, todas as 5 abas, botão Vendedores do header, pré-seleção de cliente ao abrir "Adicionar veículo"
     - _Requirements: —_
+
+## Addendum — ajustes de feedback
+
+- [x] 7. Tabelas embutidas (Veículos/Cotações/Apólices) alinhadas ao padrão de lista (`rounded-2xl`, `p-5`/`mb-4`, sem padding duplicado)
+  - _Requirements: —_
+- [x] 8. "Editar" (cliente) e os fluxos abertos a partir do hub ("Adicionar veículo"/"Nova cotação") retornam pro hub do cliente ao fechar/salvar, via `return_to` na query string
+  - _Requirements: —_
+- [x] 9. `TabsList` trocado pra `variant="line"` (sublinhado, sem fundo preenchido)
+  - _Requirements: —_
+- [x] 10. Verificação visual via Playwright: novo estilo de tabs, grid das tabelas, e navegação de volta ao hub confirmada por URL após editar/salvar e após cancelar "Adicionar veículo"
+  - _Requirements: —_

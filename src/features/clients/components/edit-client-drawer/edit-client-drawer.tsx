@@ -429,7 +429,7 @@ export function EditClientDrawer() {
   const { data: client, isLoading, isError, refetch } = useClient(clientId!);
 
   function handleClose() {
-    navigate("/clients");
+    navigate(`/clients/${clientId}`);
   }
 
   return (

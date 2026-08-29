@@ -161,97 +161,95 @@ function ClientVehiclesTab({ clientId, canCreate }: { clientId: string; canCreat
   const { data: vehicles, isLoading, isError, refetch } = useVehiclesByClient(clientId);
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between p-5 pb-0">
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+      <div className="mb-4 flex items-center justify-between">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Veículos da frota
         </p>
         {canCreate && (
           <Button asChild size="sm">
-            <Link to={`/vehicles/add?client_id=${clientId}`}>Adicionar veículo</Link>
+            <Link to={`/vehicles/add?client_id=${clientId}&return_to=/clients/${clientId}`}>
+              Adicionar veículo
+            </Link>
           </Button>
         )}
       </div>
-      <div className="p-5">
-        <Table>
-          <TableHeaderRow>
-            <TableRow>
-              <TableHead>Placa</TableHead>
-              <TableHead>Classificação</TableHead>
-              <TableHead>Marca/Modelo</TableHead>
-              <TableHead>Ano</TableHead>
-              <TableHead>Uso</TableHead>
-              <TableHead>Valor declarado</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeaderRow>
-          <TableBody>
-            {isLoading &&
-              Array.from({ length: 2 }).map((_, index) => (
-                <TableSkeletonRow key={index} cells={7} />
-              ))}
+      <Table>
+        <TableHeaderRow>
+          <TableRow>
+            <TableHead>Placa</TableHead>
+            <TableHead>Classificação</TableHead>
+            <TableHead>Marca/Modelo</TableHead>
+            <TableHead>Ano</TableHead>
+            <TableHead>Uso</TableHead>
+            <TableHead>Valor declarado</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeaderRow>
+        <TableBody>
+          {isLoading &&
+            Array.from({ length: 2 }).map((_, index) => <TableSkeletonRow key={index} cells={7} />)}
 
-            {isError && !isLoading && (
-              <TableErrorState
-                colSpan={7}
-                message="Não foi possível carregar os veículos."
-                onRetry={() => refetch()}
-              />
-            )}
+          {isError && !isLoading && (
+            <TableErrorState
+              colSpan={7}
+              message="Não foi possível carregar os veículos."
+              onRetry={() => refetch()}
+            />
+          )}
 
-            {!isLoading && !isError && vehicles?.length === 0 && (
-              <TableEmptyState colSpan={7} message="Nenhum veículo cadastrado ainda." />
-            )}
+          {!isLoading && !isError && vehicles?.length === 0 && (
+            <TableEmptyState colSpan={7} message="Nenhum veículo cadastrado ainda." />
+          )}
 
-            {!isLoading &&
-              !isError &&
-              vehicles?.map((vehicle) => (
-                <TableRow key={vehicle.id}>
-                  <TableCell className="font-mono-data text-foreground">{vehicle.plate}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {vehicle.vehicle_type ? VEHICLE_TYPE_LABELS[vehicle.vehicle_type] : "—"}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {[vehicle.brand, vehicle.model].filter(Boolean).join(" ") || "—"}
-                  </TableCell>
-                  <TableCell className="font-mono-data text-muted-foreground">
-                    {vehicle.model_year ?? "—"}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {vehicle.vehicle_usage ? VEHICLE_USAGE_LABELS[vehicle.vehicle_usage] : "—"}
-                  </TableCell>
-                  <TableCell className="font-mono-data text-muted-foreground">
-                    {formatCurrency(vehicle.declared_value)}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end gap-1">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/vehicles/${vehicle.id}`}>
-                              <Eye className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Ver</TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button asChild variant="ghost" size="icon-sm">
-                            <Link to={`/vehicles/${vehicle.id}/edit`}>
-                              <Pencil className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Editar</TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </div>
+          {!isLoading &&
+            !isError &&
+            vehicles?.map((vehicle) => (
+              <TableRow key={vehicle.id}>
+                <TableCell className="font-mono-data text-foreground">{vehicle.plate}</TableCell>
+                <TableCell className="text-muted-foreground">
+                  {vehicle.vehicle_type ? VEHICLE_TYPE_LABELS[vehicle.vehicle_type] : "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {[vehicle.brand, vehicle.model].filter(Boolean).join(" ") || "—"}
+                </TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {vehicle.model_year ?? "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {vehicle.vehicle_usage ? VEHICLE_USAGE_LABELS[vehicle.vehicle_usage] : "—"}
+                </TableCell>
+                <TableCell className="font-mono-data text-muted-foreground">
+                  {formatCurrency(vehicle.declared_value)}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link to={`/vehicles/${vehicle.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Ver</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link to={`/vehicles/${vehicle.id}/edit`}>
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Editar</TooltipContent>
+                    </Tooltip>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -272,73 +270,153 @@ function ClientHistoryTab({ clientId, canCreate }: { clientId: string; canCreate
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between p-5 pb-0">
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
             Cotações
           </p>
           {canCreate && (
             <Button asChild size="sm">
-              <Link to={`/quotations/add?client_id=${clientId}`}>Nova cotação</Link>
+              <Link to={`/quotations/add?client_id=${clientId}&return_to=/clients/${clientId}`}>
+                Nova cotação
+              </Link>
             </Button>
           )}
         </div>
-        <div className="p-5">
-          <Table>
-            <TableHeaderRow>
-              <TableRow>
-                <TableHead>Número</TableHead>
-                <TableHead>Vendedor</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Prazo</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeaderRow>
-            <TableBody>
-              {isLoadingQuotations &&
-                Array.from({ length: 2 }).map((_, index) => (
-                  <TableSkeletonRow key={index} cells={5} />
-                ))}
+        <Table>
+          <TableHeaderRow>
+            <TableRow>
+              <TableHead>Número</TableHead>
+              <TableHead>Vendedor</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Prazo</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeaderRow>
+          <TableBody>
+            {isLoadingQuotations &&
+              Array.from({ length: 2 }).map((_, index) => (
+                <TableSkeletonRow key={index} cells={5} />
+              ))}
 
-              {isErrorQuotations && !isLoadingQuotations && (
-                <TableErrorState
-                  colSpan={5}
-                  message="Não foi possível carregar as cotações."
-                  onRetry={() => refetchQuotations()}
-                />
-              )}
+            {isErrorQuotations && !isLoadingQuotations && (
+              <TableErrorState
+                colSpan={5}
+                message="Não foi possível carregar as cotações."
+                onRetry={() => refetchQuotations()}
+              />
+            )}
 
-              {!isLoadingQuotations && !isErrorQuotations && quotations?.length === 0 && (
-                <TableEmptyState colSpan={5} message="Nenhuma cotação registrada." />
-              )}
+            {!isLoadingQuotations && !isErrorQuotations && quotations?.length === 0 && (
+              <TableEmptyState colSpan={5} message="Nenhuma cotação registrada." />
+            )}
 
-              {!isLoadingQuotations &&
-                !isErrorQuotations &&
-                quotations?.map((quotation) => (
-                  <TableRow key={quotation.id}>
+            {!isLoadingQuotations &&
+              !isErrorQuotations &&
+              quotations?.map((quotation) => (
+                <TableRow key={quotation.id}>
+                  <TableCell className="font-mono-data text-foreground">
+                    {quotation.number}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {quotation.seller?.full_name ?? "—"}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={QUOTATION_STATUS_BADGE_CLASSES[quotation.status]}
+                    >
+                      {QUOTATION_STATUS_LABELS[quotation.status]}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="font-mono-data text-muted-foreground">
+                    {formatDate(quotation.due_date)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-end">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button asChild variant="ghost" size="icon-sm">
+                            <Link to={`/quotations/${quotation.id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Ver</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <p className="mb-4 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Apólices
+        </p>
+        <Table>
+          <TableHeaderRow>
+            <TableRow>
+              <TableHead>Número</TableHead>
+              <TableHead>Seguradora</TableHead>
+              <TableHead>Prêmio</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Vigência</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeaderRow>
+          <TableBody>
+            {isLoadingPolicies &&
+              Array.from({ length: 2 }).map((_, index) => (
+                <TableSkeletonRow key={index} cells={6} />
+              ))}
+
+            {isErrorPolicies && !isLoadingPolicies && (
+              <TableErrorState
+                colSpan={6}
+                message="Não foi possível carregar as apólices."
+                onRetry={() => refetchPolicies()}
+              />
+            )}
+
+            {!isLoadingPolicies && !isErrorPolicies && policies?.length === 0 && (
+              <TableEmptyState colSpan={6} message="Nenhuma apólice registrada." />
+            )}
+
+            {!isLoadingPolicies &&
+              !isErrorPolicies &&
+              policies?.map((policy) => {
+                const derivedStatus = getDerivedPolicyStatus(policy);
+                return (
+                  <TableRow key={policy.id}>
                     <TableCell className="font-mono-data text-foreground">
-                      {quotation.number}
+                      {policy.policy_number ?? "Pendente de emissão"}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {quotation.seller?.full_name ?? "—"}
+                      {policy.insurers?.name ?? "—"}
+                    </TableCell>
+                    <TableCell className="font-mono-data text-muted-foreground">
+                      {formatCurrency(policy.premium_amount)}
                     </TableCell>
                     <TableCell>
                       <Badge
                         variant="outline"
-                        className={QUOTATION_STATUS_BADGE_CLASSES[quotation.status]}
+                        className={DERIVED_POLICY_STATUS_BADGE_CLASSES[derivedStatus]}
                       >
-                        {QUOTATION_STATUS_LABELS[quotation.status]}
+                        {DERIVED_POLICY_STATUS_LABELS[derivedStatus]}
                       </Badge>
                     </TableCell>
                     <TableCell className="font-mono-data text-muted-foreground">
-                      {formatDate(quotation.due_date)}
+                      {formatDate(policy.coverage_start)} — {formatDate(policy.coverage_end)}
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end">
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button asChild variant="ghost" size="icon-sm">
-                              <Link to={`/quotations/${quotation.id}`}>
+                              <Link to={`/policies/${policy.id}`}>
                                 <Eye className="h-4 w-4" />
                               </Link>
                             </Button>
@@ -348,94 +426,10 @@ function ClientHistoryTab({ clientId, canCreate }: { clientId: string; canCreate
                       </div>
                     </TableCell>
                   </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-
-      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-        <div className="p-5 pb-0">
-          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            Apólices
-          </p>
-        </div>
-        <div className="p-5">
-          <Table>
-            <TableHeaderRow>
-              <TableRow>
-                <TableHead>Número</TableHead>
-                <TableHead>Seguradora</TableHead>
-                <TableHead>Prêmio</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Vigência</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeaderRow>
-            <TableBody>
-              {isLoadingPolicies &&
-                Array.from({ length: 2 }).map((_, index) => (
-                  <TableSkeletonRow key={index} cells={6} />
-                ))}
-
-              {isErrorPolicies && !isLoadingPolicies && (
-                <TableErrorState
-                  colSpan={6}
-                  message="Não foi possível carregar as apólices."
-                  onRetry={() => refetchPolicies()}
-                />
-              )}
-
-              {!isLoadingPolicies && !isErrorPolicies && policies?.length === 0 && (
-                <TableEmptyState colSpan={6} message="Nenhuma apólice registrada." />
-              )}
-
-              {!isLoadingPolicies &&
-                !isErrorPolicies &&
-                policies?.map((policy) => {
-                  const derivedStatus = getDerivedPolicyStatus(policy);
-                  return (
-                    <TableRow key={policy.id}>
-                      <TableCell className="font-mono-data text-foreground">
-                        {policy.policy_number ?? "Pendente de emissão"}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {policy.insurers?.name ?? "—"}
-                      </TableCell>
-                      <TableCell className="font-mono-data text-muted-foreground">
-                        {formatCurrency(policy.premium_amount)}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="outline"
-                          className={DERIVED_POLICY_STATUS_BADGE_CLASSES[derivedStatus]}
-                        >
-                          {DERIVED_POLICY_STATUS_LABELS[derivedStatus]}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="font-mono-data text-muted-foreground">
-                        {formatDate(policy.coverage_start)} — {formatDate(policy.coverage_end)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex justify-end">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button asChild variant="ghost" size="icon-sm">
-                                <Link to={`/policies/${policy.id}`}>
-                                  <Eye className="h-4 w-4" />
-                                </Link>
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Ver</TooltipContent>
-                          </Tooltip>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </div>
+                );
+              })}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
@@ -741,7 +735,7 @@ export function ClientDetailDrawer() {
 
             {!isLoading && !isError && client && (
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
+                <TabsList variant="line">
                   <TabsTrigger value="dados">Dados</TabsTrigger>
                   <TabsTrigger value="vehicles">Veículos</TabsTrigger>
                   <TabsTrigger value="history">Histórico</TabsTrigger>
