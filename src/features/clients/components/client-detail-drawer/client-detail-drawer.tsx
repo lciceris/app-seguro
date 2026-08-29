@@ -24,7 +24,7 @@ import {
 } from "@/shared/components/ui/sheet";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
-import { CLIENT_TYPE_LABELS, SEGMENT_BADGE_CLASSES, SEGMENT_LABELS } from "../../constants/labels";
+import { CLIENT_TYPE_LABELS } from "../../constants/labels";
 import { useAddClientSeller } from "../../hooks/use-add-client-seller";
 import { useClient } from "../../hooks/use-client";
 import { useClientSellers } from "../../hooks/use-client-sellers";
@@ -307,24 +307,6 @@ export function ClientDetailDrawer() {
                   </p>
                   <DetailField label="Nome do contato" value={client.financial_name} />
                   <DetailField label="E-mail" value={client.financial_email} />
-                </div>
-
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Configurações
-                  </p>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                      Segmento
-                    </span>
-                    <Badge
-                      variant="outline"
-                      className={`w-fit ${SEGMENT_BADGE_CLASSES[client.segment]}`}
-                    >
-                      {SEGMENT_LABELS[client.segment]}
-                    </Badge>
-                  </div>
-                  <DetailField label="Origem do lead" value={client.lead_source} />
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">

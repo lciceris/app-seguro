@@ -32,8 +32,7 @@ const clientFake = {
   contact_phone: null,
   financial_name: null,
   financial_email: null,
-  segment: "active" as const,
-  lead_source: null,
+  status: "active" as const,
   notes: null,
   created_at: "",
   updated_at: "",
@@ -64,14 +63,14 @@ describe("EditClientDrawer", () => {
   it("vem pré-preenchido com os dados atuais do cliente", () => {
     renderDrawer();
 
-    expect(screen.getByLabelText("Razão social / Nome completo")).toHaveValue("Cliente Original");
-    expect(screen.getByLabelText("CPF/CNPJ")).toHaveValue("111.111.111-11");
+    expect(screen.getByLabelText("Nome completo *")).toHaveValue("Cliente Original");
+    expect(screen.getByLabelText("CPF")).toHaveValue("111.111.111-11");
   });
 
   it("chama a mutation com os valores editados", async () => {
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("Razão social / Nome completo"), {
+    fireEvent.change(screen.getByLabelText("Nome completo *"), {
       target: { value: "Cliente Editado" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));

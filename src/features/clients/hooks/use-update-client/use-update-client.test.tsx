@@ -48,8 +48,7 @@ describe("useUpdateClient", () => {
       contact_phone: null,
       financial_name: null,
       financial_email: null,
-      segment: "lead" as const,
-      lead_source: null,
+      status: "active" as const,
       notes: null,
     };
     result.current.mutate(input);

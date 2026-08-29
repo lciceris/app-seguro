@@ -20,7 +20,7 @@ import {
 } from "@/shared/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
-import { CLIENT_TYPE_LABELS, SEGMENT_BADGE_CLASSES, SEGMENT_LABELS } from "../../constants/labels";
+import { CLIENT_TYPE_LABELS, STATUS_BADGE_CLASSES, STATUS_LABELS } from "../../constants/labels";
 import { DeactivateClientConfirmDialog } from "../../components/deactivate-client-confirm-dialog";
 import { useClients } from "../../hooks/use-clients";
 import { useReactivateClient } from "../../hooks/use-reactivate-client";
@@ -109,7 +109,7 @@ export function ClientsListScreen() {
               <TableHead>Tipo</TableHead>
               <TableHead>CPF/CNPJ</TableHead>
               <TableHead>Cidade/UF</TableHead>
-              <TableHead>Segmento</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -160,8 +160,8 @@ export function ClientsListScreen() {
                     {client.city ? `${client.city}${client.state ? `/${client.state}` : ""}` : "—"}
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={SEGMENT_BADGE_CLASSES[client.segment]}>
-                      {SEGMENT_LABELS[client.segment]}
+                    <Badge variant="outline" className={STATUS_BADGE_CLASSES[client.status]}>
+                      {STATUS_LABELS[client.status]}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -189,7 +189,7 @@ export function ClientsListScreen() {
                         </Tooltip>
                       )}
                       {canDeactivate &&
-                        (client.segment === "inactive" ? (
+                        (client.status === "inactive" ? (
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button

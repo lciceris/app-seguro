@@ -24,8 +24,6 @@ export interface CreateClientInput {
   contact_phone: string | null;
   financial_name: string | null;
   financial_email: string | null;
-  segment: Database["public"]["Enums"]["client_segment"];
-  lead_source: string | null;
   notes: string | null;
 }
 

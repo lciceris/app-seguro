@@ -22,8 +22,6 @@ export const createClientSchema = z.object({
   contact_phone: z.string().optional(),
   financial_name: z.string().optional(),
   financial_email: z.union([z.literal(""), z.string().email("E-mail inválido")]).optional(),
-  segment: z.enum(["lead", "active", "vip", "inactive"]),
-  lead_source: z.string().optional(),
   notes: z.string().optional(),
 });
 

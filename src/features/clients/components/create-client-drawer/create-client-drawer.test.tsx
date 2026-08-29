@@ -65,7 +65,7 @@ describe("CreateClientDrawer", () => {
   it("chama a mutation com os dados do formulário", async () => {
     renderWithProviders(<CreateClientDrawer />);
 
-    fireEvent.change(screen.getByLabelText("Razão social / Nome completo"), {
+    fireEvent.change(screen.getByLabelText("Razão social *"), {
       target: { value: "Cliente Teste" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
@@ -86,7 +86,7 @@ describe("CreateClientDrawer", () => {
 
     renderWithProviders(<CreateClientDrawer />);
 
-    fireEvent.change(screen.getByLabelText("Razão social / Nome completo"), {
+    fireEvent.change(screen.getByLabelText("Razão social *"), {
       target: { value: "Cliente Teste" },
     });
     fireEvent.click(screen.getByLabelText("Vendedor Um"));
