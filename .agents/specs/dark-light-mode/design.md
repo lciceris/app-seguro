@@ -121,6 +121,14 @@ Auditoria (agente Explore) confirmou que o grosso do app já usa tokens — acha
 - `bg-black/0` → `group-hover:bg-black/40` no hover do avatar de logo (`own-brokerage-screen.tsx`) — overlay sobre uma imagem raster (foto/logo), mesmo raciocínio: preto/branco é o padrão de affordance de upload de foto em qualquer tema.
 - PDFs (`policy-endorsement-document.tsx`, `quotation-proposal-document.tsx`) — `StyleSheet` do `@react-pdf/renderer` renderiza fora do DOM, `.dark` nunca alcança. Documento exportado/impresso continua claro de propósito.
 
+## Addendum — Neutral em vez de Slate
+
+Depois de implementado, o usuário achou que o dark mode ficou com um viés azulado (Slate) e pediu 5 opções de tons de preto pra base. Escolheu **Neutral** (cinza puro, sem viés): `#0A0A0A` (fundo) / `#171717` (card/popover) / `#262626` (secondary/muted/accent/border/input/table-header) / `#A3A3A3` (muted-foreground) / `#F5F5F5` (foreground e demais `-foreground`).
+
+Só as superfícies neutras mudam. `--success`/`--warning`/`--status-progress`/`-negotiation`/`-effect`/`-effected`/`-notclosed` são cores de acento (verde/âmbar/azul/violeta/vermelho) — não têm viés de neutro, ficam como estavam. `--status-waiting`/`--neutral` (que são "cinza", não uma cor de status) também trocam de Slate pra Neutral, pra consistência.
+
+`--sidebar-*` some par, reaproveitando exatamente a mesma escala (não é mais o par "branco ↔ slate-950" da spec `sidebar-light-redesign` — vira "branco ↔ neutral-950").
+
 ## Testing Strategy
 
 - `tsc`/`eslint`/`vitest run` completos a cada task.

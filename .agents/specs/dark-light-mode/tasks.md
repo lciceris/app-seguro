@@ -28,3 +28,9 @@
     - _Requirements: —_
   - [x] 5.2 Verificação visual via Playwright — confirmado: botão alterna `dark` no `<html>` e grava/lê `localStorage`; reload com tema escuro salvo já nasce com a classe (sem flash); sidebar/header/tabela com o par branco↔slate-950; badge "Ativo" com fundo verde escuro/texto verde claro (par `success-bg`/`success-text`); drawer com overlay escurecendo corretamente o fundo já escuro, cards com hierarquia visual mantida
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 3.1, 4.1_
+
+- [x] 6. Addendum — troca a base Slate por Neutral (usuário achou o azulado incômodo mesmo no escuro)
+  - [x] 6.1 `.dark`: `--background`/`--card`/`--popover`/`--secondary`/`--muted`/`--accent`/`--border`/`--input`/`--sidebar-*`/`--table-header`/`--neutral-*`/`--status-waiting-*` viram Neutral (`#0A0A0A`/`#171717`/`#262626`/`#A3A3A3`/`#F5F5F5`); cores de acento (success/warning/progress/negotiation/effect/effected/notclosed) ficam como estavam
+    - _Requirements: —_
+  - [x] 6.2 `tsc`/`vitest run` completos; verificação visual via Playwright — `--background` computado = `#0A0A0A`, listagem com badges Ativo/Inativo legível, sem viés azul
+    - _Requirements: —_
