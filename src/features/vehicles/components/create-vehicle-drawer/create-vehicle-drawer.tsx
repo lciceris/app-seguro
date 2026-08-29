@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useClients } from "@/features/clients";
@@ -78,6 +78,7 @@ function paraPayload(values: CreateVehicleFormValues): Omit<CreateVehicleInput, 
 
 export function CreateVehicleDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const createVehicle = useCreateVehicle();
   const { data: clients } = useClients();
 
@@ -89,7 +90,7 @@ export function CreateVehicleDrawer() {
   } = useForm<CreateVehicleFormValues>({
     resolver: zodResolver(createVehicleSchema),
     defaultValues: {
-      client_id: "",
+      client_id: searchParams.get("client_id") ?? "",
       vehicle_type: NO_VEHICLE_TYPE_VALUE,
       vehicle_usage: NO_VEHICLE_USAGE_VALUE,
       has_tracker: false,

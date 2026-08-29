@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
@@ -70,6 +70,7 @@ function paraPayload(
 
 export function CreateQuotationDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const usuario = useAuthStore((state) => state.usuario);
   const isSeller = usuario?.role === "seller";
 
@@ -86,7 +87,7 @@ export function CreateQuotationDrawer() {
   } = useForm<CreateQuotationFormValues>({
     resolver: zodResolver(createQuotationSchema),
     defaultValues: {
-      client_id: "",
+      client_id: searchParams.get("client_id") ?? "",
       seller_id: "",
       quotation_type: NO_QUOTATION_TYPE_VALUE,
       coverage_start: null,
