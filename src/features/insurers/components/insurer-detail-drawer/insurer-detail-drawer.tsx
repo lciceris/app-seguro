@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
+import { formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -65,9 +66,12 @@ export function InsurerDetailDrawer() {
                     />
                   )}
                   <DetailField label="Nome" value={insurer.name} />
-                  <DetailField label="CNPJ" value={insurer.cnpj} />
+                  <DetailField label="CNPJ" value={formatCnpj(insurer.cnpj)} />
                   <DetailField label="E-mail" value={insurer.email} />
-                  <DetailField label="Telefone comercial" value={insurer.phone} />
+                  <DetailField
+                    label="Telefone comercial"
+                    value={insurer.phone ? formatPhone(insurer.phone) : insurer.phone}
+                  />
                   <DetailField label="Website" value={insurer.website} />
                 </div>
 

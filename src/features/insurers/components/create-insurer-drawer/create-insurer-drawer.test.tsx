@@ -52,7 +52,7 @@ describe("CreateInsurerDrawer", () => {
       expect(mutateMock).toHaveBeenCalledWith(
         {
           name: "Seguradora X",
-          cnpj: "12.345.678/0001-90",
+          cnpj: "12345678000190",
           email: null,
           phone: null,
           website: null,

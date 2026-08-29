@@ -28,3 +28,11 @@
     - _Requirements: —_
   - [x] 4.2 Verificação visual via Playwright — submeter vazio bloqueia com "Informe o nome"/"Informe o CNPJ" e não navega; criar com nome/CNPJ/logo funciona, `logo_url` salvo no banco com URL pública válida, logo aparece no drawer de detalhe
     - _Requirements: 1.1, 2.2, 2.3, 2.4_
+
+- [x] 5. Addendum — máscara de CNPJ e telefone (pedido depois da entrega inicial)
+  - [x] 5.1 `create-insurer-drawer.tsx`/`edit-insurer-drawer.tsx`: `onChange` com `formatCnpj`/`formatPhone`, payload salva só dígitos; `edit` formata o valor do banco pro form
+    - _Requirements: —_
+  - [x] 5.2 `insurers-list-screen.tsx`/`insurer-detail-drawer.tsx`: exibição formatada (dado agora é salvo sem pontuação)
+    - _Requirements: —_
+  - [x] 5.3 Testes ajustados (payload esperado vira dígitos puros); `tsc`/`eslint`/`vitest run` completos (134/134); verificação visual via Playwright — máscara aplica ao digitar, banco recebe só dígitos, edição e detalhe mostram formatado
+    - _Requirements: —_

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { supabase } from "@/shared/lib/supabase";
+import { formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -34,12 +35,17 @@ function sanitizeNum(value: string | undefined) {
   return value === "" || value === undefined || Number.isNaN(Number(value)) ? null : Number(value);
 }
 
+function digitsOnly(value: string | undefined) {
+  const digits = value?.replace(/\D/g, "") ?? "";
+  return digits === "" ? null : digits;
+}
+
 function paraPayload(values: CreateInsurerFormValues): CreateInsurerInput {
   return {
     name: values.name,
-    cnpj: values.cnpj,
+    cnpj: values.cnpj.replace(/\D/g, ""),
     email: sanitize(values.email),
-    phone: sanitize(values.phone),
+    phone: digitsOnly(values.phone),
     website: sanitize(values.website),
     contact_name: sanitize(values.contact_name),
     response_time_days: sanitizeNum(values.response_time_days),
@@ -60,6 +66,7 @@ export function CreateInsurerDrawer() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<CreateInsurerFormValues>({
     resolver: zodResolver(createInsurerSchema),
@@ -143,7 +150,13 @@ export function CreateInsurerDrawer() {
 
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="cnpj">CNPJ *</Label>
-                  <Input id="cnpj" placeholder="00.000.000/0000-00" {...register("cnpj")} />
+                  <Input
+                    id="cnpj"
+                    placeholder="00.000.000/0000-00"
+                    maxLength={18}
+                    {...register("cnpj")}
+                    onChange={(e) => setValue("cnpj", formatCnpj(e.target.value))}
+                  />
                   {errors.cnpj && <p className="text-sm text-destructive">{errors.cnpj.message}</p>}
                 </div>
 
@@ -157,7 +170,13 @@ export function CreateInsurerDrawer() {
 
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="phone">Telefone Comercial</Label>
-                  <Input id="phone" placeholder="(00) 00000-0000" {...register("phone")} />
+                  <Input
+                    id="phone"
+                    placeholder="(00) 00000-0000"
+                    maxLength={16}
+                    {...register("phone")}
+                    onChange={(e) => setValue("phone", formatPhone(e.target.value))}
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1.5">

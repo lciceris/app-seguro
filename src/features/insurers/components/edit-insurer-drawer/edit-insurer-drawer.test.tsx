@@ -71,7 +71,7 @@ describe("EditInsurerDrawer", () => {
         {
           id: "i1",
           name: "Nome Editado",
-          cnpj: "12.345.678/0001-90",
+          cnpj: "12345678000190",
           email: "contato@seguradora.com",
           phone: null,
           website: null,

@@ -87,6 +87,16 @@ export async function uploadInsurerLogo({ insurerId, file }: UploadInsurerLogoIn
 
 No topo do card "Identificação", antes do `DetailField` de Nome: se `insurer.logo_url` existir, `<img src={insurer.logo_url} className="size-16 rounded-lg border border-border bg-card object-contain p-1.5" />`. Sem logo, nada aparece (sem placeholder/inicial — é só visualização, diferente do avatar-editor de `own-brokerage-screen`).
 
+## Addendum — máscara de CNPJ e telefone
+
+Escopo original descartava máscara ("não foi pedido"). Usuário pediu depois. Espelha exatamente `own-brokerage-screen`/`create-brokerage-drawer`:
+
+- `onChange={(e) => setValue("cnpj", formatCnpj(e.target.value))}` / `formatPhone` nos dois drawers, `maxLength={18}`/`{16}`.
+- Payload passa a salvar só dígitos (`values.cnpj.replace(/\D/g, "")`, `digitsOnly(values.phone)`) — mesma convenção de `brokerages` (`tax_id`/`phone` também são dígitos puros no banco).
+- `edit-insurer-drawer`: `defaultValues.cnpj`/`phone` formatam o valor vindo do banco (`formatCnpj(insurer.cnpj)`) pra exibir mascarado ao abrir pra editar.
+- Exibição em `insurers-list-screen` e `insurer-detail-drawer` também formata pra não mostrar dígitos crus depois que o dado passa a ser salvo sem pontuação.
+- Busca da listagem (`normalize()`) não muda — mesmo comportamento (sem strip de pontuação) já usado em `brokerages-list-screen`, não é uma lacuna nova desta spec.
+
 ## Testing Strategy
 
 - `tsc`/`eslint`/`vitest run` completos (ajustar os testes existentes de `create-insurer-drawer.test.tsx`/`edit-insurer-drawer.test.tsx` que hoje devem submeter sem CNPJ — checar antes de mexer).

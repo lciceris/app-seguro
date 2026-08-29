@@ -2,6 +2,7 @@ import { Eye, Pencil, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
+import { formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -116,10 +117,13 @@ export function InsurersListScreen() {
                 <TableRow key={insurer.id}>
                   <TableCell className="text-foreground">{insurer.name}</TableCell>
                   <TableCell className="font-mono-data text-muted-foreground">
-                    {insurer.cnpj ?? "—"}
+                    {formatCnpj(insurer.cnpj)}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {insurer.contact_name ?? insurer.phone ?? insurer.email ?? "—"}
+                    {insurer.contact_name ??
+                      (insurer.phone ? formatPhone(insurer.phone) : null) ??
+                      insurer.email ??
+                      "—"}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-end gap-1">
