@@ -48,10 +48,10 @@ describe("InviteUserDrawer", () => {
     const user = userEvent.setup();
     renderWithProviders(<InviteUserDrawer />);
 
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Novo Usuário" } });
-    fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "novo@example.com" } });
+    fireEvent.change(screen.getByLabelText("Nome *"), { target: { value: "Novo Usuário" } });
+    fireEvent.change(screen.getByLabelText("E-mail *"), { target: { value: "novo@example.com" } });
 
-    await user.click(screen.getByRole("combobox", { name: "Perfil" }));
+    await user.click(screen.getByRole("combobox", { name: "Perfil *" }));
     const listbox = await screen.findByRole("listbox");
     await user.click(within(listbox).getByText("Vendedor"));
 

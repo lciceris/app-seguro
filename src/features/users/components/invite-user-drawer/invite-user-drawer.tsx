@@ -94,7 +94,7 @@ export function InviteUserDrawer() {
             <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="full_name">Nome</Label>
+                  <Label htmlFor="full_name">Nome *</Label>
                   <Input id="full_name" {...register("full_name")} />
                   {errors.full_name && (
                     <p className="text-sm text-destructive">{errors.full_name.message}</p>
@@ -102,7 +102,7 @@ export function InviteUserDrawer() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="email">E-mail</Label>
+                  <Label htmlFor="email">E-mail *</Label>
                   <Input id="email" type="email" {...register("email")} />
                   {errors.email && (
                     <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -117,8 +117,8 @@ export function InviteUserDrawer() {
                   )}
                 </div>
 
-                <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="role">Perfil</Label>
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor="role">Perfil *</Label>
                   <Controller
                     name="role"
                     control={control}

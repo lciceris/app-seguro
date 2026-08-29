@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import {
@@ -85,15 +86,16 @@ export function UserDetailDrawer() {
                   <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Status
                   </span>
-                  <span
+                  <Badge
+                    variant="outline"
                     className={
                       user.status === "active"
-                        ? "text-sm font-medium text-success-text"
-                        : "text-sm font-medium text-neutral-text"
+                        ? "w-fit border-transparent bg-success-bg text-success-text"
+                        : "w-fit border-transparent bg-neutral-bg text-neutral-text"
                     }
                   >
                     {user.status === "active" ? "Ativo" : "Inativo"}
-                  </span>
+                  </Badge>
                 </div>
               </div>
             )}

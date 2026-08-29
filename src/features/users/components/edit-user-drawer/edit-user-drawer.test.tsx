@@ -43,14 +43,14 @@ describe("EditUserDrawer", () => {
   it("vem pré-preenchido com os dados atuais do usuário", () => {
     renderDrawer();
 
-    expect(screen.getByLabelText("Nome")).toHaveValue("Usuário Original");
+    expect(screen.getByLabelText("Nome *")).toHaveValue("Usuário Original");
     expect(screen.getByLabelText("Telefone")).toHaveValue("11988887777");
   });
 
   it("chama a mutation com os valores editados", async () => {
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Nome Editado" } });
+    fireEvent.change(screen.getByLabelText("Nome *"), { target: { value: "Nome Editado" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => {
