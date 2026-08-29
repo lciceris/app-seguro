@@ -1,10 +1,26 @@
-import { Star, X } from "lucide-react";
+import { Eye, Pencil, Star, Users, X } from "lucide-react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
+import {
+  QUOTATION_STATUS_BADGE_CLASSES,
+  QUOTATION_STATUS_LABELS,
+  useQuotationsByClient,
+} from "@/features/quotations";
 import { useUsers } from "@/features/users";
+import {
+  DERIVED_POLICY_STATUS_BADGE_CLASSES,
+  DERIVED_POLICY_STATUS_LABELS,
+  getDerivedPolicyStatus,
+  usePoliciesByClientDetailed,
+} from "@/features/policies";
+import {
+  VEHICLE_TYPE_LABELS,
+  VEHICLE_USAGE_LABELS,
+  useVehiclesByClient,
+} from "@/features/vehicles";
 import { formatCnpj, formatCpf } from "@/shared/lib/masks";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -24,6 +40,19 @@ import {
   SheetTitle,
 } from "@/shared/components/ui/sheet";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEmptyState,
+  TableErrorState,
+  TableHead,
+  TableHeader as TableHeaderRow,
+  TableRow,
+  TableSkeletonRow,
+} from "@/shared/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
 
 import { CLIENT_TYPE_LABELS } from "../../constants/labels";
 import { useAddClientSeller } from "../../hooks/use-add-client-seller";
@@ -32,6 +61,394 @@ import { useClientSellers } from "../../hooks/use-client-sellers";
 import { useRemoveClientSeller } from "../../hooks/use-remove-client-seller";
 import { useSetPrimaryClientSeller } from "../../hooks/use-set-primary-client-seller";
 import type { ClientSellerWithUser } from "../../types/client";
+
+function formatCurrency(value: number | null) {
+  if (value === null) return "—";
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function formatDate(value: string | null) {
+  if (!value) return "—";
+  return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR");
+}
+
+function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useClient>["data"]> }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Identificação
+        </p>
+        <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
+        <DetailField
+          label={client.client_type === "company" ? "CNPJ" : "CPF"}
+          value={
+            client.tax_id
+              ? client.client_type === "company"
+                ? formatCnpj(client.tax_id)
+                : formatCpf(client.tax_id)
+              : null
+          }
+        />
+        <DetailField
+          label={client.client_type === "company" ? "Razão social" : "Nome completo"}
+          value={client.legal_name}
+        />
+        {client.client_type === "company" && (
+          <DetailField label="Nome fantasia" value={client.trade_name} />
+        )}
+        {client.client_type === "individual" && (
+          <DetailField
+            label="Data de nascimento"
+            value={
+              client.birth_date
+                ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
+                : null
+            }
+          />
+        )}
+        {client.client_type === "company" && (
+          <>
+            <DetailField label="CNAE" value={client.business_code} />
+            <DetailField label="Setor" value={client.industry} />
+            <DetailField label="Inscrição estadual" value={client.state_registration} />
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Endereço
+        </p>
+        <DetailField label="CEP" value={client.zip_code} />
+        <DetailField label="Logradouro" value={client.street} />
+        <DetailField label="Número" value={client.street_number} />
+        <DetailField label="Complemento" value={client.complement} />
+        <DetailField label="Bairro" value={client.neighborhood} />
+        <DetailField label="Cidade" value={client.city} />
+        <DetailField label="UF" value={client.state} />
+      </div>
+
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Contato comercial
+        </p>
+        <DetailField label="Nome do contato" value={client.contact_name} />
+        <DetailField label="Cargo" value={client.contact_role} />
+        <DetailField label="E-mail" value={client.contact_email} />
+        <DetailField label="Telefone" value={client.contact_phone} />
+      </div>
+
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Contato financeiro
+        </p>
+        <DetailField label="Nome do contato" value={client.financial_name} />
+        <DetailField label="E-mail" value={client.financial_email} />
+      </div>
+
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Observações
+        </p>
+        <DetailField label="Observações" value={client.notes} />
+      </div>
+    </div>
+  );
+}
+
+function ClientVehiclesTab({ clientId, canCreate }: { clientId: string; canCreate: boolean }) {
+  const { data: vehicles, isLoading, isError, refetch } = useVehiclesByClient(clientId);
+
+  return (
+    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between p-5 pb-0">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Veículos da frota
+        </p>
+        {canCreate && (
+          <Button asChild size="sm">
+            <Link to={`/vehicles/add?client_id=${clientId}`}>Adicionar veículo</Link>
+          </Button>
+        )}
+      </div>
+      <div className="p-5">
+        <Table>
+          <TableHeaderRow>
+            <TableRow>
+              <TableHead>Placa</TableHead>
+              <TableHead>Classificação</TableHead>
+              <TableHead>Marca/Modelo</TableHead>
+              <TableHead>Ano</TableHead>
+              <TableHead>Uso</TableHead>
+              <TableHead>Valor declarado</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeaderRow>
+          <TableBody>
+            {isLoading &&
+              Array.from({ length: 2 }).map((_, index) => (
+                <TableSkeletonRow key={index} cells={7} />
+              ))}
+
+            {isError && !isLoading && (
+              <TableErrorState
+                colSpan={7}
+                message="Não foi possível carregar os veículos."
+                onRetry={() => refetch()}
+              />
+            )}
+
+            {!isLoading && !isError && vehicles?.length === 0 && (
+              <TableEmptyState colSpan={7} message="Nenhum veículo cadastrado ainda." />
+            )}
+
+            {!isLoading &&
+              !isError &&
+              vehicles?.map((vehicle) => (
+                <TableRow key={vehicle.id}>
+                  <TableCell className="font-mono-data text-foreground">{vehicle.plate}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {vehicle.vehicle_type ? VEHICLE_TYPE_LABELS[vehicle.vehicle_type] : "—"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {[vehicle.brand, vehicle.model].filter(Boolean).join(" ") || "—"}
+                  </TableCell>
+                  <TableCell className="font-mono-data text-muted-foreground">
+                    {vehicle.model_year ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {vehicle.vehicle_usage ? VEHICLE_USAGE_LABELS[vehicle.vehicle_usage] : "—"}
+                  </TableCell>
+                  <TableCell className="font-mono-data text-muted-foreground">
+                    {formatCurrency(vehicle.declared_value)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-end gap-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button asChild variant="ghost" size="icon-sm">
+                            <Link to={`/vehicles/${vehicle.id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Ver</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button asChild variant="ghost" size="icon-sm">
+                            <Link to={`/vehicles/${vehicle.id}/edit`}>
+                              <Pencil className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Editar</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}
+
+function ClientHistoryTab({ clientId, canCreate }: { clientId: string; canCreate: boolean }) {
+  const {
+    data: quotations,
+    isLoading: isLoadingQuotations,
+    isError: isErrorQuotations,
+    refetch: refetchQuotations,
+  } = useQuotationsByClient(clientId);
+  const {
+    data: policies,
+    isLoading: isLoadingPolicies,
+    isError: isErrorPolicies,
+    refetch: refetchPolicies,
+  } = usePoliciesByClientDetailed(clientId);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between p-5 pb-0">
+          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            Cotações
+          </p>
+          {canCreate && (
+            <Button asChild size="sm">
+              <Link to={`/quotations/add?client_id=${clientId}`}>Nova cotação</Link>
+            </Button>
+          )}
+        </div>
+        <div className="p-5">
+          <Table>
+            <TableHeaderRow>
+              <TableRow>
+                <TableHead>Número</TableHead>
+                <TableHead>Vendedor</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Prazo</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeaderRow>
+            <TableBody>
+              {isLoadingQuotations &&
+                Array.from({ length: 2 }).map((_, index) => (
+                  <TableSkeletonRow key={index} cells={5} />
+                ))}
+
+              {isErrorQuotations && !isLoadingQuotations && (
+                <TableErrorState
+                  colSpan={5}
+                  message="Não foi possível carregar as cotações."
+                  onRetry={() => refetchQuotations()}
+                />
+              )}
+
+              {!isLoadingQuotations && !isErrorQuotations && quotations?.length === 0 && (
+                <TableEmptyState colSpan={5} message="Nenhuma cotação registrada." />
+              )}
+
+              {!isLoadingQuotations &&
+                !isErrorQuotations &&
+                quotations?.map((quotation) => (
+                  <TableRow key={quotation.id}>
+                    <TableCell className="font-mono-data text-foreground">
+                      {quotation.number}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {quotation.seller?.full_name ?? "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={QUOTATION_STATUS_BADGE_CLASSES[quotation.status]}
+                      >
+                        {QUOTATION_STATUS_LABELS[quotation.status]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="font-mono-data text-muted-foreground">
+                      {formatDate(quotation.due_date)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-end">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button asChild variant="ghost" size="icon-sm">
+                              <Link to={`/quotations/${quotation.id}`}>
+                                <Eye className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Ver</TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <div className="p-5 pb-0">
+          <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+            Apólices
+          </p>
+        </div>
+        <div className="p-5">
+          <Table>
+            <TableHeaderRow>
+              <TableRow>
+                <TableHead>Número</TableHead>
+                <TableHead>Seguradora</TableHead>
+                <TableHead>Prêmio</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Vigência</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeaderRow>
+            <TableBody>
+              {isLoadingPolicies &&
+                Array.from({ length: 2 }).map((_, index) => (
+                  <TableSkeletonRow key={index} cells={6} />
+                ))}
+
+              {isErrorPolicies && !isLoadingPolicies && (
+                <TableErrorState
+                  colSpan={6}
+                  message="Não foi possível carregar as apólices."
+                  onRetry={() => refetchPolicies()}
+                />
+              )}
+
+              {!isLoadingPolicies && !isErrorPolicies && policies?.length === 0 && (
+                <TableEmptyState colSpan={6} message="Nenhuma apólice registrada." />
+              )}
+
+              {!isLoadingPolicies &&
+                !isErrorPolicies &&
+                policies?.map((policy) => {
+                  const derivedStatus = getDerivedPolicyStatus(policy);
+                  return (
+                    <TableRow key={policy.id}>
+                      <TableCell className="font-mono-data text-foreground">
+                        {policy.policy_number ?? "Pendente de emissão"}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {policy.insurers?.name ?? "—"}
+                      </TableCell>
+                      <TableCell className="font-mono-data text-muted-foreground">
+                        {formatCurrency(policy.premium_amount)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="outline"
+                          className={DERIVED_POLICY_STATUS_BADGE_CLASSES[derivedStatus]}
+                        >
+                          {DERIVED_POLICY_STATUS_LABELS[derivedStatus]}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-mono-data text-muted-foreground">
+                        {formatDate(policy.coverage_start)} — {formatDate(policy.coverage_end)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-end">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button asChild variant="ghost" size="icon-sm">
+                                <Link to={`/policies/${policy.id}`}>
+                                  <Eye className="h-4 w-4" />
+                                </Link>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Ver</TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ClientDocumentsTab() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border bg-card p-12 text-center shadow-sm">
+      <p className="text-sm font-medium text-foreground">Em breve</p>
+      <p className="text-sm text-muted-foreground">Upload e gestão de documentos do cliente.</p>
+    </div>
+  );
+}
 
 function ClientSellersSection({ clientId, canManage }: { clientId: string; canManage: boolean }) {
   const { data: clientSellers, isLoading } = useClientSellers(clientId);
@@ -220,8 +637,18 @@ export function ClientDetailDrawer() {
   const navigate = useNavigate();
   const { clientId } = useParams<{ clientId: string }>();
   const { data: client, isLoading, isError, refetch } = useClient(clientId!);
+  const { data: clientSellers } = useClientSellers(clientId!);
   const usuario = useAuthStore((state) => state.usuario);
   const canManageSellers = usuario?.role !== "seller" && usuario?.role !== "viewer";
+  const canEdit = usuario?.role !== "viewer";
+  const canCreateRelated =
+    usuario?.role === "seller" ||
+    usuario?.role === "supervisor" ||
+    usuario?.role === "brokerage_admin" ||
+    usuario?.role === "platform_admin";
+  const [activeTab, setActiveTab] = useState("dados");
+
+  const primarySeller = clientSellers?.find((cs) => cs.is_primary);
 
   function handleClose() {
     navigate("/clients");
@@ -231,7 +658,63 @@ export function ClientDetailDrawer() {
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
       <SheetContent size="lg">
         <SheetHeader>
-          <SheetTitle>Detalhe do cliente</SheetTitle>
+          {isLoading && (
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="flex flex-col gap-1.5">
+                <Skeleton className="h-5 w-56" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+            </div>
+          )}
+
+          {!isLoading && client && (
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-muted text-base font-semibold text-muted-foreground">
+                  {client.legal_name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <SheetTitle className="flex items-center gap-2 text-base">
+                    {client.legal_name}
+                    <Badge variant="outline">
+                      {client.client_type === "company" ? "PJ" : "PF"}
+                    </Badge>
+                  </SheetTitle>
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    {client.tax_id && (
+                      <span className="font-mono-data">
+                        {client.client_type === "company"
+                          ? formatCnpj(client.tax_id)
+                          : formatCpf(client.tax_id)}
+                      </span>
+                    )}
+                    {primarySeller?.users?.full_name && (
+                      <span className="flex items-center gap-1">
+                        <Star className="h-3 w-3 fill-warning text-warning" />
+                        {primarySeller.users.full_name}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" onClick={() => setActiveTab("sellers")}>
+                  <Users className="h-4 w-4" />
+                  Vendedores
+                </Button>
+                {canEdit && (
+                  <Button asChild variant="outline" size="sm">
+                    <Link to={`/clients/${client.id}/edit`}>
+                      <Pencil className="h-4 w-4" />
+                      Editar
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </SheetHeader>
 
         <div className="flex-1 min-h-0 overflow-y-auto bg-background">
@@ -257,88 +740,35 @@ export function ClientDetailDrawer() {
             )}
 
             {!isLoading && !isError && client && (
-              <>
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Identificação
-                  </p>
-                  <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
-                  <DetailField
-                    label={client.client_type === "company" ? "CNPJ" : "CPF"}
-                    value={
-                      client.tax_id
-                        ? client.client_type === "company"
-                          ? formatCnpj(client.tax_id)
-                          : formatCpf(client.tax_id)
-                        : null
-                    }
-                  />
-                  <DetailField
-                    label={client.client_type === "company" ? "Razão social" : "Nome completo"}
-                    value={client.legal_name}
-                  />
-                  {client.client_type === "company" && (
-                    <DetailField label="Nome fantasia" value={client.trade_name} />
-                  )}
-                  {client.client_type === "individual" && (
-                    <DetailField
-                      label="Data de nascimento"
-                      value={
-                        client.birth_date
-                          ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
-                          : null
-                      }
-                    />
-                  )}
-                  {client.client_type === "company" && (
-                    <>
-                      <DetailField label="CNAE" value={client.business_code} />
-                      <DetailField label="Setor" value={client.industry} />
-                      <DetailField label="Inscrição estadual" value={client.state_registration} />
-                    </>
-                  )}
-                </div>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList>
+                  <TabsTrigger value="dados">Dados</TabsTrigger>
+                  <TabsTrigger value="vehicles">Veículos</TabsTrigger>
+                  <TabsTrigger value="history">Histórico</TabsTrigger>
+                  <TabsTrigger value="documents">Documentos</TabsTrigger>
+                  <TabsTrigger value="sellers">Vendedores</TabsTrigger>
+                </TabsList>
 
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Endereço
-                  </p>
-                  <DetailField label="CEP" value={client.zip_code} />
-                  <DetailField label="Logradouro" value={client.street} />
-                  <DetailField label="Número" value={client.street_number} />
-                  <DetailField label="Complemento" value={client.complement} />
-                  <DetailField label="Bairro" value={client.neighborhood} />
-                  <DetailField label="Cidade" value={client.city} />
-                  <DetailField label="UF" value={client.state} />
-                </div>
+                <TabsContent value="dados" className="mt-4">
+                  <ClientDataTab client={client} />
+                </TabsContent>
 
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Contato comercial
-                  </p>
-                  <DetailField label="Nome do contato" value={client.contact_name} />
-                  <DetailField label="Cargo" value={client.contact_role} />
-                  <DetailField label="E-mail" value={client.contact_email} />
-                  <DetailField label="Telefone" value={client.contact_phone} />
-                </div>
+                <TabsContent value="vehicles" className="mt-4">
+                  <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
+                </TabsContent>
 
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Contato financeiro
-                  </p>
-                  <DetailField label="Nome do contato" value={client.financial_name} />
-                  <DetailField label="E-mail" value={client.financial_email} />
-                </div>
+                <TabsContent value="history" className="mt-4">
+                  <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
+                </TabsContent>
 
-                <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                  <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                    Observações
-                  </p>
-                  <DetailField label="Observações" value={client.notes} />
-                </div>
+                <TabsContent value="documents" className="mt-4">
+                  <ClientDocumentsTab />
+                </TabsContent>
 
-                <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
-              </>
+                <TabsContent value="sellers" className="mt-4">
+                  <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
+                </TabsContent>
+              </Tabs>
             )}
           </div>
         </div>

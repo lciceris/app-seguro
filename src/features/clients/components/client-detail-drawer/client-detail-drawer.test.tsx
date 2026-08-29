@@ -114,27 +114,38 @@ describe("ClientDetailDrawer", () => {
     roleMock = "supervisor";
   });
 
-  it("supervisor vê os controles de gestão de vendedores", () => {
-    renderDrawer();
+  async function openSellersTab(user: ReturnType<typeof userEvent.setup>) {
+    await user.click(screen.getByRole("tab", { name: "Vendedores" }));
+    return screen.getByRole("tabpanel");
+  }
 
-    expect(screen.getByText("Vendedor Um")).toBeInTheDocument();
-    expect(screen.getByText("Principal")).toBeInTheDocument();
-    expect(screen.getAllByTitle("Remover")).toHaveLength(2);
+  it("supervisor vê os controles de gestão de vendedores", async () => {
+    const user = userEvent.setup();
+    renderDrawer();
+    const panel = await openSellersTab(user);
+
+    expect(within(panel).getByText("Vendedor Um")).toBeInTheDocument();
+    expect(within(panel).getByText("Principal")).toBeInTheDocument();
+    expect(within(panel).getAllByTitle("Remover")).toHaveLength(2);
   });
 
-  it("seller não vê nenhum controle de gestão de vendedores", () => {
+  it("seller não vê nenhum controle de gestão de vendedores", async () => {
+    const user = userEvent.setup();
     roleMock = "seller";
     renderDrawer();
+    const panel = await openSellersTab(user);
 
-    expect(screen.getByText("Vendedor Um")).toBeInTheDocument();
-    expect(screen.queryByTitle("Remover")).not.toBeInTheDocument();
-    expect(screen.queryByText("Adicionar vendedor")).not.toBeInTheDocument();
+    expect(within(panel).getByText("Vendedor Um")).toBeInTheDocument();
+    expect(within(panel).queryByTitle("Remover")).not.toBeInTheDocument();
+    expect(within(panel).queryByText("Adicionar vendedor")).not.toBeInTheDocument();
   });
 
-  it("remove diretamente um vendedor não-principal", () => {
+  it("remove diretamente um vendedor não-principal", async () => {
+    const user = userEvent.setup();
     renderDrawer();
+    const panel = await openSellersTab(user);
 
-    const rowDois = screen.getByText("Vendedor Dois").closest("div")!.parentElement!;
+    const rowDois = within(panel).getByText("Vendedor Dois").closest("div")!.parentElement!;
     fireEvent.click(within(rowDois).getByTitle("Remover"));
 
     expect(removeMutateMock).toHaveBeenCalledWith(
@@ -146,11 +157,12 @@ describe("ClientDetailDrawer", () => {
   it("exige escolher um substituto ao remover o vendedor principal com outros restantes", async () => {
     const user = userEvent.setup();
     renderDrawer();
+    const panel = await openSellersTab(user);
 
-    const rowUm = screen.getByText("Vendedor Um").closest("div")!.parentElement!;
+    const rowUm = within(panel).getByText("Vendedor Um").closest("div")!.parentElement!;
     fireEvent.click(within(rowUm).getByTitle("Remover"));
 
-    const replacementBox = screen
+    const replacementBox = within(panel)
       .getByText("Escolha o novo vendedor principal antes de remover Vendedor Um.")
       .closest("div")!;
     expect(removeMutateMock).not.toHaveBeenCalled();
@@ -170,10 +182,12 @@ describe("ClientDetailDrawer", () => {
     );
   });
 
-  it("marca um vendedor diferente como principal", () => {
+  it("marca um vendedor diferente como principal", async () => {
+    const user = userEvent.setup();
     renderDrawer();
+    const panel = await openSellersTab(user);
 
-    fireEvent.click(screen.getByTitle("Tornar principal"));
+    fireEvent.click(within(panel).getByTitle("Tornar principal"));
 
     expect(setPrimaryMutateMock).toHaveBeenCalledWith(
       { id: "cs2", clientId: "c1" },
@@ -184,11 +198,12 @@ describe("ClientDetailDrawer", () => {
   it("adiciona um novo vendedor disponível", async () => {
     const user = userEvent.setup();
     renderDrawer();
+    const panel = await openSellersTab(user);
 
-    await user.click(screen.getByRole("combobox"));
+    await user.click(within(panel).getByRole("combobox"));
     const listbox = await screen.findByRole("listbox");
     await user.click(within(listbox).getByText("Vendedor Três"));
-    await user.click(screen.getByRole("button", { name: "Adicionar" }));
+    await user.click(within(panel).getByRole("button", { name: "Adicionar" }));
 
     expect(addMutateMock).toHaveBeenCalledWith(
       { clientId: "c1", sellerId: "s3", isPrimary: false },
