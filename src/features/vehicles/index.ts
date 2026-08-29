@@ -1,4 +1,5 @@
 export * from "./hooks/use-vehicles";
+export * from "./hooks/use-vehicles-by-client";
 export * from "./hooks/use-vehicle";
 export * from "./hooks/use-create-vehicle";
 export * from "./hooks/use-update-vehicle";

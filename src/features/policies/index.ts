@@ -1,5 +1,6 @@
 export * from "./hooks/use-policies";
 export * from "./hooks/use-policies-by-client";
+export * from "./hooks/use-policies-by-client-detailed";
 export * from "./hooks/use-policy";
 export * from "./hooks/use-renewed-by-policy";
 export * from "./hooks/use-renewed-from-policy";

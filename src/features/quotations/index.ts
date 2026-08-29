@@ -1,4 +1,5 @@
 export * from "./hooks/use-quotations";
+export * from "./hooks/use-quotations-by-client";
 export * from "./hooks/use-quotation";
 export * from "./hooks/use-create-quotation";
 export * from "./hooks/use-update-quotation";

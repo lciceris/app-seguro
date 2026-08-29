@@ -2,6 +2,8 @@ export const policyKeys = {
   all: ["policies"] as const,
   lists: () => [...policyKeys.all, "list"] as const,
   listByClient: (clientId: string) => [...policyKeys.lists(), "by-client", clientId] as const,
+  listByClientDetailed: (clientId: string) =>
+    [...policyKeys.lists(), "by-client-detailed", clientId] as const,
   details: () => [...policyKeys.all, "detail"] as const,
   detail: (id: string) => [...policyKeys.details(), id] as const,
   attachments: (policyId: string) => [...policyKeys.detail(policyId), "attachments"] as const,

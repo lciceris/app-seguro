@@ -1,6 +1,7 @@
 export const quotationKeys = {
   all: ["quotations"] as const,
   lists: () => [...quotationKeys.all, "list"] as const,
+  listByClient: (clientId: string) => [...quotationKeys.lists(), "by-client", clientId] as const,
   details: () => [...quotationKeys.all, "detail"] as const,
   detail: (id: string) => [...quotationKeys.details(), id] as const,
   vehicles: (quotationId: string) => [...quotationKeys.detail(quotationId), "vehicles"] as const,
