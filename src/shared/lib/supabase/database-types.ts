@@ -262,11 +262,9 @@ export type Database = {
           financial_name: string | null
           id: string
           industry: string | null
-          lead_source: string | null
           legal_name: string
           neighborhood: string | null
           notes: string | null
-          segment: Database["public"]["Enums"]["client_segment"]
           state: string | null
           state_registration: string | null
           status: Database["public"]["Enums"]["client_status"]
@@ -293,11 +291,9 @@ export type Database = {
           financial_name?: string | null
           id?: string
           industry?: string | null
-          lead_source?: string | null
           legal_name: string
           neighborhood?: string | null
           notes?: string | null
-          segment?: Database["public"]["Enums"]["client_segment"]
           state?: string | null
           state_registration?: string | null
           status?: Database["public"]["Enums"]["client_status"]
@@ -324,11 +320,9 @@ export type Database = {
           financial_name?: string | null
           id?: string
           industry?: string | null
-          lead_source?: string | null
           legal_name?: string
           neighborhood?: string | null
           notes?: string | null
-          segment?: Database["public"]["Enums"]["client_segment"]
           state?: string | null
           state_registration?: string | null
           status?: Database["public"]["Enums"]["client_status"]
@@ -1531,7 +1525,6 @@ export type Database = {
     }
     Enums: {
       brokerage_status: "active" | "inactive"
-      client_segment: "lead" | "active" | "vip" | "inactive"
       client_status: "active" | "inactive"
       client_type: "individual" | "company"
       coverage_type: "rcf" | "total" | "vd"
@@ -1730,7 +1723,6 @@ export const Constants = {
   public: {
     Enums: {
       brokerage_status: ["active", "inactive"],
-      client_segment: ["lead", "active", "vip", "inactive"],
       client_status: ["active", "inactive"],
       client_type: ["individual", "company"],
       coverage_type: ["rcf", "total", "vd"],

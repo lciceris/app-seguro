@@ -36,10 +36,10 @@
   - [x] 5.3 `clients-list-screen.tsx`: coluna Status (Badge) + toggle usa `status`
     - _Requirements: 6.2, 6.3, 6.4_
 
-- [ ] 6. Limpeza final no banco
-  - [ ] 6.1 Migration drop `segment`/`lead_source`/`client_segment` (só depois do código não referenciar mais)
+- [x] 6. Limpeza final no banco
+  - [x] 6.1 Migration drop `segment`/`lead_source`/`client_segment` (só depois do código não referenciar mais)
     - _Requirements: 6.5_
-  - [ ] 6.2 `supabase gen types typescript --linked` final
+  - [x] 6.2 `supabase gen types typescript --linked` final
     - _Requirements: —_
 
 - [x] 7. Testes e verificação
