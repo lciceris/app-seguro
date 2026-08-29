@@ -27,7 +27,35 @@ export function InsurerDetailDrawer() {
     <Sheet open onOpenChange={(open) => !open && handleClose()}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Detalhe da seguradora</SheetTitle>
+          <div className="flex items-center gap-3">
+            {!isLoading && insurer && (
+              <>
+                {insurer.logo_url ? (
+                  <img
+                    src={insurer.logo_url}
+                    alt={insurer.name}
+                    className="h-10 w-10 shrink-0 rounded-full border-[3px] border-primary object-cover"
+                  />
+                ) : (
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[3px] border-primary bg-muted text-sm font-semibold text-muted-foreground">
+                    {insurer.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+              </>
+            )}
+            <div className="flex flex-col gap-0.5">
+              <SheetTitle>
+                {isLoading ? (
+                  <Skeleton className="h-6 w-40" />
+                ) : (
+                  (insurer?.name ?? "Detalhe da seguradora")
+                )}
+              </SheetTitle>
+              {!isLoading && insurer && (
+                <p className="text-xs text-muted-foreground">Detalhe da seguradora</p>
+              )}
+            </div>
+          </div>
         </SheetHeader>
 
         <div className="flex-1 min-h-0 overflow-y-auto bg-background">
@@ -58,46 +86,53 @@ export function InsurerDetailDrawer() {
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Identificação
                   </p>
-                  {insurer.logo_url && (
-                    <img
-                      src={insurer.logo_url}
-                      alt="Logo"
-                      className="size-16 rounded-lg border border-border bg-card object-contain p-1.5"
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <div className="col-span-2">
+                      <DetailField label="Nome" value={insurer.name} />
+                    </div>
+                    <DetailField label="CNPJ" value={formatCnpj(insurer.cnpj)} />
+                    <DetailField label="E-mail" value={insurer.email} />
+                    <DetailField
+                      label="Telefone comercial"
+                      value={insurer.phone ? formatPhone(insurer.phone) : insurer.phone}
                     />
-                  )}
-                  <DetailField label="Nome" value={insurer.name} />
-                  <DetailField label="CNPJ" value={formatCnpj(insurer.cnpj)} />
-                  <DetailField label="E-mail" value={insurer.email} />
-                  <DetailField
-                    label="Telefone comercial"
-                    value={insurer.phone ? formatPhone(insurer.phone) : insurer.phone}
-                  />
-                  <DetailField label="Website" value={insurer.website} />
+                    <div className="col-span-2">
+                      <DetailField label="Website" value={insurer.website} />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Contato comercial
                   </p>
-                  <DetailField label="Nome do contato" value={insurer.contact_name} />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <DetailField label="Nome do contato" value={insurer.contact_name} />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Configurações
                   </p>
-                  <DetailField
-                    label="Prazo de resposta (dias)"
-                    value={insurer.response_time_days}
-                  />
-                  <DetailField label="Ordem de exibição" value={insurer.display_order} />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <DetailField
+                      label="Prazo de resposta (dias)"
+                      value={insurer.response_time_days}
+                    />
+                    <DetailField label="Ordem de exibição" value={insurer.display_order} />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
                   <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Observações
                   </p>
-                  <DetailField label="Observações" value={insurer.notes} />
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <div className="col-span-2">
+                      <DetailField label="Observações" value={insurer.notes} />
+                    </div>
+                  </div>
                 </div>
               </>
             )}
