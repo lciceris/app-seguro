@@ -269,6 +269,7 @@ export type Database = {
           segment: Database["public"]["Enums"]["client_segment"]
           state: string | null
           state_registration: string | null
+          status: Database["public"]["Enums"]["client_status"]
           street: string | null
           street_number: string | null
           tax_id: string | null
@@ -299,6 +300,7 @@ export type Database = {
           segment?: Database["public"]["Enums"]["client_segment"]
           state?: string | null
           state_registration?: string | null
+          status?: Database["public"]["Enums"]["client_status"]
           street?: string | null
           street_number?: string | null
           tax_id?: string | null
@@ -329,6 +331,7 @@ export type Database = {
           segment?: Database["public"]["Enums"]["client_segment"]
           state?: string | null
           state_registration?: string | null
+          status?: Database["public"]["Enums"]["client_status"]
           street?: string | null
           street_number?: string | null
           tax_id?: string | null
@@ -1529,6 +1532,7 @@ export type Database = {
     Enums: {
       brokerage_status: "active" | "inactive"
       client_segment: "lead" | "active" | "vip" | "inactive"
+      client_status: "active" | "inactive"
       client_type: "individual" | "company"
       coverage_type: "rcf" | "total" | "vd"
       franchise_type: "normal" | "reduced"
@@ -1727,6 +1731,7 @@ export const Constants = {
     Enums: {
       brokerage_status: ["active", "inactive"],
       client_segment: ["lead", "active", "vip", "inactive"],
+      client_status: ["active", "inactive"],
       client_type: ["individual", "company"],
       coverage_type: ["rcf", "total", "vd"],
       franchise_type: ["normal", "reduced"],

@@ -3,7 +3,7 @@ import { supabase } from "@/shared/lib/supabase";
 export async function reactivateClient(id: string) {
   const { data, error } = await supabase
     .from("clients")
-    .update({ segment: "active" })
+    .update({ status: "active" })
     .eq("id", id)
     .select()
     .single();

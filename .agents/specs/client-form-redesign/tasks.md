@@ -4,12 +4,12 @@
   - [x] 1.1 `formatCpf` em `src/shared/lib/masks.ts`
     - _Requirements: 3.2_
 
-- [ ] 2. Status de cliente (migration + backfill)
-  - [ ] 2.1 Migration `client_status` enum + coluna `status` + backfill a partir de `segment`
+- [x] 2. Status de cliente (migration + backfill)
+  - [x] 2.1 Migration `client_status` enum + coluna `status` + backfill a partir de `segment`
     - _Requirements: 6.1_
-  - [ ] 2.2 `deactivate-client.ts`/`reactivate-client.ts` passam a usar `status`
+  - [x] 2.2 `deactivate-client.ts`/`reactivate-client.ts` passam a usar `status`
     - _Requirements: 6.2, 6.3_
-  - [ ] 2.3 `supabase gen types typescript --linked`
+  - [x] 2.3 `supabase gen types typescript --linked`
     - _Requirements: —_
 
 - [ ] 3. Toggle PF/PJ + reordenação + busca CNPJ/CEP + máscaras (create-client-drawer)
