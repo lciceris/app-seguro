@@ -79,72 +79,82 @@ function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useCl
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Identificação
         </p>
-        <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
-        <DetailField
-          label={client.client_type === "company" ? "CNPJ" : "CPF"}
-          value={
-            client.tax_id
-              ? client.client_type === "company"
-                ? formatCnpj(client.tax_id)
-                : formatCpf(client.tax_id)
-              : null
-          }
-        />
-        <DetailField
-          label={client.client_type === "company" ? "Razão social" : "Nome completo"}
-          value={client.legal_name}
-        />
-        {client.client_type === "company" && (
-          <DetailField label="Nome fantasia" value={client.trade_name} />
-        )}
-        {client.client_type === "individual" && (
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <div className="col-span-2">
+            <DetailField
+              label={client.client_type === "company" ? "Razão social" : "Nome completo"}
+              value={client.legal_name}
+            />
+          </div>
+          <DetailField label="Tipo" value={CLIENT_TYPE_LABELS[client.client_type]} />
           <DetailField
-            label="Data de nascimento"
+            label={client.client_type === "company" ? "CNPJ" : "CPF"}
             value={
-              client.birth_date
-                ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
+              client.tax_id
+                ? client.client_type === "company"
+                  ? formatCnpj(client.tax_id)
+                  : formatCpf(client.tax_id)
                 : null
             }
           />
-        )}
-        {client.client_type === "company" && (
-          <>
-            <DetailField label="CNAE" value={client.business_code} />
-            <DetailField label="Setor" value={client.industry} />
-            <DetailField label="Inscrição estadual" value={client.state_registration} />
-          </>
-        )}
+          {client.client_type === "company" && (
+            <>
+              <DetailField label="Nome fantasia" value={client.trade_name} />
+              <DetailField label="CNAE" value={client.business_code} />
+              <DetailField label="Setor" value={client.industry} />
+              <DetailField label="Inscrição estadual" value={client.state_registration} />
+            </>
+          )}
+          {client.client_type === "individual" && (
+            <DetailField
+              label="Data de nascimento"
+              value={
+                client.birth_date
+                  ? new Date(client.birth_date + "T00:00:00").toLocaleDateString("pt-BR")
+                  : null
+              }
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Endereço
         </p>
-        <DetailField label="CEP" value={client.zip_code} />
-        <DetailField label="Logradouro" value={client.street} />
-        <DetailField label="Número" value={client.street_number} />
-        <DetailField label="Complemento" value={client.complement} />
-        <DetailField label="Bairro" value={client.neighborhood} />
-        <DetailField label="Cidade" value={client.city} />
-        <DetailField label="UF" value={client.state} />
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <DetailField label="CEP" value={client.zip_code} />
+          <div className="col-span-2">
+            <DetailField label="Logradouro" value={client.street} />
+          </div>
+          <DetailField label="Número" value={client.street_number} />
+          <DetailField label="Complemento" value={client.complement} />
+          <DetailField label="Bairro" value={client.neighborhood} />
+          <DetailField label="Cidade" value={client.city} />
+          <DetailField label="UF" value={client.state} />
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Contato comercial
         </p>
-        <DetailField label="Nome do contato" value={client.contact_name} />
-        <DetailField label="Cargo" value={client.contact_role} />
-        <DetailField label="E-mail" value={client.contact_email} />
-        <DetailField label="Telefone" value={client.contact_phone} />
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <DetailField label="Nome do contato" value={client.contact_name} />
+          <DetailField label="Cargo" value={client.contact_role} />
+          <DetailField label="E-mail" value={client.contact_email} />
+          <DetailField label="Telefone" value={client.contact_phone} />
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Contato financeiro
         </p>
-        <DetailField label="Nome do contato" value={client.financial_name} />
-        <DetailField label="E-mail" value={client.financial_email} />
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <DetailField label="Nome do contato" value={client.financial_name} />
+          <DetailField label="E-mail" value={client.financial_email} />
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
