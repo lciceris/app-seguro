@@ -51,3 +51,14 @@
   - _Requirements: —_
 - [x] 10. Verificação visual via Playwright: novo estilo de tabs, grid das tabelas, e navegação de volta ao hub confirmada por URL após editar/salvar e após cancelar "Adicionar veículo"
   - _Requirements: —_
+
+## Addendum 2 — grid em 2 colunas + escolha final do estilo de tabs
+
+- [x] 11. Aba Dados: cards de Identificacao/Endereco/Contatos em grid de 2 colunas (igual brokerage-detail-drawer)
+  - _Requirements: --_
+- [x] 12. Apresentadas 6 opcoes de estilo de tabs via artifact interativo; usuario escolheu "sublinhado com base cheia" (opcao 5)
+  - _Requirements: --_
+- [x] 13. variant="line" do Tabs compartilhado reescrito pra essa opcao: TabsList ganha border-b full-width, TabsTrigger vira flex-none (nao estica mais igual), indicador da aba ativa passa de bg-foreground/bottom[-5px] pra bg-primary/bottom[-1px] + font-semibold. Unico consumidor de variant="line" e client-detail-drawer -- quotation-detail-screen continua na variante default (pill), nao afetado.
+  - _Requirements: --_
+- [x] 14. tsc/eslint/vitest run (137/137) + verificacao visual via Playwright (Dados e Historico ativos)
+  - _Requirements: --_
