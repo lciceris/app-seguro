@@ -34,6 +34,7 @@
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
+    --color-border-strong: var(--border-strong);
     --color-destructive: var(--destructive);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
@@ -88,6 +89,7 @@
     --destructive-foreground: #FFFFFF;
 
     --border: #E2E8F0;
+    --border-strong: #CBD5E1;
     --input: #E2E8F0;
 
     /* Ring: acompanha o primary */
@@ -178,6 +180,7 @@
     --destructive-foreground: #FFFFFF;
 
     --border: #262626;
+    --border-strong: #404040;
     --input: #262626;
 
     /* Sidebar — mesma escala Neutral do resto */
