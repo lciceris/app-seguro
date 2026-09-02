@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { isValidCnpj } from "@/shared/lib/document-validators";
+
 // "none" é o valor sentinela do SelectItem de "Sem plano" (Select não aceita
 // value="" nem null diretamente) — convertido pra null no payload da mutation.
 export const NO_PLAN_VALUE = "none";
@@ -12,7 +14,7 @@ export const editBrokerageSchema = z.object({
   plan_id: z.string(),
   plan_expires_at: z.date().nullable(),
   trade_name: z.string().optional(),
-  tax_id: z.string().min(1, "Informe o CNPJ"),
+  tax_id: z.string().min(1, "Informe o CNPJ").refine(isValidCnpj, "CNPJ inválido"),
   business_code: z.string().optional(),
   state_registration: z.string().optional(),
   email: z.union([z.literal(""), z.string().email("E-mail inválido")]).optional(),

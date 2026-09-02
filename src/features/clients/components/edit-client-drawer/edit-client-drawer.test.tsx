@@ -14,7 +14,7 @@ const clientFake = {
   client_type: "individual" as const,
   legal_name: "Cliente Original",
   trade_name: null,
-  tax_id: "111.111.111-11",
+  tax_id: "111.444.777-35",
   birth_date: null,
   business_code: null,
   industry: null,
@@ -64,7 +64,7 @@ describe("EditClientDrawer", () => {
     renderDrawer();
 
     expect(screen.getByLabelText("Nome completo *")).toHaveValue("Cliente Original");
-    expect(screen.getByLabelText("CPF")).toHaveValue("111.111.111-11");
+    expect(screen.getByLabelText("CPF")).toHaveValue("111.444.777-35");
   });
 
   it("chama a mutation com os valores editados", async () => {

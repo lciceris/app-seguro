@@ -237,6 +237,9 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
                     </Button>
                   )}
                 </div>
+                {errors.tax_id && (
+                  <p className="text-sm text-destructive">{errors.tax_id.message}</p>
+                )}
               </div>
 
               <div className="col-span-2 flex flex-col gap-1.5">
