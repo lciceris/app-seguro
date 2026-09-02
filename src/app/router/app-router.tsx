@@ -52,13 +52,21 @@ export function AppRouter() {
 
           <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/users")} />}>
             <Route path="/users" element={<UsersPage />}>
-              <Route path=":userId" element={<UserDetailPage />} />
-
               <Route
                 element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}
               >
                 <Route path="add" element={<AddUserPage />} />
-                <Route path=":userId/edit" element={<EditUserPage />} />
+              </Route>
+            </Route>
+
+            {/* Página cheia, não drawer — "Ver" é sempre página em todo o
+                app (ver .agents/specs/design-refresh-stitch-inspired/design.md,
+                "Divergência de padrão"). */}
+            <Route path="/users/:userId" element={<UserDetailPage />}>
+              <Route
+                element={<ProtectedRoute allowedRoles={["platform_admin", "brokerage_admin"]} />}
+              >
+                <Route path="edit" element={<EditUserPage />} />
               </Route>
             </Route>
           </Route>
@@ -66,8 +74,13 @@ export function AppRouter() {
           <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/brokerages")} />}>
             <Route path="/brokerages" element={<BrokeragesPage />}>
               <Route path="add" element={<AddBrokeragePage />} />
-              <Route path=":brokerageId" element={<BrokerageDetailPage />} />
-              <Route path=":brokerageId/edit" element={<EditBrokeragePage />} />
+            </Route>
+
+            {/* Página cheia, não drawer — "Ver" é sempre página em todo o
+                app (ver .agents/specs/design-refresh-stitch-inspired/design.md,
+                "Divergência de padrão"). */}
+            <Route path="/brokerages/:brokerageId" element={<BrokerageDetailPage />}>
+              <Route path="edit" element={<EditBrokeragePage />} />
             </Route>
           </Route>
 
@@ -78,8 +91,13 @@ export function AppRouter() {
           <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/admin/insurers")} />}>
             <Route path="/admin/insurers" element={<InsurersPage />}>
               <Route path="add" element={<AddInsurerPage />} />
-              <Route path=":insurerId" element={<InsurerDetailPage />} />
-              <Route path=":insurerId/edit" element={<EditInsurerPage />} />
+            </Route>
+
+            {/* Página cheia, não drawer — "Ver" é sempre página em todo o
+                app (ver .agents/specs/design-refresh-stitch-inspired/design.md,
+                "Divergência de padrão"). */}
+            <Route path="/admin/insurers/:insurerId" element={<InsurerDetailPage />}>
+              <Route path="edit" element={<EditInsurerPage />} />
             </Route>
           </Route>
 
@@ -119,8 +137,13 @@ export function AppRouter() {
           <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/vehicles")} />}>
             <Route path="/vehicles" element={<VehiclesPage />}>
               <Route path="add" element={<AddVehiclePage />} />
-              <Route path=":vehicleId" element={<VehicleDetailPage />} />
-              <Route path=":vehicleId/edit" element={<EditVehiclePage />} />
+            </Route>
+
+            {/* Página cheia, não drawer — "Ver" é sempre página em todo o
+                app (ver .agents/specs/design-refresh-stitch-inspired/design.md,
+                "Divergência de padrão"). */}
+            <Route path="/vehicles/:vehicleId" element={<VehicleDetailPage />}>
+              <Route path="edit" element={<EditVehiclePage />} />
             </Route>
           </Route>
 
@@ -159,12 +182,13 @@ export function AppRouter() {
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/policies")} />}>
-            <Route path="/policies" element={<PoliciesPage />}>
-              <Route path=":policyId" element={<PolicyDetailPage />} />
-              <Route
-                path=":policyId/endorsements/:endorsementId"
-                element={<PolicyEndorsementDetailPage />}
-              />
+            <Route path="/policies" element={<PoliciesPage />} />
+
+            {/* Página cheia, não drawer — "Ver" é sempre página em todo o
+                app (ver .agents/specs/design-refresh-stitch-inspired/design.md,
+                "Divergência de padrão"). */}
+            <Route path="/policies/:policyId" element={<PolicyDetailPage />}>
+              <Route path="endorsements/:endorsementId" element={<PolicyEndorsementDetailPage />} />
 
               <Route
                 element={
@@ -173,7 +197,7 @@ export function AppRouter() {
                   />
                 }
               >
-                <Route path=":policyId/edit" element={<EditPolicyPage />} />
+                <Route path="edit" element={<EditPolicyPage />} />
               </Route>
 
               <Route
@@ -183,7 +207,7 @@ export function AppRouter() {
                   />
                 }
               >
-                <Route path=":policyId/endorsements/add" element={<AddPolicyEndorsementPage />} />
+                <Route path="endorsements/add" element={<AddPolicyEndorsementPage />} />
               </Route>
             </Route>
           </Route>

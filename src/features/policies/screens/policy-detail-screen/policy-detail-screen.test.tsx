@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithProviders } from "@/shared/lib/test-utils";
 
-import { PolicyDetailDrawer } from "./policy-detail-drawer";
+import { PolicyDetailScreen } from "./policy-detail-screen";
 
 const policyFake = {
   id: "p1",
@@ -62,16 +62,16 @@ vi.mock("./policy-endorsements-section", () => ({
   PolicyEndorsementsSection: () => null,
 }));
 
-function renderDrawer() {
+function renderScreen() {
   return renderWithProviders(
     <Routes>
-      <Route path="/policies/:policyId" element={<PolicyDetailDrawer />} />
+      <Route path="/policies/:policyId" element={<PolicyDetailScreen />} />
     </Routes>,
     { route: "/policies/p1" },
   );
 }
 
-describe("PolicyDetailDrawer", () => {
+describe("PolicyDetailScreen", () => {
   beforeEach(() => {
     usuarioMock = { role: "supervisor" };
     renewedFromMock = null;
@@ -79,9 +79,10 @@ describe("PolicyDetailDrawer", () => {
   });
 
   it("mostra os dados gerais e o link pra cotação de origem", () => {
-    renderDrawer();
+    renderScreen();
 
-    expect(screen.getByRole("heading", { name: "AP-2026-0001Vigente" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "AP-2026-0001" })).toBeInTheDocument();
+    expect(screen.getByText("Vigente")).toBeInTheDocument();
     expect(screen.getByText("Cliente Um")).toBeInTheDocument();
     expect(screen.getByText("Seguradora Um")).toBeInTheDocument();
     expect(screen.getByText("R$ 15.000,00")).toBeInTheDocument();
@@ -94,7 +95,7 @@ describe("PolicyDetailDrawer", () => {
   it("mostra o vínculo de renovação nos dois sentidos quando existe", () => {
     renewedFromMock = { id: "p0", policy_number: "AP-2025-0009" };
     renewedByMock = { id: "p2", policy_number: "AP-2027-0002" };
-    renderDrawer();
+    renderScreen();
 
     expect(screen.getByRole("link", { name: "AP-2025-0009" })).toHaveAttribute(
       "href",
@@ -107,7 +108,7 @@ describe("PolicyDetailDrawer", () => {
   });
 
   it("não mostra seção de renovação quando não há vínculo em nenhum sentido", () => {
-    renderDrawer();
+    renderScreen();
 
     expect(screen.queryByText("Renova a apólice")).not.toBeInTheDocument();
     expect(screen.queryByText("Renovada pela apólice")).not.toBeInTheDocument();

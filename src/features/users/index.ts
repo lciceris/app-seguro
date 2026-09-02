@@ -8,6 +8,6 @@ export * from "./hooks/use-reactivate-user";
 export * from "./types/user";
 export * from "./constants/role-labels";
 export * from "./screens/users-list-screen";
+export * from "./screens/user-detail-screen";
 export * from "./components/invite-user-drawer";
-export * from "./components/user-detail-drawer";
 export * from "./components/edit-user-drawer";

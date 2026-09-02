@@ -13,6 +13,6 @@ export * from "./types/policy";
 export * from "./constants/labels";
 export * from "./lib/get-derived-policy-status";
 export * from "./screens/policies-list-screen";
-export * from "./components/policy-detail-drawer";
+export * from "./screens/policy-detail-screen";
 export * from "./components/edit-policy-drawer";
 export * from "./validations/edit-policy-schema";

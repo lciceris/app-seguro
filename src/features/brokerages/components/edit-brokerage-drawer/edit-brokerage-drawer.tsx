@@ -464,7 +464,7 @@ export function EditBrokerageDrawer() {
   const { data: brokerage, isLoading, isError, refetch } = useBrokerage(brokerageId!);
 
   function handleClose() {
-    navigate("/brokerages");
+    navigate(`/brokerages/${brokerageId}`);
   }
 
   return (

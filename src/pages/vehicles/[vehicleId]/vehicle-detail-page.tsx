@@ -1,5 +1,5 @@
-import { VehicleDetailDrawer } from "@/features/vehicles";
+import { VehicleDetailScreen } from "@/features/vehicles";
 
 export function VehicleDetailPage() {
-  return <VehicleDetailDrawer />;
+  return <VehicleDetailScreen />;
 }

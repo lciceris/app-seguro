@@ -1,5 +1,5 @@
-import { UserDetailDrawer } from "@/features/users";
+import { UserDetailScreen } from "@/features/users";
 
 export function UserDetailPage() {
-  return <UserDetailDrawer />;
+  return <UserDetailScreen />;
 }

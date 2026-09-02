@@ -1,5 +1,5 @@
-import { InsurerDetailDrawer } from "@/features/insurers";
+import { InsurerDetailScreen } from "@/features/insurers";
 
 export function InsurerDetailPage() {
-  return <InsurerDetailDrawer />;
+  return <InsurerDetailScreen />;
 }

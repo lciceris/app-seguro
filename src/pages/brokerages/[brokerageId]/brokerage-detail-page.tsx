@@ -1,5 +1,5 @@
-import { BrokerageDetailDrawer } from "@/features/brokerages";
+import { BrokerageDetailScreen } from "@/features/brokerages";
 
 export function BrokerageDetailPage() {
-  return <BrokerageDetailDrawer />;
+  return <BrokerageDetailScreen />;
 }

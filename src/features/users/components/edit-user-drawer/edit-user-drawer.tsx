@@ -142,7 +142,7 @@ export function EditUserDrawer() {
   const { data: user, isLoading, isError, refetch } = useUser(userId!);
 
   function handleClose() {
-    navigate("/users");
+    navigate(`/users/${userId}`);
   }
 
   return (

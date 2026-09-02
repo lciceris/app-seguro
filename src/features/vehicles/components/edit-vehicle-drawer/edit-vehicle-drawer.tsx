@@ -394,7 +394,7 @@ export function EditVehicleDrawer() {
   const isLoading = isVehicleLoading || isClientsLoading;
 
   function handleClose() {
-    navigate("/vehicles");
+    navigate(`/vehicles/${vehicleId}`);
   }
 
   return (

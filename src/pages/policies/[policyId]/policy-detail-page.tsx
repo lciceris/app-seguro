@@ -1,5 +1,5 @@
-import { PolicyDetailDrawer } from "@/features/policies";
+import { PolicyDetailScreen } from "@/features/policies";
 
 export function PolicyDetailPage() {
-  return <PolicyDetailDrawer />;
+  return <PolicyDetailScreen />;
 }

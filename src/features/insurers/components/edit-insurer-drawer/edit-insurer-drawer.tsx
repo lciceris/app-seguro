@@ -304,7 +304,7 @@ export function EditInsurerDrawer() {
   const { data: insurer, isLoading, isError, refetch } = useInsurer(insurerId!);
 
   function handleClose() {
-    navigate("/admin/insurers");
+    navigate(`/admin/insurers/${insurerId}`);
   }
 
   return (

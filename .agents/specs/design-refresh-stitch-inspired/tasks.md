@@ -16,3 +16,30 @@
   - _Requirements: 6.1_
 - [x] 8. Testes e verificação visual
   - _Requirements: —_
+
+## Addendum 3 -- "Ver" sempre pagina, "Criar/Editar" sempre drawer (regra unica)
+
+Usuario sentiu que misturar pagina e drawer pra "Ver" dependendo da riqueza
+da entidade (heuristica anterior) era inconsistente na pratica, mesmo sendo
+architecturally justificavel -- o eixo certo e o tipo de acao (ver vs
+criar/editar), nao a riqueza do conteudo.
+
+- [x] 9. Veiculo: virou pagina (vehicle-detail-screen), rota /vehicles/:id
+  saiu de dentro do Outlet de /vehicles
+  - _Requirements: --_
+- [x] 10. Apolice: virou pagina (policy-detail-screen), preservando as rotas
+  aninhadas de endossos (/policies/:id/endorsements/...)
+  - _Requirements: --_
+- [x] 11. Seguradora: virou pagina (insurer-detail-screen)
+  - _Requirements: --_
+- [x] 12. Corretora: virou pagina (brokerage-detail-screen)
+  - _Requirements: --_
+- [x] 13. Usuario: virou pagina (user-detail-screen)
+  - _Requirements: --_
+- [x] 14. edit-*-drawer de cada entidade: handleClose incondicional pra
+  /entidade/:id (a pagina de detalhe, sempre presente por tras agora)
+  - _Requirements: --_
+- [x] 15. tsc/eslint/vitest (138/138) + verificacao visual via Playwright em
+  todas as 5 paginas + cenario de editar direto da listagem mostrando a
+  pagina de detalhe atras (nao mais a lista)
+  - _Requirements: --_
