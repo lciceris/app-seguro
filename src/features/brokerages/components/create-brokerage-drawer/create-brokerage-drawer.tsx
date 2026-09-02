@@ -370,9 +370,15 @@ export function CreateBrokerageDrawer() {
             </div>
 
             <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-              <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Representante e contato
-              </p>
+              <div className="flex flex-col gap-1">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Representante e contato
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Um usuário administrador da corretora será criado automaticamente para este
+                  representante, que receberá um convite por e-mail pra definir a senha.
+                </p>
+              </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
