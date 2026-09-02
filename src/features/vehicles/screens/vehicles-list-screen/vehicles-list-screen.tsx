@@ -1,4 +1,4 @@
-import { Eye, Pencil, Search, UserCheck, UserX } from "lucide-react";
+import { Eye, Pencil, Plus, Search, UserCheck, UserX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { toast } from "sonner";
@@ -79,7 +79,10 @@ export function VehiclesListScreen() {
             )}
           </div>
           <Button asChild>
-            <Link to="/vehicles/add">Novo veículo</Link>
+            <Link to="/vehicles/add">
+              <Plus className="h-4 w-4" />
+              Novo veículo
+            </Link>
           </Button>
         </div>
 

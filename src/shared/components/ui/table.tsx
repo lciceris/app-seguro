@@ -49,7 +49,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-3 text-left text-[10.5px] font-semibold tracking-wider text-muted-foreground uppercase",
+        "h-11 px-3 text-left text-[11.5px] font-semibold tracking-wider text-muted-foreground uppercase",
         className,
       )}
       {...props}
@@ -58,7 +58,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
 }
 
 function TableCell({ className, ...props }: React.ComponentProps<"td">) {
-  return <td data-slot="table-cell" className={cn("px-3 py-1.5", className)} {...props} />;
+  return <td data-slot="table-cell" className={cn("px-3 py-2.5", className)} {...props} />;
 }
 
 // Linha de estado vazio ("Nenhum X encontrado/cadastrado") — mesmo padrão

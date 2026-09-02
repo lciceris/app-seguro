@@ -1,4 +1,4 @@
-import { Eye, KeyRound, Pencil, Search, UserCheck, UserX } from "lucide-react";
+import { Eye, KeyRound, Pencil, Plus, Search, UserCheck, UserX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { toast } from "sonner";
@@ -82,7 +82,10 @@ export function UsersListScreen() {
           </div>
           {canManageUsers && (
             <Button asChild>
-              <Link to="/users/add">Convidar usuário</Link>
+              <Link to="/users/add">
+                <Plus className="h-4 w-4" />
+                Convidar usuário
+              </Link>
             </Button>
           )}
         </div>

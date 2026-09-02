@@ -1,4 +1,4 @@
-import { Eye, Pencil, Search, UserCheck, UserX } from "lucide-react";
+import { Eye, Pencil, Plus, Search, UserCheck, UserX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { toast } from "sonner";
@@ -87,7 +87,10 @@ export function ClientsListScreen() {
           </div>
           {canEdit && (
             <Button asChild>
-              <Link to="/clients/add">Novo cliente</Link>
+              <Link to="/clients/add">
+                <Plus className="h-4 w-4" />
+                Novo cliente
+              </Link>
             </Button>
           )}
         </div>

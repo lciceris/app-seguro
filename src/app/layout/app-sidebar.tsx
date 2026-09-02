@@ -54,7 +54,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1.5">
+            <SidebarMenu className="gap-2">
               {items.map((item) => {
                 const active = isItemActive(location.pathname, item.to);
                 return (
@@ -63,7 +63,7 @@ export function AppSidebar() {
                       asChild
                       isActive={active}
                       className={cn(
-                        "text-[14.5px] font-medium",
+                        "h-9 text-[14.5px] font-medium [&_svg]:size-5",
                         active && "!bg-primary/10 !text-primary !font-bold",
                       )}
                     >

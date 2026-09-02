@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Eye, Pencil, Search } from "lucide-react";
+import { ArrowDown, ArrowUp, Eye, Pencil, Plus, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
@@ -81,7 +81,10 @@ export function InsurersListScreen() {
             )}
           </div>
           <Button asChild>
-            <Link to="/admin/insurers/add">Nova seguradora</Link>
+            <Link to="/admin/insurers/add">
+              <Plus className="h-4 w-4" />
+              Nova seguradora
+            </Link>
           </Button>
         </div>
 
