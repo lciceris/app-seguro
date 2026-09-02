@@ -122,80 +122,66 @@ export function QuotationInsurersTab({ quotation }: QuotationInsurersTabProps) {
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-muted">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Seguradora
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Status
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Prêmio
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Vencedora
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading &&
-              Array.from({ length: 2 }).map((_, index) => (
-                <tr key={index} className="border-b border-border">
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-32" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-20" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-20" />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Skeleton className="h-4 w-16" />
-                  </td>
-                  <td className="px-4 py-3" />
-                </tr>
-              ))}
+      {isLoading && (
+        <div className="rounded-xl border border-border bg-card p-5">
+          <Skeleton className="h-4 w-full" />
+        </div>
+      )}
 
-            {isError && !isLoading && (
+      {isError && !isLoading && (
+        <div className="rounded-xl border border-border bg-card p-8 text-center">
+          <p className="mb-2 text-sm text-muted-foreground">
+            Não foi possível carregar as seguradoras da cotação.
+          </p>
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            Tentar novamente
+          </Button>
+        </div>
+      )}
+
+      {!isLoading && !isError && quotationInsurers?.length === 0 && (
+        <div className="rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+          Nenhuma seguradora convidada ainda.
+        </div>
+      )}
+
+      {!isLoading && !isError && quotationInsurers && quotationInsurers.length > 0 && (
+        <div className="overflow-x-auto rounded-xl border border-border bg-card">
+          <table className="w-full text-sm">
+            <thead className="bg-muted">
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center">
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    Não foi possível carregar as seguradoras da cotação.
-                  </p>
-                  <Button variant="outline" size="sm" onClick={() => refetch()}>
-                    Tentar novamente
-                  </Button>
-                </td>
+                <th className="w-40 px-4 py-3 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Critérios
+                </th>
+                {quotationInsurers.map((quotationInsurer) => (
+                  <th
+                    key={quotationInsurer.id}
+                    className="min-w-48 px-4 py-3 text-left align-bottom"
+                  >
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-sm font-semibold text-foreground">
+                        {quotationInsurer.insurers?.name ?? "—"}
+                      </span>
+                      {quotationInsurer.is_winner && (
+                        <Badge
+                          variant="outline"
+                          className="w-fit border-transparent bg-warning-bg text-warning-text"
+                        >
+                          Vencedora
+                        </Badge>
+                      )}
+                    </div>
+                  </th>
+                ))}
               </tr>
-            )}
-
-            {!isLoading && !isError && quotationInsurers?.length === 0 && (
-              <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  Nenhuma seguradora convidada ainda.
+            </thead>
+            <tbody>
+              <tr className="border-t border-border">
+                <td className="px-4 py-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Status
                 </td>
-              </tr>
-            )}
-
-            {!isLoading &&
-              !isError &&
-              quotationInsurers?.map((quotationInsurer) => (
-                <tr
-                  key={quotationInsurer.id}
-                  className="cursor-pointer border-b border-border last:border-0 hover:bg-muted/50"
-                  onClick={() => setSelectedQuotationInsurerId(quotationInsurer.id)}
-                >
-                  <td className="px-4 py-3 text-foreground">
-                    {quotationInsurer.insurers?.name ?? "—"}
-                  </td>
-                  <td className="px-4 py-3">
+                {quotationInsurers.map((quotationInsurer) => (
+                  <td key={quotationInsurer.id} className="px-4 py-3">
                     <Badge
                       variant="outline"
                       className={
@@ -205,38 +191,41 @@ export function QuotationInsurersTab({ quotation }: QuotationInsurersTabProps) {
                       {INSURER_RESPONSE_STATUS_LABELS[quotationInsurer.response_status]}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">
+                ))}
+              </tr>
+              <tr className="border-t border-border">
+                <td className="px-4 py-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Prêmio
+                </td>
+                {quotationInsurers.map((quotationInsurer) => (
+                  <td
+                    key={quotationInsurer.id}
+                    className="px-4 py-3 font-mono-data text-foreground"
+                  >
                     {formatCurrency(quotationInsurer.premium_amount)}
                   </td>
-                  <td className="px-4 py-3">
-                    {quotationInsurer.is_winner ? (
-                      <Badge
-                        variant="outline"
-                        className="border-transparent bg-warning-bg text-warning-text"
-                      >
-                        Vencedora
-                      </Badge>
-                    ) : (
-                      <span className="text-muted-foreground">—</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-right">
+                ))}
+              </tr>
+              <tr className="border-t border-border">
+                <td className="px-4 py-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Detalhes
+                </td>
+                {quotationInsurers.map((quotationInsurer) => (
+                  <td key={quotationInsurer.id} className="px-4 py-3">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setSelectedQuotationInsurerId(quotationInsurer.id);
-                      }}
+                      onClick={() => setSelectedQuotationInsurerId(quotationInsurer.id)}
                     >
                       {canEdit ? "Editar" : "Ver"}
                     </Button>
                   </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <QuotationInsurerDrawer
         quotationId={quotation.id}

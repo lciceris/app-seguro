@@ -8,7 +8,7 @@
   - _Requirements: 3.1_
 - [x] 4. Ícone "+" nos botões de criar das 6 listagens
   - _Requirements: 4.1_
-- [ ] 5. Comparativo de seguradoras em colunas na cotação
+- [x] 5. Comparativo de seguradoras em colunas na cotação
   - _Requirements: 5.1, 5.2_
 - [ ] 6. Hub do cliente vira página cheia (rota + componente)
   - _Requirements: 7.1, 7.2_

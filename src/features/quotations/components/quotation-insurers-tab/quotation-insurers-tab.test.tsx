@@ -115,12 +115,14 @@ describe("QuotationInsurersTab", () => {
     expect(within(listbox).getByText("Seguradora Nova")).toBeInTheDocument();
   });
 
-  it("mostra o status e o badge de vencedora na linha", () => {
+  it("mostra a seguradora como coluna, com o status e o badge de vencedora", () => {
     renderWithProviders(<QuotationInsurersTab quotation={quotationFake} />);
 
-    const row = screen.getByRole("row", { name: /Seguradora Alfa/ });
-    expect(within(row).getByText("Aceita")).toBeInTheDocument();
-    expect(within(row).getByText("Vencedora")).toBeInTheDocument();
+    const headerRow = screen.getByRole("row", { name: /Seguradora Alfa/ });
+    expect(within(headerRow).getByText("Vencedora")).toBeInTheDocument();
+
+    const statusRow = screen.getByRole("row", { name: /Status/ });
+    expect(within(statusRow).getByText("Aceita")).toBeInTheDocument();
   });
 
   it("seller não vê o seletor de convidar e o botão de linha é 'Ver', não 'Editar'", () => {
