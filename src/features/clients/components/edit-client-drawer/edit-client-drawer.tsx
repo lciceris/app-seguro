@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { fetchCepData } from "@/shared/lib/via-cep";
@@ -428,12 +428,11 @@ function EditClientForm({ client, onSuccess }: { client: Client; onSuccess: () =
 
 export function EditClientDrawer() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { clientId } = useParams<{ clientId: string }>();
   const { data: client, isLoading, isError, refetch } = useClient(clientId!);
 
   function handleClose() {
-    navigate(searchParams.get("return_to") || "/clients");
+    navigate(`/clients/${clientId}`);
   }
 
   return (

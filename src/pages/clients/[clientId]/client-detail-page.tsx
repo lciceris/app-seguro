@@ -1,5 +1,5 @@
-import { ClientDetailDrawer } from "@/features/clients";
+import { ClientDetailScreen } from "@/features/clients";
 
 export function ClientDetailPage() {
-  return <ClientDetailDrawer />;
+  return <ClientDetailScreen />;
 }

@@ -1,6 +1,6 @@
-import { Eye, Pencil, Star, Users, X } from "lucide-react";
+import { ArrowLeft, Eye, Pencil, Star, Users, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth";
@@ -32,13 +32,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/shared/components/ui/sheet";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import {
   Table,
@@ -637,8 +630,73 @@ function ClientSellersSection({ clientId, canManage }: { clientId: string; canMa
   );
 }
 
-export function ClientDetailDrawer() {
-  const navigate = useNavigate();
+function ClientSidebarCards({
+  clientId,
+  primarySellerName,
+  onSeeSellers,
+}: {
+  clientId: string;
+  primarySellerName: string | null;
+  onSeeSellers: () => void;
+}) {
+  const { data: policies, isLoading } = usePoliciesByClientDetailed(clientId);
+
+  const currentPolicy = policies
+    ?.filter((policy) => {
+      const status = getDerivedPolicyStatus(policy);
+      return status !== "cancelled" && status !== "superseded";
+    })
+    .sort((a, b) => (b.coverage_end ?? "").localeCompare(a.coverage_end ?? ""))[0];
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Vendedor principal
+        </p>
+        {primarySellerName ? (
+          <div className="flex items-center gap-2">
+            <Star className="h-4 w-4 fill-warning text-warning" />
+            <span className="text-sm text-foreground">{primarySellerName}</span>
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">Nenhum vendedor vinculado.</p>
+        )}
+        <Button variant="outline" size="sm" className="w-fit" onClick={onSeeSellers}>
+          Ver todos
+        </Button>
+      </div>
+
+      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card shadow-sm p-5">
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Apólice vigente
+        </p>
+        {isLoading && <Skeleton className="h-4 w-32" />}
+        {!isLoading && !currentPolicy && (
+          <p className="text-sm text-muted-foreground">Nenhuma apólice vigente.</p>
+        )}
+        {!isLoading && currentPolicy && (
+          <>
+            <DetailField
+              label="Número"
+              value={currentPolicy.policy_number ?? "Pendente de emissão"}
+            />
+            <DetailField label="Seguradora" value={currentPolicy.insurers?.name ?? null} />
+            <DetailField
+              label="Vigência"
+              value={`${formatDate(currentPolicy.coverage_start)} — ${formatDate(currentPolicy.coverage_end)}`}
+            />
+            <Button asChild variant="outline" size="sm" className="w-fit">
+              <Link to={`/policies/${currentPolicy.id}`}>Ver detalhes</Link>
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function ClientDetailScreen() {
   const { clientId } = useParams<{ clientId: string }>();
   const { data: client, isLoading, isError, refetch } = useClient(clientId!);
   const { data: clientSellers } = useClientSellers(clientId!);
@@ -654,17 +712,19 @@ export function ClientDetailDrawer() {
 
   const primarySeller = clientSellers?.find((cs) => cs.is_primary);
 
-  function handleClose() {
-    navigate("/clients");
-  }
-
   return (
-    <Sheet open onOpenChange={(open) => !open && handleClose()}>
-      <SheetContent size="lg">
-        <SheetHeader>
+    <>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon-sm">
+            <Link to="/clients">
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+
           {isLoading && (
             <div className="flex items-center gap-3">
-              <Skeleton className="h-12 w-12 rounded-full" />
+              <Skeleton className="h-10 w-10 rounded-full" />
               <div className="flex flex-col gap-1.5">
                 <Skeleton className="h-5 w-56" />
                 <Skeleton className="h-4 w-32" />
@@ -673,116 +733,114 @@ export function ClientDetailDrawer() {
           )}
 
           {!isLoading && client && (
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-muted text-base font-semibold text-muted-foreground">
-                  {client.legal_name.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex flex-col gap-1">
-                  <SheetTitle className="flex items-center gap-2 text-base">
-                    {client.legal_name}
-                    <Badge variant="outline">
-                      {client.client_type === "company" ? "PJ" : "PF"}
-                    </Badge>
-                  </SheetTitle>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    {client.tax_id && (
-                      <span className="font-mono-data">
-                        {client.client_type === "company"
-                          ? formatCnpj(client.tax_id)
-                          : formatCpf(client.tax_id)}
-                      </span>
-                    )}
-                    {primarySeller?.users?.full_name && (
-                      <span className="flex items-center gap-1">
-                        <Star className="h-3 w-3 fill-warning text-warning" />
-                        {primarySeller.users.full_name}
-                      </span>
-                    )}
-                  </div>
-                </div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-base font-semibold text-muted-foreground">
+                {client.legal_name.charAt(0).toUpperCase()}
               </div>
-
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setActiveTab("sellers")}>
-                  <Users className="h-4 w-4" />
-                  Vendedores
-                </Button>
-                {canEdit && (
-                  <Button asChild variant="outline" size="sm">
-                    <Link to={`/clients/${client.id}/edit?return_to=/clients/${client.id}`}>
-                      <Pencil className="h-4 w-4" />
-                      Editar
-                    </Link>
-                  </Button>
-                )}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-semibold text-foreground">{client.legal_name}</h1>
+                  <Badge variant="outline">{client.client_type === "company" ? "PJ" : "PF"}</Badge>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  {client.tax_id && (
+                    <span className="font-mono-data">
+                      {client.client_type === "company"
+                        ? formatCnpj(client.tax_id)
+                        : formatCpf(client.tax_id)}
+                    </span>
+                  )}
+                  {primarySeller?.users?.full_name && (
+                    <span className="flex items-center gap-1">
+                      <Star className="h-3 w-3 fill-warning text-warning" />
+                      {primarySeller.users.full_name}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           )}
-        </SheetHeader>
-
-        <div className="flex-1 min-h-0 overflow-y-auto bg-background">
-          <div className="mx-auto flex w-full max-w-[1000px] flex-col gap-4 p-5">
-            {isLoading && (
-              <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-                <Skeleton className="h-4 w-48" />
-                <Skeleton className="h-4 w-40" />
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-4 w-24" />
-              </div>
-            )}
-
-            {isError && !isLoading && (
-              <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
-                <p className="mb-2 text-sm text-muted-foreground">
-                  Não foi possível carregar os dados do cliente.
-                </p>
-                <Button variant="outline" size="sm" onClick={() => refetch()}>
-                  Tentar novamente
-                </Button>
-              </div>
-            )}
-
-            {!isLoading && !isError && client && (
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList variant="line">
-                  <TabsTrigger value="dados">Dados</TabsTrigger>
-                  <TabsTrigger value="vehicles">Veículos</TabsTrigger>
-                  <TabsTrigger value="history">Histórico</TabsTrigger>
-                  <TabsTrigger value="documents">Documentos</TabsTrigger>
-                  <TabsTrigger value="sellers">Vendedores</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="dados" className="mt-4">
-                  <ClientDataTab client={client} />
-                </TabsContent>
-
-                <TabsContent value="vehicles" className="mt-4">
-                  <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
-                </TabsContent>
-
-                <TabsContent value="history" className="mt-4">
-                  <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
-                </TabsContent>
-
-                <TabsContent value="documents" className="mt-4">
-                  <ClientDocumentsTab />
-                </TabsContent>
-
-                <TabsContent value="sellers" className="mt-4">
-                  <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
-                </TabsContent>
-              </Tabs>
-            )}
-          </div>
         </div>
 
-        <SheetFooter className="flex-row justify-end">
-          <Button variant="outline" onClick={handleClose}>
-            Fechar
+        {client && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setActiveTab("sellers")}>
+              <Users className="h-4 w-4" />
+              Vendedores
+            </Button>
+            {canEdit && (
+              <Button asChild variant="outline" size="sm">
+                <Link to={`/clients/${client.id}/edit`}>
+                  <Pencil className="h-4 w-4" />
+                  Editar
+                </Link>
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {isLoading && (
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-24" />
+        </div>
+      )}
+
+      {isError && !isLoading && (
+        <div className="rounded-xl border border-border bg-card shadow-sm p-5 text-center">
+          <p className="mb-2 text-sm text-muted-foreground">
+            Não foi possível carregar os dados do cliente.
+          </p>
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            Tentar novamente
           </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </div>
+      )}
+
+      {!isLoading && !isError && client && (
+        <div className="grid grid-cols-[1fr_320px] gap-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList variant="line">
+              <TabsTrigger value="dados">Dados</TabsTrigger>
+              <TabsTrigger value="vehicles">Veículos</TabsTrigger>
+              <TabsTrigger value="history">Histórico</TabsTrigger>
+              <TabsTrigger value="documents">Documentos</TabsTrigger>
+              <TabsTrigger value="sellers">Vendedores</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="dados" className="mt-4">
+              <ClientDataTab client={client} />
+            </TabsContent>
+
+            <TabsContent value="vehicles" className="mt-4">
+              <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
+            </TabsContent>
+
+            <TabsContent value="history" className="mt-4">
+              <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
+            </TabsContent>
+
+            <TabsContent value="documents" className="mt-4">
+              <ClientDocumentsTab />
+            </TabsContent>
+
+            <TabsContent value="sellers" className="mt-4">
+              <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
+            </TabsContent>
+          </Tabs>
+
+          <ClientSidebarCards
+            clientId={client.id}
+            primarySellerName={primarySeller?.users?.full_name ?? null}
+            onSeeSellers={() => setActiveTab("sellers")}
+          />
+        </div>
+      )}
+
+      <Outlet />
+    </>
   );
 }

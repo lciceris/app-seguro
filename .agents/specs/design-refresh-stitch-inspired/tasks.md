@@ -10,9 +10,9 @@
   - _Requirements: 4.1_
 - [x] 5. Comparativo de seguradoras em colunas na cotação
   - _Requirements: 5.1, 5.2_
-- [ ] 6. Hub do cliente vira página cheia (rota + componente)
+- [x] 6. Hub do cliente vira página cheia (rota + componente)
   - _Requirements: 7.1, 7.2_
-- [ ] 7. Hub do cliente: coluna lateral (vendedor principal + apólice vigente)
+- [x] 7. Hub do cliente: coluna lateral (vendedor principal + apólice vigente)
   - _Requirements: 6.1_
-- [ ] 8. Testes e verificação visual
+- [x] 8. Testes e verificação visual
   - _Requirements: —_

@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 
 import { renderWithProviders } from "@/shared/lib/test-utils";
 
-import { ClientDetailDrawer } from "./client-detail-drawer";
+import { ClientDetailScreen } from "./client-detail-screen";
 
 const setPrimaryMutateMock = vi.fn();
 const removeMutateMock = vi.fn();
@@ -77,6 +77,25 @@ vi.mock("@/features/users", () => ({
   }),
 }));
 
+vi.mock("@/features/policies", () => ({
+  usePoliciesByClientDetailed: () => ({ data: [], isLoading: false, isError: false }),
+  getDerivedPolicyStatus: () => "active",
+  DERIVED_POLICY_STATUS_LABELS: {},
+  DERIVED_POLICY_STATUS_BADGE_CLASSES: {},
+}));
+
+vi.mock("@/features/vehicles", () => ({
+  useVehiclesByClient: () => ({ data: [], isLoading: false, isError: false }),
+  VEHICLE_TYPE_LABELS: {},
+  VEHICLE_USAGE_LABELS: {},
+}));
+
+vi.mock("@/features/quotations", () => ({
+  useQuotationsByClient: () => ({ data: [], isLoading: false, isError: false }),
+  QUOTATION_STATUS_LABELS: {},
+  QUOTATION_STATUS_BADGE_CLASSES: {},
+}));
+
 vi.mock("../../hooks/use-client", () => ({
   useClient: () => ({ data: clientFake, isLoading: false, isError: false, refetch: vi.fn() }),
 }));
@@ -97,16 +116,16 @@ vi.mock("../../hooks/use-add-client-seller", () => ({
   useAddClientSeller: () => ({ mutate: addMutateMock, isPending: false }),
 }));
 
-function renderDrawer() {
+function renderScreen() {
   return renderWithProviders(
     <Routes>
-      <Route path="/clients/:clientId" element={<ClientDetailDrawer />} />
+      <Route path="/clients/:clientId" element={<ClientDetailScreen />} />
     </Routes>,
     { route: "/clients/c1" },
   );
 }
 
-describe("ClientDetailDrawer", () => {
+describe("ClientDetailScreen", () => {
   beforeEach(() => {
     setPrimaryMutateMock.mockClear();
     removeMutateMock.mockClear();
@@ -121,7 +140,7 @@ describe("ClientDetailDrawer", () => {
 
   it("supervisor vê os controles de gestão de vendedores", async () => {
     const user = userEvent.setup();
-    renderDrawer();
+    renderScreen();
     const panel = await openSellersTab(user);
 
     expect(within(panel).getByText("Vendedor Um")).toBeInTheDocument();
@@ -132,7 +151,7 @@ describe("ClientDetailDrawer", () => {
   it("seller não vê nenhum controle de gestão de vendedores", async () => {
     const user = userEvent.setup();
     roleMock = "seller";
-    renderDrawer();
+    renderScreen();
     const panel = await openSellersTab(user);
 
     expect(within(panel).getByText("Vendedor Um")).toBeInTheDocument();
@@ -142,7 +161,7 @@ describe("ClientDetailDrawer", () => {
 
   it("remove diretamente um vendedor não-principal", async () => {
     const user = userEvent.setup();
-    renderDrawer();
+    renderScreen();
     const panel = await openSellersTab(user);
 
     const rowDois = within(panel).getByText("Vendedor Dois").closest("div")!.parentElement!;
@@ -156,7 +175,7 @@ describe("ClientDetailDrawer", () => {
 
   it("exige escolher um substituto ao remover o vendedor principal com outros restantes", async () => {
     const user = userEvent.setup();
-    renderDrawer();
+    renderScreen();
     const panel = await openSellersTab(user);
 
     const rowUm = within(panel).getByText("Vendedor Um").closest("div")!.parentElement!;
@@ -184,7 +203,7 @@ describe("ClientDetailDrawer", () => {
 
   it("marca um vendedor diferente como principal", async () => {
     const user = userEvent.setup();
-    renderDrawer();
+    renderScreen();
     const panel = await openSellersTab(user);
 
     fireEvent.click(within(panel).getByTitle("Tornar principal"));
@@ -197,7 +216,7 @@ describe("ClientDetailDrawer", () => {
 
   it("adiciona um novo vendedor disponível", async () => {
     const user = userEvent.setup();
-    renderDrawer();
+    renderScreen();
     const panel = await openSellersTab(user);
 
     await user.click(within(panel).getByRole("combobox"));
@@ -209,5 +228,13 @@ describe("ClientDetailDrawer", () => {
       { clientId: "c1", sellerId: "s3", isPrimary: false },
       expect.any(Object),
     );
+  });
+
+  it("mostra o vendedor principal na coluna lateral", () => {
+    renderScreen();
+
+    expect(screen.getByText("Vendedor principal")).toBeInTheDocument();
+    expect(screen.getByText("Apólice vigente")).toBeInTheDocument();
+    expect(screen.getByText("Nenhuma apólice vigente.")).toBeInTheDocument();
   });
 });

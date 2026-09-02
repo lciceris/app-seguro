@@ -89,8 +89,6 @@ export function AppRouter() {
 
           <Route element={<ProtectedRoute allowedRoles={allowedRolesFor("/clients")} />}>
             <Route path="/clients" element={<ClientsPage />}>
-              <Route path=":clientId" element={<ClientDetailPage />} />
-
               <Route
                 element={
                   <ProtectedRoute
@@ -99,7 +97,21 @@ export function AppRouter() {
                 }
               >
                 <Route path="add" element={<AddClientPage />} />
-                <Route path=":clientId/edit" element={<EditClientPage />} />
+              </Route>
+            </Route>
+
+            {/* Página cheia, não drawer — não fica dentro do <Outlet/> de /clients
+                (ver .agents/specs/design-refresh-stitch-inspired/design.md,
+                "Divergência de padrão"). */}
+            <Route path="/clients/:clientId" element={<ClientDetailPage />}>
+              <Route
+                element={
+                  <ProtectedRoute
+                    allowedRoles={["platform_admin", "brokerage_admin", "supervisor", "seller"]}
+                  />
+                }
+              >
+                <Route path="edit" element={<EditClientPage />} />
               </Route>
             </Route>
           </Route>
