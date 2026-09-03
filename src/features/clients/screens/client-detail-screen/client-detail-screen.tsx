@@ -801,43 +801,45 @@ export function ClientDetailScreen() {
       )}
 
       {!isLoading && !isError && client && (
-        <div className="grid grid-cols-[1fr_320px] gap-4">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList variant="line">
-              <TabsTrigger value="dados">Dados</TabsTrigger>
-              <TabsTrigger value="vehicles">Veículos</TabsTrigger>
-              <TabsTrigger value="history">Histórico</TabsTrigger>
-              <TabsTrigger value="documents">Documentos</TabsTrigger>
-              <TabsTrigger value="sellers">Vendedores</TabsTrigger>
-            </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList variant="line">
+            <TabsTrigger value="dados">Dados</TabsTrigger>
+            <TabsTrigger value="vehicles">Veículos</TabsTrigger>
+            <TabsTrigger value="history">Histórico</TabsTrigger>
+            <TabsTrigger value="documents">Documentos</TabsTrigger>
+            <TabsTrigger value="sellers">Vendedores</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="dados" className="mt-4">
-              <ClientDataTab client={client} />
-            </TabsContent>
+          <div className="mt-4 grid grid-cols-[1fr_320px] gap-4">
+            <div>
+              <TabsContent value="dados">
+                <ClientDataTab client={client} />
+              </TabsContent>
 
-            <TabsContent value="vehicles" className="mt-4">
-              <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
-            </TabsContent>
+              <TabsContent value="vehicles">
+                <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
+              </TabsContent>
 
-            <TabsContent value="history" className="mt-4">
-              <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
-            </TabsContent>
+              <TabsContent value="history">
+                <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
+              </TabsContent>
 
-            <TabsContent value="documents" className="mt-4">
-              <ClientDocumentsTab />
-            </TabsContent>
+              <TabsContent value="documents">
+                <ClientDocumentsTab />
+              </TabsContent>
 
-            <TabsContent value="sellers" className="mt-4">
-              <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="sellers">
+                <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
+              </TabsContent>
+            </div>
 
-          <ClientSidebarCards
-            clientId={client.id}
-            primarySellerName={primarySeller?.users?.full_name ?? null}
-            onSeeSellers={() => setActiveTab("sellers")}
-          />
-        </div>
+            <ClientSidebarCards
+              clientId={client.id}
+              primarySellerName={primarySeller?.users?.full_name ?? null}
+              onSeeSellers={() => setActiveTab("sellers")}
+            />
+          </div>
+        </Tabs>
       )}
 
       <Outlet />
