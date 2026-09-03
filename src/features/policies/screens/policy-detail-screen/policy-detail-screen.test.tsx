@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -78,24 +79,34 @@ describe("PolicyDetailScreen", () => {
     renewedByMock = null;
   });
 
-  it("mostra os dados gerais e o link pra cotação de origem", () => {
+  it("mostra os dados gerais no resumo e na aba Dados gerais", () => {
     renderScreen();
 
     expect(screen.getByRole("heading", { name: "AP-2026-0001" })).toBeInTheDocument();
     expect(screen.getByText("Vigente")).toBeInTheDocument();
-    expect(screen.getByText("Cliente Um")).toBeInTheDocument();
-    expect(screen.getByText("Seguradora Um")).toBeInTheDocument();
-    expect(screen.getByText("R$ 15.000,00")).toBeInTheDocument();
+    expect(screen.getAllByText("Cliente Um").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Seguradora Um").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("R$ 15.000,00").length).toBeGreaterThan(0);
     expect(screen.getByText("R$ 400.000,00")).toBeInTheDocument();
+  });
+
+  it("mostra o link pra cotação de origem na aba Origem", async () => {
+    const user = userEvent.setup();
+    renderScreen();
+
+    await user.click(screen.getByRole("tab", { name: "Origem" }));
 
     const quotationLink = screen.getByRole("link", { name: "QT-2026-0001" });
     expect(quotationLink).toHaveAttribute("href", "/quotations/q1");
   });
 
-  it("mostra o vínculo de renovação nos dois sentidos quando existe", () => {
+  it("mostra o vínculo de renovação nos dois sentidos quando existe", async () => {
+    const user = userEvent.setup();
     renewedFromMock = { id: "p0", policy_number: "AP-2025-0009" };
     renewedByMock = { id: "p2", policy_number: "AP-2027-0002" };
     renderScreen();
+
+    await user.click(screen.getByRole("tab", { name: "Origem" }));
 
     expect(screen.getByRole("link", { name: "AP-2025-0009" })).toHaveAttribute(
       "href",
@@ -107,8 +118,11 @@ describe("PolicyDetailScreen", () => {
     );
   });
 
-  it("não mostra seção de renovação quando não há vínculo em nenhum sentido", () => {
+  it("não mostra seção de renovação quando não há vínculo em nenhum sentido", async () => {
+    const user = userEvent.setup();
     renderScreen();
+
+    await user.click(screen.getByRole("tab", { name: "Origem" }));
 
     expect(screen.queryByText("Renova a apólice")).not.toBeInTheDocument();
     expect(screen.queryByText("Renovada pela apólice")).not.toBeInTheDocument();

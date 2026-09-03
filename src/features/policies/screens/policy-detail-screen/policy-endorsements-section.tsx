@@ -46,11 +46,8 @@ export function PolicyEndorsementsSection({ policy }: PolicyEndorsementsSectionP
     !!usuario && OPEN_ENDORSEMENT_ROLES.has(usuario.role) && policy.status === "active";
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-          Endossos
-        </p>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-end">
         {canOpenEndorsement && (
           <Button asChild variant="outline" size="sm">
             <Link to={`/policies/${policy.id}/endorsements/add`}>

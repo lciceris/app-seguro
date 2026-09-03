@@ -4,7 +4,9 @@ import { Link, Outlet, useParams } from "react-router-dom";
 import { formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
+import { DetailSummaryBand } from "@/shared/components/ui/detail-summary-band";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 
 import { useInsurer } from "../../hooks/use-insurer";
 
@@ -73,56 +75,65 @@ export function InsurerDetailScreen() {
       )}
 
       {!isLoading && !isError && insurer && (
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Identificação
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <div className="col-span-2">
-                <DetailField label="Nome" value={insurer.name} />
-              </div>
-              <DetailField label="CNPJ" value={formatCnpj(insurer.cnpj)} />
-              <DetailField label="E-mail" value={insurer.email} />
-              <DetailField
-                label="Telefone comercial"
-                value={insurer.phone ? formatPhone(insurer.phone) : insurer.phone}
-              />
-              <div className="col-span-2">
-                <DetailField label="Website" value={insurer.website} />
-              </div>
-            </div>
-          </div>
+        <div className="rounded-xl border border-border bg-card p-5">
+          <DetailSummaryBand
+            items={[
+              { label: "CNPJ", value: formatCnpj(insurer.cnpj) },
+              { label: "E-mail", value: insurer.email },
+              {
+                label: "Telefone comercial",
+                value: insurer.phone ? formatPhone(insurer.phone) : insurer.phone,
+              },
+              {
+                label: "Prazo de resposta",
+                value:
+                  insurer.response_time_days != null ? `${insurer.response_time_days} dias` : null,
+              },
+            ]}
+          />
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Contato comercial
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <DetailField label="Nome do contato" value={insurer.contact_name} />
-            </div>
-          </div>
+          <Tabs defaultValue="identificacao">
+            <TabsList variant="line">
+              <TabsTrigger value="identificacao">Identificação</TabsTrigger>
+              <TabsTrigger value="contato">Contato comercial</TabsTrigger>
+              <TabsTrigger value="configuracoes">Configurações</TabsTrigger>
+              <TabsTrigger value="observacoes">Observações</TabsTrigger>
+            </TabsList>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Configurações
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <DetailField label="Prazo de resposta (dias)" value={insurer.response_time_days} />
-              <DetailField label="Ordem de exibição" value={insurer.display_order} />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Observações
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <div className="col-span-2">
-                <DetailField label="Observações" value={insurer.notes} />
+            <TabsContent value="identificacao" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <div className="col-span-2">
+                  <DetailField label="Nome" value={insurer.name} />
+                </div>
+                <DetailField label="CNPJ" value={formatCnpj(insurer.cnpj)} />
+                <DetailField label="E-mail" value={insurer.email} />
+                <DetailField
+                  label="Telefone comercial"
+                  value={insurer.phone ? formatPhone(insurer.phone) : insurer.phone}
+                />
+                <div className="col-span-2">
+                  <DetailField label="Website" value={insurer.website} />
+                </div>
               </div>
-            </div>
-          </div>
+            </TabsContent>
+
+            <TabsContent value="contato" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="Nome do contato" value={insurer.contact_name} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="configuracoes" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="Prazo de resposta (dias)" value={insurer.response_time_days} />
+                <DetailField label="Ordem de exibição" value={insurer.display_order} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="observacoes" className="mt-4">
+              <DetailField label="Observações" value={insurer.notes} />
+            </TabsContent>
+          </Tabs>
         </div>
       )}
 

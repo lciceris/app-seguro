@@ -4,7 +4,9 @@ import { Link, Outlet, useParams } from "react-router-dom";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
+import { DetailSummaryBand } from "@/shared/components/ui/detail-summary-band";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 
 import { VEHICLE_TYPE_LABELS, VEHICLE_USAGE_LABELS } from "../../constants/labels";
 import { useVehicle } from "../../hooks/use-vehicle";
@@ -73,65 +75,89 @@ export function VehicleDetailScreen() {
       )}
 
       {!isLoading && !isError && vehicle && (
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Identificação
-            </p>
-            <DetailField label="Cliente" value={vehicle.clients?.legal_name ?? null} />
-            <DetailField label="Placa" value={vehicle.plate} />
-            <DetailField label="Chassi" value={vehicle.chassis} />
-            <DetailField label="Código de identificação" value={vehicle.identification_code} />
-            <DetailField label="RENAVAM" value={vehicle.renavam} />
-            <DetailField label="Marca" value={vehicle.brand} />
-            <DetailField label="Modelo" value={vehicle.model} />
-            <DetailField
-              label="Ano de fabricação"
-              value={vehicle.manufacture_year?.toString() ?? null}
-            />
-            <DetailField label="Ano do modelo" value={vehicle.model_year?.toString() ?? null} />
-            <DetailField
-              label="Tipo"
-              value={vehicle.vehicle_type ? VEHICLE_TYPE_LABELS[vehicle.vehicle_type] : null}
-            />
-            <DetailField
-              label="Uso"
-              value={vehicle.vehicle_usage ? VEHICLE_USAGE_LABELS[vehicle.vehicle_usage] : null}
-            />
-            <DetailField label="Combustível" value={vehicle.fuel_type} />
-          </div>
+        <div className="rounded-xl border border-border bg-card p-5">
+          <DetailSummaryBand
+            items={[
+              { label: "Placa", value: vehicle.plate },
+              {
+                label: "Marca/Modelo",
+                value: [vehicle.brand, vehicle.model].filter(Boolean).join(" ") || null,
+              },
+              { label: "Valor declarado", value: formatCurrency(vehicle.declared_value) },
+              {
+                label: "Tipo",
+                value: vehicle.vehicle_type ? VEHICLE_TYPE_LABELS[vehicle.vehicle_type] : null,
+              },
+            ]}
+          />
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Valores
-            </p>
-            <DetailField label="Código FIPE" value={vehicle.fipe_code} />
-            <DetailField label="Valor FIPE" value={formatCurrency(vehicle.fipe_value)} />
-            <DetailField label="Valor declarado" value={formatCurrency(vehicle.declared_value)} />
-          </div>
+          <Tabs defaultValue="identificacao">
+            <TabsList variant="line">
+              <TabsTrigger value="identificacao">Identificação</TabsTrigger>
+              <TabsTrigger value="valores">Valores</TabsTrigger>
+              <TabsTrigger value="circulacao">Circulação</TabsTrigger>
+              <TabsTrigger value="observacoes">Observações</TabsTrigger>
+            </TabsList>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Circulação
-            </p>
-            <DetailField label="CEP de pernoite" value={vehicle.overnight_zip_code} />
-            <DetailField label="UF principal" value={vehicle.main_state} />
-            <DetailField label="Possui rastreador" value={vehicle.has_tracker ? "Sim" : "Não"} />
-            <DetailField label="Modelo do rastreador" value={vehicle.tracker_model} />
-            <DetailField label="Acessórios" value={vehicle.accessories} />
-            <DetailField label="Condutor principal" value={vehicle.main_driver} />
-            <DetailField
-              label="Possui histórico de sinistro"
-              value={vehicle.has_claim_history ? "Sim" : "Não"}
-            />
-          </div>
+            <TabsContent value="identificacao" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="Cliente" value={vehicle.clients?.legal_name ?? null} />
+                <DetailField label="Placa" value={vehicle.plate} />
+                <DetailField label="Chassi" value={vehicle.chassis} />
+                <DetailField label="Código de identificação" value={vehicle.identification_code} />
+                <DetailField label="RENAVAM" value={vehicle.renavam} />
+                <DetailField label="Marca" value={vehicle.brand} />
+                <DetailField label="Modelo" value={vehicle.model} />
+                <DetailField
+                  label="Ano de fabricação"
+                  value={vehicle.manufacture_year?.toString() ?? null}
+                />
+                <DetailField label="Ano do modelo" value={vehicle.model_year?.toString() ?? null} />
+                <DetailField
+                  label="Tipo"
+                  value={vehicle.vehicle_type ? VEHICLE_TYPE_LABELS[vehicle.vehicle_type] : null}
+                />
+                <DetailField
+                  label="Uso"
+                  value={vehicle.vehicle_usage ? VEHICLE_USAGE_LABELS[vehicle.vehicle_usage] : null}
+                />
+                <DetailField label="Combustível" value={vehicle.fuel_type} />
+              </div>
+            </TabsContent>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Observações
-            </p>
-            <DetailField label="Observações" value={vehicle.notes} />
-          </div>
+            <TabsContent value="valores" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="Código FIPE" value={vehicle.fipe_code} />
+                <DetailField label="Valor FIPE" value={formatCurrency(vehicle.fipe_value)} />
+                <DetailField
+                  label="Valor declarado"
+                  value={formatCurrency(vehicle.declared_value)}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="circulacao" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="CEP de pernoite" value={vehicle.overnight_zip_code} />
+                <DetailField label="UF principal" value={vehicle.main_state} />
+                <DetailField
+                  label="Possui rastreador"
+                  value={vehicle.has_tracker ? "Sim" : "Não"}
+                />
+                <DetailField label="Modelo do rastreador" value={vehicle.tracker_model} />
+                <DetailField label="Acessórios" value={vehicle.accessories} />
+                <DetailField label="Condutor principal" value={vehicle.main_driver} />
+                <DetailField
+                  label="Possui histórico de sinistro"
+                  value={vehicle.has_claim_history ? "Sim" : "Não"}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="observacoes" className="mt-4">
+              <DetailField label="Observações" value={vehicle.notes} />
+            </TabsContent>
+          </Tabs>
         </div>
       )}
 

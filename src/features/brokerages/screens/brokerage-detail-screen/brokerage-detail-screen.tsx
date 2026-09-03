@@ -5,7 +5,9 @@ import { formatCep, formatCnpj, formatPhone } from "@/shared/lib/masks";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
+import { DetailSummaryBand } from "@/shared/components/ui/detail-summary-band";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 
 import { useActiveUsersCount } from "../../hooks/use-active-users-count";
 import { useBrokerage } from "../../hooks/use-brokerage";
@@ -102,94 +104,99 @@ export function BrokerageDetailScreen() {
       )}
 
       {!isLoading && !isError && brokerage && (
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Usuários ativos
-            </p>
-            {isLoadingUsersCount ? (
-              <Skeleton className="h-7 w-16" />
-            ) : (
-              <p className="text-2xl font-bold text-foreground">
-                {activeUsersCount ?? "—"}
-                <span className="ml-1.5 text-sm font-normal text-muted-foreground">
-                  usuários ativos
-                </span>
-              </p>
-            )}
-          </div>
+        <div className="rounded-xl border border-border bg-card p-5">
+          <DetailSummaryBand
+            items={[
+              {
+                label: "Usuários ativos",
+                value: isLoadingUsersCount ? (
+                  <Skeleton className="h-4 w-8" />
+                ) : (
+                  (activeUsersCount ?? "—")
+                ),
+              },
+              { label: "CNPJ", value: brokerage.tax_id ? formatCnpj(brokerage.tax_id) : null },
+              {
+                label: "Cidade/UF",
+                value: [brokerage.city, brokerage.state].filter(Boolean).join("/") || null,
+              },
+              { label: "Plano", value: brokerage.plans?.name ?? "Sem plano" },
+            ]}
+          />
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Empresa
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <div className="col-span-2">
-                <DetailField label="Razão social" value={brokerage.name} />
+          <Tabs defaultValue="empresa">
+            <TabsList variant="line">
+              <TabsTrigger value="empresa">Empresa</TabsTrigger>
+              <TabsTrigger value="endereco">Endereço</TabsTrigger>
+              <TabsTrigger value="representante">Representante</TabsTrigger>
+              <TabsTrigger value="plano">Plano</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="empresa" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <div className="col-span-2">
+                  <DetailField label="Razão social" value={brokerage.name} />
+                </div>
+                <DetailField label="Nome fantasia" value={brokerage.trade_name} />
+                <DetailField
+                  label="CNPJ"
+                  value={brokerage.tax_id ? formatCnpj(brokerage.tax_id) : null}
+                />
+                <DetailField label="CNAE" value={brokerage.business_code} />
+                <DetailField label="Inscrição estadual" value={brokerage.state_registration} />
+                <DetailField label="E-mail comercial" value={brokerage.email} />
+                <DetailField
+                  label="Telefone"
+                  value={brokerage.phone ? formatPhone(brokerage.phone) : null}
+                />
               </div>
-              <DetailField label="Nome fantasia" value={brokerage.trade_name} />
-              <DetailField
-                label="CNPJ"
-                value={brokerage.tax_id ? formatCnpj(brokerage.tax_id) : null}
-              />
-              <DetailField label="CNAE" value={brokerage.business_code} />
-              <DetailField label="Inscrição estadual" value={brokerage.state_registration} />
-              <DetailField label="E-mail comercial" value={brokerage.email} />
-              <DetailField
-                label="Telefone"
-                value={brokerage.phone ? formatPhone(brokerage.phone) : null}
-              />
-            </div>
-          </div>
+            </TabsContent>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Endereço
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <DetailField
-                label="CEP"
-                value={brokerage.zip_code ? formatCep(brokerage.zip_code) : null}
-              />
-              <div className="col-span-2">
-                <DetailField label="Logradouro" value={brokerage.street} />
+            <TabsContent value="endereco" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField
+                  label="CEP"
+                  value={brokerage.zip_code ? formatCep(brokerage.zip_code) : null}
+                />
+                <div className="col-span-2">
+                  <DetailField label="Logradouro" value={brokerage.street} />
+                </div>
+                <DetailField label="Número" value={brokerage.street_number} />
+                <DetailField label="Complemento" value={brokerage.complement} />
+                <DetailField label="Bairro" value={brokerage.neighborhood} />
+                <DetailField label="Cidade" value={brokerage.city} />
+                <DetailField label="UF" value={brokerage.state} />
               </div>
-              <DetailField label="Número" value={brokerage.street_number} />
-              <DetailField label="Complemento" value={brokerage.complement} />
-              <DetailField label="Bairro" value={brokerage.neighborhood} />
-              <DetailField label="Cidade" value={brokerage.city} />
-              <DetailField label="UF" value={brokerage.state} />
-            </div>
-          </div>
+            </TabsContent>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Representante e contato
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <DetailField label="Nome do representante" value={brokerage.representative_name} />
-              <DetailField label="E-mail do representante" value={brokerage.representative_email} />
-              <DetailField label="Nome financeiro" value={brokerage.financial_name} />
-              <DetailField label="E-mail financeiro" value={brokerage.financial_email} />
-            </div>
-          </div>
+            <TabsContent value="representante" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="Nome do representante" value={brokerage.representative_name} />
+                <DetailField
+                  label="E-mail do representante"
+                  value={brokerage.representative_email}
+                />
+                <DetailField label="Nome financeiro" value={brokerage.financial_name} />
+                <DetailField label="E-mail financeiro" value={brokerage.financial_email} />
+              </div>
+            </TabsContent>
 
-          <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-              Plano
-            </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <DetailField label="Plano" value={brokerage.plans?.name ?? "Sem plano"} />
-              <DetailField
-                label="Data de expiração do plano"
-                value={
-                  brokerage.plan_expires_at
-                    ? new Date(brokerage.plan_expires_at + "T00:00:00").toLocaleDateString("pt-BR")
-                    : null
-                }
-              />
-            </div>
-          </div>
+            <TabsContent value="plano" className="mt-4">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <DetailField label="Plano" value={brokerage.plans?.name ?? "Sem plano"} />
+                <DetailField
+                  label="Data de expiração do plano"
+                  value={
+                    brokerage.plan_expires_at
+                      ? new Date(brokerage.plan_expires_at + "T00:00:00").toLocaleDateString(
+                          "pt-BR",
+                        )
+                      : null
+                  }
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       )}
 

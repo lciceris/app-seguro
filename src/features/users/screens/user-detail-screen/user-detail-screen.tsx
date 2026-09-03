@@ -5,6 +5,7 @@ import { useAuthStore } from "@/features/auth";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
+import { DetailSummaryBand } from "@/shared/components/ui/detail-summary-band";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 import { ROLE_LABELS } from "../../constants/role-labels";
@@ -72,11 +73,22 @@ export function UserDetailScreen() {
       )}
 
       {!isLoading && !isError && user && (
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5">
-          <DetailField label="Nome" value={user.full_name} />
-          <DetailField label="E-mail" value={user.email} />
-          <DetailField label="Telefone" value={user.phone} />
-          <DetailField label="Perfil" value={ROLE_LABELS[user.role]} />
+        <div className="rounded-xl border border-border bg-card p-5">
+          <DetailSummaryBand
+            items={[
+              { label: "E-mail", value: user.email },
+              { label: "Telefone", value: user.phone },
+              { label: "Perfil", value: ROLE_LABELS[user.role] },
+            ]}
+          />
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            <div className="col-span-2">
+              <DetailField label="Nome" value={user.full_name} />
+            </div>
+            <DetailField label="E-mail" value={user.email} />
+            <DetailField label="Telefone" value={user.phone} />
+            <DetailField label="Perfil" value={ROLE_LABELS[user.role]} />
+          </div>
         </div>
       )}
 

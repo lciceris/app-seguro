@@ -25,6 +25,7 @@ import { formatCnpj, formatCpf } from "@/shared/lib/masks";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
+import { DetailSummaryBand } from "@/shared/components/ui/detail-summary-band";
 import {
   Select,
   SelectContent,
@@ -67,8 +68,8 @@ function formatDate(value: string | null) {
 
 function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useClient>["data"]> }) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+    <div className="rounded-xl border border-border bg-card">
+      <div className="flex flex-col gap-4 border-b border-border p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Identificação
         </p>
@@ -111,7 +112,7 @@ function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useCl
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+      <div className="flex flex-col gap-4 border-b border-border p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Endereço
         </p>
@@ -128,7 +129,7 @@ function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useCl
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+      <div className="flex flex-col gap-4 border-b border-border p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Contato comercial
         </p>
@@ -140,7 +141,7 @@ function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useCl
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+      <div className="flex flex-col gap-4 border-b border-border p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Contato financeiro
         </p>
@@ -150,7 +151,7 @@ function ClientDataTab({ client }: { client: NonNullable<ReturnType<typeof useCl
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+      <div className="flex flex-col gap-4 p-5">
         <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Observações
         </p>
@@ -801,45 +802,58 @@ export function ClientDetailScreen() {
       )}
 
       {!isLoading && !isError && client && (
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList variant="line">
-            <TabsTrigger value="dados">Dados</TabsTrigger>
-            <TabsTrigger value="vehicles">Veículos</TabsTrigger>
-            <TabsTrigger value="history">Histórico</TabsTrigger>
-            <TabsTrigger value="documents">Documentos</TabsTrigger>
-            <TabsTrigger value="sellers">Vendedores</TabsTrigger>
-          </TabsList>
+        <>
+          <DetailSummaryBand
+            items={[
+              {
+                label: "Cidade/UF",
+                value: [client.city, client.state].filter(Boolean).join("/") || null,
+              },
+              { label: "Contato comercial", value: client.contact_name },
+              { label: "E-mail comercial", value: client.contact_email },
+              { label: "Telefone comercial", value: client.contact_phone },
+            ]}
+          />
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList variant="line">
+              <TabsTrigger value="dados">Dados</TabsTrigger>
+              <TabsTrigger value="vehicles">Veículos</TabsTrigger>
+              <TabsTrigger value="history">Histórico</TabsTrigger>
+              <TabsTrigger value="documents">Documentos</TabsTrigger>
+              <TabsTrigger value="sellers">Vendedores</TabsTrigger>
+            </TabsList>
 
-          <div className="mt-4 grid grid-cols-[1fr_320px] gap-4">
-            <div>
-              <TabsContent value="dados">
-                <ClientDataTab client={client} />
-              </TabsContent>
+            <div className="mt-4 grid grid-cols-[1fr_320px] gap-4">
+              <div>
+                <TabsContent value="dados">
+                  <ClientDataTab client={client} />
+                </TabsContent>
 
-              <TabsContent value="vehicles">
-                <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
-              </TabsContent>
+                <TabsContent value="vehicles">
+                  <ClientVehiclesTab clientId={client.id} canCreate={canCreateRelated} />
+                </TabsContent>
 
-              <TabsContent value="history">
-                <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
-              </TabsContent>
+                <TabsContent value="history">
+                  <ClientHistoryTab clientId={client.id} canCreate={canCreateRelated} />
+                </TabsContent>
 
-              <TabsContent value="documents">
-                <ClientDocumentsTab />
-              </TabsContent>
+                <TabsContent value="documents">
+                  <ClientDocumentsTab />
+                </TabsContent>
 
-              <TabsContent value="sellers">
-                <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
-              </TabsContent>
+                <TabsContent value="sellers">
+                  <ClientSellersSection clientId={client.id} canManage={canManageSellers} />
+                </TabsContent>
+              </div>
+
+              <ClientSidebarCards
+                clientId={client.id}
+                primarySellerName={primarySeller?.users?.full_name ?? null}
+                onSeeSellers={() => setActiveTab("sellers")}
+              />
             </div>
-
-            <ClientSidebarCards
-              clientId={client.id}
-              primarySellerName={primarySeller?.users?.full_name ?? null}
-              onSeeSellers={() => setActiveTab("sellers")}
-            />
-          </div>
-        </Tabs>
+          </Tabs>
+        </>
       )}
 
       <Outlet />
