@@ -735,7 +735,7 @@ export function ClientDetailScreen() {
 
           {!isLoading && client && (
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-base font-semibold text-muted-foreground">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-border-strong bg-card text-base font-semibold text-muted-foreground">
                 {client.legal_name.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col gap-1">
@@ -804,6 +804,7 @@ export function ClientDetailScreen() {
       {!isLoading && !isError && client && (
         <>
           <DetailSummaryBand
+            className="border border-border bg-card"
             items={[
               {
                 label: "Cidade/UF",

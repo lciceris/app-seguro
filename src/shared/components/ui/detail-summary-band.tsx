@@ -5,9 +5,15 @@ export interface DetailSummaryBandItem {
   value: React.ReactNode;
 }
 
-export function DetailSummaryBand({ items }: { items: DetailSummaryBandItem[] }) {
+export function DetailSummaryBand({
+  items,
+  className,
+}: {
+  items: DetailSummaryBandItem[];
+  className?: string;
+}) {
   return (
-    <div className="mb-4 flex flex-wrap gap-4 rounded-lg bg-muted p-4">
+    <div className={cn("mb-4 flex flex-wrap gap-4 rounded-lg bg-table-header p-4", className)}>
       {items.map((item, index) => (
         <div
           key={item.label}
