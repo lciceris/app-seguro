@@ -170,7 +170,7 @@ function ClientVehiclesTab({ clientId, canCreate }: { clientId: string; canCreat
           Veículos da frota
         </p>
         {canCreate && (
-          <Button asChild size="sm">
+          <Button asChild>
             <Link to={`/vehicles/add?client_id=${clientId}&return_to=/clients/${clientId}`}>
               Adicionar veículo
             </Link>
@@ -279,7 +279,7 @@ function ClientHistoryTab({ clientId, canCreate }: { clientId: string; canCreate
             Cotações
           </p>
           {canCreate && (
-            <Button asChild size="sm">
+            <Button asChild>
               <Link to={`/quotations/add?client_id=${clientId}&return_to=/clients/${clientId}`}>
                 Nova cotação
               </Link>
@@ -764,12 +764,12 @@ export function ClientDetailScreen() {
 
         {client && (
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setActiveTab("sellers")}>
+            <Button variant="outline" onClick={() => setActiveTab("sellers")}>
               <Users className="h-4 w-4" />
               Vendedores
             </Button>
             {canEdit && (
-              <Button asChild variant="outline" size="sm">
+              <Button asChild variant="outline">
                 <Link to={`/clients/${client.id}/edit`}>
                   <Pencil className="h-4 w-4" />
                   Editar
