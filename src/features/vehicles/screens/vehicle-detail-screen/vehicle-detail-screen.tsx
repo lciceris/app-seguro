@@ -22,7 +22,7 @@ export function VehicleDetailScreen() {
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between rounded-xl border border-border bg-card p-5">
         <div className="flex items-center gap-3">
           <Button asChild variant="ghost" size="icon-sm">
             <Link to="/vehicles">
