@@ -11,12 +11,6 @@ import { useUsers } from "@/features/users";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/components/ui/button";
 import { DatePicker } from "@/shared/components/ui/date-picker";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import {
@@ -26,6 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/shared/components/ui/sheet";
 import { Textarea } from "@/shared/components/ui/textarea";
 
 import { QuotationQarTab } from "../quotation-qar-tab";
@@ -370,30 +372,30 @@ export function CreateQuotationWizard() {
   const stepLabel = STEPS[step - 1].label;
 
   return (
-    <Dialog open onOpenChange={handleOpenChange}>
-      <DialogContent className="flex max-h-[85vh] w-full max-w-[720px] flex-col gap-0 overflow-hidden p-0 sm:max-w-[720px]">
-        <div className="flex flex-col gap-3 border-b border-border p-5">
+    <Sheet open onOpenChange={handleOpenChange}>
+      <SheetContent>
+        <SheetHeader className="gap-3">
           <div>
-            <DialogTitle className="text-lg font-semibold">Nova cotação</DialogTitle>
-            <DialogDescription>
-              {`Passo ${step} de ${STEPS.length} — ${stepLabel}`}
-            </DialogDescription>
+            <SheetTitle>Nova cotação</SheetTitle>
+            <SheetDescription>{`Passo ${step} de ${STEPS.length} — ${stepLabel}`}</SheetDescription>
           </div>
           <StepIndicator currentStep={step} />
+        </SheetHeader>
+
+        <div className="flex-1 min-h-0 overflow-y-auto bg-background">
+          <div className="mx-auto w-full max-w-[720px] p-5">
+            {step === 1 && <StepClient onCreated={handleCreated} />}
+            {step === 2 && quotation && (
+              <QuotationQarTab quotationId={quotation.id} clientId={quotation.client_id} />
+            )}
+            {step === 3 && quotation && <QuotationVehiclesTab quotation={quotation} />}
+            {step === 4 && quotation && (
+              <StepClosing quotation={quotation} onSaved={handleFinished} />
+            )}
+          </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto bg-background p-5">
-          {step === 1 && <StepClient onCreated={handleCreated} />}
-          {step === 2 && quotation && (
-            <QuotationQarTab quotationId={quotation.id} clientId={quotation.client_id} />
-          )}
-          {step === 3 && quotation && <QuotationVehiclesTab quotation={quotation} />}
-          {step === 4 && quotation && (
-            <StepClosing quotation={quotation} onSaved={handleFinished} />
-          )}
-        </div>
-
-        <div className="flex items-center justify-between border-t border-border p-4">
+        <SheetFooter className="flex-row items-center justify-between">
           <Button variant="outline" onClick={() => handleOpenChange(false)}>
             Cancelar
           </Button>
@@ -438,8 +440,8 @@ export function CreateQuotationWizard() {
               </Button>
             )}
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }
