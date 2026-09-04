@@ -1,6 +1,7 @@
 import { ArrowLeft, Pencil } from "lucide-react";
 import { Link, Outlet, useParams } from "react-router-dom";
 
+import { formatCep } from "@/shared/lib/masks";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { DetailField } from "@/shared/components/ui/detail-field";
@@ -138,7 +139,10 @@ export function VehicleDetailScreen() {
 
             <TabsContent value="circulacao" className="mt-4">
               <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                <DetailField label="CEP de pernoite" value={vehicle.overnight_zip_code} />
+                <DetailField
+                  label="CEP de pernoite"
+                  value={vehicle.overnight_zip_code ? formatCep(vehicle.overnight_zip_code) : null}
+                />
                 <DetailField label="UF principal" value={vehicle.main_state} />
                 <DetailField
                   label="Possui rastreador"

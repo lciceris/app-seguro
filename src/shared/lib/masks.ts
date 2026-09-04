@@ -29,3 +29,35 @@ export function formatCep(value: string): string {
   if (d.length <= 5) return d;
   return `${d.slice(0, 5)}-${d.slice(5)}`;
 }
+
+// Ano (4 dígitos, sem separador) — usado em campos tipo "Ano de fabricação".
+export function formatYear(value: string): string {
+  return value.replace(/\D/g, "").slice(0, 4);
+}
+
+// Máscara de dinheiro em tempo real (trata os dígitos digitados como centavos,
+// ex.: "18740000" -> "R$ 187.400,00") — mesmo padrão usado por apps bancários.
+export function formatCurrencyInput(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (digits === "") return "";
+  const cents = digits.padStart(3, "0");
+  const integerPart = cents.slice(0, -2).replace(/^0+(?=\d)/, "");
+  const centsPart = cents.slice(-2);
+  const withThousands = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `R$ ${withThousands},${centsPart}`;
+}
+
+// Extrai o número puro de um valor mascarado por formatCurrencyInput, pra
+// salvar no banco (coluna numeric).
+export function parseCurrencyInput(value: string): number | null {
+  const digits = value.replace(/\D/g, "");
+  if (digits === "") return null;
+  return Number(digits) / 100;
+}
+
+// Inverso: formata um número vindo do banco pra semear o defaultValue de um
+// input com formatCurrencyInput (mesma máscara, sem duplicar a lógica).
+export function numberToCurrencyInput(value: number | null | undefined): string {
+  if (value === null || value === undefined) return "";
+  return formatCurrencyInput(Math.round(value * 100).toString());
+}

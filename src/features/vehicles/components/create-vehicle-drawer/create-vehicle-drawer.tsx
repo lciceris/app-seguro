@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useClients } from "@/features/clients";
+import { formatCep, formatCurrencyInput, formatYear, parseCurrencyInput } from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Input } from "@/shared/components/ui/input";
@@ -23,6 +24,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/shared/components/ui/sheet";
+import { Switch } from "@/shared/components/ui/switch";
 import { Textarea } from "@/shared/components/ui/textarea";
 
 import { VEHICLE_TYPE_LABELS, VEHICLE_USAGE_LABELS } from "../../constants/labels";
@@ -41,6 +43,11 @@ function sanitize(value: string | undefined) {
 
 function sanitizeNum(value: string | undefined) {
   return value === "" || value === undefined || Number.isNaN(Number(value)) ? null : Number(value);
+}
+
+function digitsOnly(value: string | undefined) {
+  const digits = value?.replace(/\D/g, "") ?? "";
+  return digits === "" ? null : digits;
 }
 
 function paraPayload(values: CreateVehicleFormValues): Omit<CreateVehicleInput, "brokerage_id"> {
@@ -64,9 +71,9 @@ function paraPayload(values: CreateVehicleFormValues): Omit<CreateVehicleInput, 
         : (values.vehicle_usage as CreateVehicleInput["vehicle_usage"]),
     fuel_type: sanitize(values.fuel_type),
     fipe_code: sanitize(values.fipe_code),
-    fipe_value: sanitizeNum(values.fipe_value),
-    declared_value: sanitizeNum(values.declared_value),
-    overnight_zip_code: sanitize(values.overnight_zip_code),
+    fipe_value: parseCurrencyInput(values.fipe_value ?? ""),
+    declared_value: parseCurrencyInput(values.declared_value ?? ""),
+    overnight_zip_code: digitsOnly(values.overnight_zip_code),
     main_state: sanitize(values.main_state),
     has_tracker: values.has_tracker,
     tracker_model: sanitize(values.tracker_model),
@@ -87,6 +94,8 @@ export function CreateVehicleDrawer() {
     register,
     handleSubmit,
     control,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<CreateVehicleFormValues>({
     resolver: zodResolver(createVehicleSchema),
@@ -98,6 +107,8 @@ export function CreateVehicleDrawer() {
       has_claim_history: false,
     },
   });
+
+  const hasTracker = watch("has_tracker");
 
   function handleClose() {
     navigate(searchParams.get("return_to") || "/vehicles");
@@ -223,12 +234,26 @@ export function CreateVehicleDrawer() {
 
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="manufacture_year">Ano de fabricação</Label>
-                  <Input id="manufacture_year" type="number" {...register("manufacture_year")} />
+                  <Input
+                    id="manufacture_year"
+                    inputMode="numeric"
+                    maxLength={4}
+                    placeholder="AAAA"
+                    {...register("manufacture_year")}
+                    onChange={(e) => setValue("manufacture_year", formatYear(e.target.value))}
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="model_year">Ano do modelo</Label>
-                  <Input id="model_year" type="number" {...register("model_year")} />
+                  <Input
+                    id="model_year"
+                    inputMode="numeric"
+                    maxLength={4}
+                    placeholder="AAAA"
+                    {...register("model_year")}
+                    onChange={(e) => setValue("model_year", formatYear(e.target.value))}
+                  />
                 </div>
 
                 <div className="col-span-2 flex flex-col gap-1.5">
@@ -296,17 +321,26 @@ export function CreateVehicleDrawer() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="fipe_value">Valor FIPE (R$)</Label>
-                  <Input id="fipe_value" type="number" step="0.01" {...register("fipe_value")} />
+                  <Label htmlFor="fipe_value">Valor FIPE</Label>
+                  <Input
+                    id="fipe_value"
+                    inputMode="decimal"
+                    placeholder="R$ 0,00"
+                    {...register("fipe_value")}
+                    onChange={(e) => setValue("fipe_value", formatCurrencyInput(e.target.value))}
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="declared_value">Valor declarado (R$)</Label>
+                  <Label htmlFor="declared_value">Valor declarado</Label>
                   <Input
                     id="declared_value"
-                    type="number"
-                    step="0.01"
+                    inputMode="decimal"
+                    placeholder="R$ 0,00"
                     {...register("declared_value")}
+                    onChange={(e) =>
+                      setValue("declared_value", formatCurrencyInput(e.target.value))
+                    }
                   />
                 </div>
               </div>
@@ -320,7 +354,13 @@ export function CreateVehicleDrawer() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="overnight_zip_code">CEP de pernoite</Label>
-                  <Input id="overnight_zip_code" {...register("overnight_zip_code")} />
+                  <Input
+                    id="overnight_zip_code"
+                    inputMode="numeric"
+                    maxLength={9}
+                    {...register("overnight_zip_code")}
+                    onChange={(e) => setValue("overnight_zip_code", formatCep(e.target.value))}
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
@@ -328,27 +368,32 @@ export function CreateVehicleDrawer() {
                   <Input id="main_state" maxLength={2} {...register("main_state")} />
                 </div>
 
-                <div className="col-span-2 flex items-center gap-2">
+                <div className="col-span-2 flex items-center justify-between">
+                  <Label htmlFor="has_tracker" className="font-normal">
+                    Possui rastreador
+                  </Label>
                   <Controller
                     name="has_tracker"
                     control={control}
                     render={({ field }) => (
-                      <Checkbox
+                      <Switch
                         id="has_tracker"
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          if (!checked) setValue("tracker_model", "");
+                        }}
                       />
                     )}
                   />
-                  <Label htmlFor="has_tracker" className="font-normal">
-                    Possui rastreador
-                  </Label>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="tracker_model">Modelo do rastreador</Label>
-                  <Input id="tracker_model" {...register("tracker_model")} />
-                </div>
+                {hasTracker && (
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="tracker_model">Modelo do rastreador</Label>
+                    <Input id="tracker_model" {...register("tracker_model")} />
+                  </div>
+                )}
 
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="accessories">Acessórios</Label>
