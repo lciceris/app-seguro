@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
@@ -166,11 +166,12 @@ function EditPolicyForm({
 
 export function EditPolicyDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { policyId } = useParams<{ policyId: string }>();
   const { data: policy, isLoading, isError, refetch } = usePolicy(policyId!);
 
   function handleClose() {
-    navigate(`/policies/${policyId}`);
+    navigate(searchParams.get("return_to") ?? "/policies");
   }
 
   return (

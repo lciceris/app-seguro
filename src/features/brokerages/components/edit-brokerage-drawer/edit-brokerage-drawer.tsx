@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { fetchCnpjData } from "@/shared/lib/brasil-api";
@@ -460,11 +460,12 @@ function EditBrokerageForm({
 
 export function EditBrokerageDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { brokerageId } = useParams<{ brokerageId: string }>();
   const { data: brokerage, isLoading, isError, refetch } = useBrokerage(brokerageId!);
 
   function handleClose() {
-    navigate(`/brokerages/${brokerageId}`);
+    navigate(searchParams.get("return_to") ?? "/brokerages");
   }
 
   return (

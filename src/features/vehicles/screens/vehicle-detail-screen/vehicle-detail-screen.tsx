@@ -47,7 +47,7 @@ export function VehicleDetailScreen() {
         </div>
         {vehicle && (
           <Button asChild variant="outline">
-            <Link to={`/vehicles/${vehicle.id}/edit`}>
+            <Link to={`/vehicles/${vehicle.id}/edit?return_to=/vehicles/${vehicle.id}`}>
               <Pencil className="h-4 w-4" />
               Editar
             </Link>

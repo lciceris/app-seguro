@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
@@ -138,11 +138,12 @@ function EditUserForm({ user, onSuccess }: { user: User; onSuccess: () => void }
 
 export function EditUserDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { userId } = useParams<{ userId: string }>();
   const { data: user, isLoading, isError, refetch } = useUser(userId!);
 
   function handleClose() {
-    navigate(`/users/${userId}`);
+    navigate(searchParams.get("return_to") ?? "/users");
   }
 
   return (

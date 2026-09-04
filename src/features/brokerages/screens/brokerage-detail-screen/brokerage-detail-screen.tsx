@@ -76,7 +76,7 @@ export function BrokerageDetailScreen() {
         </div>
         {brokerage && (
           <Button asChild variant="outline">
-            <Link to={`/brokerages/${brokerage.id}/edit`}>
+            <Link to={`/brokerages/${brokerage.id}/edit?return_to=/brokerages/${brokerage.id}`}>
               <Pencil className="h-4 w-4" />
               Editar
             </Link>

@@ -46,7 +46,7 @@ export function InsurerDetailScreen() {
         </div>
         {insurer && (
           <Button asChild variant="outline">
-            <Link to={`/admin/insurers/${insurer.id}/edit`}>
+            <Link to={`/admin/insurers/${insurer.id}/edit?return_to=/admin/insurers/${insurer.id}`}>
               <Pencil className="h-4 w-4" />
               Editar
             </Link>

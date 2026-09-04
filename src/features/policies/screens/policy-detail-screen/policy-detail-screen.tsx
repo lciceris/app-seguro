@@ -68,7 +68,7 @@ export function PolicyDetailScreen() {
         </div>
         {policy && canManage && (
           <Button asChild variant="outline">
-            <Link to={`/policies/${policy.id}/edit`}>
+            <Link to={`/policies/${policy.id}/edit?return_to=/policies/${policy.id}`}>
               <Pencil className="h-4 w-4" />
               Editar
             </Link>

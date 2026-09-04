@@ -44,7 +44,7 @@ export function UserDetailScreen() {
         </div>
         {user && canManageUsers && (
           <Button asChild variant="outline">
-            <Link to={`/users/${user.id}/edit`}>
+            <Link to={`/users/${user.id}/edit?return_to=/users/${user.id}`}>
               <Pencil className="h-4 w-4" />
               Editar
             </Link>

@@ -771,7 +771,7 @@ export function ClientDetailScreen() {
             </Button>
             {canEdit && (
               <Button asChild variant="outline">
-                <Link to={`/clients/${client.id}/edit`}>
+                <Link to={`/clients/${client.id}/edit?return_to=/clients/${client.id}`}>
                   <Pencil className="h-4 w-4" />
                   Editar
                 </Link>

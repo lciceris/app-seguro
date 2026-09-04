@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useClients } from "@/features/clients";
@@ -383,6 +383,7 @@ function EditVehicleForm({ vehicle, onSuccess }: { vehicle: Vehicle; onSuccess: 
 
 export function EditVehicleDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { vehicleId } = useParams<{ vehicleId: string }>();
   const { data: vehicle, isLoading: isVehicleLoading, isError, refetch } = useVehicle(vehicleId!);
   // O Select de cliente depende de useClients() também ter carregado — se
@@ -394,7 +395,7 @@ export function EditVehicleDrawer() {
   const isLoading = isVehicleLoading || isClientsLoading;
 
   function handleClose() {
-    navigate(`/vehicles/${vehicleId}`);
+    navigate(searchParams.get("return_to") ?? "/vehicles");
   }
 
   return (

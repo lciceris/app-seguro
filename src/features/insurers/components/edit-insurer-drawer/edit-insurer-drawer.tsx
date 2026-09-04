@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { formatCnpj, formatPhone } from "@/shared/lib/masks";
@@ -300,11 +300,12 @@ function EditInsurerForm({ insurer, onSuccess }: { insurer: Insurer; onSuccess: 
 
 export function EditInsurerDrawer() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { insurerId } = useParams<{ insurerId: string }>();
   const { data: insurer, isLoading, isError, refetch } = useInsurer(insurerId!);
 
   function handleClose() {
-    navigate(`/admin/insurers/${insurerId}`);
+    navigate(searchParams.get("return_to") ?? "/admin/insurers");
   }
 
   return (
