@@ -1,5 +1,5 @@
-import { CreateQuotationDrawer } from "@/features/quotations";
+import { CreateQuotationWizard } from "@/features/quotations";
 
 export function AddQuotationPage() {
-  return <CreateQuotationDrawer />;
+  return <CreateQuotationWizard />;
 }
