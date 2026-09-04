@@ -5,7 +5,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useClients } from "@/features/clients";
-import { formatCep, formatCurrencyInput, formatYear, parseCurrencyInput } from "@/shared/lib/masks";
+import {
+  formatCep,
+  formatCurrencyInput,
+  formatUf,
+  formatYear,
+  parseCurrencyInput,
+} from "@/shared/lib/masks";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Input } from "@/shared/components/ui/input";
@@ -175,7 +181,7 @@ export function CreateVehicleDrawer() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2 flex flex-col gap-1.5">
-                  <Label htmlFor="client_id">Cliente</Label>
+                  <Label htmlFor="client_id">Cliente *</Label>
                   <Controller
                     name="client_id"
                     control={control}
@@ -200,7 +206,7 @@ export function CreateVehicleDrawer() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="plate">Placa</Label>
+                  <Label htmlFor="plate">Placa *</Label>
                   <Input id="plate" {...register("plate")} />
                   {errors.plate && (
                     <p className="text-sm text-destructive">{errors.plate.message}</p>
@@ -365,13 +371,15 @@ export function CreateVehicleDrawer() {
 
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="main_state">UF principal</Label>
-                  <Input id="main_state" maxLength={2} {...register("main_state")} />
+                  <Input
+                    id="main_state"
+                    maxLength={2}
+                    {...register("main_state")}
+                    onChange={(e) => setValue("main_state", formatUf(e.target.value))}
+                  />
                 </div>
 
-                <div className="col-span-2 flex items-center justify-between">
-                  <Label htmlFor="has_tracker" className="font-normal">
-                    Possui rastreador
-                  </Label>
+                <div className="col-span-2 flex items-center gap-2">
                   <Controller
                     name="has_tracker"
                     control={control}
@@ -386,6 +394,9 @@ export function CreateVehicleDrawer() {
                       />
                     )}
                   />
+                  <Label htmlFor="has_tracker" className="font-normal">
+                    Possui rastreador
+                  </Label>
                 </div>
 
                 {hasTracker && (

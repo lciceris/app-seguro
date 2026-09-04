@@ -35,6 +35,14 @@ export function formatYear(value: string): string {
   return value.replace(/\D/g, "").slice(0, 4);
 }
 
+// UF (2 letras maiúsculas) — usado em campos tipo "UF principal".
+export function formatUf(value: string): string {
+  return value
+    .replace(/[^a-zA-Z]/g, "")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 // Máscara de dinheiro em tempo real (trata os dígitos digitados como centavos,
 // ex.: "18740000" -> "R$ 187.400,00") — mesmo padrão usado por apps bancários.
 export function formatCurrencyInput(value: string): string {

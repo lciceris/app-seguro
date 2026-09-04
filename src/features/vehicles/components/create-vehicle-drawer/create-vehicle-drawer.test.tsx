@@ -44,7 +44,7 @@ describe("CreateVehicleDrawer", () => {
     const listbox = await screen.findByRole("listbox");
     await user.click(within(listbox).getByText("Cliente Um"));
 
-    fireEvent.change(screen.getByLabelText("Placa"), { target: { value: "ABC1D23" } });
+    fireEvent.change(screen.getByLabelText("Placa *"), { target: { value: "ABC1D23" } });
     fireEvent.click(screen.getByRole("button", { name: "Criar" }));
 
     await vi.waitFor(() => {

@@ -78,7 +78,7 @@ describe("EditVehicleDrawer", () => {
   it("vem pré-preenchido com os dados atuais do veículo", () => {
     renderDrawer();
 
-    expect(screen.getByLabelText("Placa")).toHaveValue("ABC1D23");
+    expect(screen.getByLabelText("Placa *")).toHaveValue("ABC1D23");
     expect(screen.getByLabelText("Marca")).toHaveValue("Volvo");
     expect(screen.getAllByRole("combobox")[0]).toHaveTextContent("Cliente Um");
   });
@@ -86,7 +86,7 @@ describe("EditVehicleDrawer", () => {
   it("chama a mutation com os valores editados", async () => {
     renderDrawer();
 
-    fireEvent.change(screen.getByLabelText("Placa"), { target: { value: "XYZ9Z99" } });
+    fireEvent.change(screen.getByLabelText("Placa *"), { target: { value: "XYZ9Z99" } });
     fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await vi.waitFor(() => {
