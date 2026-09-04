@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Download, FileSpreadsheet, Upload } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -127,6 +128,35 @@ export function CreateVehicleDrawer() {
           className="flex-1 min-h-0 overflow-y-auto bg-background"
         >
           <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 p-5">
+            <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
+              <div className="flex items-center gap-2">
+                <FileSpreadsheet className="h-4 w-4 text-primary" />
+                <p className="text-sm font-semibold text-foreground">Importar planilha</p>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Importe veículos em massa a partir de um arquivo Excel. Colunas obrigatórias: Placa,
+                Marca, Modelo, Ano de Fabricação, Tipo de Veículo, Uso do Veículo.
+              </p>
+              <div className="flex gap-2">
+                <Button type="button" variant="outline">
+                  <Download className="h-4 w-4" />
+                  Baixar modelo
+                </Button>
+                <Button type="button" variant="outline">
+                  <Upload className="h-4 w-4" />
+                  Enviar planilha
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
+                Ou adicione manualmente
+              </span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+
             <div className="flex flex-col gap-4 rounded-xl border border-border bg-card shadow-sm p-5">
               <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Identificação
